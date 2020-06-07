@@ -1,5 +1,5 @@
 Main.java
-push.bat
+*.bat
 /.idea/
 *.iml
 /out
