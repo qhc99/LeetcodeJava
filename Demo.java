@@ -16,7 +16,7 @@ public class Demo {
             try{
                 System.out.println(f.getCanonicalPath());
             }catch (IOException e){
-                System.out.println(e.toString());
+                e.printStackTrace();
                 return;
             }
             System.out.println(f.isFile());
@@ -32,13 +32,13 @@ public class Demo {
                     }
                 }
             }catch (IOException e){
-                System.out.println(e.toString());
+                e.printStackTrace();
                 return;
             }
             try{
                 File t = File.createTempFile("temp","txt");
             }catch (IOException e){
-                System.out.println(e.toString());
+                e.printStackTrace();
                 return;
             }
             File l = new File("..");
@@ -69,7 +69,7 @@ public class Demo {
                 String res = new String(Arrays.copyOf(buffer,len));
                 System.out.println(res);
             }catch (IOException e){
-                System.out.println(e.toString());
+                e.printStackTrace();
                 return;
             }
 
@@ -81,7 +81,7 @@ public class Demo {
                 }
                 System.out.println();
             }catch (IOException e){
-                System.out.println(e.toString());
+                e.printStackTrace();
             }
         }
 
@@ -91,19 +91,19 @@ public class Demo {
             try{
                 if (!f.exists()) {have_create = f.createNewFile();}
             }catch (IOException ie){
-                System.out.println(ie.toString());
+                ie.printStackTrace();
                 return;
             }
             if(f.exists()){
                 try(OutputStream out = new FileOutputStream(f.getAbsolutePath())){
                     out.write(s.getBytes(StandardCharsets.UTF_8));
                 }catch (IOException ie){
-                    System.out.println(ie.toString());
+                    ie.printStackTrace();
                 }
             }
         }
 
-        public static void readerDemo() {
+        public static void readerDemo(){
             try(Reader r = new FileReader(".\\README.md", StandardCharsets.UTF_8)){
                 char[] buffer = new char[60];
                 int n;
@@ -113,28 +113,28 @@ public class Demo {
                 String res = new String(buffer);
                 System.out.println(res);
             }catch (IOException ie){
-                System.out.println(ie.toString());
+                ie.printStackTrace();
                 return;
             }
 
             try(Reader t = new InputStreamReader(System.in)) {
                 int i = 0;
             }catch (IOException ie){
-                System.out.println(ie.toString());
+                ie.printStackTrace();
                 return;
             }
 
             try (Reader reader = new CharArrayReader("Hello".toCharArray())) {
                 System.out.println("simulate char array file");
             }catch (IOException ie){
-                System.out.println(ie.toString());
+                ie.printStackTrace();
                 return;
             }
 
             try (Reader reader = new StringReader("Hello")) {
                 System.out.println("simulate string file");
             }catch (IOException ie){
-                System.out.println(ie.toString());
+                ie.printStackTrace();
             }
         }
 
@@ -142,7 +142,7 @@ public class Demo {
             try(Writer r = new FileWriter(".\\temp.txt", StandardCharsets.UTF_8,false)){
                 r.write(s); // overwrite
             }catch (IOException ie){
-                System.out.println(ie.toString());
+                ie.printStackTrace();
                 return;
             }
 
@@ -153,11 +153,11 @@ public class Demo {
             char[] data = writer.toCharArray(); // { 'A', 'B', 'C' }
         }
 
-        public static void printWriterDemo(String[] ss) {
+        public static void printWriterDemo(String[] ss){
             try(var pw = new PrintWriter(new FileWriter("temp.txt", StandardCharsets.UTF_8))){
                 for(var s : ss) pw.println(s);
             }catch (IOException ie){
-                System.out.println(ie.toString());
+                ie.printStackTrace();
             }
         }
     }
