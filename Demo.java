@@ -1,9 +1,12 @@
 import java.io.*;
+import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -305,57 +308,143 @@ public class Demo {
             }
         }
 
-        public static void join() throws InterruptedException {
-            Thread t = new Thread(){
-                public void run(){
-                    System.out.println("Thread start.");
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {}
-                    System.out.println("Thread end.");
-                }
-            };
-            Thread tt = new Thread(){
-                public void run(){
-                    System.out.println("Thread start.");
-                    try {
-                        Thread.sleep(100);
-                    } catch (InterruptedException e) {}
-                    System.out.println("Thread end.");
-                }
-            };
-            t.start();
-            t.join();
-            tt.start();
-            tt.join();
-        }
-        public static void syn() throws InterruptedException {
-            Object lock = new Object();
-            final int[] c = {0};
-            var add = new Thread(){
-                public void run(){
-                    for(int i = 0; i < 10000; i++){
-                        synchronized(lock){
-                            c[0]++;
+        // class design
+        public static void waitNotifyAllDemo(){
+            var q = new TaskQueue();
+            var ts = new ArrayList<Thread>();
+            for (int i=0; i<5; i++) {
+                var t = new Thread() {
+                    public void run() {
+                        // 执行task:
+                        while (true) {
+                            try {
+                                String s = q.getTask();
+                                System.out.println("execute task: " + s);
+                            } catch (InterruptedException e) {
+                                return;
+                            }
                         }
                     }
+                };
+                t.start();
+                ts.add(t);
+            }
+            var add = new Thread(() -> {
+                for (int i=0; i<10; i++) {
+                    // 放入task:
+                    String s = "t-" + Math.random();
+                    System.out.println("add task: " + s);
+                    q.addTask(s);
+                    try { Thread.sleep(100); } catch(InterruptedException ignore) {}
                 }
-            };
-            var dec = new Thread(){
-                public void run(){
-                    for(int i = 0; i < 10000; i++){
-                        synchronized(lock){
-                            c[0]--;
-                        }
-                    }
-                }
-            };
+            });
             add.start();
-            dec.start();
-            add.join();
-            dec.join();
-            System.out.println(c[0]);
+            try {
+                add.join();
+                Thread.sleep(100);
+
+            }catch (InterruptedException ignore){}
+            for (var t : ts) {
+                t.interrupt();
+            }
         }
+        static class TaskQueue {
+            Queue<String> queue = new LinkedList<>();
+
+            public synchronized void addTask(String s) {
+                this.queue.add(s);
+                this.notifyAll();
+            }
+
+            public synchronized String getTask() throws InterruptedException {
+                while (queue.isEmpty()) {
+                    this.wait();
+                }
+                return queue.remove();
+            }
+        }
+
+        // replace synchronised
+        public static class ReentrantClassDemo{
+            private final Lock this_lock = new ReentrantLock();
+            private int count = 0;
+
+            public void add(){
+                try {
+                    if (this_lock.tryLock(5, TimeUnit.MILLISECONDS)) {
+                        try{
+                            count++;
+                        }finally {
+                            this_lock.unlock();
+                        }
+                    }
+                }catch (InterruptedException ignore){}
+            }
+        }
+
+        // replace wait and notifiy
+        public static class ConditionClassDemo{
+            private final Lock this_lock = new ReentrantLock();
+            private final Condition this_condition = this_lock.newCondition();
+            private Queue<String> q = new LinkedList<>();
+
+            public void add(String s){
+                this_lock.lock();
+                try{
+                    q.add(s);
+                    this_condition.signalAll();
+                }finally {
+                    this_lock.unlock();
+                }
+            }
+
+            public String getTask(){
+                this_lock.lock();
+                try{
+                    while(q.isEmpty()){
+                        try{
+                            if(!this_condition.await(1, TimeUnit.MILLISECONDS)){
+                                throw new RuntimeException("fail to get task");
+                            }
+                        }catch (InterruptedException e){
+                            e.printStackTrace();
+                        }
+                    }
+                    return q.remove();
+                }finally {
+                    this_lock.unlock();
+                }
+            }
+        }
+
+        // cannot write while reading
+        public static class ReadWriteLockClassDemo{
+            private final ReadWriteLock rwlock = new ReentrantReadWriteLock();
+            private final Lock rlock = rwlock.readLock();
+            private final Lock wlock = rwlock.writeLock();
+            private int[] a = new int[5];
+
+            public void inc(int idx){
+                if(idx < 0 | idx >= 5) throw new IllegalArgumentException();
+                wlock.lock();
+                try{
+                    a[idx]++;
+                }finally {
+                    wlock.unlock();
+                }
+            }
+
+            public int[] read(int idx){
+                if(idx < 0 | idx >= 5) throw new IllegalArgumentException();
+                rlock.lock();
+                try{
+                    return Arrays.copyOf(a, a.length);
+                }finally {
+                    rlock.unlock();
+                }
+            }
+        }
+
 
     }
 
