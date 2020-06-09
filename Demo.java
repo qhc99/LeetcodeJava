@@ -1,12 +1,13 @@
 import java.io.*;
-import java.lang.reflect.Array;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalTime;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.*;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -445,7 +446,283 @@ public class Demo {
             }
         }
 
+        // can write while reading
+        public static class StampedLockClassDemo {
+            private final StampedLock stampedLock = new StampedLock();
 
+            private double x;
+            private double y;
+
+            public void move(double deltaX, double deltaY) {
+                long stamp = stampedLock.writeLock(); // 获取写锁
+                try {
+                    x += deltaX;
+                    y += deltaY;
+                } finally {
+                    stampedLock.unlockWrite(stamp); // 释放写锁
+                }
+            }
+
+            public double distanceFromOrigin() {
+                long stamp = stampedLock.tryOptimisticRead(); // 获得一个乐观读锁
+                double currentX = x;
+                double currentY = y;
+                if (!stampedLock.validate(stamp)) { // 检查乐观读锁后是否有其他写锁发生
+                    stamp = stampedLock.readLock(); // 获取一个悲观读锁
+                    try {
+                        currentX = x;
+                        currentY = y;
+                    } finally {
+                        stampedLock.unlockRead(stamp); // 释放悲观读锁
+                    }
+                }
+                return Math.sqrt(currentX * currentX + currentY * currentY);
+            }
+        }
+
+        // atomic class
+        public static class IdGenerator {
+            AtomicLong var = new AtomicLong(0);
+
+            public long getNextId() {
+                return var.incrementAndGet();
+            }
+        }
+
+        public static void threadPoolDemo(){
+            ExecutorService pool = Executors.newFixedThreadPool(4);
+            pool.submit(new AddThread());
+            pool.submit(new DecThread());
+            pool.submit(new AddThread());
+            pool.submit(new DecThread());
+//            try{
+//                Thread.sleep(5);
+//            }catch (InterruptedException ignore){}
+            try{
+                pool.awaitTermination(2,TimeUnit.SECONDS);
+                pool.shutdown();
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+            System.out.println(Counter.count);
+            System.out.println(pool.isShutdown());
+            try{
+                Thread.sleep(100);
+            }catch (InterruptedException ie){
+                ie.printStackTrace();
+            }
+            System.out.println(pool.isTerminated());
+
+
+            ScheduledExecutorService spool = Executors.newScheduledThreadPool(4);
+            spool.schedule(new Thread(){
+                @Override
+                public void run(){
+                    System.out.println("running");
+                }
+            }, 1, TimeUnit.MILLISECONDS);
+
+            spool.scheduleAtFixedRate(new Thread(){
+                @Override
+                public void run(){
+                    System.out.println("running");
+                }
+            }, 0,1, TimeUnit.MILLISECONDS);
+
+            spool.scheduleWithFixedDelay(new Thread(){
+                @Override
+                public void run(){
+                    System.out.println("running");
+                }
+            }, 0, 1, TimeUnit.MILLISECONDS);
+            try{
+                Thread.sleep(5);
+            }catch (InterruptedException ie){
+                ie.printStackTrace();
+            }
+            spool.shutdownNow();
+            System.out.println(spool.isShutdown());
+            System.out.println(spool.isTerminated());
+            System.out.println(Thread.activeCount());
+        }
+
+        public static void futureDemo(){
+            var task = new GetAString();
+            ExecutorService pool = Executors.newFixedThreadPool(2);
+            Future<String> res = pool.submit(task);
+            try{
+                System.out.println(res.get());
+            }catch (ExecutionException | InterruptedException e){
+                e.printStackTrace();
+            }
+            pool.shutdown();
+        }
+        static class GetAString implements Callable<String>{
+            @Override
+            public String call(){
+                try {
+                    Thread.sleep(2000);
+                }catch (InterruptedException e){
+                    e.printStackTrace();
+                }
+                return "a future result";
+            }
+        }
+
+        public static void completableFutureDemo1(){
+            // 创建异步执行任务:
+            CompletableFuture<Double> cf = CompletableFuture.supplyAsync(ThreadDemo::fetchPrice);
+            // 如果执行成功:
+            cf.thenAccept((result) -> {
+                System.out.println("price: " + result);
+            });
+            // 如果执行异常:
+            cf.exceptionally((e) -> {
+                e.printStackTrace();
+                return null;
+            });
+            // 主线程不要立刻结束，否则CompletableFuture默认使用的线程池会立刻关闭:
+            try {
+                Thread.sleep(200);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        static Double fetchPrice() {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ignore) { }
+            if (Math.random() < 0.3) {
+                throw new RuntimeException("fetch price failed!");
+            }
+            return 5 + Math.random() * 20;
+        }
+
+        public static void completableFutureDemo2() {
+            CompletableFuture<String> cfQueryFromSina = CompletableFuture.supplyAsync(() -> {
+                return queryCode("中国石油", "https://finance.sina.com.cn/code/");
+            });
+            CompletableFuture<String> cfQueryFrom163 = CompletableFuture.supplyAsync(() -> {
+                return queryCode("中国石油", "https://money.163.com/code/");
+            });
+
+            CompletableFuture<Object> cfQuery = CompletableFuture.anyOf(cfQueryFromSina, cfQueryFrom163);
+
+            CompletableFuture<Double> cfFetchFromSina = cfQuery.thenApplyAsync((code) -> {
+                return fetchPrice((String) code, "https://finance.sina.com.cn/price/");
+            });
+            CompletableFuture<Double> cfFetchFrom163 = cfQuery.thenApplyAsync((code) -> {
+                return fetchPrice((String) code, "https://money.163.com/price/");
+            });
+
+            CompletableFuture<Object> cfFetch = CompletableFuture.anyOf(cfFetchFromSina, cfFetchFrom163);
+
+
+            cfFetch.thenAccept((result) -> {
+                System.out.println("price: " + result);
+            });
+
+            try{
+                Thread.sleep(200);
+            }catch (InterruptedException e){
+                e.printStackTrace();
+            }
+        }
+        static String queryCode(String name, String url) {
+            System.out.println("query code from " + url + "...");
+            try {
+                Thread.sleep((long) (Math.random() * 100));
+            } catch (InterruptedException ignore) {
+            }
+            return "601857";
+        }
+        static Double fetchPrice(String code, String url) {
+            System.out.println("query price from " + url + "...");
+            try {
+                Thread.sleep((long) (Math.random() * 100));
+            } catch (InterruptedException ignore) {
+            }
+            return 5 + Math.random() * 20;
+        }
+
+        public static void forkJoinDemo(){
+            int[] a = new int[]{1, 2, 3, 4, 5, 6, 7, 8};
+            var task = new BoringAdd(a, 0, a.length);
+            var res = ForkJoinPool.commonPool().invoke(task);
+            System.out.println(res);
+        }
+        static class BoringAdd extends RecursiveTask<Integer> {
+            int[] array;
+            int start;
+            int end;
+
+            public BoringAdd(int[] a, int start, int end){
+                array = a;
+                this.start = start;
+                this.end = end;
+
+            }
+
+            @Override
+            public Integer compute(){
+                if(end - start <= 2){
+                    int res = 0;
+                    for(int i = start; i < end; i++){
+                        res += array[i];
+                    }
+                    return res;
+                }else {
+                    int mid = (start + end) / 2;
+                    var t1 = new BoringAdd(array, start, mid);
+                    var t2 = new BoringAdd(array, mid, end);
+                    invokeAll(t1, t2);
+                    var res1 = t1.join();
+                    var res2 = t2.join();
+                    return res1 + res2;
+                }
+            }
+        }
+
+        public static void threadLocalDemo(){
+            var thread1 = new TwicePrintThread("hello", "thread1");
+            var thread2 = new TwicePrintThread("world", "thread2");
+            thread1.start();
+            thread2.start();
+            try{
+                Thread.sleep(20);
+            }catch (InterruptedException e){e.printStackTrace();}
+        }
+        static class TwicePrintThread extends Thread{
+            static ThreadLocal<String> twice_thread_local_string = new ThreadLocal<>();
+            String message;
+            String other_message;
+
+
+            public TwicePrintThread(String s, String other_s) {
+                message = s;
+                other_message = other_s;
+            }
+
+            @Override
+            public void run(){
+                try{
+                    twice_thread_local_string.set(message);
+                    firstPrint();
+                    System.out.println(other_message);
+                    secondPrint();
+                }finally {
+                    twice_thread_local_string.remove();
+                }
+            }
+
+            private void firstPrint(){
+                System.out.println(String.format("first: %s", twice_thread_local_string.get()));
+            }
+
+            private void secondPrint(){
+                System.out.println(String.format("second: %s", twice_thread_local_string.get()));
+            }
+        }
     }
 
     public static class StreamDemo {
@@ -485,6 +762,27 @@ public class Demo {
                     s1 = res.parallelStream();
             }
             return res;
+        }
+        public static void createDemo(){
+            var s1 = Stream.of("a", "b");
+            var s2 = Arrays.stream(new String[]{"a", "b"});
+            var s3 = List.of(1, 2).stream();
+            var s4 = Stream.generate(new FibonacciGenerator());
+            s4.limit(9).forEach(System.out::println);
+
+        }
+        //0 1 1 2 3 5 8 13 21
+        static class FibonacciGenerator implements Supplier<Integer>{
+            int a = 0;
+            int b = 1;
+            @Override
+            public Integer get(){
+                int t = a;
+                int n = a + b;
+                a = b;
+                b = n;
+                return t;
+            }
         }
     }
 }
