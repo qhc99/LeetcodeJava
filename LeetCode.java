@@ -1,8 +1,6 @@
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class LeetCode {
     static class ListNode {
@@ -78,70 +76,6 @@ public class LeetCode {
             }
         }
     }
-    //#23
-    // merge k sorted lists
-    //[[1 4 6] [2 3 5]]  ---> [1 2 3 4 5 6]
-    public static ListNode mergeKLists(ListNode[] lists) {
-        if(lists.length == 0) return null;
-        ListNode[] lst = new ListNode[lists.length];
-        int heap_size = lst.length;
-        int idx = 0;
-        for(var i : lists){
-            if(i != null){
-                lst[idx++] = i;
-            }else{
-                heap_size--;
-            }
-        }
-        if(heap_size == 0) return null;
-        buildMinHeap(lst, heap_size);
-        ListNode head;
-        ListNode head_ptr;
-        head = lst[0];
-        head_ptr = head;
-        lst[0] = lst[0].next;
-        if(lst[0] == null){
-            lst[0] = lst[heap_size - 1];
-            heap_size--;
-            minHeapify(lst, 0, heap_size);
-        }
-        while(heap_size > 0){
-            minHeapify(lst, 0, heap_size);
-            head_ptr.next = lst[0];
-            head_ptr = head_ptr.next;
-            lst[0] = lst[0].next;
-            if(lst[0] == null){
-                lst[0] = lst[heap_size - 1];
-                heap_size--;
-                minHeapify(lst, 0, heap_size);
-            }
-        }
-        return head;
-    }
-    private static void minHeapify(ListNode[] arr, int idx, int heap_size){
-        int l = 2 * (idx + 1);
-        int l_idx = l - 1;
-        int r = 2 * (idx + 1) + 1;
-        int r_idx = r - 1;
-        int min_idx = idx;
-        if ((l_idx < heap_size) && (arr[l_idx].val < arr[min_idx].val)) {
-            min_idx = l_idx;
-        }
-        if ((r_idx < heap_size) && (arr[r_idx].val < arr[min_idx].val)) {
-            min_idx = r_idx;
-        }
-        if (min_idx != idx) {
-            var t = arr[min_idx];
-            arr[min_idx] = arr[idx];
-            arr[idx] = t;
-            minHeapify(arr, min_idx, heap_size);
-        }
-    }
-    private static void buildMinHeap(ListNode[] arr, int heap_size){
-        for(int i = heap_size/2 - 1; i >= 0; i--){
-            minHeapify(arr, i, heap_size);
-        }
-    }
     //#25
     // reverse a linked list every k elements
     //1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
@@ -185,6 +119,7 @@ public class LeetCode {
     //#105
     //前序遍历 preorder = [3,9,20,15,7]
     //中序遍历 inorder = [9,3,15,20,7]
+    //result:
     //    3
     //   / \
     //  9  20
