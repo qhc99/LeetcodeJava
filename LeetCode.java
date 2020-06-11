@@ -194,7 +194,7 @@ public class LeetCode {
         if(preorder.length == 0) return null;
         return recursiveBuildTree(preorder, 0, preorder.length, inorder, 0, inorder.length);
     }
-    public static TreeNode recursiveBuildTree(int[] p_order,int p_start,int p_end,int[] i_order,int i_start, int i_end){
+    public static TreeNode recursiveBuildTree(int[] p_order,int p_start,int p_end,int[] i_order,int i_start,int i_end){
         if(p_end - p_start == 1){
             return new TreeNode(p_order[p_start]);
         }else if(p_end - p_start == 0){
@@ -209,8 +209,8 @@ public class LeetCode {
                 }
             }
             int l_len = i_mid - i_start;
-            root.left = recursiveBuildTree(p_order, p_start+1, p_start+1 + l_len, i_order, i_start, i_start + l_len);
-            root.right = recursiveBuildTree(p_order, p_start+1+l_len, p_end, i_order, i_start+l_len+1, i_end);
+            root.left = recursiveBuildTree(p_order,p_start+1,p_start+1+l_len, i_order, i_start,i_start+l_len);
+            root.right = recursiveBuildTree(p_order,p_start+1+l_len,p_end,i_order,i_start+l_len+1,i_end);
             return root;
         }
     }
