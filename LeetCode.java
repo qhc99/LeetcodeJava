@@ -1,4 +1,4 @@
-package algorithms;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,6 +14,12 @@ public class LeetCode {
         }
         ListNode(){}
     }
+    static public class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode(int x) { val = x; }
+  }
     //#7
     // reverse int with restriction
     // 123 ---> 321
@@ -176,6 +182,38 @@ public class LeetCode {
         }
         return true;
     }
+    //#105
+    //前序遍历 preorder = [3,9,20,15,7]
+    //中序遍历 inorder = [9,3,15,20,7]
+    //    3
+    //   / \
+    //  9  20
+    //    /  \
+    //   15   7
+    public static TreeNode buildTree(int[] preorder, int[] inorder) {
+        if(preorder.length == 0) return null;
+        return recursiveBuildTree(preorder, 0, preorder.length, inorder, 0, inorder.length);
+    }
+    public static TreeNode recursiveBuildTree(int[] p_order,int p_start,int p_end,int[] i_order,int i_start, int i_end){
+        if(p_end - p_start == 1){
+            return new TreeNode(p_order[p_start]);
+        }else if(p_end - p_start == 0){
+            return null;
+        } else {
+            TreeNode root = new TreeNode(p_order[p_start]);
+            int i_mid = i_start;
+            for (int i = i_start; i < i_end; i++) {
+                if (root.val == i_order[i]) {
+                    i_mid = i;
+                    break;
+                }
+            }
+            int l_len = i_mid - i_start;
+            root.left = recursiveBuildTree(p_order, p_start+1, p_start+1 + l_len, i_order, i_start, i_start + l_len);
+            root.right = recursiveBuildTree(p_order, p_start+1+l_len, p_end, i_order, i_start+l_len+1, i_end);
+            return root;
+        }
+    }
     //#560
     // find the count of continue sub-arrays which sum is k
     //[1, 2, 3, 4], 3 ---> 2    ([1, 2] and [3])
@@ -191,6 +229,4 @@ public class LeetCode {
         }
         return count;
     }
-    //
-
 }
