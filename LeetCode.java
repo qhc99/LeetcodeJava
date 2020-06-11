@@ -127,25 +127,23 @@ public class LeetCode {
     //   15   7
     public static TreeNode buildTree(int[] preorder, int[] inorder) {
         if(preorder.length == 0) return null;
-        return recursiveBuildTree(preorder, 0, preorder.length, inorder, 0, inorder.length);
+        Map<Integer, Integer> m = new HashMap<>();
+        for(int i = 0; i < inorder.length; i++){
+            m.put(inorder[i], i);
+        }
+        return recursiveBuildTree(preorder, 0, preorder.length, inorder, 0, inorder.length, m);
     }
-    public static TreeNode recursiveBuildTree(int[] p_order,int p_start,int p_end,int[] i_order,int i_start,int i_end){
+    public static TreeNode recursiveBuildTree(int[] p_order,int p_start,int p_end,int[] i_order,int i_start,int i_end,Map<Integer, Integer> m){
         if(p_end - p_start == 1){
             return new TreeNode(p_order[p_start]);
         }else if(p_end - p_start == 0){
             return null;
         } else {
             TreeNode root = new TreeNode(p_order[p_start]);
-            int i_mid = i_start;
-            for (int i = i_start; i < i_end; i++) {
-                if (root.val == i_order[i]) {
-                    i_mid = i;
-                    break;
-                }
-            }
+            int i_mid = m.get(root.val);
             int l_len = i_mid - i_start;
-            root.left = recursiveBuildTree(p_order,p_start+1,p_start+1+l_len, i_order, i_start,i_start+l_len);
-            root.right = recursiveBuildTree(p_order,p_start+1+l_len,p_end,i_order,i_start+l_len+1,i_end);
+            root.left = recursiveBuildTree(p_order,p_start+1,p_start+1+l_len, i_order, i_start,i_start+l_len,m);
+            root.right = recursiveBuildTree(p_order,p_start+1+l_len,p_end,i_order,i_start+l_len+1,i_end,m);
             return root;
         }
     }
