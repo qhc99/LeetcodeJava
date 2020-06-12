@@ -38,7 +38,7 @@ public class LeetCode {
     public static ListNode removeNthFromEnd(ListNode head, int n) {
         boolean is_len_one = (head.next == null);
         int head_order = RecursiveRemoveNthFromEnd(head, n);
-        if(is_len_one & n == 1) return null;
+        if(is_len_one && n == 1) return null;
         else if(head_order == n) return head.next;
         else return head;
     }
@@ -61,13 +61,13 @@ public class LeetCode {
         if(str_len == (2*n)) res.add(strb.toString());
         else{
             str_len++;
-            if(stack_ptr >= 1 & stack_ptr <= n-1 & left_count <= n-1){
+            if(stack_ptr >= 1 && stack_ptr <= n-1 && left_count <= n-1){
                 StringBuilder t = new StringBuilder(strb);
                 strb.append("(");
                 t.append(")");
                 RecursiveGenerateParenthesis(strb, str_len, left_count+1, stack_ptr+1, res, n);
                 RecursiveGenerateParenthesis(t, str_len, left_count, stack_ptr-1, res, n);
-            }else if(stack_ptr == 0 & left_count <= n-1){
+            }else if(stack_ptr == 0 && left_count <= n-1){
                 strb.append("(");
                 RecursiveGenerateParenthesis(strb, str_len, left_count+1, stack_ptr+1, res, n);
             }else{
@@ -80,7 +80,7 @@ public class LeetCode {
     // reverse a linked list every k elements
     //1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
     public static ListNode reverseKGroup(ListNode head, int k) {
-        if(head == null | k <= 1) return head;
+        if(head == null || k <= 1) return head;
         ListNode res = new ListNode();
         ListNode handle;
         res.next = head;
