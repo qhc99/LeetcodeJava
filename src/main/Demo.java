@@ -1,3 +1,5 @@
+package src.main;
+
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
@@ -109,13 +111,14 @@ public class Demo {
 
         public static void readerDemo(){
             try(Reader r = new FileReader(".\\README.md", StandardCharsets.UTF_8)){
-                char[] buffer = new char[60];
-                int n;
+                char[] buffer = new char[5];
+                int n = 0;
+                StringBuilder b = new StringBuilder();
                 while((n = r.read(buffer)) != -1){
                     System.out.println(String.format("read %d chars", n));
+                    b.append(new String(Arrays.copyOfRange(buffer, 0, n)));
                 }
-                String res = new String(buffer);
-                System.out.println(res);
+                System.out.println(b.toString());
             }catch (IOException ie){
                 ie.printStackTrace();
                 return;
