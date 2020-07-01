@@ -17,6 +17,7 @@ public class LeetCode {
         }
         return rev;
     }
+
     //#19
     // remove the nth node of reverse order
     // 1->2->3->4, 2 ---> 1->2->4
@@ -33,6 +34,7 @@ public class LeetCode {
         if(this_order == n + 1) node.next = node.next.next;
         return this_order;
     }
+
     //#22
     //  k pairs parenthesis permutation
     // 3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
@@ -61,6 +63,7 @@ public class LeetCode {
             }
         }
     }
+
     //#25
     // reverse a linked list every k elements
     //1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
@@ -101,6 +104,7 @@ public class LeetCode {
         }
         return true;
     }
+
     //#105
     //前序遍历 preorder = [3,9,20,15,7]
     //中序遍历 inorder = [9,3,15,20,7]
@@ -132,6 +136,7 @@ public class LeetCode {
             return root;
         }
     }
+
     //#560
     // find the count of continue sub-arrays which sum is k
     //[1, 2, 3, 4], 3 ---> 2    ([1, 2] and [3])
