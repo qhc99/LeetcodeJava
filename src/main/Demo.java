@@ -498,22 +498,14 @@ public class Demo {
             pool.submit(new DecThread());
             pool.submit(new AddThread());
             pool.submit(new DecThread());
-//            try{
-//                Thread.sleep(5);
-//            }catch (InterruptedException ignore){}
             try{
-                pool.awaitTermination(2,TimeUnit.SECONDS);
                 pool.shutdown();
+                pool.awaitTermination(1,TimeUnit.NANOSECONDS);
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
             System.out.println(Counter.count);
             System.out.println(pool.isShutdown());
-            try{
-                Thread.sleep(100);
-            }catch (InterruptedException ie){
-                ie.printStackTrace();
-            }
             System.out.println(pool.isTerminated());
 
 
