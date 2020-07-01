@@ -1,8 +1,6 @@
-Main.java
 *.bat
 /.idea/
 *.iml
 /out/
 src/main/Solution.java
 src/main/Main.java
-Solution.java
