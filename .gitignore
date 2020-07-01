@@ -2,4 +2,4 @@ Main.java
 *.bat
 /.idea/
 *.iml
-/out
+/out/
