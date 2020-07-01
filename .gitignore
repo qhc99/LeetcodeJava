@@ -4,3 +4,5 @@ Main.java
 *.iml
 /out/
 src/main/Solution.java
+src/main/Main.java
+Solution.java
