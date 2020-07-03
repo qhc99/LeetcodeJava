@@ -105,7 +105,7 @@ public class LeetCode {
         return true;
     }
 
-    //#29 divide without '/', '*', '%'
+    //#29 int divide without '/', '*', '%'
     public static int divide(int dividend, int divisor) {
         if((dividend == Integer.MIN_VALUE) && (divisor == -1)) return Integer.MAX_VALUE;
         if(divisor == 1) return dividend;
