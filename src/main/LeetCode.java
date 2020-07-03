@@ -105,6 +105,41 @@ public class LeetCode {
         return true;
     }
 
+    //#29 divide without '/', '*', '%'
+    public static int divide(int dividend, int divisor) {
+        if((dividend == Integer.MIN_VALUE) && (divisor == -1)) return Integer.MAX_VALUE;
+        if(divisor == 1) return dividend;
+        if(divisor == - 1) return -dividend;
+        if(dividend == divisor) return 1;
+
+        long new_divisor = (divisor > 0)? divisor: ((long)(~divisor))+1;
+        long new_dividend = (dividend > 0)? dividend : ((long)(~dividend))+1;
+        int res = 0;
+        int sign = ((dividend > 0 && divisor > 0 ) || (dividend < 0 && divisor < 0))? 1: -1;
+
+        if(new_dividend < new_divisor) return 0;
+
+        int i;
+        do{
+            i = 0;
+            while (((new_divisor << i) <= new_dividend)) {
+                i++;
+                if(i >= 1 && leftMoveOverflow(new_divisor << (i-1))){
+                    break;
+                }
+            }
+            if(i != 0){
+                new_dividend -= (new_divisor<< (i-1));
+                res += 1 << (i - 1);
+            }
+        }while(i != 0);
+
+        return sign*res;
+    }
+    private static boolean leftMoveOverflow(long n){
+        return (((n & 0x40000000) << 1) ^ (n & 0x80000000)) == 0x80000000;
+    }
+
     //#105
     //前序遍历 preorder = [3,9,20,15,7]
     //中序遍历 inorder = [9,3,15,20,7]
