@@ -279,34 +279,44 @@ public class Demo {
         }
 
         public static void synchronizeDemo(){
-            var add = new AddThread();
-            var dec = new DecThread();
+            Counter c = new Counter();
+            var add = new AddThread(c);
+            var dec = new DecThread(c);
             add.start();
             dec.start();
             try{
                 add.join();
                 dec.join();
             }catch (InterruptedException ignore){}
-            System.out.println(Counter.count);
+            System.out.println(c.count);
         }
         static class Counter {
-            public static final Object lock = new Object();
-            public static int count = 0;
+            public final Object lock = new Object();
+            public int count = 0;
         }
         static class AddThread extends Thread {
+            private final Counter counter;
+            public AddThread(Counter c){
+                this.counter = c;
+            }
+
             public void run() {
-                for (int i=0; i<1000; i++) {
-                    synchronized(Counter.lock) {
-                        Counter.count += 1;
+                for (int i=0; i<10000; i++) {
+                    synchronized(counter.lock) {
+                        counter.count += 1;
                     }
                 }
             }
         }
         static class DecThread extends Thread {
+            private final Counter counter;
+            public DecThread(Counter c){
+                this.counter = c;
+            }
             public void run() {
-                for (int i=0; i<2000; i++) {
-                    synchronized(Counter.lock) {
-                        Counter.count -= 1;
+                for (int i=0; i<20000; i++) {
+                    synchronized(counter.lock) {
+                        counter.count -= 1;
                     }
                 }
             }
@@ -494,50 +504,53 @@ public class Demo {
 
         public static void threadPoolDemo(){
             ExecutorService pool = Executors.newFixedThreadPool(4);
-            pool.submit(new AddThread());
-            pool.submit(new DecThread());
-            pool.submit(new AddThread());
-            pool.submit(new DecThread());
+            Counter counter = new Counter();
+            pool.submit(new AddThread(counter));
+            pool.submit(new DecThread(counter));
+            pool.submit(new AddThread(counter));
+            pool.submit(new DecThread(counter));
             try{
                 pool.shutdown();
-                pool.awaitTermination(1,TimeUnit.NANOSECONDS);
+                System.out.println(String.format("execute finished: %b",pool.awaitTermination(10,TimeUnit.SECONDS)));
             }catch (InterruptedException e){
                 e.printStackTrace();
             }
-            System.out.println(Counter.count);
-            System.out.println(pool.isShutdown());
-            System.out.println(pool.isTerminated());
+            System.out.println(String.format("count: %d",counter.count));
+            System.out.println(String.format("shutdown: %b",pool.isShutdown()));
+            System.out.println(String.format("terminated: %b",pool.isTerminated()));
 
 
             ScheduledExecutorService spool = Executors.newScheduledThreadPool(4);
-            spool.schedule(new Thread(){
-                @Override
-                public void run(){
-                    System.out.println("running");
-                }
-            }, 1, TimeUnit.MILLISECONDS);
+            spool.schedule(new Thread(() -> System.out.println("delay 1ms")),
+                    1, TimeUnit.MILLISECONDS);
 
-            spool.scheduleAtFixedRate(new Thread(){
-                @Override
-                public void run(){
-                    System.out.println("running");
+            spool.scheduleAtFixedRate(new Thread(() -> {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            }, 0,1, TimeUnit.MILLISECONDS);
+                System.out.println("fix 2ms");
+            }), 0,2, TimeUnit.MILLISECONDS);
 
-            spool.scheduleWithFixedDelay(new Thread(){
-                @Override
-                public void run(){
-                    System.out.println("running");
+            spool.scheduleWithFixedDelay(new Thread(() -> {
+                try {
+                    Thread.sleep(1);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-            }, 0, 1, TimeUnit.MILLISECONDS);
-            try{
-                Thread.sleep(5);
-            }catch (InterruptedException ie){
-                ie.printStackTrace();
+                System.out.println("intermission 2ms");
+            }), 0, 2, TimeUnit.MILLISECONDS);
+
+            try {
+
+                System.out.println(String.format("schedule finished: %b",spool.awaitTermination(50,TimeUnit.MILLISECONDS)));
+                spool.shutdown();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            spool.shutdownNow();
-            System.out.println(spool.isShutdown());
-            System.out.println(spool.isTerminated());
+            System.out.println(String.format("shutdown: %b",spool.isShutdown()));
+            System.out.println(String.format("terminated: %b",spool.isTerminated()));
             System.out.println(Thread.activeCount());
         }
 
