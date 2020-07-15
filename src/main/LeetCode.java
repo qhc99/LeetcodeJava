@@ -3,7 +3,7 @@ package src.main;
 import java.util.*;
 
 public class LeetCode {
-    //#7
+    // #7
     // reverse int with restriction
     // 123 ---> 321
     public static int reverse(int x){
@@ -18,7 +18,7 @@ public class LeetCode {
         return rev;
     }
 
-    //#19
+    // #19
     // remove the nth node of reverse order
     // 1->2->3->4, 2 ---> 1->2->4
     public static ListNode removeNthFromEnd(ListNode head, int n) {
@@ -35,8 +35,8 @@ public class LeetCode {
         return this_order;
     }
 
-    //#22
-    //  k pairs parenthesis permutation
+    // #22
+    // k pairs parenthesis permutation
     // 3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
     public static List<String> generateParenthesis(int n) {
         List<String> res = new ArrayList<>();
@@ -64,7 +64,7 @@ public class LeetCode {
         }
     }
 
-    //#25
+    // #25
     // reverse a linked list every k elements
     //1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
     public static ListNode reverseKGroup(ListNode head, int k) {
@@ -105,7 +105,8 @@ public class LeetCode {
         return true;
     }
 
-    //#29 int divide without '/', '*', '%'
+    // #29
+    // int divide without '/', '*', '%'
     public static int divide(int dividend, int divisor) {
         if((dividend == Integer.MIN_VALUE) && (divisor == -1)) return Integer.MAX_VALUE;
         if(divisor == 1) return dividend;
@@ -140,10 +141,96 @@ public class LeetCode {
         return (((n & 0x40000000) << 1) ^ (n & 0x80000000)) == 0x80000000;
     }
 
-    //#105
-    //前序遍历 preorder = [3,9,20,15,7]
-    //中序遍历 inorder = [9,3,15,20,7]
-    //result:
+    // #96 count of all binary search tree given range [1,n]
+    //  3 -> 5
+    //    1         3     3      2      1
+    //     \       /     /      / \      \
+    //      3     2     1      1   3      2
+    //     /     /       \                 \
+    //    2     1         2                 3
+    public static int numTrees(int n) {
+        int[] G = new int[n+1];
+        G[0] = 1;
+        G[1] = 1;
+        for(int i = 2; i <= n; i++){
+            G[i] = 0;
+            for(int j = 1; j <= i; j++){
+                G[i] += G[j-1]*G[i-j];
+            }
+        }
+        return G[n];
+    }
+
+    // #30
+    // find possible chain result
+    // s = "barfoothefoobarman",
+    // words = ["foo","bar"]
+    // answer: [0, 9] //('barfoo' at 0, and 'foobar' at 9)
+    /*
+    public static List<Integer> findSubstring(String s, String[] words) {
+        List<Integer> res = new ArrayList<>();
+        if (s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0){
+            return res;
+        }
+        Map<String, Integer> words_and_count = new HashMap<>();
+        for(var word : words){
+            Integer count = words_and_count.getOrDefault(word,0);
+            words_and_count.put(word, count+1);
+        }
+        int s_len = s.length();
+        int word_len = words[0].length();
+        int words_count = words.length;
+        int valid_word_upper_bound = s_len - word_len + 1;
+        String[] match_res = new String[valid_word_upper_bound];
+        for(int i = 0; i < valid_word_upper_bound; i++){
+            for (String word : words) {
+                if (s.substring(i, i + word_len).equals(word)) {
+                    match_res[i] = word;
+                    break;
+                }
+            }
+        }
+        int valid_chain_upper_bound = s_len - word_len * words_count + 1;
+        Map<String, Integer> check_map = new HashMap<>();
+        for(var word : words){
+            check_map.put(word,0);
+        }
+        for(int idx1 = 0; idx1 < valid_chain_upper_bound; idx1++){
+            if(canChain(idx1,word_len,words_count,match_res)){
+                int count = 0;
+                for(var entry : check_map.entrySet()){
+                    entry.setValue(0);
+                }
+                for(int idx2 = idx1; count < words_count; idx2 += word_len){
+                    Integer c = check_map.get(match_res[idx2]);
+                    check_map.put(match_res[idx2], c+1);
+                    count++;
+                }
+                if(check_map.equals(words_and_count)){
+                    res.add(idx1);
+                }
+            }
+        }
+        return res;
+    }
+    private static boolean canChain(int idx, int word_len, int words_count, String[] match_res){
+        boolean can_chain = true;
+        int count = 0;
+        for(; count < words_count; idx += word_len){
+            count++;
+            if (match_res[idx] == null) {
+                can_chain = false;
+                break;
+            }
+        }
+        return can_chain;
+    }
+     */
+
+    // #105
+    // 前序遍历 preorder = [3,9,20,15,7]
+    // 中序遍历 inorder = [9,3,15,20,7]
+    // result:
     //    3
     //   / \
     //  9  20
@@ -155,9 +242,9 @@ public class LeetCode {
         for(int i = 0; i < inorder.length; i++){
             m.put(inorder[i], i);
         }
-        return recursiveBuildTree(preorder, 0, preorder.length, inorder, 0, inorder.length, m);
+        return recursiveBuildTree(preorder, 0, preorder.length, 0, m);
     }
-    public static TreeNode recursiveBuildTree(int[] p_order,int p_start,int p_end,int[] i_order,int i_start,int i_end,Map<Integer, Integer> m){
+    private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m){
         if(p_end - p_start == 1){
             return new TreeNode(p_order[p_start]);
         }else if(p_end - p_start == 0){
@@ -166,15 +253,15 @@ public class LeetCode {
             TreeNode root = new TreeNode(p_order[p_start]);
             int i_mid = m.get(root.val);
             int l_len = i_mid - i_start;
-            root.left = recursiveBuildTree(p_order,p_start+1,p_start+1+l_len, i_order, i_start,i_start+l_len,m);
-            root.right = recursiveBuildTree(p_order,p_start+1+l_len,p_end,i_order,i_start+l_len+1,i_end,m);
+            root.left = recursiveBuildTree(p_order,p_start+1,p_start+1+l_len, i_start, m);
+            root.right = recursiveBuildTree(p_order,p_start+1+l_len,p_end, i_start+l_len+1, m);
             return root;
         }
     }
 
-    //#560
+    // #560
     // find the count of continue sub-arrays which sum is k
-    //[1, 2, 3, 4], 3 ---> 2    ([1, 2] and [3])
+    // [1, 2, 3, 4], 3 ---> 2    ([1, 2] and [3])
     public static int subarraySum(int[] nums, int k) {
         int count = 0, pre = 0;
         HashMap< Integer, Integer > mp = new HashMap < > ();
