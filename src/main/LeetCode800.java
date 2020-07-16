@@ -17,8 +17,8 @@ public class LeetCode800 {
         Queue<Integer> queue = new LinkedList<>();
         for(int i = 0; i < vertices_count; i++){
             if(vertex_color.get(i) == Color.GRAY){
-                var is_bipartte = BFS(i,queue,vertex_color,graph);
-                if(!is_bipartte){
+                var is_bipartite = BFS(i,queue,vertex_color,graph);
+                if(!is_bipartite){
                     return false;
                 }
             }

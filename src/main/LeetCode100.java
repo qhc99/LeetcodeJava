@@ -205,6 +205,77 @@ public class LeetCode100 {
         return can_chain;
     }
 
+    // #31
+    // next permutation
+    // 1,2,3 → 1,3,2
+    // 3,2,1 → 1,2,3
+    // 1,1,5 → 1,5,1
+    public static void nextPermutation(int[] nums){
+        int len = nums.length;
+        if(len == 0 || len == 1){
+            return;
+        }
+        int i = len - 1;
+        for(; i >= 1; i--){
+            if(nums[i] > nums[i-1]){
+                break;
+            }
+        }
+        if(i == 0){
+            reverseArray(nums, 0, len);
+            return;
+        }
+        int swap_idx1 = i - 1;
+        int swap_idx2 = i;
+        for(; swap_idx2 < len; swap_idx2++){
+            if((swap_idx2 == len - 1) || (nums[swap_idx2] > nums[swap_idx1] && nums[swap_idx2+1] <= nums[swap_idx1])){
+                break;
+            }
+        }
+        int t = nums[swap_idx1];
+        nums[swap_idx1] = nums[swap_idx2];
+        nums[swap_idx2] = t;
+        reverseArray(nums,i, len);
+    }
+    private static void reverseArray(int[] nums, int start, int end){
+        int idx1 = start;
+        int idx2 = end-1;
+        while(idx1 < idx2){
+            int t = nums[idx1];
+            nums[idx1] = nums[idx2];
+            nums[idx2] = t;
+            idx1++;
+            idx2--;
+        }
+    }
+
+    // #32
+    // longest valid parentheses
+    public static int longestValidParentheses(String s) {
+        int max_len = 0;
+        int s_len = s.length();
+        if(s_len == 0){
+            return 0;
+        }
+        int[] stack = new int[s_len+1];
+        stack[0] = -1;
+        int stack_head = 1;
+        for (int i = 0; i < s_len; i++) {
+            if (s.charAt(i) == '(') {
+                stack[stack_head++] = i;
+            } else {
+                stack_head--;
+                if (stack_head == 0) {
+                    stack[stack_head++] = i;
+                } else {
+                    max_len = Math.max(max_len, i - stack[stack_head - 1]);
+                }
+            }
+        }
+        return max_len;
+    }
+
+
     // #96
     // count of all binary search tree given range [1,n]
     //  3 -> 5
