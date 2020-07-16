@@ -2,7 +2,7 @@ package src.main;
 
 import java.util.*;
 
-public class LeetCode {
+public class LeetCode100 {
     // #7
     // reverse int with restriction
     // 123 ---> 321
@@ -141,32 +141,11 @@ public class LeetCode {
         return (((n & 0x40000000) << 1) ^ (n & 0x80000000)) == 0x80000000;
     }
 
-    // #96 count of all binary search tree given range [1,n]
-    //  3 -> 5
-    //    1         3     3      2      1
-    //     \       /     /      / \      \
-    //      3     2     1      1   3      2
-    //     /     /       \                 \
-    //    2     1         2                 3
-    public static int numTrees(int n) {
-        int[] G = new int[n+1];
-        G[0] = 1;
-        G[1] = 1;
-        for(int i = 2; i <= n; i++){
-            G[i] = 0;
-            for(int j = 1; j <= i; j++){
-                G[i] += G[j-1]*G[i-j];
-            }
-        }
-        return G[n];
-    }
-
     // #30
     // find possible chain result
     // s = "barfoothefoobarman",
     // words = ["foo","bar"]
     // answer: [0, 9] //('barfoo' at 0, and 'foobar' at 9)
-    /*
     public static List<Integer> findSubstring(String s, String[] words) {
         List<Integer> res = new ArrayList<>();
         if (s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0){
@@ -225,53 +204,24 @@ public class LeetCode {
         }
         return can_chain;
     }
-     */
 
-    // #105
-    // 前序遍历 preorder = [3,9,20,15,7]
-    // 中序遍历 inorder = [9,3,15,20,7]
-    // result:
-    //    3
-    //   / \
-    //  9  20
-    //    /  \
-    //   15   7
-    public static TreeNode buildTree(int[] preorder, int[] inorder) {
-        if(preorder.length == 0) return null;
-        Map<Integer, Integer> m = new HashMap<>();
-        for(int i = 0; i < inorder.length; i++){
-            m.put(inorder[i], i);
+    // #96 count of all binary search tree given range [1,n]
+    //  3 -> 5
+    //    1         3     3      2      1
+    //     \       /     /      / \      \
+    //      3     2     1      1   3      2
+    //     /     /       \                 \
+    //    2     1         2                 3
+    public static int numTrees(int n) {
+        int[] G = new int[n+1];
+        G[0] = 1;
+        G[1] = 1;
+        for(int i = 2; i <= n; i++){
+            G[i] = 0;
+            for(int j = 1; j <= i; j++){
+                G[i] += G[j-1]*G[i-j];
+            }
         }
-        return recursiveBuildTree(preorder, 0, preorder.length, 0, m);
-    }
-    private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m){
-        if(p_end - p_start == 1){
-            return new TreeNode(p_order[p_start]);
-        }else if(p_end - p_start == 0){
-            return null;
-        } else {
-            TreeNode root = new TreeNode(p_order[p_start]);
-            int i_mid = m.get(root.val);
-            int l_len = i_mid - i_start;
-            root.left = recursiveBuildTree(p_order,p_start+1,p_start+1+l_len, i_start, m);
-            root.right = recursiveBuildTree(p_order,p_start+1+l_len,p_end, i_start+l_len+1, m);
-            return root;
-        }
-    }
-
-    // #560
-    // find the count of continue sub-arrays which sum is k
-    // [1, 2, 3, 4], 3 ---> 2    ([1, 2] and [3])
-    public static int subarraySum(int[] nums, int k) {
-        int count = 0, pre = 0;
-        HashMap< Integer, Integer > mp = new HashMap < > ();
-        mp.put(0, 1);
-        for (int num : nums) {
-            pre += num;
-            if (mp.containsKey(pre - k))
-                count += mp.get(pre - k);
-            mp.put(pre, mp.getOrDefault(pre, 0) + 1);
-        }
-        return count;
+        return G[n];
     }
 }
