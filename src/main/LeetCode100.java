@@ -275,6 +275,98 @@ public class LeetCode100 {
         return max_len;
     }
 
+    // #33
+    // search target in concatenated sorted array
+    // input: nums = [4,5,6,7,0,1,2], target = 0
+    // result: 4
+    public static int search(int[] nums, int target) {
+        int len = nums.length;
+        if(len <= 4){
+            for(int i = 0; i < len; i++){
+                if(nums[i] == target){
+                    return i;
+                }
+            }
+            return -1;
+        }
+        int l_idx = 0, r_idx = len-1;
+        if(target == nums[l_idx]){
+            return l_idx;
+        }else if(target == nums[r_idx]){
+            return r_idx;
+        }
+        int border = 0;
+        try{
+            border = searchBorder(nums);
+        }catch (AssertionError e){
+            return binarySearchSubArray(nums,target,0,len);
+        }
+        if(target == nums[border]){
+            return border;
+        }
+        if(target > nums[r_idx]){
+            return binarySearchSubArray(nums, target, 0, border);
+        }else{
+            return binarySearchSubArray(nums, target, border, len);
+        }
+    }
+    private static int binarySearchSubArray(int[] nums, int target, int start, int end){
+        while(start < end){
+            if(end - start == 1){
+                if(nums[start] == target){
+                    return target;
+                }else{
+                    return -1;
+                }
+            }
+            int mid = (start + end) / 2;
+            if(target == nums[mid]){
+                return mid;
+            }else if(target > nums[mid]){
+                start = mid;
+            }else{
+                end = mid;
+            }
+        }
+        return -1;
+    }
+    public static int searchBorder(int[] nums){
+        int len = nums.length;
+        int left_border = 0, right_border = len;
+        while(left_border < right_border){
+            int mid_idx = (left_border + right_border) / 2;
+            if((mid_idx - 1) > 0  && nums[mid_idx] < nums[mid_idx - 1]){
+                return mid_idx;
+            }else if((mid_idx + 1) < len && nums[mid_idx] > nums[mid_idx + 1]){
+                return mid_idx + 1;
+            }
+            int left_mid_idx = (left_border + mid_idx) / 2;
+            int right_mid_idx = (mid_idx + right_border) / 2;
+            if(nums[left_mid_idx] > nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]){
+                left_border = left_mid_idx;
+                right_border = mid_idx;
+            }else if(nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] < nums[mid_idx]){
+                left_border = mid_idx;
+                right_border = right_mid_idx;
+            }else if(nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]){
+                if(nums[mid_idx] > nums[left_border]){
+                    left_border = mid_idx;
+                }else{
+                    right_border = mid_idx;
+                }
+            }else{
+                throw new AssertionError();
+            }
+        }
+        throw new AssertionError();
+    }
+    //left_mid  right_mid    result
+    // >mid       >mid    border in left
+    // <mid       <mid    border in right
+    // <mid       >mid       depends
+    // >mid       <mid     not possible
+    // else       else     nums is order
+
 
     // #96
     // count of all binary search tree given range [1,n]
