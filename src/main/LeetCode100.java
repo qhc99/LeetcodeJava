@@ -205,7 +205,8 @@ public class LeetCode100 {
         return can_chain;
     }
 
-    // #96 count of all binary search tree given range [1,n]
+    // #96
+    // count of all binary search tree given range [1,n]
     //  3 -> 5
     //    1         3     3      2      1
     //     \       /     /      / \      \
