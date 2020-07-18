@@ -745,6 +745,70 @@ public class LeetCode100 {
     // >mid       <mid     not possible
     // else       else     nums is order
 
+    // #34
+    // 搜搜有序数组连续数字的边界
+    // 输入: nums = [5,7,7,8,8,10], target = 8
+    // 输出: [3,4]
+    //
+    // 输入: nums = [5,7,7,8,8,10], target = 6
+    // 输出: [-1,-1]
+    public static int[] SearchRange(int[] nums, int target) {
+        if(nums == null || nums.length == 0){
+            return new int[]{-1,-1};
+        }
+        int l = searchLowerBound(nums,target);
+        int u = searchUpperBound(nums,target);
+        if(nums[0] == target){
+            l = 0;
+        }
+        if(nums[nums.length - 1] == target){
+            u = nums.length - 1;
+        }
+        return new int[]{l,u};
+    }
+    private static int searchLowerBound(int[] nums, int target){
+        int start = 0, end = nums.length;
+        int res = -1;
+        while(end - start > 1){
+            int mid = (start + end) / 2;
+            if(nums[mid] < target){
+                if(mid + 1 < nums.length && nums[mid + 1] == target){
+                    res = mid+1;
+                }
+                start = mid;
+            }else if(nums[mid] > target){
+                end = mid;
+            }else{
+                end--;
+            }
+        }
+        if(start + 1 < nums.length && nums[start] < target && nums[start+1] == target){
+            res = start+1;
+        }
+        return res;
+    }
+    private static int searchUpperBound(int[] nums, int target){
+        int start = 0, end = nums.length;
+        int res = -1;
+        while(end - start > 0){
+            int mid = (start + end) / 2;
+            if(nums[mid] < target){
+                start = mid;
+            }else if(nums[mid] > target){
+                if(mid - 1 >= 0 && nums[mid - 1] == target){
+                    res = mid - 1;
+                }
+                end = mid;
+            }else{
+                start++;
+            }
+        }
+        if(start - 1 >= 0 && nums[start] > target && nums[start - 1] == target){
+            res = start - 1;
+        }
+        return res;
+    }
+
 
     // #96
     // count of all binary search tree given range [1,n]
