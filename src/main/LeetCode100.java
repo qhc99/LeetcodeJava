@@ -212,11 +212,11 @@ public class LeetCode100 {
     // result: LEETCODELEETCODE
     public static String convert(String s, int numRows) {
         int len = s.length();
-        List<StringBuilder> rows = new ArrayList<StringBuilder>();
+        List<StringBuilder> rows = new ArrayList<>();
         for(int i = 0; i < numRows; i++) {
             rows.add(new StringBuilder());
         }
-        List<Integer> T = new ArrayList<Integer>(); // numRows==4: 0 1 2 3 2 1
+        List<Integer> T = new ArrayList<>(); // numRows==4: 0 1 2 3 2 1
         for(int i = 0; i < numRows; i++){
             T.add(i%numRows);
         }
@@ -768,12 +768,11 @@ public class LeetCode100 {
     }
     private static int searchLowerBound(int[] nums, int target){
         int start = 0, end = nums.length;
-        int res = -1;
         while(end - start > 1){
             int mid = (start + end) / 2;
             if(nums[mid] < target){
                 if(mid + 1 < nums.length && nums[mid + 1] == target){
-                    res = mid+1;
+                    return mid + 1;
                 }
                 start = mid;
             }else if(nums[mid] > target){
@@ -783,20 +782,19 @@ public class LeetCode100 {
             }
         }
         if(start + 1 < nums.length && nums[start] < target && nums[start+1] == target){
-            res = start+1;
+            return start + 1;
         }
-        return res;
+        return -1;
     }
     private static int searchUpperBound(int[] nums, int target){
         int start = 0, end = nums.length;
-        int res = -1;
-        while(end - start > 0){
+        while(end - start > 1){
             int mid = (start + end) / 2;
             if(nums[mid] < target){
                 start = mid;
             }else if(nums[mid] > target){
                 if(mid - 1 >= 0 && nums[mid - 1] == target){
-                    res = mid - 1;
+                    return mid - 1;
                 }
                 end = mid;
             }else{
@@ -804,9 +802,15 @@ public class LeetCode100 {
             }
         }
         if(start - 1 >= 0 && nums[start] > target && nums[start - 1] == target){
-            res = start - 1;
+            return start - 1;
         }
-        return res;
+        return -1;
+    }
+
+    // #36
+    public static boolean isValidSudoku(char[][] board) {
+
+        return false;
     }
 
 
@@ -829,5 +833,15 @@ public class LeetCode100 {
             }
         }
         return G[n];
+    }
+
+    // #97
+
+    public static boolean isInterleave(String s1, String s2, String s3) {
+        if(s1.length() + s2.length() != s3.length()){ return false; }
+        if(s3.length() == 0){ return true; }
+
+
+        return false;
     }
 }
