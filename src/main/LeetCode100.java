@@ -426,9 +426,12 @@ public class LeetCode100
         return res;
     }
 
-    private static void RecursiveGenerateParenthesis(StringBuilder strb, int str_len, int left_count, int stack_ptr, List<String> res, int n)
+    private static void RecursiveGenerateParenthesis(StringBuilder strb, int str_len, int left_count,
+                                                     int stack_ptr, List<String> res, int n)
     {
-        if (str_len == (2 * n)) res.add(strb.toString());
+        if (str_len == (2 * n)) {
+            res.add(strb.toString());
+        }
         else
         {
             str_len++;
@@ -464,7 +467,9 @@ public class LeetCode100
     // 输出: 1->1->2->3->4->4->5->6
     public static ListNode mergeKLists(ListNode[] lists)
     {
-        if (lists.length == 0) return null;
+        if (lists.length == 0) {
+            return null;
+        }
         ListNode[] lst = new ListNode[lists.length];
         int heap_size = lst.length;
         int idx = 0;
@@ -507,7 +512,6 @@ public class LeetCode100
         }
         return head;
     }
-
     private static void minHeapify(ListNode[] arr, int idx, int heap_size)
     {
         int l = 2 * (idx + 1);
@@ -531,7 +535,6 @@ public class LeetCode100
             minHeapify(arr, min_idx, heap_size);
         }
     }
-
     private static void buildMinHeap(ListNode[] arr, int heap_size)
     {
         for (int i = heap_size / 2 - 1; i >= 0; i--)
@@ -553,7 +556,6 @@ public class LeetCode100
         while (hasKChildren(handle, k)) handle = reverseGroup(handle, k);
         return res.next;
     }
-
     private static ListNode reverseGroup(ListNode handle, int k)
     {
         // have at least k node
@@ -577,7 +579,6 @@ public class LeetCode100
         handle.next = ptr2;
         return head;
     }
-
     private static boolean hasKChildren(ListNode handle, int k)
     {
         for (int i = 0; i < k; i++)
@@ -625,7 +626,6 @@ public class LeetCode100
 
         return sign * res;
     }
-
     private static boolean leftMoveOverflow(long n)
     {
         return (((n & 0x40000000) << 1) ^ (n & 0x80000000)) == 0x80000000;
@@ -694,7 +694,6 @@ public class LeetCode100
         }
         return res;
     }
-
     private static boolean canChain(int idx, int word_len, int words_count, String[] match_res)
     {
         boolean can_chain = true;
