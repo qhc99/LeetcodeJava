@@ -1,4 +1,4 @@
-package src.main;
+package src;
 
 public class ListNode {
     int val;

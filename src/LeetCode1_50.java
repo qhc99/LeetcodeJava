@@ -1,9 +1,8 @@
-package src.main;
+package src;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
-public class LeetCode100 {
+public class LeetCode1_50 {
     // #1
     // 给定 nums = [2, 7, 11, 15], target = 9
     // 因为 nums[0] + nums[1] = 2 + 7 = 9
@@ -75,7 +74,7 @@ public class LeetCode100 {
     // 输出: 3
     // 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
     public static int lengthOfLongestSubstring(String s) {
-        Map<Character, Integer> map = new ConcurrentHashMap<>();
+        Map<Character, Integer> map = new HashMap<>();
         int len = s.length();
         int head = 0, tail = 0;
         int max_count = tail - head;
@@ -826,25 +825,6 @@ public class LeetCode100 {
         return false;
     }
 
-    // #96
-    // count of all binary search tree given range [1,n]
-    //  3 -> 5
-    //    1         3     3      2      1
-    //     \       /     /      / \      \
-    //      3     2     1      1   3      2
-    //     /     /       \                 \
-    //    2     1         2                 3
-    public static int numTrees(int n) {
-        int[] G = new int[n + 1];
-        G[0] = 1;
-        G[1] = 1;
-        for (int i = 2; i <= n; i++) {
-            G[i] = 0;
-            for (int j = 1; j <= i; j++) {
-                G[i] += G[j - 1] * G[i - j];
-            }
-        }
-        return G[n];
-    }
+
 
 }

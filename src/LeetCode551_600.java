@@ -1,8 +1,8 @@
-package src.main;
+package src;
 
 import java.util.*;
 
-public class LeetCode600 {
+public class LeetCode551_600 {
     // #560
     // find the count of continue sub-arrays which sum is k
     // [1, 2, 3, 4], 3 ---> 2    ([1, 2] and [3])

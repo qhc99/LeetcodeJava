@@ -2,5 +2,5 @@
 /.idea/
 *.iml
 /out/
-src/main/Solution.java
-src/main/Main.java
+src/Solution.java
+src/Main.java
