@@ -4,6 +4,7 @@ import java.util.*;
 
 public class LeetCode1_50 {
     // #1
+
     // 给定 nums = [2, 7, 11, 15], target = 9
     // 因为 nums[0] + nums[1] = 2 + 7 = 9
     // 所以返回 [0, 1]
@@ -22,6 +23,7 @@ public class LeetCode1_50 {
     }
 
     // #2
+
     // reverse order integer addition
     // 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
     // 输出：7 -> 0 -> 8
@@ -70,6 +72,7 @@ public class LeetCode1_50 {
     }
 
     // #3
+
     // 输入: "abcabcbb"
     // 输出: 3
     // 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
@@ -97,6 +100,7 @@ public class LeetCode1_50 {
     }
 
     // #4
+
     // 两个有序数组的中位数
     // nums1 = [1, 3]
     // nums2 = [2]
@@ -140,6 +144,7 @@ public class LeetCode1_50 {
 
 
     // #5
+
     // 最长回文字符串
     // 输入: "babad"
     // 输出: "bab"
@@ -184,6 +189,7 @@ public class LeetCode1_50 {
     }
 
     // #6
+
     // Z形字符串转字符串
     // input:
     //      L    D    C
@@ -216,6 +222,7 @@ public class LeetCode1_50 {
     }
 
     // #7
+
     // reverse int with restriction
     // 123 ---> 321
     public static int reverse(int x) {
@@ -235,6 +242,7 @@ public class LeetCode1_50 {
     }
 
     // #8
+
     // string to int
     public static int myAtoi(String str) {
         var automata = new Automation();
@@ -286,6 +294,7 @@ public class LeetCode1_50 {
     }
 
     // #9
+
     // 回文整数
     // 输入: 121
     // 输出: true
@@ -313,6 +322,7 @@ public class LeetCode1_50 {
     }
 
     // #19
+
     // remove the nth node of reverse order
     // 1->2->3->4, 2 ---> 1->2->4
     public static ListNode removeNthFromEnd(ListNode head, int n) {
@@ -341,6 +351,7 @@ public class LeetCode1_50 {
     }
 
     // #22
+
     // k pairs parenthesis permutation
     // 3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
     public static List<String> generateParenthesis(int n) {
@@ -376,6 +387,7 @@ public class LeetCode1_50 {
     }
 
     // #23
+
     // 合并K个排序链表
     // 输入:
     // [
@@ -452,6 +464,7 @@ public class LeetCode1_50 {
     }
 
     // #25
+
     // reverse a linked list every k elements
     //1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
     public static ListNode reverseKGroup(ListNode head, int k) {
@@ -501,6 +514,7 @@ public class LeetCode1_50 {
     }
 
     // #29
+
     // int divide without '/', '*', '%'
     public static int divide(int dividend, int divisor) {
         if ((dividend == Integer.MIN_VALUE) && (divisor == -1)) {
@@ -548,6 +562,7 @@ public class LeetCode1_50 {
     }
 
     // #30
+
     // find possible chain result
     // s = "barfoothefoobarman",
     // words = ["foo","bar"]
@@ -613,6 +628,7 @@ public class LeetCode1_50 {
     }
 
     // #31
+
     // next permutation
     // 1,2,3 → 1,3,2
     // 3,2,1 → 1,2,3
@@ -658,6 +674,7 @@ public class LeetCode1_50 {
     }
 
     // #32
+
     // longest valid parentheses
     public static int longestValidParentheses(String s) {
         int max_len = 0;
@@ -686,6 +703,7 @@ public class LeetCode1_50 {
     }
 
     // #33
+
     // search target in concatenated sorted array
     // input: nums = [4,5,6,7,0,1,2], target = 0
     // result: 4
@@ -754,6 +772,7 @@ public class LeetCode1_50 {
     // else       else     nums is order
 
     // #34
+
     // 搜搜有序数组连续数字的边界
     // 输入: nums = [5,7,7,8,8,10], target = 8
     // 输出: [3,4]
@@ -820,6 +839,8 @@ public class LeetCode1_50 {
     }
 
     // #36
+
+    //
     public static boolean isValidSudoku(char[][] board) {
 
         return false;

@@ -4,6 +4,7 @@ import java.util.*;
 
 public class LeetCode751_800 {
     // #785
+
     // bipartite graph: vertex and its neighbors has different color
     private enum Color {
         GRAY, RED, GREEN

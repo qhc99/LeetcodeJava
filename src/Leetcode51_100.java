@@ -2,6 +2,7 @@ package src;
 
 public class Leetcode51_100 {
     // #96
+
     // count of all binary search tree given range [1,n]
     //  3 -> 5
     //    1         3     3      2      1
