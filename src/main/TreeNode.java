@@ -1,13 +1,11 @@
 package src.main;
 
-public class TreeNode
-{
+public class TreeNode {
     int val;
     TreeNode left;
     TreeNode right;
 
-    TreeNode(int x)
-    {
+    TreeNode(int x) {
         val = x;
     }
 }
