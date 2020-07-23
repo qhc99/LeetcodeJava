@@ -929,7 +929,7 @@ public class Leetcode1_50 {
         }
         return available_chars;
     }
-    static Map<Integer, int[][]> groups = Map.of(
+    static final Map<Integer, int[][]> groups = Map.of(
             0, new int[][]{{0,1,2},{0,1,2}},
             1, new int[][]{{0,1,2},{3,4,5}},
             2, new int[][]{{0,1,2},{6,7,8}},
@@ -958,6 +958,16 @@ public class Leetcode1_50 {
     // #36
 
     // 外观数列
+    // 1.     1
+    // 2.     11
+    // 3.     21
+    // 4.     1211
+    // 5.     111221
+    // 第一项是数字 1
+    // 描述前一项，这个数是 1 即 “一个 1 ”，记作 11
+    // 描述前一项，这个数是 11 即 “两个 1 ” ，记作 21
+    // 描述前一项，这个数是 21 即 “一个 2 一个 1 ” ，记作 1211
+    // 描述前一项，这个数是 1211 即 “一个 1 一个 2 两个 1 ” ，记作 111221
     public static String countAndSay(int n) {
         String start = "1";
         System.out.println(start);
