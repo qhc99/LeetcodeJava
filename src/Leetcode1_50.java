@@ -31,7 +31,6 @@ public class Leetcode1_50 {
     public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         return recursiveAddTwoNumbers(l1, l2, 0);
     }
-
     private static ListNode recursiveAddTwoNumbers(ListNode l1, ListNode l2, int digit) {
         if (l1 == null && l2 == null) {
             return new ListNode(digit);
@@ -57,7 +56,6 @@ public class Leetcode1_50 {
         }
         return n;
     }
-
     private static void addDigit(ListNode l, int digit) {
         l.val += digit;
         if (l.val >= 10) {
@@ -73,6 +71,7 @@ public class Leetcode1_50 {
 
     // #3
 
+    // 最长无重复字符长度
     // 输入: "abcabcbb"
     // 输出: 3
     // 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
@@ -629,7 +628,7 @@ public class Leetcode1_50 {
 
     // #31
 
-    // next permutation
+    // 下一个排列
     // 1,2,3 → 1,3,2
     // 3,2,1 → 1,2,3
     // 1,1,5 → 1,5,1
@@ -675,7 +674,7 @@ public class Leetcode1_50 {
 
     // #32
 
-    // longest valid parentheses
+    // 最长符号陪对
     public static int longestValidParentheses(String s) {
         int max_len = 0;
         int s_len = s.length();
@@ -704,7 +703,7 @@ public class Leetcode1_50 {
 
     // #33
 
-    // search target in concatenated sorted array
+    // 旋转数组搜索
     // input: nums = [4,5,6,7,0,1,2], target = 0
     // result: 4
     public static int search(int[] nums, int target) {
@@ -840,12 +839,147 @@ public class Leetcode1_50 {
 
     // #36
 
-    //
+    //验证9*9方格是否为数独
     public static boolean isValidSudoku(char[][] board) {
-
-        return false;
+        List<Set<Character>> cols = new ArrayList<>();
+        List<Set<Character>> rows = new ArrayList<>();
+        List<Set<Character>> groups = new ArrayList<>();
+        for(int i = 0; i < 9; i++){
+            cols.add(new HashSet<>());
+            rows.add(new HashSet<>());
+            groups.add(new HashSet<>());
+        }
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                char c = board[i][j];
+                if(c == '.') continue;
+                var cm = cols.get(j);
+                var rm = rows.get(i);
+                var gm = groups.get((i/3)*3+j/3);
+                if(cm.contains(c)) return false;
+                else if(rm.contains(c)) return false;
+                else if(gm.contains(c)) return false;
+                else{
+                    cm.add(c);
+                    rm.add(c);
+                    gm.add(c);
+                }
+            }
+        }
+        return true;
     }
 
+    // #36
 
+    //解数独
+    public static void solveSudoku(char[][] board) {
+        List<MatrixIndex> spaces = new ArrayList<>(81);
+        for(int r = 0; r < 9; r++){
+            for(int c = 0; c < 9; c++){
+                char f = board[r][c];
+                if(f == '.') spaces.add(new MatrixIndex(r,c));
+            }
+        }
+        depthFirstSearchSudoku(spaces,0,board);
+    }
+    private static boolean depthFirstSearchSudoku(List<MatrixIndex> spaces, int space_idx, char[][] board){
+        if(space_idx == spaces.size()){
+            return true;
+        }
+        var mi = spaces.get(space_idx);
+        int r_idx = mi.row;
+        int c_idx = mi.col;
+        var availableChars = getAvailableChars(r_idx,c_idx,board);
+        for(var chr : availableChars){
+            board[r_idx][c_idx] = chr;
+            boolean success = depthFirstSearchSudoku(spaces,space_idx+1,board);
+            if(success) return true;
+        }
+        board[r_idx][c_idx] = '.';
+        return false;
+    }
+    private static Set<Character> getAvailableChars(int r_idx, int c_idx, char[][] board){
+        Set<Character> available_chars = new HashSet<>();
+        for(int i = 1; i <= 9; i++){
+            available_chars.add((char)(i + '0'));
+        }
+        for(int j = 0; j < 9; j++){
+            char chr = board[r_idx][j];
+            if(chr != '.'){
+                available_chars.remove(chr);
+            }
+        }
+        for(int i = 0; i < 9; i++){
+            char chr = board[i][c_idx];
+            if(chr != '.'){
+                available_chars.remove(chr);
+            }
+        }
+        int group_idx = (r_idx/3)*3+c_idx/3;
+        int[][] group_indices = groups.get(group_idx);
+        int[] row_indices = group_indices[0];
+        int[] col_indices = group_indices[1];
+        for(var i : row_indices){
+            for(var j : col_indices){
+                char chr = board[i][j];
+                if(chr != '.'){
+                    available_chars.remove(chr);
+                }
+            }
+        }
+        return available_chars;
+    }
+    static Map<Integer, int[][]> groups = Map.of(
+            0, new int[][]{{0,1,2},{0,1,2}},
+            1, new int[][]{{0,1,2},{3,4,5}},
+            2, new int[][]{{0,1,2},{6,7,8}},
+            3, new int[][]{{3,4,5},{0,1,2}},
+            4, new int[][]{{3,4,5},{3,4,5}},
+            5, new int[][]{{3,4,5},{6,7,8}},
+            6, new int[][]{{6,7,8},{0,1,2}},
+            7, new int[][]{{6,7,8},{3,4,5}},
+            8, new int[][]{{6,7,8},{6,7,8}});
+    private static class MatrixIndex{
+        final int row;
+        final int col;
+        private final int hash;
 
+        public MatrixIndex(int r, int c){
+            row = r;
+            col = c;
+            hash = Objects.hash(r,c);
+        }
+        @Override
+        public int hashCode(){
+            return hash;
+        }
+    }
+
+    // #36
+
+    // 外观数列
+    public static String countAndSay(int n) {
+        String start = "1";
+        System.out.println(start);
+        for(int i = 2; i <= n; i++){
+            start = next(start);
+            System.out.println(start);
+        }
+        return start;
+    }
+    private static String next(String s){
+        int i = 0;
+        StringBuilder res = new StringBuilder();
+        while(i < s.length()){
+            int count = 1;
+            while((i + 1 < s.length()) && s.charAt(i) == s.charAt(i+1)){
+                count++;
+                i++;
+            }
+            res.append(count);
+            res.append(s.charAt(i));
+            i++;
+        }
+        return res.toString();
+    }
 }
