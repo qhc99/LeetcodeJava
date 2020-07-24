@@ -320,6 +320,99 @@ public class Leetcode1_50 {
         return rev == original;
     }
 
+    // #11
+
+    // 盛最多水的容器
+    public static int maxArea(int[] height) {
+        int len = height.length;
+        int p = 0, q = len - 1;
+        int max_area = (q - p) * Math.min(height[p], height[q]);
+        while(p != q){
+            if(height[p] > height[q]){
+                int current_area = (q - p) * Math.min(height[p], height[q]);
+                max_area = Math.max(max_area,current_area);
+                q--;
+            }else if(height[p] < height[q]){
+                int current_area = (q - p) * Math.min(height[p], height[q]);
+                max_area = Math.max(max_area,current_area);
+                p++;
+            }else{
+                int current_area = (q - p) * Math.min(height[p], height[q]);
+                max_area = Math.max(max_area,current_area);
+                int l = height[p+1];
+                int h = height[q-1];
+                if(l < h) q--;
+                else p++;
+            }
+        }
+        return max_area;
+    }
+
+    // #16
+
+    //输入：nums = [-1,2,1,-4], target = 1
+    //输出：2
+    //解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+    public int threeSumClosest(int[] nums, int target) {
+        Arrays.sort(nums);
+        int ans = nums[0] + nums[1] + nums[2];
+        for(int i = 0; i < nums.length - 2; i++){
+            int s = i + 1, e = nums.length - 1;
+            while(s < e){
+                int t = nums[i] + nums[s] + nums[e];
+                if(Math.abs(t - target) < Math.abs(ans - target)) ans = t;
+                if(t == target) return t;
+                else if(t > target) e--;
+                else s++;
+            }
+        }
+        return ans;
+    }
+
+    // #18
+
+    // 四数之和
+    //给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+    //
+    //满足要求的四元组集合为：
+    //[
+    //  [-1,  0, 0, 1],
+    //  [-2, -1, 1, 2],
+    //  [-2,  0, 0, 2]
+    //]
+    public List<List<Integer>> fourSum(int[] nums, int target) {
+        int len = nums.length;
+        List<List<Integer>> res =  new ArrayList<>();
+        if(len < 4) return res;
+        Arrays.sort(nums);
+        for(int i = 0; i < len - 3; i++){
+            if(i != 0){
+                while(i < len - 3 && nums[i] == nums[i - 1]) i++;
+            }
+            for(int j = i + 1; j < len - 2; j++){
+                if(j != i + 1){
+                    while(j < len - 2 && nums[j] == nums[j - 1]) j++;
+                }
+                int a = j + 1, b = len - 1;
+                while(a < b){
+                    int t = nums[i] + nums[j] + nums[a] + nums[b];
+                    if(t == target){
+                        res.add(List.of(nums[i], nums[j], nums[a], nums[b]));
+                        a++;
+                        while(a < b && nums[a] == nums[a - 1]) a++;
+                    }else if(t < target){
+                        a++;
+                        while(a < b && nums[a] == nums[a - 1]) a++;
+                    }else{
+                        b--;
+                        while(a < b && nums[b] == nums[b + 1]) b--;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
     // #19
 
     // remove the nth node of reverse order
@@ -647,19 +740,16 @@ public class Leetcode1_50 {
             reverseArray(nums, 0, len);
             return;
         }
-        int swap_idx1 = i - 1;
-        int swap_idx2 = i;
-        for (; swap_idx2 < len; swap_idx2++) {
-            if ((swap_idx2 == len - 1) || (nums[swap_idx2] > nums[swap_idx1] && nums[swap_idx2 + 1] <= nums[swap_idx1])) {
-                break;
-            }
+        int idx1 = i - 1;
+        int idx2 = i;
+        while(idx2 < len && (!((idx2==len-1)||(nums[idx2]>nums[idx1]&&nums[idx2+1]<=nums[idx1])))){
+            idx2++;
         }
-        int t = nums[swap_idx1];
-        nums[swap_idx1] = nums[swap_idx2];
-        nums[swap_idx2] = t;
+        int t = nums[idx1];
+        nums[idx1] = nums[idx2];
+        nums[idx2] = t;
         reverseArray(nums, i, len);
     }
-
     private static void reverseArray(int[] nums, int start, int end) {
         int idx1 = start;
         int idx2 = end - 1;
@@ -678,24 +768,16 @@ public class Leetcode1_50 {
     public static int longestValidParentheses(String s) {
         int max_len = 0;
         int s_len = s.length();
-        if (s_len == 0) {
-            return 0;
-        }
+        if (s_len == 0) return 0;
         int[] stack = new int[s_len + 1];
         stack[0] = -1;
         int stack_head = 1;
         for (int i = 0; i < s_len; i++) {
-            if (s.charAt(i) == '(') {
-                stack[stack_head++] = i;
-            }
+            if (s.charAt(i) == '(') stack[stack_head++] = i;
             else {
                 stack_head--;
-                if (stack_head == 0) {
-                    stack[stack_head++] = i;
-                }
-                else {
-                    max_len = Math.max(max_len, i - stack[stack_head - 1]);
-                }
+                if (stack_head == 0) stack[stack_head++] = i;
+                else max_len = Math.max(max_len, i - stack[stack_head - 1]);
             }
         }
         return max_len;
@@ -769,6 +851,8 @@ public class Leetcode1_50 {
     // <mid       >mid       depends
     // >mid       <mid     not possible
     // else       else     nums is order
+
+    // #34
 
     // #34
 
