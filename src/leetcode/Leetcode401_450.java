@@ -1,4 +1,4 @@
-package src;
+package leetcode;
 
 public class Leetcode401_450 {
     // #410
