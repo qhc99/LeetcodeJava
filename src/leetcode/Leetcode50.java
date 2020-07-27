@@ -1,5 +1,7 @@
 package leetcode;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class Leetcode50 {
@@ -527,13 +529,13 @@ public class Leetcode50 {
 
     /**
      * #23
-     * 合并K个排序链表
-     * 输入:
-     * [
-     *   1->4->5,
-     *   1->3->4,
-     *   2->6
-     * ]
+     * <p>合并K个排序链表</p>
+     * <p>输入:</p>
+     * <p>[</p>
+     * <p>  1->4->5,</p>
+     * <p>  1->3->4,</p>
+     * <p>  2->6</p>
+     * <p>]</p>
      * 输出: 1->1->2->3->4->4->5->6
      * @param lists list of list
      * @return merged list
@@ -607,8 +609,8 @@ public class Leetcode50 {
 
     /**
      * #25
-     * reverse a linked list every k elements
-     * 1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
+     * <p>reverse a linked list every k elements</p>
+     * <p>1->2->3->4->5->6, 3  --->  3->2->1->6->5->4</p>
      * @param head linked list
      * @param k group number
      * @return reversed linked list
@@ -659,7 +661,7 @@ public class Leetcode50 {
 
     /**
      * #29
-     * int divide without '/', '*', '%'
+     * <p>int divide without '/', '*', '%'</p>
      * @param dividend dividend
      * @param divisor divisor
      * @return result
@@ -710,10 +712,10 @@ public class Leetcode50 {
 
     /**
      * #30
-     * find possible chain result
-     * s = "barfoothefoobarman",
-     * words = ["foo","bar"]
-     * answer: [0, 9] //('barfoo' at 0, and 'foobar' at 9)
+     * <BR>find possible chain result<BR>
+     * s = "barfoothefoobarman",<BR>
+     * words = ["foo","bar"]<BR>
+     * answer: [0, 9] //('barfoo' at 0, and 'foobar' at 9)<BR>
      * @param s string
      * @param words words
      * @return result index
@@ -779,10 +781,10 @@ public class Leetcode50 {
 
     /**
      * #31
-     * 下一个排列
-     * 1,2,3 → 1,3,2
-     * 3,2,1 → 1,2,3
-     * 1,1,5 → 1,5,1
+     * <BR>下一个排列<BR>
+     * 1,2,3 → 1,3,2<BR>
+     * 3,2,1 → 1,2,3<BR>
+     * 1,1,5 → 1,5,1<BR>
      * @param nums permutation
      */
     public static void nextPermutation(int[] nums) {
@@ -824,7 +826,7 @@ public class Leetcode50 {
 
     /**
      * 32
-     * 最长符号陪对
+     * <BR>最长符号陪对<BR>
      * @param s string
      * @return max length
      */
@@ -848,9 +850,9 @@ public class Leetcode50 {
 
     /**
      * #33
-     * 旋转数组搜索
-     * input: nums = [4,5,6,7,0,1,2], target = 0
-     * result: 4
+     * <BR>旋转数组搜索<BR>
+     * input: nums = [4,5,6,7,0,1,2], target = 0<BR>
+     * result: 4<BR>
      *
      * search border case:
      * left_mid  right_mid    result
@@ -923,11 +925,11 @@ public class Leetcode50 {
 
     /**
      * #34
-     * 搜搜有序数组连续数字的边界
-     * 输入: nums = [5,7,7,8,8,10], target = 8
-     * 输出: [3,4]
-     * 输入: nums = [5,7,7,8,8,10], target = 6
-     * 输出: [-1,-1]
+     * <BR>搜搜有序数组连续数字的边界<BR>
+     * 输入: nums = [5,7,7,8,8,10], target = 8<BR>
+     * 输出: [3,4]<BR>
+     * 输入: nums = [5,7,7,8,8,10], target = 6<BR>
+     * 输出: [-1,-1]<BR>
      * @param nums array
      * @param target target
      * @return range
@@ -968,7 +970,7 @@ public class Leetcode50 {
         }
         return -1;
     }
-    private static int searchUpperBound(int[] nums, int target) {
+    private static int searchUpperBound(int @NotNull [] nums, int target) {
         int start = 0, end = nums.length;
         while (end - start > 1) {
             int mid = (start + end) / 2;
@@ -993,7 +995,7 @@ public class Leetcode50 {
 
     /**
      * #36
-     * 验证9*9方格是否为数独
+     * <BR>验证9*9方格是否为数独<BR>
      * @param board 9*9 board
      * @return is valid sudoku
      */
@@ -1028,7 +1030,7 @@ public class Leetcode50 {
 
     /**
      * #37
-     * 解数独
+     * <BR>解数独<BR>
      * @param board 9*9 board
      */
     public static void solveSudoku(char[][] board) {
@@ -1116,17 +1118,17 @@ public class Leetcode50 {
 
     /**
      * #36
-     * 外观数列
+     * 外观数列<BR>
      * 1.     1
      * 2.     11
      * 3.     21
      * 4.     1211
      * 5.     111221
-     * 第一项是数字 1
-     * 描述前一项，这个数是 1 即 “一个 1 ”，记作 11
-     * 描述前一项，这个数是 11 即 “两个 1 ” ，记作 21
-     * 描述前一项，这个数是 21 即 “一个 2 一个 1 ” ，记作 1211
-     * 描述前一项，这个数是 1211 即 “一个 1 一个 2 两个 1 ” ，记作 111221
+     * 第一项是数字 1<BR>
+     * 描述前一项，这个数是 1 即 “一个 1 ”，记作 11<BR>
+     * 描述前一项，这个数是 11 即 “两个 1 ” ，记作 21<BR>
+     * 描述前一项，这个数是 21 即 “一个 2 一个 1 ” ，记作 1211<BR>
+     * 描述前一项，这个数是 1211 即 “一个 1 一个 2 两个 1 ” ，记作 111221<BR>
      * @param n order
      * @return result
      */
