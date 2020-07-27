@@ -3,11 +3,15 @@ package leetcode;
 import java.util.*;
 
 public class Leetcode50 {
-    // #1
-
-    // 给定 nums = [2, 7, 11, 15], target = 9
-    // 因为 nums[0] + nums[1] = 2 + 7 = 9
-    // 所以返回 [0, 1]
+    /**
+     * #1
+     * 给定 nums = [2, 7, 11, 15], target = 9
+     * 因为 nums[0] + nums[1] = 2 + 7 = 9
+     * 所以返回 [0, 1]
+     * @param nums array
+     * @param target target sum
+     * @return numbers array
+     */
     public static int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
@@ -22,12 +26,16 @@ public class Leetcode50 {
         throw new AssertionError();
     }
 
-    // #2
-
-    // reverse order integer addition
-    // 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
-    // 输出：7 -> 0 -> 8
-    // 原因：342 + 465 = 807
+    /**
+     * #2
+     * reverse order integer addition
+     * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+     * 输出：7 -> 0 -> 8
+     * 原因：342 + 465 = 807
+     * @param l1 list number
+     * @param l2 list number
+     * @return add result
+     */
     public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
         return recursiveAddTwoNumbers(l1, l2, 0);
     }
@@ -69,12 +77,15 @@ public class Leetcode50 {
         }
     }
 
-    // #3
-
-    // 最长无重复字符长度
-    // 输入: "abcabcbb"
-    // 输出: 3
-    // 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+    /**
+     * #3
+     * 最长无重复字符长度
+     * 输入: "abcabcbb"
+     * 输出: 3
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     * @param s string
+     * @return result
+     */
     public static int lengthOfLongestSubstring(String s) {
         Map<Character, Integer> map = new HashMap<>();
         int len = s.length();
@@ -98,12 +109,16 @@ public class Leetcode50 {
         return max_count;
     }
 
-    // #4
-
-    // 两个有序数组的中位数
-    // nums1 = [1, 3]
-    // nums2 = [2]
-    // 则中位数是 2.0
+    /**
+     * #4
+     * 两个有序数组的中位数
+     * nums1 = [1, 3]
+     * nums2 = [2]
+     * 则中位数是 2.0
+     * @param nums1 array
+     * @param nums2 array
+     * @return median
+     */
     public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
         if (nums1.length > nums2.length) {
             return findMedianSortedArrays(nums2, nums1);
@@ -142,12 +157,15 @@ public class Leetcode50 {
     }
 
 
-    // #5
-
-    // 最长回文字符串
-    // 输入: "babad"
-    // 输出: "bab"
-    // 注意: "aba" 也是一个有效答案。
+    /**
+     * #5
+     * 最长回文字符串
+     * 输入: "babad"
+     * 输出: "bab"
+     * 注意: "aba" 也是一个有效答案。
+     * @param s string
+     * @return longest palindrome
+     */
     public static String longestPalindrome(String s) {
         int len = s.length();
         if (len <= 1) {
@@ -187,15 +205,19 @@ public class Leetcode50 {
         return s.substring(res_start, res_end + 1);
     }
 
-    // #6
-
-    // Z形字符串转字符串
-    // input:
-    //      L    D    C
-    //      E  O E  T O
-    //      E C  L E  D
-    //      T    E    E
-    // result: LEETCODELEETCODE
+    /**
+     * #6
+     * Z形字符串转字符串
+     * input:
+     *    L    D    C
+     *    E  O E  T O
+     *    E C  L E  D
+     *    T    E    E
+     *   result: LEETCODELEETCODE
+     * @param s z string
+     * @param numRows row count
+     * @return origin
+     */
     public static String convert(String s, int numRows) {
         int len = s.length();
         List<StringBuilder> rows = new ArrayList<>();
@@ -220,10 +242,13 @@ public class Leetcode50 {
         return res.toString();
     }
 
-    // #7
-
-    // reverse int with restriction
-    // 123 ---> 321
+    /**
+     * #7
+     * reverse int with restriction
+     * 123 ---> 321
+     * @param x int
+     * @return reversed int
+     */
     public static int reverse(int x) {
         int rev = 0;
         while (x != 0) {
@@ -240,9 +265,12 @@ public class Leetcode50 {
         return rev;
     }
 
-    // #8
-
-    // string to int
+    /**
+     * #8
+     * string to int
+     * @param str string
+     * @return int
+     */
     public static int myAtoi(String str) {
         var automata = new Automation();
         int len = str.length();
@@ -292,14 +320,16 @@ public class Leetcode50 {
         }
     }
 
-    // #9
-
-    // 回文整数
-    // 输入: 121
-    // 输出: true
-    //
-    // 输入: -121
-    // 输出: false
+    /**
+     * #9
+     * 回文整数
+     * 输入: 121
+     * 输出: true
+     * 输入: -121
+     * 输出: false
+     * @param x int
+     * @return x is palindrome
+     */
     public static boolean isPalindrome(int x) {
         if (x < 0) {
             return false;
@@ -320,9 +350,12 @@ public class Leetcode50 {
         return rev == original;
     }
 
-    // #11
-
-    // 盛最多水的容器
+    /**
+     * #11
+     * 盛最多水的容器
+     * @param height partition array
+     * @return max area
+     */
     public static int maxArea(int[] height) {
         int len = height.length;
         int p = 0, q = len - 1;
@@ -348,11 +381,15 @@ public class Leetcode50 {
         return max_area;
     }
 
-    // #16
-
-    //输入：nums = [-1,2,1,-4], target = 1
-    //输出：2
-    //解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+    /**
+     * #16
+     * 输入：nums = [-1,2,1,-4], target = 1
+     * 出：2
+     * 解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+     * @param nums array
+     * @param target sum target
+     * @return closest sum
+     */
     public int threeSumClosest(int[] nums, int target) {
         Arrays.sort(nums);
         int ans = nums[0] + nums[1] + nums[2];
@@ -369,17 +406,21 @@ public class Leetcode50 {
         return ans;
     }
 
-    // #18
-
-    // 四数之和
-    //给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
-    //
-    //满足要求的四元组集合为：
-    //[
-    //  [-1,  0, 0, 1],
-    //  [-2, -1, 1, 2],
-    //  [-2,  0, 0, 2]
-    //]
+    /**
+     * #18
+     * 四数之和
+     * 给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+     *
+     * 满足要求的四元组集合为：
+     * [
+     *  [-1,  0, 0, 1],
+     *  [-2, -1, 1, 2],
+     *  [-2,  0, 0, 2]
+     * ]
+     * @param nums array
+     * @param target sum target
+     * @return list of four-tuple
+     */
     public List<List<Integer>> fourSum(int[] nums, int target) {
         int len = nums.length;
         List<List<Integer>> res =  new ArrayList<>();
@@ -413,10 +454,14 @@ public class Leetcode50 {
         return res;
     }
 
-    // #19
-
-    // remove the nth node of reverse order
-    // 1->2->3->4, 2 ---> 1->2->4
+    /**
+     * #19
+     * remove the nth node of reverse order
+     * 1->2->3->4, 2 ---> 1->2->4
+     * @param head linked list
+     * @param n order
+     * @return processed linked list
+     */
     public static ListNode removeNthFromEnd(ListNode head, int n) {
         boolean is_len_one = (head.next == null);
         int head_order = RecursiveRemoveNthFromEnd(head, n);
@@ -442,17 +487,19 @@ public class Leetcode50 {
         return this_order;
     }
 
-    // #22
-
-    // k pairs parenthesis permutation
-    // 3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
+    /**
+     * #22
+     * k pairs parenthesis permutation
+     * 3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
+     * @param n order
+     * @return result
+     */
     public static List<String> generateParenthesis(int n) {
         List<String> res = new ArrayList<>();
         StringBuilder init = new StringBuilder("(");
         RecursiveGenerateParenthesis(init, 1, 1, 1, res, n);
         return res;
     }
-
     private static void RecursiveGenerateParenthesis(StringBuilder strb, int str_len, int left_count,
                                                      int stack_ptr, List<String> res, int n) {
         if (str_len == (2 * n)) {
@@ -478,16 +525,19 @@ public class Leetcode50 {
         }
     }
 
-    // #23
-
-    // 合并K个排序链表
-    // 输入:
-    // [
-    //   1->4->5,
-    //   1->3->4,
-    //   2->6
-    // ]
-    // 输出: 1->1->2->3->4->4->5->6
+    /**
+     * #23
+     * 合并K个排序链表
+     * 输入:
+     * [
+     *   1->4->5,
+     *   1->3->4,
+     *   2->6
+     * ]
+     * 输出: 1->1->2->3->4->4->5->6
+     * @param lists list of list
+     * @return merged list
+     */
     public static ListNode mergeKLists(ListNode[] lists) {
         if (lists.length == 0) {
             return null;
@@ -555,10 +605,14 @@ public class Leetcode50 {
         }
     }
 
-    // #25
-
-    // reverse a linked list every k elements
-    //1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
+    /**
+     * #25
+     * reverse a linked list every k elements
+     * 1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
+     * @param head linked list
+     * @param k group number
+     * @return reversed linked list
+     */
     public static ListNode reverseKGroup(ListNode head, int k) {
         if (head == null || k <= 1) {
             return head;
@@ -572,7 +626,6 @@ public class Leetcode50 {
         }
         return res.next;
     }
-
     private static ListNode reverseGroup(ListNode handle, int k) {
         // have at least k node
         ListNode rest, ptr1, ptr2, head;
@@ -594,7 +647,6 @@ public class Leetcode50 {
         handle.next = ptr2;
         return head;
     }
-
     private static boolean hasKChildren(ListNode handle, int k) {
         for (int i = 0; i < k; i++) {
             handle = handle.next;
@@ -605,9 +657,13 @@ public class Leetcode50 {
         return true;
     }
 
-    // #29
-
-    // int divide without '/', '*', '%'
+    /**
+     * #29
+     * int divide without '/', '*', '%'
+     * @param dividend dividend
+     * @param divisor divisor
+     * @return result
+     */
     public static int divide(int dividend, int divisor) {
         if ((dividend == Integer.MIN_VALUE) && (divisor == -1)) {
             return Integer.MAX_VALUE;
@@ -648,17 +704,20 @@ public class Leetcode50 {
 
         return sign * res;
     }
-
     private static boolean leftMoveOverflow(long n) {
         return (((n & 0x40000000) << 1) ^ (n & 0x80000000)) == 0x80000000;
     }
 
-    // #30
-
-    // find possible chain result
-    // s = "barfoothefoobarman",
-    // words = ["foo","bar"]
-    // answer: [0, 9] //('barfoo' at 0, and 'foobar' at 9)
+    /**
+     * #30
+     * find possible chain result
+     * s = "barfoothefoobarman",
+     * words = ["foo","bar"]
+     * answer: [0, 9] //('barfoo' at 0, and 'foobar' at 9)
+     * @param s string
+     * @param words words
+     * @return result index
+     */
     public static List<Integer> findSubstring(String s, String[] words) {
         List<Integer> res = new ArrayList<>();
         if (s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0) {
@@ -705,7 +764,6 @@ public class Leetcode50 {
         }
         return res;
     }
-
     private static boolean canChain(int idx, int word_len, int words_count, String[] match_res) {
         boolean can_chain = true;
         int count = 0;
@@ -719,12 +777,14 @@ public class Leetcode50 {
         return can_chain;
     }
 
-    // #31
-
-    // 下一个排列
-    // 1,2,3 → 1,3,2
-    // 3,2,1 → 1,2,3
-    // 1,1,5 → 1,5,1
+    /**
+     * #31
+     * 下一个排列
+     * 1,2,3 → 1,3,2
+     * 3,2,1 → 1,2,3
+     * 1,1,5 → 1,5,1
+     * @param nums permutation
+     */
     public static void nextPermutation(int[] nums) {
         int len = nums.length;
         if (len == 0 || len == 1) {
@@ -762,9 +822,12 @@ public class Leetcode50 {
         }
     }
 
-    // #32
-
-    // 最长符号陪对
+    /**
+     * 32
+     * 最长符号陪对
+     * @param s string
+     * @return max length
+     */
     public static int longestValidParentheses(String s) {
         int max_len = 0;
         int s_len = s.length();
@@ -783,11 +846,23 @@ public class Leetcode50 {
         return max_len;
     }
 
-    // #33
-
-    // 旋转数组搜索
-    // input: nums = [4,5,6,7,0,1,2], target = 0
-    // result: 4
+    /**
+     * #33
+     * 旋转数组搜索
+     * input: nums = [4,5,6,7,0,1,2], target = 0
+     * result: 4
+     *
+     * search border case:
+     * left_mid  right_mid    result
+     *  >mid       >mid    border in left
+     *  <mid       <mid    border in right
+     *  <mid       >mid       depends
+     *  >mid       <mid     not possible
+     *  else       else     nums is order
+     * @param nums array
+     * @param target target
+     * @return index
+     */
     public static int search(int[] nums, int target) {
         int len = nums.length;
         if(len == 0) return -1;
@@ -845,23 +920,18 @@ public class Leetcode50 {
         }
         return -1;
     }
-    //left_mid  right_mid    result
-    // >mid       >mid    border in left
-    // <mid       <mid    border in right
-    // <mid       >mid       depends
-    // >mid       <mid     not possible
-    // else       else     nums is order
 
-    // #34
-
-    // #34
-
-    // 搜搜有序数组连续数字的边界
-    // 输入: nums = [5,7,7,8,8,10], target = 8
-    // 输出: [3,4]
-    //
-    // 输入: nums = [5,7,7,8,8,10], target = 6
-    // 输出: [-1,-1]
+    /**
+     * #34
+     * 搜搜有序数组连续数字的边界
+     * 输入: nums = [5,7,7,8,8,10], target = 8
+     * 输出: [3,4]
+     * 输入: nums = [5,7,7,8,8,10], target = 6
+     * 输出: [-1,-1]
+     * @param nums array
+     * @param target target
+     * @return range
+     */
     public static int[] SearchRange(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
             return new int[]{-1, -1};
@@ -921,9 +991,12 @@ public class Leetcode50 {
         return -1;
     }
 
-    // #36
-
-    //验证9*9方格是否为数独
+    /**
+     * #36
+     * 验证9*9方格是否为数独
+     * @param board 9*9 board
+     * @return is valid sudoku
+     */
     public static boolean isValidSudoku(char[][] board) {
         List<Set<Character>> cols = new ArrayList<>();
         List<Set<Character>> rows = new ArrayList<>();
@@ -953,9 +1026,11 @@ public class Leetcode50 {
         return true;
     }
 
-    // #37
-
-    //解数独
+    /**
+     * #37
+     * 解数独
+     * @param board 9*9 board
+     */
     public static void solveSudoku(char[][] board) {
         List<MatrixIndex> spaces = new ArrayList<>(81);
         for(int r = 0; r < 9; r++){
@@ -1039,19 +1114,22 @@ public class Leetcode50 {
         }
     }
 
-    // #36
-
-    // 外观数列
-    // 1.     1
-    // 2.     11
-    // 3.     21
-    // 4.     1211
-    // 5.     111221
-    // 第一项是数字 1
-    // 描述前一项，这个数是 1 即 “一个 1 ”，记作 11
-    // 描述前一项，这个数是 11 即 “两个 1 ” ，记作 21
-    // 描述前一项，这个数是 21 即 “一个 2 一个 1 ” ，记作 1211
-    // 描述前一项，这个数是 1211 即 “一个 1 一个 2 两个 1 ” ，记作 111221
+    /**
+     * #36
+     * 外观数列
+     * 1.     1
+     * 2.     11
+     * 3.     21
+     * 4.     1211
+     * 5.     111221
+     * 第一项是数字 1
+     * 描述前一项，这个数是 1 即 “一个 1 ”，记作 11
+     * 描述前一项，这个数是 11 即 “两个 1 ” ，记作 21
+     * 描述前一项，这个数是 21 即 “一个 2 一个 1 ” ，记作 1211
+     * 描述前一项，这个数是 1211 即 “一个 1 一个 2 两个 1 ” ，记作 111221
+     * @param n order
+     * @return result
+     */
     public static String countAndSay(int n) {
         String start = "1";
         System.out.println(start);

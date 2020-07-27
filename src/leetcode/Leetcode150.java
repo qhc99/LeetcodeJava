@@ -3,16 +3,21 @@ package leetcode;
 import java.util.*;
 
 public class Leetcode150 {
-    // #105
-
-    // 前序遍历 preorder = [3,9,20,15,7]
-    // 中序遍历 inorder = [9,3,15,20,7]
-    // result:
-    //    3
-    //   / \
-    //  9  20
-    //    /  \
-    //   15   7
+    /**
+     * #105
+     *
+     * 前序遍历 preorder = [3,9,20,15,7]
+     * 中序遍历 inorder = [9,3,15,20,7]
+     * result:
+     *    3
+     *   / \
+     *  9  20
+     *    /  \
+     *   15   7
+     * @param preorder preorder int array
+     * @param inorder inorder int array
+     * @return origin tree
+     */
     public static TreeNode buildTree(int[] preorder, int[] inorder) {
         if (preorder.length == 0) {
             return null;
@@ -23,7 +28,6 @@ public class Leetcode150 {
         }
         return recursiveBuildTree(preorder, 0, preorder.length, 0, m);
     }
-
     private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m) {
         if (p_end - p_start == 1) {
             return new TreeNode(p_order[p_start]);

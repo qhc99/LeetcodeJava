@@ -2,18 +2,21 @@ package leetcode;
 
 public class Leetcode100 {
 
-    // #64
-
-    //说明：每次只能向下或者向右移动一步。
-    // (上, 左)
-    //输入:
-    //[
-    //  [1,3,1],
-    //  [1,5,1],
-    //  [4,2,1]
-    //]
-    //输出: 7
-    //解释: 因为路径 1→3→1→1→1 的总和最小。
+    /**
+     * #64
+     *说明：每次只能向下或者向右移动一步。
+     *(上, 左)
+     *     输入:
+     * [
+     *  [1,3,1],
+     *  [1,5,1],
+     *  [4,2,1]
+     * ]
+     * 输出: 7
+     * 解释: 因为路径 1→3→1→1→1 的总和最小。
+     * @param grid int graph
+     * @return path sum
+     */
     public static int minPathSum(int[][] grid) {
         int r_len = grid.length;
         int c_len = grid[0].length;
@@ -32,15 +35,19 @@ public class Leetcode100 {
         return (int)Math.min(l,u);
     }
 
-    // #96
-
-    // count of all binary search tree given range [1,n]
-    //  3 -> 5
-    //    1         3     3      2      1
-    //     \       /     /      / \      \
-    //      3     2     1      1   3      2
-    //     /     /       \                 \
-    //    2     1         2                 3
+    /**
+     * #96
+     *
+     * count of all binary search tree given range [1,n]
+     *  3 -> 5
+     *    1         3     3      2      1
+     *     \       /     /      / \      \
+     *      3     2     1      1   3      2
+     *     /     /       \                 \
+     *    2     1         2                 3
+     * @param n range upper bound
+     * @return count
+     */
     public static int numTrees(int n) {
         int[] G = new int[n + 1];
         G[0] = 1;

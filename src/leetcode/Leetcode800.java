@@ -3,12 +3,13 @@ package leetcode;
 import java.util.*;
 
 public class Leetcode800 {
-    // #785
 
-    // bipartite graph: vertex and its neighbors has different color
-    private enum Color {
-        GRAY, RED, GREEN
-    }
+    /**
+     * #785
+     * bipartite graph: vertex and its neighbors has different color
+     * @param graph graph
+     * @return graph is bipartite
+     */
     public static boolean isBipartite(int[][] graph) {
         int vertices_count = graph.length;
         Map<Integer, Color> vertex_color = new HashMap<>();
@@ -25,6 +26,9 @@ public class Leetcode800 {
             }
         }
         return true;
+    }
+    private enum Color {
+        GRAY, RED, GREEN
     }
     private static boolean BFS(Integer start, Queue<Integer> queue, Map<Integer, Color> vertex_color, int[][] graph) {
         queue.add(start);
