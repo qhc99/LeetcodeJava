@@ -2,7 +2,7 @@ package leetcode;
 
 import java.util.*;
 
-public class Leetcode101_150 {
+public class Leetcode150 {
     // #105
 
     // 前序遍历 preorder = [3,9,20,15,7]

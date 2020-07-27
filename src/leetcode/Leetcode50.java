@@ -2,7 +2,7 @@ package leetcode;
 
 import java.util.*;
 
-public class Leetcode1_50 {
+public class Leetcode50 {
     // #1
 
     // 给定 nums = [2, 7, 11, 15], target = 9

@@ -2,7 +2,7 @@ package leetcode;
 
 import java.util.*;
 
-public class Leetcode551_600 {
+public class Leetcode600 {
     // #560
 
     // find the count of continue sub-arrays which sum is k

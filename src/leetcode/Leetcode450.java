@@ -1,6 +1,6 @@
 package leetcode;
 
-public class Leetcode401_450 {
+public class Leetcode450 {
     // #410
 
     //输入:

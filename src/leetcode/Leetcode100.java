@@ -1,6 +1,6 @@
 package leetcode;
 
-public class Leetcode51_100 {
+public class Leetcode100 {
 
     // #64
 

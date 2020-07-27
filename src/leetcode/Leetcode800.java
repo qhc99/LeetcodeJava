@@ -2,7 +2,7 @@ package leetcode;
 
 import java.util.*;
 
-public class Leetcode751_800 {
+public class Leetcode800 {
     // #785
 
     // bipartite graph: vertex and its neighbors has different color
