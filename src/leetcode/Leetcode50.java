@@ -1,7 +1,5 @@
 package leetcode;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.*;
 
 public class Leetcode50 {
@@ -970,7 +968,7 @@ public class Leetcode50 {
         }
         return -1;
     }
-    private static int searchUpperBound(int @NotNull [] nums, int target) {
+    private static int searchUpperBound(int[] nums, int target) {
         int start = 0, end = nums.length;
         while (end - start > 1) {
             int mid = (start + end) / 2;
@@ -1041,25 +1039,37 @@ public class Leetcode50 {
                 if(f == '.') spaces.add(new MatrixIndex(r,c));
             }
         }
-        depthFirstSearchSudoku(spaces,0,board);
+        Map<Integer, int[][]> groups = Map.of(
+                0, new int[][]{{0,1,2},{0,1,2}},
+                1, new int[][]{{0,1,2},{3,4,5}},
+                2, new int[][]{{0,1,2},{6,7,8}},
+                3, new int[][]{{3,4,5},{0,1,2}},
+                4, new int[][]{{3,4,5},{3,4,5}},
+                5, new int[][]{{3,4,5},{6,7,8}},
+                6, new int[][]{{6,7,8},{0,1,2}},
+                7, new int[][]{{6,7,8},{3,4,5}},
+                8, new int[][]{{6,7,8},{6,7,8}});
+        depthFirstSearchSudoku(spaces,0,board,groups);
     }
-    private static boolean depthFirstSearchSudoku(List<MatrixIndex> spaces, int space_idx, char[][] board){
+    private static boolean depthFirstSearchSudoku(List<MatrixIndex> spaces, int space_idx,
+                                                  char[][] board,Map<Integer, int[][]> groups){
         if(space_idx == spaces.size()){
             return true;
         }
         var mi = spaces.get(space_idx);
         int r_idx = mi.row;
         int c_idx = mi.col;
-        var availableChars = getAvailableChars(r_idx,c_idx,board);
+        var availableChars = getAvailableChars(r_idx,c_idx,board,groups);
         for(var chr : availableChars){
             board[r_idx][c_idx] = chr;
-            boolean success = depthFirstSearchSudoku(spaces,space_idx+1,board);
+            boolean success = depthFirstSearchSudoku(spaces,space_idx+1,board,groups);
             if(success) return true;
         }
         board[r_idx][c_idx] = '.';
         return false;
     }
-    private static Set<Character> getAvailableChars(int r_idx, int c_idx, char[][] board){
+    private static Set<Character> getAvailableChars(int r_idx, int c_idx,
+                                                    char[][] board,Map<Integer, int[][]> groups){
         Set<Character> available_chars = new HashSet<>();
         for(int i = 1; i <= 9; i++){
             available_chars.add((char)(i + '0'));
@@ -1090,30 +1100,15 @@ public class Leetcode50 {
         }
         return available_chars;
     }
-    static final Map<Integer, int[][]> groups = Map.of(
-            0, new int[][]{{0,1,2},{0,1,2}},
-            1, new int[][]{{0,1,2},{3,4,5}},
-            2, new int[][]{{0,1,2},{6,7,8}},
-            3, new int[][]{{3,4,5},{0,1,2}},
-            4, new int[][]{{3,4,5},{3,4,5}},
-            5, new int[][]{{3,4,5},{6,7,8}},
-            6, new int[][]{{6,7,8},{0,1,2}},
-            7, new int[][]{{6,7,8},{3,4,5}},
-            8, new int[][]{{6,7,8},{6,7,8}});
     private static class MatrixIndex{
         final int row;
         final int col;
-        private final int hash;
 
         public MatrixIndex(int r, int c){
             row = r;
             col = c;
-            hash = Objects.hash(r,c);
         }
-        @Override
-        public int hashCode(){
-            return hash;
-        }
+
     }
 
     /**
