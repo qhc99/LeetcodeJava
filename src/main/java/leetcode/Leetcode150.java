@@ -2,18 +2,21 @@ package leetcode;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Leetcode150 {
     /**
      * #105
      *
-     * 前序遍历 preorder = [3,9,20,15,7]
-     * 中序遍历 inorder = [9,3,15,20,7]
-     * result:
+     * <br>前序遍历 preorder = [3,9,20,15,7]
+     * <br>中序遍历 inorder = [9,3,15,20,7]
+     * <br>result:
+     * <pre>
      *    3
      *   / \
      *  9  20
      *    /  \
      *   15   7
+     * </pre>
      * @param preorder preorder int array
      * @param inorder inorder int array
      * @return origin tree

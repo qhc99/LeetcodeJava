@@ -2,12 +2,13 @@ package leetcode;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Leetcode50 {
     /**
-     * #1<br>
-     * 给定 nums = [2, 7, 11, 15], target = 9<br>
-     * 因为 nums[0] + nums[1] = 2 + 7 = 9<br>
-     * 所以返回 [0, 1]<br>
+     * #1
+     * <br>给定 nums = [2, 7, 11, 15], target = 9
+     * <br>因为 nums[0] + nums[1] = 2 + 7 = 9
+     * <br>所以返回 [0, 1]
      * @param nums array
      * @param target target sum
      * @return numbers array
@@ -27,11 +28,11 @@ public class Leetcode50 {
     }
 
     /**
-     * #2<br>
-     * reverse order integer addition<br>
-     * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)<br>
-     * 输出：7 -> 0 -> 8<br>
-     * 原因：342 + 465 = 807<br>
+     * #2
+     * <br>reverse order integer addition
+     * <br>输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
+     * <br>输出：7 -> 0 -> 8
+     * <br>原因：342 + 465 = 807
      * @param l1 list number
      * @param l2 list number
      * @return add result
@@ -78,11 +79,11 @@ public class Leetcode50 {
     }
 
     /**
-     * #3<br>
-     * 最长无重复字符长度<br>
-     * 输入: "abcabcbb"<br>
-     * 输出: 3<br>
-     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。<br>
+     * #3
+     * <br>最长无重复字符长度
+     * <br>输入: "abcabcbb"
+     * <br>输出: 3
+     * <br>解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
      * @param s string
      * @return result
      */
@@ -90,7 +91,7 @@ public class Leetcode50 {
         Map<Character, Integer> map = new HashMap<>();
         int len = s.length();
         int head = 0, tail = 0;
-        int max_count = tail - head;
+        int max_count = 0;
         for (int idx = 0; idx < len; idx++) {
             char c = s.charAt(idx);
             if (!map.containsKey(c)) {
@@ -110,11 +111,11 @@ public class Leetcode50 {
     }
 
     /**
-     * #4<br>
-     * 两个有序数组的中位数<br>
-     * nums1 = [1, 3]<br>
-     * nums2 = [2]<br>
-     * 则中位数是 2.0<br>
+     * #4
+     * <br>两个有序数组的中位数
+     * <br>nums1 = [1, 3]
+     * <br>nums2 = [2]
+     * <br>则中位数是 2.0
      * @param nums1 array
      * @param nums2 array
      * @return median
@@ -158,11 +159,11 @@ public class Leetcode50 {
 
 
     /**
-     * #5<br>
-     * 最长回文字符串<br>
-     * 输入: "babad"<br>
-     * 输出: "bab"<br>
-     * 注意: "aba" 也是一个有效答案。<br>
+     * #5
+     * <br>最长回文字符串
+     * <br>输入: "babad"
+     * <br>输出: "bab"
+     * <br>注意: "aba" 也是一个有效答案。
      * @param s string
      * @return longest palindrome
      */
@@ -206,16 +207,16 @@ public class Leetcode50 {
     }
 
     /**
-     * #6<br>
-     * Z形字符串转字符串<br>
-     * input:<br>
+     * #6
+     * <br>Z形字符串转字符串
+     * <br>input:<br>
      * <pre>
      *    L    D    C
      *    E  O E  T O
      *    E C  L E  D
      *    T    E    E
      * </pre>
-     * result: LEETCODELEETCODE<br>
+     * result: LEETCODELEETCODE
      * @param s z string
      * @param numRows row count
      * @return origin
@@ -245,9 +246,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #7<br>
-     * reverse int with restriction<br>
-     * 123 ---> 321<br>
+     * #7
+     * <br>reverse int with restriction
+     * <br>123 ---> 321
      * @param x int
      * @return reversed int
      */
@@ -268,8 +269,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #8<br>
-     * string to int<br>
+     * #8
+     * <br>string to int
      * @param str string
      * @return int
      */
@@ -323,12 +324,12 @@ public class Leetcode50 {
     }
 
     /**
-     * #9<br>
-     * 回文整数<br>
-     * 输入: 121<br>
-     * 输出: true<br>
-     * 输入: -121<br>
-     * 输出: false<br>
+     * #9
+     * <br>回文整数
+     * <br>输入: 121
+     * <br>输出: true
+     * <br>输入: -121
+     * <br>输出: false
      * @param x int
      * @return x is palindrome
      */
@@ -344,7 +345,7 @@ public class Leetcode50 {
             if (rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
                 return false;
             }
-            if (rev < Integer.MIN_VALUE / 10 || (rev == Integer.MIN_VALUE / 10 && pop < -8)) {
+            if (rev < Integer.MIN_VALUE / 10) {
                 return false;
             }
             rev = rev * 10 + pop;
@@ -353,8 +354,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #11<br>
-     * 盛最多水的容器<br>
+     * #11
+     * <br>盛最多水的容器
      * @param height partition array
      * @return max area
      */
@@ -384,10 +385,10 @@ public class Leetcode50 {
     }
 
     /**
-     * #16<br>
-     * 输入：nums = [-1,2,1,-4], target = 1<br>
-     * 输出：2<br>
-     * 解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。<br>
+     * #16
+     * <br>输入：nums = [-1,2,1,-4], target = 1
+     * <br>输出：2
+     * <br>解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
      * @param nums array
      * @param target sum target
      * @return closest sum
@@ -409,11 +410,11 @@ public class Leetcode50 {
     }
 
     /**
-     * #18<br>
-     * 四数之和<br>
-     * 给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。<br>
+     * #18
+     * <br>四数之和
+     * <br>给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
      *
-     * 满足要求的四元组集合为：<br>
+     * <br>满足要求的四元组集合为：<br>
      * <pre>
      * [
      *  [-1,  0, 0, 1],
@@ -458,9 +459,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #19<br>
-     * remove the nth node of reverse order<br>
-     * 1->2->3->4, 2 ---> 1->2->4<br>
+     * #19
+     * <br>remove the nth node of reverse order
+     * <br>1->2->3->4, 2 ---> 1->2->4
      * @param head linked list
      * @param n order
      * @return processed linked list
@@ -491,9 +492,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #22<br>
-     * k pairs parenthesis permutation<br>
-     * 3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]<br>
+     * #22
+     * <br>k pairs parenthesis permutation
+     * <br>3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
      * @param n order
      * @return result
      */
@@ -529,17 +530,17 @@ public class Leetcode50 {
     }
 
     /**
-     * #23<br>
-     * 合并K个排序链表<p>
-     * 输入:<br>
-     * <pre>
+     * #23
+     * <br>合并K个排序链表<p>
+     * <br>输入:<br>
+     *
      * [
      *   1->4->5,
      *   1->3->4,
      *   2->6
      * ]
      * </pre>
-     * 输出: 1->1->2->3->4->4->5->6<br>
+     * 输出: 1->1->2->3->4->4->5->6
      * @param lists list of list
      * @return merged list
      */
@@ -611,8 +612,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #25<br>
-     * reverse a linked list every k elements<br>
+     * #25
+     * <br>reverse a linked list every k elements
      * 1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
      * @param head linked list
      * @param k group number
@@ -663,8 +664,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #29<br>
-     * int divide without '/', '*', '%'<br>
+     * #29
+     * <br>int divide without '/', '*', '%'
      * @param dividend dividend
      * @param divisor divisor
      * @return result
@@ -714,7 +715,7 @@ public class Leetcode50 {
     }
 
     /**
-     * #30<br>
+     * #30
      * find possible chain result<BR>
      * s = "barfoothefoobarman",<BR>
      * words = ["foo","bar"]<BR>
@@ -784,10 +785,10 @@ public class Leetcode50 {
 
     /**
      * #31<br>
-     * 下一个排列<BR>
-     * 1,2,3 → 1,3,2<BR>
-     * 3,2,1 → 1,2,3<BR>
-     * 1,1,5 → 1,5,1<BR>
+     * <br>下一个排列
+     * <br>1,2,3 → 1,3,2
+     * <br>3,2,1 → 1,2,3
+     * <br>1,1,5 → 1,5,1
      * @param nums permutation
      */
     public static void nextPermutation(int[] nums) {
@@ -828,8 +829,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #32<br>
-     * 最长符号陪对<BR>
+     * #32
+     * <br>最长符号陪对<BR>
      * @param s string
      * @return max length
      */
@@ -853,12 +854,12 @@ public class Leetcode50 {
 
     /**
      * #33
-     * <BR>旋转数组搜索<BR>
-     * input: nums = [4,5,6,7,0,1,2], target = 0<BR>
-     * result: 4<BR>
+     * <BR>旋转数组搜索
+     * <br>input: nums = [4,5,6,7,0,1,2], target = 0
+     * <br>result: 4
      *
-     * search border case:<br>
-     * <pre>
+     * <br>search border case:<br>
+     *
      * left_mid    right_mid       result
      *  &gt mid       &gt mid      border in left
      *  &lt mid       &lt mid      border in right
@@ -931,10 +932,10 @@ public class Leetcode50 {
     /**
      * #34
      * <BR>搜搜有序数组连续数字的边界<BR>
-     * 输入: nums = [5,7,7,8,8,10], target = 8<BR>
-     * 输出: [3,4]<BR>
-     * 输入: nums = [5,7,7,8,8,10], target = 6<BR>
-     * 输出: [-1,-1]<BR>
+     * <br>输入: nums = [5,7,7,8,8,10], target = 8
+     * <br>输出: [3,4]
+     * <br>输入: nums = [5,7,7,8,8,10], target = 6
+     * <br>输出: [-1,-1]
      * @param nums array
      * @param target target
      * @return range
@@ -1000,7 +1001,7 @@ public class Leetcode50 {
 
     /**
      * #36
-     * <BR>验证9*9方格是否为数独<BR>
+     * <BR>验证9*9方格是否为数独
      * @param board 9*9 board
      * @return is valid sudoku
      */
@@ -1035,7 +1036,7 @@ public class Leetcode50 {
 
     /**
      * #37
-     * <BR>解数独<BR>
+     * <BR>解数独
      * @param board 9*9 board
      */
     public static void solveSudoku(char[][] board) {
@@ -1120,7 +1121,7 @@ public class Leetcode50 {
 
     /**
      * #36
-     * 外观数列<BR>
+     * <br>外观数列<br>
      * <pre>
      * 1.     1
      * 2.     11

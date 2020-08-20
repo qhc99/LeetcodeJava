@@ -1,5 +1,6 @@
 package leetcode;
 
+@SuppressWarnings("unused")
 public class Leetcode100 {
 
     /**
@@ -38,13 +39,15 @@ public class Leetcode100 {
     /**
      * #96
      *
-     * count of all binary search tree given range [1,n]
+     * <br>count of all binary search tree given range [1,n]
+     * <pre>
      *  3 -> 5
      *    1         3     3      2      1
      *     \       /     /      / \      \
      *      3     2     1      1   3      2
      *     /     /       \                 \
      *    2     1         2                 3
+     * </pre>
      * @param n range upper bound
      * @return count
      */

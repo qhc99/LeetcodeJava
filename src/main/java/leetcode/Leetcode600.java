@@ -2,11 +2,12 @@ package leetcode;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Leetcode600 {
     /**
      * #560
-     * find the count of continue sub-arrays which sum is k
-     * [1, 2, 3, 4], 3 ---> 2    ([1, 2] and [3])
+     * <br>find the count of continue sub-arrays which sum is k<br>
+     * [1, 2, 3, 4], 3 ---> 2    (answer: [1, 2] and [3])
      * @param nums array
      * @param k sum target
      * @return count

@@ -2,11 +2,12 @@ package leetcode;
 
 import java.util.*;
 
+@SuppressWarnings("unused")
 public class Leetcode800 {
 
     /**
      * #785
-     * bipartite graph: vertex and its neighbors has different color
+     * <br>bipartite graph: vertex and its neighbors has different color
      * @param graph graph
      * @return graph is bipartite
      */

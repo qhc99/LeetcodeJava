@@ -1,5 +1,6 @@
 package leetcode;
 
+@SuppressWarnings("unused")
 public class Leetcode400 {
     /**
      * #392
