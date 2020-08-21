@@ -1054,7 +1054,7 @@ public class Leetcode50 {
      *
      * @param board 9*9 board
      */
-    public static void SolveSudoku(char[][] board) {
+    public static void solveSudoku(char[][] board) {
         List<MatrixIndex> spaces = new ArrayList<>();
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
@@ -1069,7 +1069,7 @@ public class Leetcode50 {
         for (var spacePtr1 : spaces) {
             relatedSpaces.put(spacePtr1, new ArrayList<>());
             for (var spacePtr2 : spaces) {
-                if (!spacePtr2.equals(spacePtr1) && Related(spacePtr1, spacePtr2)) {
+                if (!spacePtr2.equals(spacePtr1) && related(spacePtr1, spacePtr2)) {
                     relatedSpaces.get(spacePtr1).add(spacePtr2);
                 }
             }
@@ -1077,14 +1077,27 @@ public class Leetcode50 {
 
         Map<MatrixIndex, HashSet<Character>> availableChars = new HashMap<>();
         for (var space : spaces) {
-            availableChars.put(space, GetAvailableChars(space.row, space.col, board));
+            availableChars.put(space, getAvailableChars(space.row, space.col, board));
         }
 
-        DepthFirstSearchSudoku(spaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
+        depthFirstSearchSudoku(spaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
 
     }
 
-    static boolean DepthFirstSearchSudoku(List<MatrixIndex> spaces, int spaceIdx, char[][] board,
+    /*
+    char[][] t = new char[][]{
+                    {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+                    {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+                    {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+                    {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+                    {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+                    {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+                    {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+                    {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+                    {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
+            };
+     */
+    static boolean depthFirstSearchSudoku(List<MatrixIndex> spaces, int spaceIdx, char[][] board,
                                           Map<MatrixIndex, HashSet<Character>> availableChars,
                                           Map<MatrixIndex, List<MatrixIndex>> relatedSpaces,
                                           HashSet<MatrixIndex> encountered) {
@@ -1104,7 +1117,7 @@ public class Leetcode50 {
                     record.add(availableChars.get(relatedSpace).remove(chr));
                 }
             }
-            boolean success = DepthFirstSearchSudoku(spaces, spaceIdx + 1, board, availableChars, relatedSpaces, encountered);
+            boolean success = depthFirstSearchSudoku(spaces, spaceIdx + 1, board, availableChars, relatedSpaces, encountered);
             if (success) return true;
             int accIdx = 0;
             for (var relatedSpace : relatedSpaces.get(currentSpace)) {
@@ -1122,17 +1135,17 @@ public class Leetcode50 {
         return false;
     }
 
-    static int BoxIndex(int row, int columns) {
+    private static int groupIndex(int row, int columns) {
         return (row / 3) * 3 + columns / 3;
     }
 
-    static boolean Related(MatrixIndex a, MatrixIndex b) {
+    private static boolean related(MatrixIndex a, MatrixIndex b) {
 
         return a.row == b.row || a.col == b.col
-                || BoxIndex(a.row, a.col) == BoxIndex(b.row, b.col);
+                || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
     }
 
-    static HashSet<Character> GetAvailableChars(int rIdx, int cIdx, char[][] board) {
+    private static HashSet<Character> getAvailableChars(int rIdx, int cIdx, char[][] board) {
         Map<Integer, int[][]> groupIdxToBoxIdx = Map.of(
                 0, new int[][]{{0, 1, 2}, {0, 1, 2}},
                 1, new int[][]{{0, 1, 2}, {3, 4, 5}},
@@ -1178,7 +1191,7 @@ public class Leetcode50 {
         return availableChars;
     }
 
-    public static class MatrixIndex {
+    private static class MatrixIndex {
         public final int row;
         public final int col;
         final int hash;

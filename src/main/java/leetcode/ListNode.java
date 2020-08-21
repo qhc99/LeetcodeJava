@@ -1,5 +1,6 @@
 package leetcode;
 
+@SuppressWarnings("unused")
 public class ListNode {
     public int val;
     public ListNode next;
@@ -8,6 +9,5 @@ public class ListNode {
         val = x;
     }
 
-    public ListNode() {
-    }
+    public ListNode() { }
 }

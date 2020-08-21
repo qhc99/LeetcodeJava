@@ -47,4 +47,30 @@ public class Leetcode150 {
             return root;
         }
     }
+
+
+    /**
+     * #111
+     * <br/>给定一个二叉树，找出其最小深度。
+     * @param root 二叉树
+     * @return 最小深度
+     */
+    public static int minDepth(TreeNode root)
+    {
+        if (root == null) return 0;
+        int left = minDepth(root.left);
+        int right = minDepth(root.right);
+        int depth = 1;
+        if (left == 0) {
+            depth += right;
+        } else {
+            if (right == 0) {
+                depth += left;
+            } else {
+                depth += Math.min(left, right);
+            }
+        }
+
+        return depth;
+    }
 }
