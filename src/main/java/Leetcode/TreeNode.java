@@ -1,4 +1,4 @@
-package leetcode;
+package Leetcode;
 
 @SuppressWarnings("unused")
 public class TreeNode {

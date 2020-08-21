@@ -1,8 +1,6 @@
 
 
-import java.util.*;
-
-import leetcode.Leetcode50;
+import Leetcode.Leetcode50;
 
 public class Main {
     public static void main(String[] args){
