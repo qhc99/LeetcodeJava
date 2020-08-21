@@ -17,8 +17,9 @@ public class Leetcode150 {
      *    /  \
      *   15   7
      * </pre>
+     *
      * @param preorder preorder int array
-     * @param inorder inorder int array
+     * @param inorder  inorder int array
      * @return origin tree
      */
     public static TreeNode buildTree(int[] preorder, int[] inorder) {
@@ -31,14 +32,13 @@ public class Leetcode150 {
         }
         return recursiveBuildTree(preorder, 0, preorder.length, 0, m);
     }
+
     private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m) {
         if (p_end - p_start == 1) {
             return new TreeNode(p_order[p_start]);
-        }
-        else if (p_end - p_start == 0) {
+        } else if (p_end - p_start == 0) {
             return null;
-        }
-        else {
+        } else {
             TreeNode root = new TreeNode(p_order[p_start]);
             int i_mid = m.get(root.val);
             int l_len = i_mid - i_start;
@@ -52,11 +52,11 @@ public class Leetcode150 {
     /**
      * #111
      * <br/>给定一个二叉树，找出其最小深度。
+     *
      * @param root 二叉树
      * @return 最小深度
      */
-    public static int minDepth(TreeNode root)
-    {
+    public static int minDepth(TreeNode root) {
         if (root == null) return 0;
         int left = minDepth(root.left);
         int right = minDepth(root.right);

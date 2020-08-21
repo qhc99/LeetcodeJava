@@ -8,8 +8,9 @@ public class Leetcode600 {
      * #560
      * <br>find the count of continue sub-arrays which sum is k<br>
      * [1, 2, 3, 4], 3 ---> 2    (answer: [1, 2] and [3])
+     *
      * @param nums array
-     * @param k sum target
+     * @param k    sum target
      * @return count
      */
     public static int subarraySum(int[] nums, int k) {

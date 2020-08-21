@@ -9,5 +9,6 @@ public class ListNode {
         val = x;
     }
 
-    public ListNode() { }
+    public ListNode() {
+    }
 }

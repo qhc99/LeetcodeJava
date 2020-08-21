@@ -13,8 +13,9 @@ public class Leetcode450 {
      * <br>一共有四种方法将nums分割为2个子数组。
      * <br>其中最好的方式是将其分为[7,2,5] 和 [10,8]，
      * <br>因为此时这两个子数组各自的和的最大值为18，在所有情况中最小。
+     *
      * @param nums array
-     * @param m number of group
+     * @param m    number of group
      * @return min group sum
      */
     public static int splitArray(int[] nums, int m) {
@@ -24,26 +25,27 @@ public class Leetcode450 {
             sum += num;
             max = Math.max(max, num);
         }
-        while(max < sum){
+        while (max < sum) {
             long mid = (sum - max) / 2 + max;
-            if(canSplit(nums,mid, m)){
+            if (canSplit(nums, mid, m)) {
                 sum = mid;
-            }else{
+            } else {
                 max = mid + 1;
             }
         }
-        return (int)max;
+        return (int) max;
     }
-    private static boolean canSplit(int[] nums, long sum, int limit){
+
+    private static boolean canSplit(int[] nums, long sum, int limit) {
         int split = 1;
         int tSum = 0;
-        for(var n : nums){
-            if(tSum + n <= sum){
+        for (var n : nums) {
+            if (tSum + n <= sum) {
                 tSum += n;
-            }else{
+            } else {
                 tSum = n;
                 split++;
-                if(split > limit) return false;
+                if (split > limit) return false;
             }
         }
         return split <= limit;

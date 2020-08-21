@@ -8,6 +8,7 @@ public class Leetcode800 {
     /**
      * #785
      * <br>bipartite graph: vertex and its neighbors has different color
+     *
      * @param graph graph
      * @return graph is bipartite
      */
@@ -28,9 +29,11 @@ public class Leetcode800 {
         }
         return true;
     }
+
     private enum Color {
         GRAY, RED, GREEN
     }
+
     private static boolean BFS(Integer start, Queue<Integer> queue, Map<Integer, Color> vertex_color, int[][] graph) {
         queue.add(start);
         vertex_color.put(start, Color.RED);
@@ -42,8 +45,7 @@ public class Leetcode800 {
                 }
                 if (vertex_color.get(neighbor) == vertex_color.get(vertex)) {
                     return false;
-                }
-                else {
+                } else {
                     vertex_color.put(neighbor, (vertex_color.get(vertex) == Color.RED) ? Color.GREEN : Color.RED);
                 }
             }
