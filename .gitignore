@@ -3,5 +3,4 @@
 *.iml
 /out/
 /target/
-src/Solution.java
-src/java/Main.java
+src/main/java/Main.java
