@@ -11,4 +11,9 @@ public class ListNode {
 
     public ListNode() {
     }
+
+    public ListNode(int x, ListNode o){
+        val = x;
+        next = o;
+    }
 }
