@@ -1200,7 +1200,6 @@ public class Leetcode50 {
             row = r;
             col = c;
             hash = Objects.hash(row, col);
-
         }
 
         @Override
