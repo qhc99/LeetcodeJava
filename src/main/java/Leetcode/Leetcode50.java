@@ -1075,6 +1075,12 @@ public class Leetcode50 {
             }
         }
 
+        spaces.sort((m1,m2)->{
+            var rc1 = relatedSpaces.get(m1).size();
+            var rc2 = relatedSpaces.get(m2).size();
+            return rc1 - rc2;
+        });
+
         Map<MatrixIndex, HashSet<Character>> availableChars = new HashMap<>();
         for (var space : spaces) {
             availableChars.put(space, getAvailableChars(space, board));
