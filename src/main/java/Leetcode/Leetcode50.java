@@ -1077,7 +1077,7 @@ public class Leetcode50 {
 
         Map<MatrixIndex, HashSet<Character>> availableChars = new HashMap<>();
         for (var space : spaces) {
-            availableChars.put(space, getAvailableChars(space.row, space.col, board));
+            availableChars.put(space, getAvailableChars(space, board));
         }
 
         depthFirstSearchSudoku(spaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
@@ -1097,10 +1097,13 @@ public class Leetcode50 {
                     {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
             };
      */
-    static boolean depthFirstSearchSudoku(List<MatrixIndex> spaces, int spaceIdx, char[][] board,
-                                          Map<MatrixIndex, HashSet<Character>> availableChars,
-                                          Map<MatrixIndex, List<MatrixIndex>> relatedSpaces,
-                                          HashSet<MatrixIndex> encountered) {
+    static boolean depthFirstSearchSudoku(
+            List<MatrixIndex> spaces,
+            int spaceIdx,
+            char[][] board,
+            Map<MatrixIndex, HashSet<Character>> availableChars,
+            Map<MatrixIndex, List<MatrixIndex>> relatedSpaces,
+            HashSet<MatrixIndex> encountered) {
         if (spaceIdx == spaces.size()) {
             return true;
         }
@@ -1145,7 +1148,8 @@ public class Leetcode50 {
                 || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
     }
 
-    private static HashSet<Character> getAvailableChars(int rIdx, int cIdx, char[][] board) {
+    private static HashSet<Character> getAvailableChars(MatrixIndex mi, char[][] board) {
+        int rIdx = mi.row, cIdx = mi.col;
         Map<Integer, int[][]> groupIdxToBoxIdx = Map.of(
                 0, new int[][]{{0, 1, 2}, {0, 1, 2}},
                 1, new int[][]{{0, 1, 2}, {3, 4, 5}},
