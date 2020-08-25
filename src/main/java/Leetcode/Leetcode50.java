@@ -1100,18 +1100,10 @@ public class Leetcode50 {
                 sortedGroupedSpaces.add(s);
                 spacesSet.remove(s);
                 var rs = relatedSpaces.get(s);
-                rs.sort((m1,m2)->{
-                var rc1 = relatedSpaces.get(m1).size();
-                var rc2 = relatedSpaces.get(m2).size();
-                return rc1 - rc2;
-            });
                 for (var e : rs)
                 {
-                    if (spacesSet.contains(e))
-                    {
-                        sortedGroupedSpaces.add(e);
-                    }
-
+                    if (!spacesSet.contains(e)) continue;
+                    sortedGroupedSpaces.add(e);
                     spacesSet.remove(e);
                 }
             }
