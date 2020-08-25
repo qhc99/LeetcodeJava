@@ -1078,16 +1078,6 @@ public class Leetcode50 {
         spaces.sort((m1,m2)->{
             var rc1 = relatedSpaces.get(m1).size();
             var rc2 = relatedSpaces.get(m2).size();
-            if(rc1 == rc2){
-                rc1 = 0;
-                for(var s : relatedSpaces.get(m1)){
-                    rc1 += relatedSpaces.get(s).size();
-                }
-                rc2 = 0;
-                for(var s : relatedSpaces.get(m2)){
-                    rc2 += relatedSpaces.get(s).size();
-                }
-            }
             return rc1 - rc2;
         });
 
