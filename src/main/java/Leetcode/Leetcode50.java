@@ -1078,15 +1078,51 @@ public class Leetcode50 {
         spaces.sort((m1,m2)->{
             var rc1 = relatedSpaces.get(m1).size();
             var rc2 = relatedSpaces.get(m2).size();
+            if(rc1 == rc2){
+                rc1 = 0;
+                for(var s : relatedSpaces.get(m1)){
+                    rc1 += relatedSpaces.get(s).size();
+                }
+                rc2 = 0;
+                for(var s : relatedSpaces.get(m2)){
+                    rc2 += relatedSpaces.get(s).size();
+                }
+            }
             return rc1 - rc2;
         });
+
+        List<MatrixIndex> sortedGroupedSpaces = new ArrayList<>(spaces.size());
+        var spacesSet = new HashSet<>(spaces);
+        for (var s : spaces)
+        {
+            if (spacesSet.contains(s))
+            {
+                sortedGroupedSpaces.add(s);
+                spacesSet.remove(s);
+                var rs = relatedSpaces.get(s);
+                rs.sort((m1,m2)->{
+                var rc1 = relatedSpaces.get(m1).size();
+                var rc2 = relatedSpaces.get(m2).size();
+                return rc1 - rc2;
+            });
+                for (var e : rs)
+                {
+                    if (spacesSet.contains(e))
+                    {
+                        sortedGroupedSpaces.add(e);
+                    }
+
+                    spacesSet.remove(e);
+                }
+            }
+        }
 
         Map<MatrixIndex, HashSet<Character>> availableChars = new HashMap<>();
         for (var space : spaces) {
             availableChars.put(space, getAvailableChars(space, board));
         }
 
-        depthFirstSearchSudoku(spaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
+        depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
 
     }
 
