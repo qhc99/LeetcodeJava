@@ -1,5 +1,4 @@
 *.bat
-*.iml
 /out/
 /target/
 src/main/java/Main.java
