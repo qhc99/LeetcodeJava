@@ -1,5 +1,6 @@
 package Leetcode;
 
+import Algorithms.tools.DPMatrix;
 
 @SuppressWarnings("unused")
 public class Leetcode700 {
