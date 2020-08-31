@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 
 @SuppressWarnings("unused")
 public class Leetcode50 {
@@ -875,7 +876,7 @@ public class Leetcode50 {
      * <br>result: 4
      *
      * <br>search border case:<br>
-     * <p>
+     * <pre>
      * left_mid    right_mid       result
      * &gt mid       &gt mid      border in left
      * &lt mid       &lt mid      border in right
@@ -1052,9 +1053,24 @@ public class Leetcode50 {
      * #37
      * <BR>解数独
      *
+     * <pre>
+     * char[][] t = new char[][]{
+     *     {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
+     *     {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
+     *     {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
+     *     {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
+     *     {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
+     *     {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
+     *     {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
+     *     {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
+     *     {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
+     * };
+     * </pre>
+     *
      * @param board 9*9 board
      */
     public static void solveSudoku(char[][] board) {
+        long t1 = System.nanoTime();
         List<MatrixIndex> spaces = new ArrayList<>();
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
@@ -1069,7 +1085,7 @@ public class Leetcode50 {
         for (var spacePtr1 : spaces) {
             relatedSpaces.put(spacePtr1, new ArrayList<>());
             for (var spacePtr2 : spaces) {
-                if (!spacePtr2.equals(spacePtr1) && related(spacePtr1, spacePtr2)) {
+                if (!spacePtr2.equals(spacePtr1) && isRelated(spacePtr1, spacePtr2)) {
                     relatedSpaces.get(spacePtr1).add(spacePtr2);
                 }
             }
@@ -1103,24 +1119,12 @@ public class Leetcode50 {
         for (var space : spaces) {
             availableChars.put(space, getAvailableChars(space, board));
         }
-
+        long t2 = System.nanoTime();
+        System.out.printf("prepare time: %fms\n",(t2-t1)/Math.pow(10,6));
         depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
-
     }
 
-    /*
-    char[][] t = new char[][]{
-                    {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
-                    {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
-                    {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-                    {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
-                    {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-                    {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
-                    {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-                    {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
-                    {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
-            };
-     */
+
     static boolean depthFirstSearchSudoku(
             List<MatrixIndex> spaces,
             int spaceIdx,
@@ -1166,8 +1170,7 @@ public class Leetcode50 {
         return (row / 3) * 3 + columns / 3;
     }
 
-    private static boolean related(MatrixIndex a, MatrixIndex b) {
-
+    private static boolean isRelated(MatrixIndex a, MatrixIndex b) {
         return a.row == b.row || a.col == b.col
                 || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
     }
