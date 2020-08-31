@@ -25,7 +25,9 @@ public class Leetcode100 {
         for (int s = 1; s <= r_len + c_len - 2; s++) {
             for (int i = 0; i < r_len && i <= s; i++) {
                 int j = s - i;
-                if (j < 0 || j >= c_len) continue;
+                if (j < 0 || j >= c_len) {
+                    continue;
+                }
                 grid[i][j] += minPath(i, j, grid);
             }
         }

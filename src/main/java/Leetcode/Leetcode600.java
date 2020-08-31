@@ -1,6 +1,6 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.HashMap;
 
 @SuppressWarnings("unused")
 public class Leetcode600 {

@@ -1,6 +1,9 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
 
 @SuppressWarnings("unused")
 public class Leetcode800 {
@@ -45,7 +48,8 @@ public class Leetcode800 {
                 }
                 if (vertex_color.get(neighbor) == vertex_color.get(vertex)) {
                     return false;
-                } else {
+                }
+                else {
                     vertex_color.put(neighbor, (vertex_color.get(vertex) == Color.RED) ? Color.GREEN : Color.RED);
                 }
             }

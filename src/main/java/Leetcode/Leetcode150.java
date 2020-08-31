@@ -1,6 +1,7 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @SuppressWarnings("unused")
 public class Leetcode150 {
@@ -36,9 +37,11 @@ public class Leetcode150 {
     private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m) {
         if (p_end - p_start == 1) {
             return new TreeNode(p_order[p_start]);
-        } else if (p_end - p_start == 0) {
+        }
+        else if (p_end - p_start == 0) {
             return null;
-        } else {
+        }
+        else {
             TreeNode root = new TreeNode(p_order[p_start]);
             int i_mid = m.get(root.val);
             int l_len = i_mid - i_start;
@@ -57,16 +60,20 @@ public class Leetcode150 {
      * @return 最小深度
      */
     public static int minDepth(TreeNode root) {
-        if (root == null) return 0;
+        if (root == null) {
+            return 0;
+        }
         int left = minDepth(root.left);
         int right = minDepth(root.right);
         int depth = 1;
         if (left == 0) {
             depth += right;
-        } else {
+        }
+        else {
             if (right == 0) {
                 depth += left;
-            } else {
+            }
+            else {
                 depth += Math.min(left, right);
             }
         }

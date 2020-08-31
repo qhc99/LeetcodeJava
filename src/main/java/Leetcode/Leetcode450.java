@@ -29,7 +29,8 @@ public class Leetcode450 {
             long mid = (sum - max) / 2 + max;
             if (canSplit(nums, mid, m)) {
                 sum = mid;
-            } else {
+            }
+            else {
                 max = mid + 1;
             }
         }
@@ -42,10 +43,13 @@ public class Leetcode450 {
         for (var n : nums) {
             if (tSum + n <= sum) {
                 tSum += n;
-            } else {
+            }
+            else {
                 tSum = n;
                 split++;
-                if (split > limit) return false;
+                if (split > limit) {
+                    return false;
+                }
             }
         }
         return split <= limit;
