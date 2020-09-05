@@ -6,6 +6,8 @@
     <groupId>org.nathan</groupId>
     <artifactId>Leetcode</artifactId>
     <version>1.0-SNAPSHOT</version>
+    <name>Leetcode</name>
+    <description>Leetcode solution</description>
 
     <build>
         <plugins>
@@ -22,6 +24,7 @@
     </build>
 
     <properties>
+        <java.version>14</java.version>
         <maven.compiler.source>14</maven.compiler.source>
         <maven.compiler.target>14</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
