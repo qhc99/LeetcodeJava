@@ -1,7 +1,6 @@
 package Leetcode;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class Leetcode150 {
@@ -49,6 +48,50 @@ public class Leetcode150 {
             root.right = recursiveBuildTree(p_order, p_start + 1 + l_len, p_end, i_start + l_len + 1, m);
             return root;
         }
+    }
+
+
+    /**
+     * #107
+     * <br>层次遍历<br>
+     * <pre>
+     *  input:[3,9,20,null,null,15,7]
+     *     3
+     *    / \
+     *   9  20
+     *     /  \
+     *    15   7
+     * </pre>
+     * <pre>
+     * return:
+     * [
+     *   [15,7],
+     *   [9,20],
+     *   [3]
+     * ]
+     * </pre>
+     * @param root root
+     * @return down to up iteration
+     */
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(root);
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            List<Integer> t = new ArrayList<>();
+            for(int i = 0; i < size; i++){
+                var n = queue.poll();
+                if(n != null) {
+                    t.add(n.val);
+                    if(n.left != null) queue.add(n.left);
+                    if(n.right != null) queue.add(n.right);
+                }
+            }
+            if(t.size() != 0) res.add(t);
+        }
+        Collections.reverse(res);
+        return res;
     }
 
 
