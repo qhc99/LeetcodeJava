@@ -13,6 +13,7 @@ public class Leetcode600 {
      * @param k    sum target
      * @return count
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static int subarraySum(int[] nums, int k) {
         int count = 0, pre = 0;
         HashMap<Integer, Integer> mp = new HashMap<>();

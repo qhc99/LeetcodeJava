@@ -14,6 +14,7 @@ public class Leetcode400 {
      * @param t whole string
      * @return match result
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static boolean isSubsequence(String s, String t) {
         int a = 0, b = 0;
         int s_len = s.length(), t_len = t.length();
