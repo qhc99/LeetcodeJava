@@ -92,6 +92,7 @@ public class Leetcode50 {
      * @param s string
      * @return result
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static int lengthOfLongestSubstring(String s) {
         Map<Character, Integer> map = new HashMap<>();
         int len = s.length();
@@ -174,6 +175,7 @@ public class Leetcode50 {
      * @param s string
      * @return longest palindrome
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static String longestPalindrome(String s) {
         int len = s.length();
         if (len <= 1) {
@@ -229,6 +231,7 @@ public class Leetcode50 {
      * @param numRows row count
      * @return origin
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static String convert(String s, int numRows) {
         int len = s.length();
         List<StringBuilder> rows = new ArrayList<>();
@@ -284,6 +287,7 @@ public class Leetcode50 {
      * @param str string
      * @return int
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static int myAtoi(String str) {
         var automata = new Automation();
         int len = str.length();
@@ -540,27 +544,29 @@ public class Leetcode50 {
         return res;
     }
 
-    private static void RecursiveGenerateParenthesis(StringBuilder strb, int str_len, int left_count,
+
+    private static void RecursiveGenerateParenthesis(StringBuilder stringBuilder,
+                                                     int str_len, int left_count,
                                                      int stack_ptr, List<String> res, int n) {
         if (str_len == (2 * n)) {
-            res.add(strb.toString());
+            res.add(stringBuilder.toString());
         }
         else {
             str_len++;
             if (stack_ptr >= 1 && stack_ptr <= n - 1 && left_count <= n - 1) {
-                StringBuilder t = new StringBuilder(strb);
-                strb.append("(");
+                StringBuilder t = new StringBuilder(stringBuilder);
+                stringBuilder.append("(");
                 t.append(")");
-                RecursiveGenerateParenthesis(strb, str_len, left_count + 1, stack_ptr + 1, res, n);
+                RecursiveGenerateParenthesis(stringBuilder, str_len, left_count + 1, stack_ptr + 1, res, n);
                 RecursiveGenerateParenthesis(t, str_len, left_count, stack_ptr - 1, res, n);
             }
             else if (stack_ptr == 0 && left_count <= n - 1) {
-                strb.append("(");
-                RecursiveGenerateParenthesis(strb, str_len, left_count + 1, stack_ptr + 1, res, n);
+                stringBuilder.append("(");
+                RecursiveGenerateParenthesis(stringBuilder, str_len, left_count + 1, stack_ptr + 1, res, n);
             }
             else {
-                strb.append(")");
-                RecursiveGenerateParenthesis(strb, str_len, left_count, stack_ptr - 1, res, n);
+                stringBuilder.append(")");
+                RecursiveGenerateParenthesis(stringBuilder, str_len, left_count, stack_ptr - 1, res, n);
             }
         }
     }
@@ -769,6 +775,7 @@ public class Leetcode50 {
      * @param words words
      * @return result index
      */
+    @SuppressWarnings("SpellCheckingInspection")
     public static List<Integer> findSubstring(String s, String[] words) {
         List<Integer> res = new ArrayList<>();
         if (s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0) {
