@@ -33,7 +33,7 @@
     <dependencies>
         <dependency>
             <groupId>org.nathan</groupId>
-            <artifactId>IntroductionToAlgorithm</artifactId>
+            <artifactId>AlgorithmsJava</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
