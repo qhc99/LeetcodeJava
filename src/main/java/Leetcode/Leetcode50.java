@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class Leetcode50 {
@@ -1203,7 +1204,6 @@ public class Leetcode50 {
         depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
     }
 
-
     static boolean depthFirstSearchSudoku(
             List<MatrixIndex> spaces,
             int spaceIdx,
@@ -1376,5 +1376,45 @@ public class Leetcode50 {
             i++;
         }
         return res.toString();
+    }
+
+
+    /**
+     * #全排列
+     * &PERFORMANCE ISSUE&
+     * @param nums int array
+     * @return unique permutation result
+     */
+    public static List<List<Integer>> permuteUnique(int[] nums) {
+        List<List<Integer>> finalRes = new ArrayList<>();
+        List<Integer> t = Arrays.stream(nums).boxed().sorted().collect(Collectors.toList());
+        recursivePermuteUnique(t, new ArrayList<>(),finalRes, t.size());
+        return finalRes;
+    }
+
+    private static void recursivePermuteUnique(List<Integer> nums, List<Integer> thisRes, List<List<Integer>> finalRes, int len){
+        if(thisRes.size() == len){
+            finalRes.add(thisRes);
+            return;
+        }
+        for(int i = 0; i < nums.size(); i++){
+            if(i < nums.size() - 1 && !nums.get(i).equals(nums.get(i + 1)))
+            {
+                List<Integer> newNums = new ArrayList<>(nums);
+                //noinspection SuspiciousListRemoveInLoop
+                newNums.remove(i);
+                var newRes = new ArrayList<>(thisRes);
+                newRes.add(nums.get(i));
+                recursivePermuteUnique(newNums,newRes,finalRes,len);
+            }
+            else if(i == nums.size() - 1)
+            {
+                var newNums = new ArrayList<>(nums);
+                newNums.remove(i);
+                var newRes = new ArrayList<>(thisRes);
+                newRes.add(nums.get(i));
+                recursivePermuteUnique(newNums,newRes,finalRes,len);
+            }
+        }
     }
 }
