@@ -2,7 +2,6 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings("unused")
 public class Leetcode150 {
     /**
      * #105
@@ -22,6 +21,7 @@ public class Leetcode150 {
      * @param inorder  inorder int array
      * @return origin tree
      */
+    @SuppressWarnings("unused")
     public static TreeNode buildTree(int[] preorder, int[] inorder) {
         if (preorder.length == 0) {
             return null;
@@ -73,6 +73,7 @@ public class Leetcode150 {
      * @param root root
      * @return down to up iteration
      */
+    @SuppressWarnings("unused")
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
         Queue<TreeNode> queue = new LinkedList<>();
@@ -102,6 +103,7 @@ public class Leetcode150 {
      * @param root 二叉树
      * @return 最小深度
      */
+    @SuppressWarnings("unused")
     public static int minDepth(TreeNode root) {
         if (root == null) {
             return 0;

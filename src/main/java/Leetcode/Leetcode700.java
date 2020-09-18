@@ -2,7 +2,7 @@ package Leetcode;
 
 import org.nathan.AlgorithmsJava.tools.DPMatrix;
 
-@SuppressWarnings("unused")
+
 public class Leetcode700 {
 
     /**
@@ -15,6 +15,7 @@ public class Leetcode700 {
      * @param s String
      * @return count of sub string
      */
+    @SuppressWarnings("unused")
     public static int countSubstrings(String s) {
         DPMatrix<Boolean> store = new DPMatrix<>(s.length());
         int res = s.length();

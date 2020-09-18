@@ -1,6 +1,6 @@
 package Leetcode;
 
-@SuppressWarnings("unused")
+
 public class Leetcode450 {
     /**
      * #410
@@ -18,6 +18,7 @@ public class Leetcode450 {
      * @param m    number of group
      * @return min group sum
      */
+    @SuppressWarnings("unused")
     public static int splitArray(int[] nums, int m) {
         long sum = 0;
         long max = 0;

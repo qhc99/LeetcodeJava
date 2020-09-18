@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
-@SuppressWarnings("unused")
+
 public class Leetcode800 {
 
     /**
@@ -15,6 +15,7 @@ public class Leetcode800 {
      * @param graph graph
      * @return graph is bipartite
      */
+    @SuppressWarnings("unused")
     public static boolean isBipartite(int[][] graph) {
         int vertices_count = graph.length;
         Map<Integer, Color> vertex_color = new HashMap<>();
