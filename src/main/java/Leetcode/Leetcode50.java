@@ -1398,7 +1398,8 @@ public class Leetcode50 {
 
     /**
      * #39
-     * 组合总和
+     * <br/>组合总和
+     * <br/>candidates不重复,可重选
      * <pre>
      * 输入：candidates = [2,3,6,7], target = 7,
      * 所求解集为：
@@ -1452,7 +1453,8 @@ public class Leetcode50 {
 
     /**
      * #40
-     * <br/>组合总和2<br/>
+     * <br/>组合总和2
+     * <br/>candidates可重复,不可重选
      * <pre>
      * 输入: candidates =[10,1,2,7,6,1,5], target =8,
      * 所求解集为:
