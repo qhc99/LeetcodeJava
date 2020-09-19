@@ -1476,6 +1476,7 @@ public class Leetcode50 {
      * @param target sum
      * @return result
      */
+    @SuppressWarnings("unused")
     public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
