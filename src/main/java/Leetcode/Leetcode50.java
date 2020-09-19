@@ -1409,6 +1409,7 @@ public class Leetcode50 {
      *   [2,1,1]
      * ]
      * </pre>
+     *
      * @param nums int array
      * @return unique permutation result
      */
@@ -1417,7 +1418,7 @@ public class Leetcode50 {
         List<List<Integer>> finalRes = new ArrayList<>();
         Arrays.sort(nums);
         boolean[] encountered = new boolean[nums.length];
-        recursivePermuteUnique(nums, encountered,new ArrayList<>(), finalRes);
+        recursivePermuteUnique(nums, encountered, new ArrayList<>(), finalRes);
         return finalRes;
     }
 
@@ -1425,22 +1426,21 @@ public class Leetcode50 {
             int[] nums,
             boolean[] inCache,
             List<Integer> currentCache,
-            List<List<Integer>> finalRes){
-        if(currentCache.size() == nums.length){
+            List<List<Integer>> finalRes) {
+        if (currentCache.size() == nums.length) {
             finalRes.add(new ArrayList<>(currentCache));
             return;
         }
-        for(int i = 0; i < nums.length; i++){
-            if(i + 1 < nums.length && nums[i] == nums[i+1] && !inCache[i+1]){
+        for (int i = 0; i < nums.length; i++) {
+            if (i + 1 < nums.length && nums[i] == nums[i + 1] && !inCache[i + 1]) {
                 continue;
             }
-            else if(!inCache[i])
-            {
+            else if (!inCache[i]) {
                 inCache[i] = true;
                 currentCache.add(nums[i]);
-                recursivePermuteUnique(nums,inCache,currentCache,finalRes);
+                recursivePermuteUnique(nums, inCache, currentCache, finalRes);
                 inCache[i] = false;
-                currentCache.remove(currentCache.size()-1);
+                currentCache.remove(currentCache.size() - 1);
             }
         }
     }

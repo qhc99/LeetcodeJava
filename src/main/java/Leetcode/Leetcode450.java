@@ -15,22 +15,23 @@ public class Leetcode450 {
      *
      * 在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
      * </pre>
+     *
      * @param root root of bTree
      * @return sum of left leaves
      */
     @SuppressWarnings("unused")
     public static int sumOfLeftLeaves(TreeNode root) {
-        if(root == null){
+        if (root == null) {
             return 0;
         }
-        else{
-            if(root.left == null){
+        else {
+            if (root.left == null) {
                 return sumOfLeftLeaves(root.right);
             }
-            else if (root.left.left == null && root.left.right == null){
+            else if (root.left.left == null && root.left.right == null) {
                 return root.left.val + sumOfLeftLeaves(root.right);
             }
-            else{
+            else {
                 return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
             }
         }
