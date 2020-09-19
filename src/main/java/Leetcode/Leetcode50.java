@@ -1396,6 +1396,73 @@ public class Leetcode50 {
         return res.toString();
     }
 
+    /**
+     * #39
+     * 组合总和
+     * <pre>
+     * 输入：candidates = [2,3,6,7], target = 7,
+     * 所求解集为：
+     * [
+     *   [7],
+     *   [2,2,3]
+     * ]
+     * 输入：candidates = [2,3,5], target = 8,
+     * 所求解集为：
+     * [
+     *   [2,2,2,2],
+     *   [2,3,3],
+     *   [3,5]
+     * ]
+     * </pre>
+     * @param candidates int array
+     * @param target sum
+     * @return result
+     */
+    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> res = new ArrayList<>();
+        Arrays.sort(candidates);
+        recursiveCombinationSum(candidates,target,new ArrayList<>(),res);
+        return res;
+    }
+
+    private static void recursiveCombinationSum(
+            int[] candidates,
+            int targetSum,
+            List<Integer> currentCache,
+            List<List<Integer>> res){
+        for(int i = 0; i < candidates.length && candidates[i] <= targetSum; i++){
+            if(currentCache.size() > 0){
+                if(candidates[i] >= currentCache.get(currentCache.size()-1)){
+                    if(candidates[i] == targetSum){
+                        List<Integer> t = new ArrayList<>(currentCache);
+                        t.add(candidates[i]);
+                        res.add(t);
+                    }
+                    else{
+                        List<Integer> t = new ArrayList<>(currentCache);
+                        t.add(candidates[i]);
+                        recursiveCombinationSum(candidates, targetSum - candidates[i], t, res);
+                    }
+                }
+                else{
+                    continue;
+                }
+            }
+            else{
+                if(candidates[i] == targetSum){
+                    List<Integer> t = new ArrayList<>(currentCache);
+                    t.add(candidates[i]);
+                    res.add(t);
+                }
+                else{
+                    List<Integer> t = new ArrayList<>(currentCache);
+                    t.add(candidates[i]);
+                    recursiveCombinationSum(candidates, targetSum - candidates[i], t, res);
+                }
+            }
+        }
+    }
+
 
     /**
      * #45
