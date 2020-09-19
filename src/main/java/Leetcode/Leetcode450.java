@@ -18,6 +18,7 @@ public class Leetcode450 {
      * @param root root of bTree
      * @return sum of left leaves
      */
+    @SuppressWarnings("unused")
     public static int sumOfLeftLeaves(TreeNode root) {
         if(root == null){
             return 0;
