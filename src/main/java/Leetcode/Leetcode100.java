@@ -1,6 +1,9 @@
 package Leetcode;
 
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Leetcode100 {
 
     /**
@@ -39,6 +42,49 @@ public class Leetcode100 {
         double u = (i - 1 < 0) ? Double.POSITIVE_INFINITY : cache[i - 1][j];
         double l = (j - 1 < 0) ? Double.POSITIVE_INFINITY : cache[i][j - 1];
         return (int) Math.min(l, u);
+    }
+
+    /**
+     * #78
+     * <br/>子集
+     * <pre>
+     * 输入: nums = [1,2,3]
+     * 输出:
+     * [
+     *   [3],
+     *  [1],
+     *  [2],
+     *  [1,2,3],
+     *  [1,3],
+     *  [2,3],
+     *  [1,2],
+     *  []
+     * ]
+     * </pre>
+     * @param nums int array
+     * @return subsets of nums
+     */
+    @SuppressWarnings("unused")
+    public static List<List<Integer>> subsets(int[] nums) {
+        List<List<Integer>> res = new ArrayList<>();
+        recursiveSubsets(nums,0,res);
+        return res;
+    }
+
+    private static void recursiveSubsets(int[] nums, int idx, List<List<Integer>> res){
+        if(idx == nums.length){
+            res.add(new ArrayList<>());
+        }
+        else{
+            recursiveSubsets(nums,idx+1, res);
+            List<List<Integer>> temp = new ArrayList<>();
+            for(var list : res){
+                List<Integer> newList = new ArrayList<>(list);
+                newList.add(nums[idx]);
+                temp.add(newList);
+            }
+            res.addAll(temp);
+        }
     }
 
     /**
