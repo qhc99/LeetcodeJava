@@ -1,7 +1,8 @@
 package Leetcode;
 
 
-public class Leetcode400 {
+public class Leetcode400
+{
     /**
      * #392
      * s = "abc", t = "ahbgdc"
@@ -15,16 +16,21 @@ public class Leetcode400 {
      * @return match result
      */
     @SuppressWarnings("SpellCheckingInspection, unused")
-    public static boolean isSubsequence(String s, String t) {
+    public static boolean isSubsequence(String s, String t)
+    {
         int a = 0, b = 0;
         int s_len = s.length(), t_len = t.length();
-        if (s_len == 0) {
+        if (s_len == 0)
+        {
             return true;
         }
-        while (b < t_len) {
-            if (s.charAt(a) == t.charAt(b)) {
+        while (b < t_len)
+        {
+            if (s.charAt(a) == t.charAt(b))
+            {
                 a++;
-                if (a == s_len) {
+                if (a == s_len)
+                {
                     return true;
                 }
             }
