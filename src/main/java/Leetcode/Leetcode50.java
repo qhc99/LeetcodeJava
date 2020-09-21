@@ -436,6 +436,18 @@ public class Leetcode50
     }
 
     /**
+     * #10
+     * <br/>正则表达式匹配
+     * @param s string
+     * @param p pattern
+     * @return is match
+     */
+    public boolean isMatch(String s, String p) {
+        //TODO
+        return false;
+    }
+
+    /**
      * #11
      * <br/>盛最多水的容器
      *
@@ -497,6 +509,7 @@ public class Leetcode50
      * @param nums int array
      * @return set of three tuple
      */
+    @SuppressWarnings("unused")
     public static List<List<Integer>> threeSum(int[] nums)
     {
         Arrays.sort(nums);
