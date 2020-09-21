@@ -348,56 +348,6 @@ public class Leetcode50
         return automata.getResult();
     }
 
-    private static final class Automation
-    {
-        private String state = "start";
-        private final Map<String, List<String>> transition_map = Map.of(
-                "start", List.of("start", "signed", "in_number", "end"),
-                "signed", List.of("end", "end", "in_number", "end"),
-                "in_number", List.of("end", "end", "in_number", "end"),
-                "end", List.of("end", "end", "end", "end")
-        );
-
-        private int get_column(char c)
-        {
-            if (c == ' ')
-            {
-                return 0;
-            }
-            else if (c == '+' || c == '-')
-            {
-                return 1;
-            }
-            else if (Character.isDigit(c))
-            {
-                return 2;
-            }
-            return 3;
-        }
-
-        private long ans = 0;
-        private int sign = 1;
-
-        public void input(char c)
-        {
-            state = transition_map.get(state).get(get_column(c));
-            if (state.equals("in_number"))
-            {
-                ans = ans * 10 + Integer.parseInt(String.valueOf(c));
-                ans = sign == 1 ? Math.min(ans, Integer.MAX_VALUE) : Math.min(ans, -(long) Integer.MIN_VALUE);
-            }
-            else if (state.equals("signed"))
-            {
-                sign = (c == '+') ? 1 : -1;
-            }
-        }
-
-        public int getResult()
-        {
-            return ((int) ans) * sign;
-        }
-    }
-
     /**
      * #9
      * <br/>回文整数
@@ -433,18 +383,6 @@ public class Leetcode50
             rev = rev * 10 + pop;
         }
         return rev == original;
-    }
-
-    /**
-     * #10
-     * <br/>正则表达式匹配
-     * @param s string
-     * @param p pattern
-     * @return is match
-     */
-    public boolean isMatch(String s, String p) {
-        //TODO
-        return false;
     }
 
     /**
@@ -557,114 +495,6 @@ public class Leetcode50
         return res;
     }
 
-
-    /**
-     * #16
-     * <br/>输入：nums = [-1,2,1,-4], target = 1
-     * <br/>输出：2
-     * <br/>解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
-     *
-     * @param nums   array
-     * @param target sum target
-     * @return closest sum
-     */
-    @SuppressWarnings("unused")
-    public int threeSumClosest(int[] nums, int target)
-    {
-        Arrays.sort(nums);
-        int ans = nums[0] + nums[1] + nums[2];
-        for (int i = 0; i < nums.length - 2; i++)
-        {
-            int s = i + 1, e = nums.length - 1;
-            while (s < e)
-            {
-                int t = nums[i] + nums[s] + nums[e];
-                if (Math.abs(t - target) < Math.abs(ans - target))
-                {
-                    ans = t;
-                }
-                if (t == target)
-                {
-                    return t;
-                }
-                else if (t > target)
-                {
-                    e--;
-                }
-                else
-                {
-                    s++;
-                }
-            }
-        }
-        return ans;
-    }
-
-    /**
-     * #18
-     * <br/>四数之和
-     * <br/>给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
-     * <p>
-     * <br/>满足要求的四元组集合为：<br/>
-     * <pre>
-     * [
-     *  [-1,  0, 0, 1],
-     *  [-2, -1, 1, 2],
-     *  [-2,  0, 0, 2]
-     * ]</pre>
-     *
-     * @param nums   array
-     * @param target sum target
-     * @return list of four-tuple
-     */
-    @SuppressWarnings("unused")
-    public List<List<Integer>> fourSum(int[] nums, int target)
-    {
-        int len = nums.length;
-        List<List<Integer>> res = new ArrayList<>();
-        if (len < 4)
-        {
-            return res;
-        }
-        Arrays.sort(nums);
-        for (int i = 0; i < len - 3; i++)
-        {
-            if (i != 0)
-            {
-                while (i < len - 3 && nums[i] == nums[i - 1]) i++;
-            }
-            for (int j = i + 1; j < len - 2; j++)
-            {
-                if (j != i + 1)
-                {
-                    while (j < len - 2 && nums[j] == nums[j - 1]) j++;
-                }
-                int a = j + 1, b = len - 1;
-                while (a < b)
-                {
-                    int t = nums[i] + nums[j] + nums[a] + nums[b];
-                    if (t == target)
-                    {
-                        res.add(List.of(nums[i], nums[j], nums[a], nums[b]));
-                        a++;
-                        while (a < b && nums[a] == nums[a - 1]) a++;
-                    }
-                    else if (t < target)
-                    {
-                        a++;
-                        while (a < b && nums[a] == nums[a - 1]) a++;
-                    }
-                    else
-                    {
-                        b--;
-                        while (a < b && nums[b] == nums[b + 1]) b--;
-                    }
-                }
-            }
-        }
-        return res;
-    }
-
     /**
      * #19
      * <br/>remove the nth node of reverse order
@@ -723,7 +553,6 @@ public class Leetcode50
         RecursiveGenerateParenthesis(init, 1, 1, 1, res, n);
         return res;
     }
-
 
     private static void RecursiveGenerateParenthesis(StringBuilder stringBuilder,
                                                      int str_len, int left_count,
@@ -1642,42 +1471,6 @@ public class Leetcode50
         return availableChars;
     }
 
-    private static class MatrixIndex
-    {
-        public final int row;
-        public final int col;
-        final int hash;
-
-        public MatrixIndex(int r, int c)
-        {
-            row = r;
-            col = c;
-            hash = Objects.hash(row, col);
-        }
-
-        @Override
-        public boolean equals(Object other)
-        {
-            if (other instanceof MatrixIndex)
-            {
-                var t = (MatrixIndex) other;
-                return t.row == row && t.col == col;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        @Override
-        public int hashCode()
-        {
-            return hash;
-        }
-
-    }
-
-
     /**
      * #38
      * <br/>外观数列
@@ -1871,7 +1664,6 @@ public class Leetcode50
         }
     }
 
-
     /**
      * #45
      * <br/>全排列
@@ -1924,5 +1716,250 @@ public class Leetcode50
                 currentCache.remove(currentCache.size() - 1);
             }
         }
+    }
+
+    /**
+     * #10
+     * <br/>正则表达式匹配
+     *
+     * @param s string
+     * @param p pattern
+     * @return is match
+     */
+    public boolean isMatch(String s, String p)
+    {
+        int m = s.length();
+        int n = p.length();
+
+        boolean[][] f = new boolean[m + 1][n + 1];
+        f[0][0] = true;
+        for (int i = 0; i <= m; ++i)
+        {
+            for (int j = 1; j <= n; ++j)
+            {
+                if (p.charAt(j - 1) == '*')
+                {
+                    f[i][j] = f[i][j - 2];
+                    if (matches(s, p, i, j - 1))
+                    {
+                        f[i][j] = f[i][j] || f[i - 1][j];
+                    }
+                }
+                else
+                {
+                    if (matches(s, p, i, j))
+                    {
+                        f[i][j] = f[i - 1][j - 1];
+                    }
+                }
+            }
+        }
+        return f[m][n];
+    }
+
+    public boolean matches(String s, String p, int i, int j)
+    {
+        if (i == 0)
+        {
+            return false;
+        }
+        if (p.charAt(j - 1) == '.')
+        {
+            return true;
+        }
+        return s.charAt(i - 1) == p.charAt(j - 1);
+
+    }
+
+
+    /**
+     * #16
+     * <br/>输入：nums = [-1,2,1,-4], target = 1
+     * <br/>输出：2
+     * <br/>解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+     *
+     * @param nums   array
+     * @param target sum target
+     * @return closest sum
+     */
+    @SuppressWarnings("unused")
+    public int threeSumClosest(int[] nums, int target)
+    {
+        Arrays.sort(nums);
+        int ans = nums[0] + nums[1] + nums[2];
+        for (int i = 0; i < nums.length - 2; i++)
+        {
+            int s = i + 1, e = nums.length - 1;
+            while (s < e)
+            {
+                int t = nums[i] + nums[s] + nums[e];
+                if (Math.abs(t - target) < Math.abs(ans - target))
+                {
+                    ans = t;
+                }
+                if (t == target)
+                {
+                    return t;
+                }
+                else if (t > target)
+                {
+                    e--;
+                }
+                else
+                {
+                    s++;
+                }
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * #18
+     * <br/>四数之和
+     * <br/>给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+     * <p>
+     * <br/>满足要求的四元组集合为：<br/>
+     * <pre>
+     * [
+     *  [-1,  0, 0, 1],
+     *  [-2, -1, 1, 2],
+     *  [-2,  0, 0, 2]
+     * ]</pre>
+     *
+     * @param nums   array
+     * @param target sum target
+     * @return list of four-tuple
+     */
+    @SuppressWarnings("unused")
+    public List<List<Integer>> fourSum(int[] nums, int target)
+    {
+        int len = nums.length;
+        List<List<Integer>> res = new ArrayList<>();
+        if (len < 4)
+        {
+            return res;
+        }
+        Arrays.sort(nums);
+        for (int i = 0; i < len - 3; i++)
+        {
+            if (i != 0)
+            {
+                while (i < len - 3 && nums[i] == nums[i - 1]) i++;
+            }
+            for (int j = i + 1; j < len - 2; j++)
+            {
+                if (j != i + 1)
+                {
+                    while (j < len - 2 && nums[j] == nums[j - 1]) j++;
+                }
+                int a = j + 1, b = len - 1;
+                while (a < b)
+                {
+                    int t = nums[i] + nums[j] + nums[a] + nums[b];
+                    if (t == target)
+                    {
+                        res.add(List.of(nums[i], nums[j], nums[a], nums[b]));
+                        a++;
+                        while (a < b && nums[a] == nums[a - 1]) a++;
+                    }
+                    else if (t < target)
+                    {
+                        a++;
+                        while (a < b && nums[a] == nums[a - 1]) a++;
+                    }
+                    else
+                    {
+                        b--;
+                        while (a < b && nums[b] == nums[b + 1]) b--;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    private static final class Automation
+    {
+        private final Map<String, List<String>> transition_map = Map.of(
+                "start", List.of("start", "signed", "in_number", "end"),
+                "signed", List.of("end", "end", "in_number", "end"),
+                "in_number", List.of("end", "end", "in_number", "end"),
+                "end", List.of("end", "end", "end", "end")
+        );
+        private String state = "start";
+        private long ans = 0;
+        private int sign = 1;
+
+        private int get_column(char c)
+        {
+            if (c == ' ')
+            {
+                return 0;
+            }
+            else if (c == '+' || c == '-')
+            {
+                return 1;
+            }
+            else if (Character.isDigit(c))
+            {
+                return 2;
+            }
+            return 3;
+        }
+
+        public void input(char c)
+        {
+            state = transition_map.get(state).get(get_column(c));
+            if (state.equals("in_number"))
+            {
+                ans = ans * 10 + Integer.parseInt(String.valueOf(c));
+                ans = sign == 1 ? Math.min(ans, Integer.MAX_VALUE) : Math.min(ans, -(long) Integer.MIN_VALUE);
+            }
+            else if (state.equals("signed"))
+            {
+                sign = (c == '+') ? 1 : -1;
+            }
+        }
+
+        public int getResult()
+        {
+            return ((int) ans) * sign;
+        }
+    }
+
+    private static class MatrixIndex
+    {
+        public final int row;
+        public final int col;
+        final int hash;
+
+        public MatrixIndex(int r, int c)
+        {
+            row = r;
+            col = c;
+            hash = Objects.hash(row, col);
+        }
+
+        @Override
+        public boolean equals(Object other)
+        {
+            if (other instanceof MatrixIndex)
+            {
+                var t = (MatrixIndex) other;
+                return t.row == row && t.col == col;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return hash;
+        }
+
     }
 }
