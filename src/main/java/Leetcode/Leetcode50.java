@@ -1665,7 +1665,55 @@ public class Leetcode50
     }
 
     /**
-     * #45
+     * #46
+     * <br/>全排列
+     * <pre>
+     * 输入: [1,2,3]
+     * 输出:
+     * [
+     *   [1,2,3],
+     *   [1,3,2],
+     *   [2,1,3],
+     *   [2,3,1],
+     *   [3,1,2],
+     *   [3,2,1]
+     * ]
+     * </pre>
+     *
+     * @param nums int array
+     * @return permutation
+     */
+    public static List<List<Integer>> permute(int[] nums)
+    {
+        List<List<Integer>> res = new ArrayList<>();
+        recursivePermute(nums,new boolean[nums.length],new ArrayList<>(), res);
+        return res;
+    }
+
+    public static void recursivePermute(int[] nums, boolean[] selected, List<Integer> cache, List<List<Integer>> res)
+    {
+        for(int i = 0; i < nums.length; i++)
+        {
+            if(!selected[i])
+            {
+                selected[i] = true;
+                cache.add(nums[i]);
+                if(cache.size() == nums.length)
+                {
+                    res.add(new ArrayList<>(cache));
+                }
+                else
+                {
+                    recursivePermute(nums,selected,cache,res);
+                }
+                cache.remove(cache.size()-1);
+                selected[i] = false;
+            }
+        }
+    }
+
+    /**
+     * #47
      * <br/>全排列
      * <pre>
      * 输入: [1,1,2]
@@ -1726,6 +1774,7 @@ public class Leetcode50
      * @param p pattern
      * @return is match
      */
+    @SuppressWarnings("unused")
     public boolean isMatch(String s, String p)
     {
         int m = s.length();
