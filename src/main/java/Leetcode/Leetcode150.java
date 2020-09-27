@@ -2,8 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-public class Leetcode150
-{
+public class Leetcode150 {
     /**
      * #105
      *
@@ -23,32 +22,25 @@ public class Leetcode150
      * @return origin tree
      */
     @SuppressWarnings("unused")
-    public static TreeNode buildTree(int[] preorder, int[] inorder)
-    {
-        if (preorder.length == 0)
-        {
+    public static TreeNode buildTree(int[] preorder, int[] inorder) {
+        if (preorder.length == 0) {
             return null;
         }
         Map<Integer, Integer> m = new HashMap<>();
-        for (int i = 0; i < inorder.length; i++)
-        {
+        for (int i = 0; i < inorder.length; i++) {
             m.put(inorder[i], i);
         }
         return recursiveBuildTree(preorder, 0, preorder.length, 0, m);
     }
 
-    private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m)
-    {
-        if (p_end - p_start == 1)
-        {
+    private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m) {
+        if (p_end - p_start == 1) {
             return new TreeNode(p_order[p_start]);
         }
-        else if (p_end - p_start == 0)
-        {
+        else if (p_end - p_start == 0) {
             return null;
         }
-        else
-        {
+        else {
             TreeNode root = new TreeNode(p_order[p_start]);
             int i_mid = m.get(root.val);
             int l_len = i_mid - i_start;
@@ -83,33 +75,26 @@ public class Leetcode150
      * @return down to up iteration
      */
     @SuppressWarnings("unused")
-    public List<List<Integer>> levelOrderBottom(TreeNode root)
-    {
+    public List<List<Integer>> levelOrderBottom(TreeNode root) {
         List<List<Integer>> res = new ArrayList<>();
         Queue<TreeNode> queue = new LinkedList<>();
         queue.add(root);
-        while (!queue.isEmpty())
-        {
+        while (!queue.isEmpty()) {
             int size = queue.size();
             List<Integer> t = new ArrayList<>();
-            for (int i = 0; i < size; i++)
-            {
+            for (int i = 0; i < size; i++) {
                 var n = queue.poll();
-                if (n != null)
-                {
+                if (n != null) {
                     t.add(n.val);
-                    if (n.left != null)
-                    {
+                    if (n.left != null) {
                         queue.add(n.left);
                     }
-                    if (n.right != null)
-                    {
+                    if (n.right != null) {
                         queue.add(n.right);
                     }
                 }
             }
-            if (t.size() != 0)
-            {
+            if (t.size() != 0) {
                 res.add(t);
             }
         }
@@ -126,27 +111,21 @@ public class Leetcode150
      * @return 最小深度
      */
     @SuppressWarnings("unused")
-    public static int minDepth(TreeNode root)
-    {
-        if (root == null)
-        {
+    public static int minDepth(TreeNode root) {
+        if (root == null) {
             return 0;
         }
         int left = minDepth(root.left);
         int right = minDepth(root.right);
         int depth = 1;
-        if (left == 0)
-        {
+        if (left == 0) {
             depth += right;
         }
-        else
-        {
-            if (right == 0)
-            {
+        else {
+            if (right == 0) {
                 depth += left;
             }
-            else
-            {
+            else {
                 depth += Math.min(left, right);
             }
         }

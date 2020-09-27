@@ -4,8 +4,7 @@ package Leetcode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Leetcode100
-{
+public class Leetcode100 {
 
     /**
      * #64
@@ -24,17 +23,13 @@ public class Leetcode100
      * @return path sum
      */
     @SuppressWarnings("unused")
-    public static int minPathSum(int[][] grid)
-    {
+    public static int minPathSum(int[][] grid) {
         int r_len = grid.length;
         int c_len = grid[0].length;
-        for (int s = 1; s <= r_len + c_len - 2; s++)
-        {
-            for (int i = 0; i < r_len && i <= s; i++)
-            {
+        for (int s = 1; s <= r_len + c_len - 2; s++) {
+            for (int i = 0; i < r_len && i <= s; i++) {
                 int j = s - i;
-                if (j < 0 || j >= c_len)
-                {
+                if (j < 0 || j >= c_len) {
                     continue;
                 }
                 grid[i][j] += minPath(i, j, grid);
@@ -43,8 +38,7 @@ public class Leetcode100
         return grid[r_len - 1][c_len - 1];
     }
 
-    private static int minPath(int i, int j, int[][] cache)
-    {
+    private static int minPath(int i, int j, int[][] cache) {
         double u = (i - 1 < 0) ? Double.POSITIVE_INFINITY : cache[i - 1][j];
         double l = (j - 1 < 0) ? Double.POSITIVE_INFINITY : cache[i][j - 1];
         return (int) Math.min(l, u);
@@ -72,25 +66,20 @@ public class Leetcode100
      * @return subsets of nums
      */
     @SuppressWarnings("unused")
-    public static List<List<Integer>> subsets(int[] nums)
-    {
+    public static List<List<Integer>> subsets(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         recursiveSubsets(nums, 0, res);
         return res;
     }
 
-    private static void recursiveSubsets(int[] nums, int idx, List<List<Integer>> res)
-    {
-        if (idx == nums.length)
-        {
+    private static void recursiveSubsets(int[] nums, int idx, List<List<Integer>> res) {
+        if (idx == nums.length) {
             res.add(new ArrayList<>());
         }
-        else
-        {
+        else {
             recursiveSubsets(nums, idx + 1, res);
             List<List<Integer>> temp = new ArrayList<>();
-            for (var list : res)
-            {
+            for (var list : res) {
                 List<Integer> newList = new ArrayList<>(list);
                 newList.add(nums[idx]);
                 temp.add(newList);
@@ -116,16 +105,13 @@ public class Leetcode100
      * @return count
      */
     @SuppressWarnings("unused")
-    public static int numTrees(int n)
-    {
+    public static int numTrees(int n) {
         int[] G = new int[n + 1];
         G[0] = 1;
         G[1] = 1;
-        for (int i = 2; i <= n; i++)
-        {
+        for (int i = 2; i <= n; i++) {
             G[i] = 0;
-            for (int j = 1; j <= i; j++)
-            {
+            for (int j = 1; j <= i; j++) {
                 G[i] += G[j - 1] * G[i - j];
             }
         }

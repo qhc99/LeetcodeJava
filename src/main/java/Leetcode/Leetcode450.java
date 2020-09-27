@@ -1,8 +1,7 @@
 package Leetcode;
 
 
-public class Leetcode450
-{
+public class Leetcode450 {
 
     /**
      * #404
@@ -21,24 +20,18 @@ public class Leetcode450
      * @return sum of left leaves
      */
     @SuppressWarnings("unused")
-    public static int sumOfLeftLeaves(TreeNode root)
-    {
-        if (root == null)
-        {
+    public static int sumOfLeftLeaves(TreeNode root) {
+        if (root == null) {
             return 0;
         }
-        else
-        {
-            if (root.left == null)
-            {
+        else {
+            if (root.left == null) {
                 return sumOfLeftLeaves(root.right);
             }
-            else if (root.left.left == null && root.left.right == null)
-            {
+            else if (root.left.left == null && root.left.right == null) {
                 return root.left.val + sumOfLeftLeaves(root.right);
             }
-            else
-            {
+            else {
                 return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
             }
         }
@@ -61,46 +54,36 @@ public class Leetcode450
      * @return min group sum
      */
     @SuppressWarnings("unused")
-    public static int splitArray(int[] nums, int m)
-    {
+    public static int splitArray(int[] nums, int m) {
         long sum = 0;
         long max = 0;
-        for (int num : nums)
-        {
+        for (int num : nums) {
             sum += num;
             max = Math.max(max, num);
         }
-        while (max < sum)
-        {
+        while (max < sum) {
             long mid = (sum - max) / 2 + max;
-            if (canSplit(nums, mid, m))
-            {
+            if (canSplit(nums, mid, m)) {
                 sum = mid;
             }
-            else
-            {
+            else {
                 max = mid + 1;
             }
         }
         return (int) max;
     }
 
-    private static boolean canSplit(int[] nums, long sum, int limit)
-    {
+    private static boolean canSplit(int[] nums, long sum, int limit) {
         int split = 1;
         int tSum = 0;
-        for (var n : nums)
-        {
-            if (tSum + n <= sum)
-            {
+        for (var n : nums) {
+            if (tSum + n <= sum) {
                 tSum += n;
             }
-            else
-            {
+            else {
                 tSum = n;
                 split++;
-                if (split > limit)
-                {
+                if (split > limit) {
                     return false;
                 }
             }

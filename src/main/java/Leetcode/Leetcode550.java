@@ -3,16 +3,16 @@ package Leetcode;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Leetcode550
-{
+public class Leetcode550 {
     /**
      * #501
      * <br/>二叉搜索树中的众数
+     *
      * @param root tree
      * @return res
      */
     @SuppressWarnings("unused")
-    public int[] findMode(TreeNode root) {
+    public static int[] findMode(TreeNode root) {
         var s = new Statistic();
         dfs(root, s);
         int[] mode = new int[s.answer.size()];
@@ -22,13 +22,13 @@ public class Leetcode550
         return mode;
     }
 
-    public void dfs(TreeNode o, Statistic solver) {
+    public static void dfs(TreeNode o, Statistic solver) {
         if (o == null) {
             return;
         }
         dfs(o.left, solver);
         solver.update(o.val);
-        dfs(o.right,solver);
+        dfs(o.right, solver);
     }
 
     static class Statistic {
@@ -38,7 +38,8 @@ public class Leetcode550
         public void update(int x) {
             if (x == base) {
                 ++count;
-            } else {
+            }
+            else {
                 count = 1;
                 base = x;
             }
@@ -67,25 +68,24 @@ public class Leetcode550
      *             /   \
      *           20     13
      * </pre>
+     *
      * @param root tree root
      * @return converted tree
      */
     @SuppressWarnings("unused")
-    public static TreeNode convertBST(TreeNode root)
-    {
-        traverseAndConvertBST(root,0);
+    public static TreeNode convertBST(TreeNode root) {
+        traverseAndConvertBST(root, 0);
         return root;
     }
 
-    private static int traverseAndConvertBST(TreeNode r, int sum)
-    {
-        if(r == null){
+    private static int traverseAndConvertBST(TreeNode r, int sum) {
+        if (r == null) {
             return sum;
         }
-        sum = traverseAndConvertBST(r.right,sum);
+        sum = traverseAndConvertBST(r.right, sum);
         r.val += sum;
         sum = r.val;
-        sum = traverseAndConvertBST(r.left,sum);
+        sum = traverseAndConvertBST(r.left, sum);
         return sum;
     }
 }
