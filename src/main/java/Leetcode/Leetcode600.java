@@ -1,6 +1,6 @@
 package Leetcode;
 
-import java.util.HashMap;
+import java.util.*;
 
 
 public class Leetcode600 {
@@ -13,7 +13,7 @@ public class Leetcode600 {
      * @param k    sum target
      * @return count
      */
-    @SuppressWarnings("SpellCheckingInspection, unused")
+    @SuppressWarnings("unused")
     public static int subarraySum(int[] nums, int k) {
         int count = 0, pre = 0;
         HashMap<Integer, Integer> mp = new HashMap<>();

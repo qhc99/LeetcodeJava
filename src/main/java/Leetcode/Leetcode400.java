@@ -1,6 +1,6 @@
 package Leetcode;
 
-
+import java.util.*;
 public class Leetcode400 {
     /**
      * #392
