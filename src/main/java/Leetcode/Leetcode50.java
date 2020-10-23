@@ -1628,7 +1628,7 @@ public class Leetcode50 {
      * @return multiply
      */
     public static String multiply(String num1, String num2) {
-        //TODO
+        //TODO implement this
         return null;
     }
 
