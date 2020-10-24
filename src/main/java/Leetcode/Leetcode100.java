@@ -6,6 +6,31 @@ import java.util.*;
 public class Leetcode100 {
 
     /**
+     * #55
+     * <br/>跳跃游戏
+     * <br/>
+     * <pre>
+     * 输入: [2,3,1,1,4]
+     * 输出: true
+     * 解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个位置。
+     * </pre>
+     * @param nums int array
+     * @return res
+     */
+    public static boolean canJump(int[] nums) {
+        int remotest = 0;
+        for(int i = 0; i < nums.length; i++){
+            if(i <= remotest){
+                remotest = Math.max(remotest, i + nums[i]);
+                if(remotest >= nums.length - 1){
+                    return true;
+                }
+            }
+        }
+        return remotest >= nums.length - 1;
+    }
+
+    /**
      * #64
      * 说明：每次只能向下或者向右移动一步。
      * (上, 左)
