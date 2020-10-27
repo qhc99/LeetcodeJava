@@ -132,4 +132,28 @@ public class Leetcode150 {
 
         return depth;
     }
+
+    /**
+     * #144
+     * <br/>前序遍历
+     * @param root root
+     * @return res array
+     */
+    public static List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        solvePreorderTraversal(root,res);
+        return res;
+    }
+
+    private static void solvePreorderTraversal(TreeNode node, List<Integer> res){
+        if(node != null){
+            res.add(node.val);
+            if(node.left != null){
+                solvePreorderTraversal(node.left,res);
+            }
+            if(node.right != null){
+                solvePreorderTraversal(node.right,res);
+            }
+        }
+    }
 }
