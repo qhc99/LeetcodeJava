@@ -134,6 +134,50 @@ public class Leetcode150 {
     }
 
     /**
+     * #129
+     * <br/>
+     * <pre>
+     *  输入: [1,2,3]
+     *     1
+     *    / \
+     *   2   3
+     * 输出: 25
+     * 解释:
+     * 从根到叶子节点路径 1->2 代表数字 12.
+     * 从根到叶子节点路径 1->3 代表数字 13.
+     * 因此，数字总和 = 12 + 13 = 25.
+     * </pre>
+     * @param root tree
+     * @return sum
+     */
+    public static int sumNumbers(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        List<Integer> res = new ArrayList<>();
+        res.add(0);
+        solveSumNumbers(root,0,res);
+        return res.get(0);
+    }
+
+    private static void solveSumNumbers(TreeNode node, int num, List<Integer> sum){
+        num = num*10 + node.val;
+        if(node.left == null && node.right == null){
+            sum.set(0, sum.get(0) + num);
+        }
+        else if(node.right != null && node.left == null){
+            solveSumNumbers(node.right,num,sum);
+        }
+        else if(node.right == null){
+            solveSumNumbers(node.left,num,sum);
+        }
+        else{
+            solveSumNumbers(node.right,num,sum);
+            solveSumNumbers(node.left,num,sum);
+        }
+    }
+
+    /**
      * #144
      * <br/>前序遍历
      * @param root root
