@@ -150,6 +150,7 @@ public class Leetcode150 {
      * @param root tree
      * @return sum
      */
+    @SuppressWarnings("unused")
     public static int sumNumbers(TreeNode root) {
         if(root == null){
             return 0;
@@ -183,6 +184,7 @@ public class Leetcode150 {
      * @param root root
      * @return res array
      */
+    @SuppressWarnings("unused")
     public static List<Integer> preorderTraversal(TreeNode root) {
         List<Integer> res = new ArrayList<>();
         solvePreorderTraversal(root,res);

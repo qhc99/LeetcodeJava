@@ -1627,6 +1627,7 @@ public class Leetcode50 {
      * @param num2 num2
      * @return multiply
      */
+    @SuppressWarnings("unused")
     public static String multiply(String num1, String num2) {
         //TODO implement this
         return null;
@@ -1729,6 +1730,7 @@ public class Leetcode50 {
      * <br/>旋转图像
      * @param matrix image
      */
+    @SuppressWarnings("unused")
     public static void rotate(int[][] matrix) {
         if(matrix.length <= 1){
             return;
