@@ -1654,6 +1654,7 @@ public class Leetcode50 {
      * @param nums int array
      * @return permutation
      */
+    @SuppressWarnings("unused")
     public static List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
         recursivePermute(nums, new boolean[nums.length], new ArrayList<>(), res);
