@@ -1266,23 +1266,21 @@ public class Leetcode50 {
      */
     @SuppressWarnings("unused")
     public static void solveSudoku(char[][] board) {
-        long t1 = System.nanoTime();
         List<MatrixIndex> spaces = new ArrayList<>();
+        Map<MatrixIndex, List<MatrixIndex>> relatedSpaces = new HashMap<>();
         for (int r = 0; r < 9; r++) {
             for (int c = 0; c < 9; c++) {
                 char f = board[r][c];
                 if (f == '.') {
-                    spaces.add(new MatrixIndex(r, c));
-                }
-            }
-        }
-
-        Map<MatrixIndex, List<MatrixIndex>> relatedSpaces = new HashMap<>();
-        for (var spacePtr1 : spaces) {
-            relatedSpaces.put(spacePtr1, new ArrayList<>());
-            for (var spacePtr2 : spaces) {
-                if (!spacePtr2.equals(spacePtr1) && isRelated(spacePtr1, spacePtr2)) {
-                    relatedSpaces.get(spacePtr1).add(spacePtr2);
+                    var ptr = new MatrixIndex(r, c);
+                    spaces.add(ptr);
+                    relatedSpaces.put(ptr, new ArrayList<>());
+                    for(int i = 0; i < spaces.size() - 1; i++){
+                        if(!ptr.equals(spaces.get(i)) && isRelated(spaces.get(i), ptr)){
+                            relatedSpaces.get(ptr).add(spaces.get(i));
+                            relatedSpaces.get(spaces.get(i)).add(ptr);
+                        }
+                    }
                 }
             }
         }
@@ -1315,8 +1313,6 @@ public class Leetcode50 {
         for (var space : spaces) {
             availableChars.put(space, getAvailableChars(space, board));
         }
-        long t2 = System.nanoTime();
-        System.out.printf("prepare time: %fms\n", (t2 - t1) / Math.pow(10, 6));
         depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
     }
 
