@@ -1,7 +1,7 @@
 package Leetcode;
 
-import org.nathan.AlgorithmsJava.tools.DPMatrix;
-import java.util.*;
+import org.nathan.AlgorithmsJava.structures.DPMatrix;
+
 
 public class Leetcode700 {
 
