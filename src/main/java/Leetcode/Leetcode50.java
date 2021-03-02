@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-public class Leetcode50 {
+public class Leetcode50{
     /**
      * #1
      * <br/>给定 nums = [2, 7, 11, 15], target = 9
@@ -14,14 +14,14 @@ public class Leetcode50 {
      * @return numbers array
      */
     @SuppressWarnings("unused")
-    public static int[] twoSum(int[] nums, int target) {
+    public static int[] twoSum(int[] nums, int target){
         Map<Integer, Integer> map = new HashMap<>();
-        for (int i = 0; i < nums.length; i++) {
+        for(int i = 0; i < nums.length; i++){
             map.put(nums[i], i);
         }
-        for (int i = 0; i < nums.length; i++) {
+        for(int i = 0; i < nums.length; i++){
             int complement = target - nums[i];
-            if (map.containsKey(complement) && map.get(complement) != i) {
+            if(map.containsKey(complement) && map.get(complement) != i){
                 return new int[]{i, map.get(complement)};
             }
         }
@@ -40,44 +40,44 @@ public class Leetcode50 {
      * @return add result
      */
     @SuppressWarnings("unused")
-    public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+    public static ListNode addTwoNumbers(ListNode l1, ListNode l2){
         return recursiveAddTwoNumbers(l1, l2, 0);
     }
 
-    private static ListNode recursiveAddTwoNumbers(ListNode l1, ListNode l2, int digit) {
-        if (l1 == null && l2 == null) {
+    private static ListNode recursiveAddTwoNumbers(ListNode l1, ListNode l2, int digit){
+        if(l1 == null && l2 == null){
             return new ListNode(digit);
         }
-        else if (l1 == null) {
+        else if(l1 == null){
             addDigit(l2, digit);
             return l2;
         }
-        else if (l2 == null) {
+        else if(l2 == null){
             addDigit(l1, digit);
             return l1;
         }
         ListNode n = new ListNode();
         n.val = l1.val + l2.val + digit;
         int this_digit = 0;
-        if (n.val >= 10) {
+        if(n.val >= 10){
             n.val -= 10;
             this_digit++;
         }
         n.next = recursiveAddTwoNumbers(l1.next, l2.next, this_digit);
-        if (n.next.val == 0 && n.next.next == null) {
+        if(n.next.val == 0 && n.next.next == null){
             n.next = null;
         }
         return n;
     }
 
-    private static void addDigit(ListNode l, int digit) {
+    private static void addDigit(ListNode l, int digit){
         l.val += digit;
-        if (l.val >= 10) {
+        if(l.val >= 10){
             l.val -= 10;
-            if (l.next == null) {
+            if(l.next == null){
                 l.next = new ListNode(1);
             }
-            else {
+            else{
                 addDigit(l.next, 1);
             }
         }
@@ -94,20 +94,20 @@ public class Leetcode50 {
      * @return result
      */
     @SuppressWarnings("SpellCheckingInspection, unused")
-    public static int lengthOfLongestSubstring(String s) {
+    public static int lengthOfLongestSubstring(String s){
         Map<Character, Integer> map = new HashMap<>();
         int len = s.length();
         int head = 0, tail = 0;
         int max_count = 0;
-        for (int idx = 0; idx < len; idx++) {
+        for(int idx = 0; idx < len; idx++){
             char c = s.charAt(idx);
-            if (!map.containsKey(c)) {
+            if(!map.containsKey(c)){
                 map.put(c, idx);
             }
-            else if (map.get(c) < head) {
+            else if(map.get(c) < head){
                 map.put(c, idx);
             }
-            else {
+            else{
                 head = map.get(c) + 1;
                 map.put(c, idx);
             }
@@ -129,8 +129,8 @@ public class Leetcode50 {
      * @return median
      */
     @SuppressWarnings("unused")
-    public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        if (nums1.length > nums2.length) {
+    public static double findMedianSortedArrays(int[] nums1, int[] nums2){
+        if(nums1.length > nums2.length){
             return findMedianSortedArrays(nums2, nums1);
         }
 
@@ -141,7 +141,7 @@ public class Leetcode50 {
         // median2：后一部分的最小值
         int median1 = 0, median2 = 0;
 
-        while (left <= right) {
+        while(left <= right) {
             // 前一部分包含 nums1[0 .. i-1] 和 nums2[0 .. j-1]
             // 后一部分包含 nums1[i .. m-1] 和 nums2[j .. n-1]
             int i = (left + right) / 2;
@@ -153,12 +153,12 @@ public class Leetcode50 {
             int nums2_jm1 = (j == 0 ? Integer.MIN_VALUE : nums2[j - 1]);
             int nums2_j = (j == n ? Integer.MAX_VALUE : nums2[j]);
 
-            if (nums1_im1 <= nums2_j) {
+            if(nums1_im1 <= nums2_j){
                 median1 = Math.max(nums1_im1, nums2_jm1);
                 median2 = Math.min(nums1_i, nums2_j);
                 left = i + 1;
             }
-            else {
+            else{
                 right = i - 1;
             }
         }
@@ -178,35 +178,35 @@ public class Leetcode50 {
      * @return longest palindrome
      */
     @SuppressWarnings("SpellCheckingInspection, unused")
-    public static String longestPalindrome(String s) {
+    public static String longestPalindrome(String s){
         int len = s.length();
-        if (len <= 1) {
+        if(len <= 1){
             return s;
         }
 
         int res_start = 0, res_end = 0; // zero index, close interval
         boolean[][] S = new boolean[len - 1][len - 1];
         // two
-        for (int i = 0; i + 2 - 1 < len; i++) {
-            if (s.charAt(i) == s.charAt(i + 1)) {
+        for(int i = 0; i + 2 - 1 < len; i++){
+            if(s.charAt(i) == s.charAt(i + 1)){
                 S[i][i] = true;
                 res_start = i;
                 res_end = i + 1;
             }
         }
         //three
-        for (int i = 0; i + 3 - 1 < len; i++) {
-            if (s.charAt(i) == s.charAt(i + 2)) {
+        for(int i = 0; i + 3 - 1 < len; i++){
+            if(s.charAt(i) == s.charAt(i + 2)){
                 S[i][i + 1] = true;
                 res_start = i;
                 res_end = i + 2;
             }
         }
         // other
-        for (int l = 4; l <= len; l++) {
-            for (int i = 0; i + l - 1 < len; i++) {
-                if (S[i + 1][i + l - 3]) {
-                    if (s.charAt(i) == s.charAt(i + l - 1)) {
+        for(int l = 4; l <= len; l++){
+            for(int i = 0; i + l - 1 < len; i++){
+                if(S[i + 1][i + l - 3]){
+                    if(s.charAt(i) == s.charAt(i + l - 1)){
                         S[i][i + l - 2] = true;
                         res_start = i;
                         res_end = i + l - 1;
@@ -234,25 +234,25 @@ public class Leetcode50 {
      * @return origin
      */
     @SuppressWarnings("SpellCheckingInspection, unused")
-    public static String convert(String s, int numRows) {
+    public static String convert(String s, int numRows){
         int len = s.length();
         List<StringBuilder> rows = new ArrayList<>();
-        for (int i = 0; i < numRows; i++) {
+        for(int i = 0; i < numRows; i++){
             rows.add(new StringBuilder());
         }
         List<Integer> T = new ArrayList<>(); // numRows==4: 0 1 2 3 2 1
-        for (int i = 0; i < numRows; i++) {
+        for(int i = 0; i < numRows; i++){
             T.add(i % numRows);
         }
-        for (int i = 2 * numRows - 2; i > numRows; i--) {
+        for(int i = 2 * numRows - 2; i > numRows; i--){
             T.add(i % numRows);
         }
         int t = T.size();
-        for (int i = 0; i < len; i++) {
+        for(int i = 0; i < len; i++){
             rows.get(T.get(i % t)).append(s.charAt(i));
         }
         StringBuilder res = new StringBuilder();
-        for (StringBuilder row : rows) {
+        for(StringBuilder row : rows){
             res.append(row);
         }
         return res.toString();
@@ -267,15 +267,15 @@ public class Leetcode50 {
      * @return reversed int
      */
     @SuppressWarnings("unused")
-    public static int reverse(int x) {
+    public static int reverse(int x){
         int rev = 0;
-        while (x != 0) {
+        while(x != 0) {
             int pop = x % 10;
             x /= 10;
-            if (rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
+            if(rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)){
                 return 0;
             }
-            if (rev < Integer.MIN_VALUE / 10 || (rev == Integer.MIN_VALUE / 10 && pop < -8)) {
+            if(rev < Integer.MIN_VALUE / 10 || (rev == Integer.MIN_VALUE / 10 && pop < -8)){
                 return 0;
             }
             rev = rev * 10 + pop;
@@ -291,16 +291,16 @@ public class Leetcode50 {
      * @return int
      */
     @SuppressWarnings("SpellCheckingInspection, unused")
-    public static int myAtoi(String str) {
+    public static int myAtoi(String str){
         var automata = new Automation();
         int len = str.length();
-        for (int i = 0; i < len; i++) {
+        for(int i = 0; i < len; i++){
             automata.input(str.charAt(i));
         }
         return automata.getResult();
     }
 
-    private static final class Automation {
+    private static final class Automation{
         private final Map<String, List<String>> transition_map = Map.of(
                 "start", List.of("start", "signed", "in_number", "end"),
                 "signed", List.of("end", "end", "in_number", "end"),
@@ -311,31 +311,31 @@ public class Leetcode50 {
         private long ans = 0;
         private int sign = 1;
 
-        private int get_column(char c) {
-            if (c == ' ') {
+        private int get_column(char c){
+            if(c == ' '){
                 return 0;
             }
-            else if (c == '+' || c == '-') {
+            else if(c == '+' || c == '-'){
                 return 1;
             }
-            else if (Character.isDigit(c)) {
+            else if(Character.isDigit(c)){
                 return 2;
             }
             return 3;
         }
 
-        public void input(char c) {
+        public void input(char c){
             state = transition_map.get(state).get(get_column(c));
-            if (state.equals("in_number")) {
+            if(state.equals("in_number")){
                 ans = ans * 10 + Integer.parseInt(String.valueOf(c));
                 ans = sign == 1 ? Math.min(ans, Integer.MAX_VALUE) : Math.min(ans, -(long) Integer.MIN_VALUE);
             }
-            else if (state.equals("signed")) {
+            else if(state.equals("signed")){
                 sign = (c == '+') ? 1 : -1;
             }
         }
 
-        public int getResult() {
+        public int getResult(){
             return ((int) ans) * sign;
         }
     }
@@ -352,19 +352,19 @@ public class Leetcode50 {
      * @return x is palindrome
      */
     @SuppressWarnings("unused")
-    public static boolean isPalindrome(int x) {
-        if (x < 0) {
+    public static boolean isPalindrome(int x){
+        if(x < 0){
             return false;
         }
         int rev = 0;
         int original = x;
-        while (x != 0) {
+        while(x != 0) {
             int pop = x % 10;
             x /= 10;
-            if (rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
+            if(rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)){
                 return false;
             }
-            if (rev < Integer.MIN_VALUE / 10) {
+            if(rev < Integer.MIN_VALUE / 10){
                 return false;
             }
             rev = rev * 10 + pop;
@@ -381,22 +381,22 @@ public class Leetcode50 {
      * @return is match
      */
     @SuppressWarnings("unused")
-    public boolean isMatch(String s, String p) {
+    public boolean isMatch(String s, String p){
         int m = s.length();
         int n = p.length();
 
         boolean[][] f = new boolean[m + 1][n + 1];
         f[0][0] = true;
-        for (int i = 0; i <= m; ++i) {
-            for (int j = 1; j <= n; ++j) {
-                if (p.charAt(j - 1) == '*') {
+        for(int i = 0; i <= m; ++i){
+            for(int j = 1; j <= n; ++j){
+                if(p.charAt(j - 1) == '*'){
                     f[i][j] = f[i][j - 2];
-                    if (matches(s, p, i, j - 1)) {
+                    if(matches(s, p, i, j - 1)){
                         f[i][j] = f[i][j] || f[i - 1][j];
                     }
                 }
-                else {
-                    if (matches(s, p, i, j)) {
+                else{
+                    if(matches(s, p, i, j)){
                         f[i][j] = f[i - 1][j - 1];
                     }
                 }
@@ -405,11 +405,11 @@ public class Leetcode50 {
         return f[m][n];
     }
 
-    private boolean matches(String s, String p, int i, int j) {
-        if (i == 0) {
+    private boolean matches(String s, String p, int i, int j){
+        if(i == 0){
             return false;
         }
-        if (p.charAt(j - 1) == '.') {
+        if(p.charAt(j - 1) == '.'){
             return true;
         }
         return s.charAt(i - 1) == p.charAt(j - 1);
@@ -425,30 +425,30 @@ public class Leetcode50 {
      * @return max area
      */
     @SuppressWarnings("unused")
-    public static int maxArea(int[] height) {
+    public static int maxArea(int[] height){
         int len = height.length;
         int p = 0, q = len - 1;
         int max_area = (q - p) * Math.min(height[p], height[q]);
-        while (p != q) {
-            if (height[p] > height[q]) {
+        while(p != q) {
+            if(height[p] > height[q]){
                 int current_area = (q - p) * Math.min(height[p], height[q]);
                 max_area = Math.max(max_area, current_area);
                 q--;
             }
-            else if (height[p] < height[q]) {
+            else if(height[p] < height[q]){
                 int current_area = (q - p) * Math.min(height[p], height[q]);
                 max_area = Math.max(max_area, current_area);
                 p++;
             }
-            else {
+            else{
                 int current_area = (q - p) * Math.min(height[p], height[q]);
                 max_area = Math.max(max_area, current_area);
                 int l = height[p + 1];
                 int h = height[q - 1];
-                if (l < h) {
+                if(l < h){
                     q--;
                 }
-                else {
+                else{
                     p++;
                 }
             }
@@ -473,30 +473,30 @@ public class Leetcode50 {
      * @return set of three tuple
      */
     @SuppressWarnings("unused")
-    public static List<List<Integer>> threeSum(int[] nums) {
+    public static List<List<Integer>> threeSum(int[] nums){
         Arrays.sort(nums);
         List<List<Integer>> res = new ArrayList<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (!(i > 0 && nums[i] == nums[i - 1])) {
+        for(int i = 0; i < nums.length; i++){
+            if(!(i > 0 && nums[i] == nums[i - 1])){
                 int left = i + 1;
                 int right = nums.length - 1;
-                while (left < right) {
-                    if (nums[i] + nums[left] + nums[right] > 0) {
+                while(left < right) {
+                    if(nums[i] + nums[left] + nums[right] > 0){
                         right--;
                     }
-                    else if (nums[i] + nums[left] + nums[right] < 0) {
+                    else if(nums[i] + nums[left] + nums[right] < 0){
                         left++;
                     }
-                    else {
+                    else{
                         List<Integer> l = new ArrayList<>();
                         l.add(nums[i]);
                         l.add(nums[left]);
                         l.add(nums[right]);
                         res.add(l);
-                        while (right > left && nums[right] == nums[right - 1]) {
+                        while(right > left && nums[right] == nums[right - 1]) {
                             right--;
                         }
-                        while (right > left && nums[left] == nums[left + 1]) {
+                        while(right > left && nums[left] == nums[left + 1]) {
                             left++;
                         }
 
@@ -522,23 +522,23 @@ public class Leetcode50 {
      * @return closest sum
      */
     @SuppressWarnings("unused")
-    public int threeSumClosest(int[] nums, int target) {
+    public int threeSumClosest(int[] nums, int target){
         Arrays.sort(nums);
         int ans = nums[0] + nums[1] + nums[2];
-        for (int i = 0; i < nums.length - 2; i++) {
+        for(int i = 0; i < nums.length - 2; i++){
             int s = i + 1, e = nums.length - 1;
-            while (s < e) {
+            while(s < e) {
                 int t = nums[i] + nums[s] + nums[e];
-                if (Math.abs(t - target) < Math.abs(ans - target)) {
+                if(Math.abs(t - target) < Math.abs(ans - target)){
                     ans = t;
                 }
-                if (t == target) {
+                if(t == target){
                     return t;
                 }
-                else if (t > target) {
+                else if(t > target){
                     e--;
                 }
-                else {
+                else{
                     s++;
                 }
             }
@@ -564,36 +564,36 @@ public class Leetcode50 {
      * @return list of four-tuple
      */
     @SuppressWarnings("unused")
-    public List<List<Integer>> fourSum(int[] nums, int target) {
+    public List<List<Integer>> fourSum(int[] nums, int target){
         int len = nums.length;
         List<List<Integer>> res = new ArrayList<>();
-        if (len < 4) {
+        if(len < 4){
             return res;
         }
         Arrays.sort(nums);
-        for (int i = 0; i < len - 3; i++) {
-            if (i != 0) {
-                while (i < len - 3 && nums[i] == nums[i - 1]) i++;
+        for(int i = 0; i < len - 3; i++){
+            if(i != 0){
+                while(i < len - 3 && nums[i] == nums[i - 1]) { i++; }
             }
-            for (int j = i + 1; j < len - 2; j++) {
-                if (j != i + 1) {
-                    while (j < len - 2 && nums[j] == nums[j - 1]) j++;
+            for(int j = i + 1; j < len - 2; j++){
+                if(j != i + 1){
+                    while(j < len - 2 && nums[j] == nums[j - 1]) { j++; }
                 }
                 int a = j + 1, b = len - 1;
-                while (a < b) {
+                while(a < b) {
                     int t = nums[i] + nums[j] + nums[a] + nums[b];
-                    if (t == target) {
+                    if(t == target){
                         res.add(List.of(nums[i], nums[j], nums[a], nums[b]));
                         a++;
-                        while (a < b && nums[a] == nums[a - 1]) a++;
+                        while(a < b && nums[a] == nums[a - 1]) { a++; }
                     }
-                    else if (t < target) {
+                    else if(t < target){
                         a++;
-                        while (a < b && nums[a] == nums[a - 1]) a++;
+                        while(a < b && nums[a] == nums[a - 1]) { a++; }
                     }
-                    else {
+                    else{
                         b--;
-                        while (a < b && nums[b] == nums[b + 1]) b--;
+                        while(a < b && nums[b] == nums[b + 1]) { b--; }
                     }
                 }
             }
@@ -611,26 +611,26 @@ public class Leetcode50 {
      * @return processed linked list
      */
     @SuppressWarnings("unused")
-    public static ListNode removeNthFromEnd(ListNode head, int n) {
+    public static ListNode removeNthFromEnd(ListNode head, int n){
         boolean is_len_one = (head.next == null);
         int head_order = RecursiveRemoveNthFromEnd(head, n);
-        if (is_len_one && n == 1) {
+        if(is_len_one && n == 1){
             return null;
         }
-        else if (head_order == n) {
+        else if(head_order == n){
             return head.next;
         }
-        else {
+        else{
             return head;
         }
     }
 
-    private static int RecursiveRemoveNthFromEnd(ListNode node, int n) {
-        if (node.next == null) {
+    private static int RecursiveRemoveNthFromEnd(ListNode node, int n){
+        if(node.next == null){
             return 1;
         }
         int this_order = RecursiveRemoveNthFromEnd(node.next, n) + 1;
-        if (this_order == n + 1) {
+        if(this_order == n + 1){
             node.next = node.next.next;
         }
         return this_order;
@@ -645,7 +645,7 @@ public class Leetcode50 {
      * @return result
      */
     @SuppressWarnings("unused")
-    public static List<String> generateParenthesis(int n) {
+    public static List<String> generateParenthesis(int n){
         List<String> res = new ArrayList<>();
         StringBuilder init = new StringBuilder("(");
         RecursiveGenerateParenthesis(init, 1, 1, 1, res, n);
@@ -654,24 +654,24 @@ public class Leetcode50 {
 
     private static void RecursiveGenerateParenthesis(StringBuilder stringBuilder,
                                                      int str_len, int left_count,
-                                                     int stack_ptr, List<String> res, int n) {
-        if (str_len == (2 * n)) {
+                                                     int stack_ptr, List<String> res, int n){
+        if(str_len == (2 * n)){
             res.add(stringBuilder.toString());
         }
-        else {
+        else{
             str_len++;
-            if (stack_ptr >= 1 && stack_ptr <= n - 1 && left_count <= n - 1) {
+            if(stack_ptr >= 1 && stack_ptr <= n - 1 && left_count <= n - 1){
                 StringBuilder t = new StringBuilder(stringBuilder);
                 stringBuilder.append("(");
                 t.append(")");
                 RecursiveGenerateParenthesis(stringBuilder, str_len, left_count + 1, stack_ptr + 1, res, n);
                 RecursiveGenerateParenthesis(t, str_len, left_count, stack_ptr - 1, res, n);
             }
-            else if (stack_ptr == 0 && left_count <= n - 1) {
+            else if(stack_ptr == 0 && left_count <= n - 1){
                 stringBuilder.append("(");
                 RecursiveGenerateParenthesis(stringBuilder, str_len, left_count + 1, stack_ptr + 1, res, n);
             }
-            else {
+            else{
                 stringBuilder.append(")");
                 RecursiveGenerateParenthesis(stringBuilder, str_len, left_count, stack_ptr - 1, res, n);
             }
@@ -695,22 +695,22 @@ public class Leetcode50 {
      * @return merged list
      */
     @SuppressWarnings("unused")
-    public static ListNode mergeKLists(ListNode[] lists) {
-        if (lists.length == 0) {
+    public static ListNode mergeKLists(ListNode[] lists){
+        if(lists.length == 0){
             return null;
         }
         ListNode[] lst = new ListNode[lists.length];
         int heap_size = lst.length;
         int idx = 0;
-        for (var i : lists) {
-            if (i != null) {
+        for(var i : lists){
+            if(i != null){
                 lst[idx++] = i;
             }
-            else {
+            else{
                 heap_size--;
             }
         }
-        if (heap_size == 0) {
+        if(heap_size == 0){
             return null;
         }
         buildMinHeap(lst, heap_size);
@@ -719,17 +719,17 @@ public class Leetcode50 {
         head = lst[0];
         head_ptr = head;
         lst[0] = lst[0].next;
-        if (lst[0] == null) {
+        if(lst[0] == null){
             lst[0] = lst[heap_size - 1];
             heap_size--;
             minHeapify(lst, 0, heap_size);
         }
-        while (heap_size > 0) {
+        while(heap_size > 0) {
             minHeapify(lst, 0, heap_size);
             head_ptr.next = lst[0];
             head_ptr = head_ptr.next;
             lst[0] = lst[0].next;
-            if (lst[0] == null) {
+            if(lst[0] == null){
                 lst[0] = lst[heap_size - 1];
                 heap_size--;
                 minHeapify(lst, 0, heap_size);
@@ -738,19 +738,19 @@ public class Leetcode50 {
         return head;
     }
 
-    private static void minHeapify(ListNode[] arr, int idx, int heap_size) {
+    private static void minHeapify(ListNode[] arr, int idx, int heap_size){
         int l = 2 * (idx + 1);
         int l_idx = l - 1;
         int r = 2 * (idx + 1) + 1;
         int r_idx = r - 1;
         int min_idx = idx;
-        if ((l_idx < heap_size) && (arr[l_idx].val < arr[min_idx].val)) {
+        if((l_idx < heap_size) && (arr[l_idx].val < arr[min_idx].val)){
             min_idx = l_idx;
         }
-        if ((r_idx < heap_size) && (arr[r_idx].val < arr[min_idx].val)) {
+        if((r_idx < heap_size) && (arr[r_idx].val < arr[min_idx].val)){
             min_idx = r_idx;
         }
-        if (min_idx != idx) {
+        if(min_idx != idx){
             var t = arr[min_idx];
             arr[min_idx] = arr[idx];
             arr[idx] = t;
@@ -758,8 +758,8 @@ public class Leetcode50 {
         }
     }
 
-    private static void buildMinHeap(ListNode[] arr, int heap_size) {
-        for (int i = heap_size / 2 - 1; i >= 0; i--) {
+    private static void buildMinHeap(ListNode[] arr, int heap_size){
+        for(int i = heap_size / 2 - 1; i >= 0; i--){
             minHeapify(arr, i, heap_size);
         }
     }
@@ -774,21 +774,21 @@ public class Leetcode50 {
      * @return reversed linked list
      */
     @SuppressWarnings("unused")
-    public static ListNode reverseKGroup(ListNode head, int k) {
-        if (head == null || k <= 1) {
+    public static ListNode reverseKGroup(ListNode head, int k){
+        if(head == null || k <= 1){
             return head;
         }
         ListNode res = new ListNode();
         ListNode handle;
         res.next = head;
         handle = res;
-        while (hasKChildren(handle, k)) {
+        while(hasKChildren(handle, k)) {
             handle = reverseGroup(handle, k);
         }
         return res.next;
     }
 
-    private static ListNode reverseGroup(ListNode handle, int k) {
+    private static ListNode reverseGroup(ListNode handle, int k){
         // have at least k node
         ListNode rest, ptr1, ptr2, head;
         head = handle.next;
@@ -796,7 +796,7 @@ public class Leetcode50 {
         ptr1 = head.next;
         rest = ptr1.next;
         // iterate k - 1 times
-        for (int i = 0; i < k - 2; i++) {
+        for(int i = 0; i < k - 2; i++){
             ptr1.next = ptr2;
             ptr2 = ptr1;
             ptr1 = rest;
@@ -810,10 +810,10 @@ public class Leetcode50 {
         return head;
     }
 
-    private static boolean hasKChildren(ListNode handle, int k) {
-        for (int i = 0; i < k; i++) {
+    private static boolean hasKChildren(ListNode handle, int k){
+        for(int i = 0; i < k; i++){
             handle = handle.next;
-            if (handle == null) {
+            if(handle == null){
                 return false;
             }
         }
@@ -829,17 +829,17 @@ public class Leetcode50 {
      * @return result
      */
     @SuppressWarnings("unused")
-    public static int divide(int dividend, int divisor) {
-        if ((dividend == Integer.MIN_VALUE) && (divisor == -1)) {
+    public static int divide(int dividend, int divisor){
+        if((dividend == Integer.MIN_VALUE) && (divisor == -1)){
             return Integer.MAX_VALUE;
         }
-        if (divisor == 1) {
+        if(divisor == 1){
             return dividend;
         }
-        if (divisor == -1) {
+        if(divisor == -1){
             return -dividend;
         }
-        if (dividend == divisor) {
+        if(dividend == divisor){
             return 1;
         }
 
@@ -848,29 +848,30 @@ public class Leetcode50 {
         int res = 0;
         int sign = ((dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0)) ? 1 : -1;
 
-        if (new_dividend < new_divisor) {
+        if(new_dividend < new_divisor){
             return 0;
         }
 
         int i;
-        do {
+        do{
             i = 0;
-            while (((new_divisor << i) <= new_dividend)) {
+            while(((new_divisor << i) <= new_dividend)) {
                 i++;
-                if (i >= 1 && leftMoveOverflow(new_divisor << (i - 1))) {
+                if(i >= 1 && leftMoveOverflow(new_divisor << (i - 1))){
                     break;
                 }
             }
-            if (i != 0) {
+            if(i != 0){
                 new_dividend -= (new_divisor << (i - 1));
                 res += 1 << (i - 1);
             }
-        } while (i != 0);
+        }
+        while(i != 0);
 
         return sign * res;
     }
 
-    private static boolean leftMoveOverflow(long n) {
+    private static boolean leftMoveOverflow(long n){
         return (((n & 0x40000000) << 1) ^ (n & 0x80000000)) == 0x80000000;
     }
 
@@ -886,13 +887,13 @@ public class Leetcode50 {
      * @return result index
      */
     @SuppressWarnings("SpellCheckingInspection, unused")
-    public static List<Integer> findSubstring(String s, String[] words) {
+    public static List<Integer> findSubstring(String s, String[] words){
         List<Integer> res = new ArrayList<>();
-        if (s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0) {
+        if(s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0){
             return res;
         }
         Map<String, Integer> words_and_count = new HashMap<>();
-        for (var word : words) {
+        for(var word : words){
             Integer count = words_and_count.getOrDefault(word, 0);
             words_and_count.put(word, count + 1);
         }
@@ -901,9 +902,9 @@ public class Leetcode50 {
         int words_count = words.length;
         int valid_word_upper_bound = s_len - word_len + 1;
         String[] match_res = new String[valid_word_upper_bound];
-        for (int i = 0; i < valid_word_upper_bound; i++) {
-            for (String word : words) {
-                if (s.substring(i, i + word_len).equals(word)) {
+        for(int i = 0; i < valid_word_upper_bound; i++){
+            for(String word : words){
+                if(s.substring(i, i + word_len).equals(word)){
                     match_res[i] = word;
                     break;
                 }
@@ -911,21 +912,21 @@ public class Leetcode50 {
         }
         int valid_chain_upper_bound = s_len - word_len * words_count + 1;
         Map<String, Integer> check_map = new HashMap<>();
-        for (var word : words) {
+        for(var word : words){
             check_map.put(word, 0);
         }
-        for (int idx1 = 0; idx1 < valid_chain_upper_bound; idx1++) {
-            if (canChain(idx1, word_len, words_count, match_res)) {
+        for(int idx1 = 0; idx1 < valid_chain_upper_bound; idx1++){
+            if(canChain(idx1, word_len, words_count, match_res)){
                 int count = 0;
-                for (var entry : check_map.entrySet()) {
+                for(var entry : check_map.entrySet()){
                     entry.setValue(0);
                 }
-                for (int idx2 = idx1; count < words_count; idx2 += word_len) {
+                for(int idx2 = idx1; count < words_count; idx2 += word_len){
                     Integer c = check_map.get(match_res[idx2]);
                     check_map.put(match_res[idx2], c + 1);
                     count++;
                 }
-                if (check_map.equals(words_and_count)) {
+                if(check_map.equals(words_and_count)){
                     res.add(idx1);
                 }
             }
@@ -933,12 +934,12 @@ public class Leetcode50 {
         return res;
     }
 
-    private static boolean canChain(int idx, int word_len, int words_count, String[] match_res) {
+    private static boolean canChain(int idx, int word_len, int words_count, String[] match_res){
         boolean can_chain = true;
         int count = 0;
-        for (; count < words_count; idx += word_len) {
+        for(; count < words_count; idx += word_len){
             count++;
-            if (match_res[idx] == null) {
+            if(match_res[idx] == null){
                 can_chain = false;
                 break;
             }
@@ -956,24 +957,24 @@ public class Leetcode50 {
      * @param nums permutation
      */
     @SuppressWarnings("unused")
-    public static void nextPermutation(int[] nums) {
+    public static void nextPermutation(int[] nums){
         int len = nums.length;
-        if (len == 0 || len == 1) {
+        if(len == 0 || len == 1){
             return;
         }
         int i = len - 1;
-        for (; i >= 1; i--) {
-            if (nums[i] > nums[i - 1]) {
+        for(; i >= 1; i--){
+            if(nums[i] > nums[i - 1]){
                 break;
             }
         }
-        if (i == 0) {
+        if(i == 0){
             reverseArray(nums, 0, len);
             return;
         }
         int idx1 = i - 1;
         int idx2 = i;
-        while (idx2 < len && (!((idx2 == len - 1) || (nums[idx2] > nums[idx1] && nums[idx2 + 1] <= nums[idx1])))) {
+        while(idx2 < len && (!((idx2 == len - 1) || (nums[idx2] > nums[idx1] && nums[idx2 + 1] <= nums[idx1])))) {
             idx2++;
         }
         int t = nums[idx1];
@@ -982,10 +983,10 @@ public class Leetcode50 {
         reverseArray(nums, i, len);
     }
 
-    private static void reverseArray(int[] nums, int start, int end) {
+    private static void reverseArray(int[] nums, int start, int end){
         int idx1 = start;
         int idx2 = end - 1;
-        while (idx1 < idx2) {
+        while(idx1 < idx2) {
             int t = nums[idx1];
             nums[idx1] = nums[idx2];
             nums[idx2] = t;
@@ -1002,25 +1003,25 @@ public class Leetcode50 {
      * @return max length
      */
     @SuppressWarnings("unused")
-    public static int longestValidParentheses(String s) {
+    public static int longestValidParentheses(String s){
         int max_len = 0;
         int s_len = s.length();
-        if (s_len == 0) {
+        if(s_len == 0){
             return 0;
         }
         int[] stack = new int[s_len + 1];
         stack[0] = -1;
         int stack_head = 1;
-        for (int i = 0; i < s_len; i++) {
-            if (s.charAt(i) == '(') {
+        for(int i = 0; i < s_len; i++){
+            if(s.charAt(i) == '('){
                 stack[stack_head++] = i;
             }
-            else {
+            else{
                 stack_head--;
-                if (stack_head == 0) {
+                if(stack_head == 0){
                     stack[stack_head++] = i;
                 }
-                else {
+                else{
                     max_len = Math.max(max_len, i - stack[stack_head - 1]);
                 }
             }
@@ -1049,75 +1050,75 @@ public class Leetcode50 {
      * @return index
      */
     @SuppressWarnings("unused")
-    public static int search(int[] nums, int target) {
+    public static int search(int[] nums, int target){
         int len = nums.length;
-        if (len == 0) {
+        if(len == 0){
             return -1;
         }
         int border = searchBorder(nums);
-        if (border == -1) {
+        if(border == -1){
             return binarySearchSubArray(nums, target, 0, len - 1);
         }
-        if (target == nums[border]) {
+        if(target == nums[border]){
             return border;
         }
 
-        if (target > nums[len - 1]) {
+        if(target > nums[len - 1]){
             return binarySearchSubArray(nums, target, 0, border - 1);
         }
-        else {
+        else{
             return binarySearchSubArray(nums, target, border, len - 1);
         }
 
     }
 
-    private static int binarySearchSubArray(int[] nums, int target, int start, int end) {
-        while (end >= start) {
+    private static int binarySearchSubArray(int[] nums, int target, int start, int end){
+        while(end >= start) {
             int mid = (start + end) / 2;
-            if (target == nums[mid]) {
+            if(target == nums[mid]){
                 return mid;
             }
-            else if (target > nums[mid]) {
+            else if(target > nums[mid]){
                 start = mid + 1;
             }
-            else {
+            else{
                 end = mid - 1;
             }
         }
         return -1;
     }
 
-    private static int searchBorder(int[] nums) {
+    private static int searchBorder(int[] nums){
         int len = nums.length;
         int left_idx = 0, right_idx = len;
-        while (left_idx < right_idx) {
+        while(left_idx < right_idx) {
             int mid_idx = (left_idx + right_idx) / 2;
-            if ((mid_idx - 1) >= 0 && nums[mid_idx] < nums[mid_idx - 1]) {
+            if((mid_idx - 1) >= 0 && nums[mid_idx] < nums[mid_idx - 1]){
                 return mid_idx;
             }
-            else if ((mid_idx + 1) < len && nums[mid_idx] > nums[mid_idx + 1]) {
+            else if((mid_idx + 1) < len && nums[mid_idx] > nums[mid_idx + 1]){
                 return mid_idx + 1;
             }
 
             int left_mid_idx = (left_idx + mid_idx) / 2;
             int right_mid_idx = (mid_idx + right_idx) / 2;
-            if (nums[left_mid_idx] > nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]) {
+            if(nums[left_mid_idx] > nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]){
                 left_idx = left_mid_idx;
                 right_idx = mid_idx - 1;
             }
-            else if (nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] < nums[mid_idx]) {
+            else if(nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] < nums[mid_idx]){
                 left_idx = mid_idx + 1;
                 right_idx = right_mid_idx;
             }
-            else if (nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]) {
-                if (nums[mid_idx] > nums[left_idx]) {
+            else if(nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]){
+                if(nums[mid_idx] > nums[left_idx]){
                     left_idx = mid_idx + 1;
                 }
-                else {
+                else{
                     right_idx = mid_idx - 1;
                 }
             }
-            else {
+            else{
                 return -1;
             }
 
@@ -1138,62 +1139,62 @@ public class Leetcode50 {
      * @return range
      */
     @SuppressWarnings("unused")
-    public static int[] SearchRange(int[] nums, int target) {
-        if (nums == null || nums.length == 0) {
+    public static int[] SearchRange(int[] nums, int target){
+        if(nums == null || nums.length == 0){
             return new int[]{-1, -1};
         }
         int l = searchLowerBound(nums, target);
         int u = searchUpperBound(nums, target);
-        if (nums[0] == target) {
+        if(nums[0] == target){
             l = 0;
         }
-        if (nums[nums.length - 1] == target) {
+        if(nums[nums.length - 1] == target){
             u = nums.length - 1;
         }
         return new int[]{l, u};
     }
 
-    private static int searchLowerBound(int[] nums, int target) {
+    private static int searchLowerBound(int[] nums, int target){
         int start = 0, end = nums.length;
-        while (end - start > 1) {
+        while(end - start > 1) {
             int mid = (start + end) / 2;
-            if (nums[mid] < target) {
-                if (mid + 1 < nums.length && nums[mid + 1] == target) {
+            if(nums[mid] < target){
+                if(mid + 1 < nums.length && nums[mid + 1] == target){
                     return mid + 1;
                 }
                 start = mid;
             }
-            else if (nums[mid] > target) {
+            else if(nums[mid] > target){
                 end = mid;
             }
-            else {
+            else{
                 end--;
             }
         }
-        if (start + 1 < nums.length && nums[start] < target && nums[start + 1] == target) {
+        if(start + 1 < nums.length && nums[start] < target && nums[start + 1] == target){
             return start + 1;
         }
         return -1;
     }
 
-    private static int searchUpperBound(int[] nums, int target) {
+    private static int searchUpperBound(int[] nums, int target){
         int start = 0, end = nums.length;
-        while (end - start > 1) {
+        while(end - start > 1) {
             int mid = (start + end) / 2;
-            if (nums[mid] < target) {
+            if(nums[mid] < target){
                 start = mid;
             }
-            else if (nums[mid] > target) {
-                if (mid - 1 >= 0 && nums[mid - 1] == target) {
+            else if(nums[mid] > target){
+                if(mid - 1 >= 0 && nums[mid - 1] == target){
                     return mid - 1;
                 }
                 end = mid;
             }
-            else {
+            else{
                 start++;
             }
         }
-        if (start - 1 >= 0 && nums[start] > target && nums[start - 1] == target) {
+        if(start - 1 >= 0 && nums[start] > target && nums[start - 1] == target){
             return start - 1;
         }
         return -1;
@@ -1207,34 +1208,34 @@ public class Leetcode50 {
      * @return is valid sudoku
      */
     @SuppressWarnings("unused")
-    public static boolean isValidSudoku(char[][] board) {
+    public static boolean isValidSudoku(char[][] board){
         List<Set<Character>> cols = new ArrayList<>();
         List<Set<Character>> rows = new ArrayList<>();
         List<Set<Character>> groups = new ArrayList<>();
-        for (int i = 0; i < 9; i++) {
+        for(int i = 0; i < 9; i++){
             cols.add(new HashSet<>());
             rows.add(new HashSet<>());
             groups.add(new HashSet<>());
         }
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 9; j++) {
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
                 char c = board[i][j];
-                if (c == '.') {
+                if(c == '.'){
                     continue;
                 }
                 var cm = cols.get(j);
                 var rm = rows.get(i);
                 var gm = groups.get((i / 3) * 3 + j / 3);
-                if (cm.contains(c)) {
+                if(cm.contains(c)){
                     return false;
                 }
-                else if (rm.contains(c)) {
+                else if(rm.contains(c)){
                     return false;
                 }
-                else if (gm.contains(c)) {
+                else if(gm.contains(c)){
                     return false;
                 }
-                else {
+                else{
                     cm.add(c);
                     rm.add(c);
                     gm.add(c);
@@ -1265,13 +1266,13 @@ public class Leetcode50 {
      * @param board 9*9 board
      */
     @SuppressWarnings("unused")
-    public static void solveSudoku(char[][] board) {
+    public static void solveSudoku(char[][] board){
         List<MatrixIndex> spaces = new ArrayList<>();
         Map<MatrixIndex, List<MatrixIndex>> relatedSpaces = new HashMap<>();
-        for (int r = 0; r < 9; r++) {
-            for (int c = 0; c < 9; c++) {
+        for(int r = 0; r < 9; r++){
+            for(int c = 0; c < 9; c++){
                 char f = board[r][c];
-                if (f == '.') {
+                if(f == '.'){
                     var ptr = new MatrixIndex(r, c);
                     spaces.add(ptr);
                     relatedSpaces.put(ptr, new ArrayList<>());
@@ -1294,13 +1295,13 @@ public class Leetcode50 {
 
         List<MatrixIndex> sortedGroupedSpaces = new ArrayList<>(spaces.size());
         var spacesSet = new HashSet<>(spaces);
-        for (var s : spaces) {
-            if (spacesSet.contains(s)) {
+        for(var s : spaces){
+            if(spacesSet.contains(s)){
                 sortedGroupedSpaces.add(s);
                 spacesSet.remove(s);
                 var rs = relatedSpaces.get(s);
-                for (var e : rs) {
-                    if (!spacesSet.contains(e)) {
+                for(var e : rs){
+                    if(!spacesSet.contains(e)){
                         continue;
                     }
                     sortedGroupedSpaces.add(e);
@@ -1309,10 +1310,11 @@ public class Leetcode50 {
             }
         }
 
-        Map<MatrixIndex, HashSet<Character>> availableChars = new HashMap<>();
-        for (var space : spaces) {
+        Map<MatrixIndex, Set<Character>> availableChars = new HashMap<>();
+        for(var space : spaces){
             availableChars.put(space, getAvailableChars(space, board));
         }
+
         depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
     }
 
@@ -1320,10 +1322,10 @@ public class Leetcode50 {
             List<MatrixIndex> spaces,
             int spaceIdx,
             char[][] board,
-            Map<MatrixIndex, HashSet<Character>> availableChars,
+            Map<MatrixIndex, Set<Character>> availableChars,
             Map<MatrixIndex, List<MatrixIndex>> relatedSpaces,
-            HashSet<MatrixIndex> encountered) {
-        if (spaceIdx == spaces.size()) {
+            Set<MatrixIndex> encountered){
+        if(spaceIdx == spaces.size()){
             return true;
         }
 
@@ -1331,22 +1333,23 @@ public class Leetcode50 {
         encountered.add(currentSpace);
         int rIdx = currentSpace.row;
         int cIdx = currentSpace.col;
-        for (var chr : availableChars.get(currentSpace)) {
+        for(var chr : availableChars.get(currentSpace)){
             board[rIdx][cIdx] = chr;
             List<Boolean> record = new ArrayList<>();
-            for (var relatedSpace : relatedSpaces.get(currentSpace)) {
-                if (!encountered.contains(relatedSpace)) {
+            for(var relatedSpace : relatedSpaces.get(currentSpace)){
+                if(!encountered.contains(relatedSpace)){
                     record.add(availableChars.get(relatedSpace).remove(chr));
                 }
             }
-            boolean success = depthFirstSearchSudoku(spaces, spaceIdx + 1, board, availableChars, relatedSpaces, encountered);
-            if (success) {
+            boolean success = depthFirstSearchSudoku(spaces, spaceIdx + 1, board, availableChars, relatedSpaces,
+                    encountered);
+            if(success){
                 return true;
             }
             int accIdx = 0;
-            for (var relatedSpace : relatedSpaces.get(currentSpace)) {
-                if (!encountered.contains(relatedSpace)) {
-                    if (record.get(accIdx++)) {
+            for(var relatedSpace : relatedSpaces.get(currentSpace)){
+                if(!encountered.contains(relatedSpace)){
+                    if(record.get(accIdx++)){
                         availableChars.get(relatedSpace).add(chr);
                     }
                 }
@@ -1359,16 +1362,16 @@ public class Leetcode50 {
         return false;
     }
 
-    private static int groupIndex(int row, int columns) {
+    private static int groupIndex(int row, int columns){
         return (row / 3) * 3 + columns / 3;
     }
 
-    private static boolean isRelated(MatrixIndex a, MatrixIndex b) {
+    private static boolean isRelated(MatrixIndex a, MatrixIndex b){
         return a.row == b.row || a.col == b.col
                 || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
     }
 
-    private static HashSet<Character> getAvailableChars(MatrixIndex mi, char[][] board) {
+    private static Set<Character> getAvailableChars(MatrixIndex mi, char[][] board){
         int rIdx = mi.row, cIdx = mi.col;
         Map<Integer, int[][]> groupIdxToBoxIdx = Map.of(
                 0, new int[][]{{0, 1, 2}, {0, 1, 2}},
@@ -1381,20 +1384,20 @@ public class Leetcode50 {
                 7, new int[][]{{6, 7, 8}, {3, 4, 5}},
                 8, new int[][]{{6, 7, 8}, {6, 7, 8}});
         var availableChars = new HashSet<Character>();
-        for (int i = 1; i <= 9; i++) {
+        for(int i = 1; i <= 9; i++){
             availableChars.add((char) (i + '0'));
         }
 
-        for (int j = 0; j < 9; j++) {
+        for(int j = 0; j < 9; j++){
             char chr = board[rIdx][j];
-            if (chr != '.') {
+            if(chr != '.'){
                 availableChars.remove(chr);
             }
         }
 
-        for (int i = 0; i < 9; i++) {
+        for(int i = 0; i < 9; i++){
             char chr = board[i][cIdx];
-            if (chr != '.') {
+            if(chr != '.'){
                 availableChars.remove(chr);
             }
         }
@@ -1403,10 +1406,10 @@ public class Leetcode50 {
         int[][] groupIndices = groupIdxToBoxIdx.get(groupIdx);
         int[] rowIndices = groupIndices[0];
         int[] colIndices = groupIndices[1];
-        for (var i : rowIndices) {
-            for (var j : colIndices) {
+        for(var i : rowIndices){
+            for(var j : colIndices){
                 char chr = board[i][j];
-                if (chr != '.') {
+                if(chr != '.'){
                     availableChars.remove(chr);
                 }
             }
@@ -1415,30 +1418,30 @@ public class Leetcode50 {
         return availableChars;
     }
 
-    private static class MatrixIndex {
+    private static class MatrixIndex{
         public final int row;
         public final int col;
         final int hash;
 
-        public MatrixIndex(int r, int c) {
+        public MatrixIndex(int r, int c){
             row = r;
             col = c;
             hash = Objects.hash(row, col);
         }
 
         @Override
-        public boolean equals(Object other) {
-            if (other instanceof MatrixIndex) {
+        public boolean equals(Object other){
+            if(other instanceof MatrixIndex){
                 var t = (MatrixIndex) other;
                 return t.row == row && t.col == col;
             }
-            else {
+            else{
                 return false;
             }
         }
 
         @Override
-        public int hashCode() {
+        public int hashCode(){
             return hash;
         }
 
@@ -1464,22 +1467,22 @@ public class Leetcode50 {
      * @return result
      */
     @SuppressWarnings("unused")
-    public static String countAndSay(int n) {
+    public static String countAndSay(int n){
         String start = "1";
         System.out.println(start);
-        for (int i = 2; i <= n; i++) {
+        for(int i = 2; i <= n; i++){
             start = next(start);
             System.out.println(start);
         }
         return start;
     }
 
-    private static String next(String s) {
+    private static String next(String s){
         int i = 0;
         StringBuilder res = new StringBuilder();
-        while (i < s.length()) {
+        while(i < s.length()) {
             int count = 1;
-            while ((i + 1 < s.length()) && s.charAt(i) == s.charAt(i + 1)) {
+            while((i + 1 < s.length()) && s.charAt(i) == s.charAt(i + 1)) {
                 count++;
                 i++;
             }
@@ -1515,7 +1518,7 @@ public class Leetcode50 {
      * @return result
      */
     @SuppressWarnings("unused")
-    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+    public static List<List<Integer>> combinationSum(int[] candidates, int target){
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
         recursiveCombinationSum(candidates, target, new ArrayList<>(), res);
@@ -1526,18 +1529,18 @@ public class Leetcode50 {
             int[] candidates,
             int targetSum,
             List<Integer> currentCache,
-            List<List<Integer>> res) {
-        for (int i = 0; i < candidates.length && candidates[i] <= targetSum; i++) {
-            if (currentCache.size() > 0 && candidates[i] < currentCache.get(currentCache.size() - 1)) {
+            List<List<Integer>> res){
+        for(int i = 0; i < candidates.length && candidates[i] <= targetSum; i++){
+            if(currentCache.size() > 0 && candidates[i] < currentCache.get(currentCache.size() - 1)){
                 continue;
             }
-            else {
-                if (candidates[i] == targetSum) {
+            else{
+                if(candidates[i] == targetSum){
                     List<Integer> t = new ArrayList<>(currentCache);
                     t.add(candidates[i]);
                     res.add(t);
                 }
-                else {
+                else{
                     List<Integer> t = new ArrayList<>(currentCache);
                     t.add(candidates[i]);
                     recursiveCombinationSum(candidates, targetSum - candidates[i], t, res);
@@ -1573,7 +1576,7 @@ public class Leetcode50 {
      * @return result
      */
     @SuppressWarnings("unused")
-    public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
+    public static List<List<Integer>> combinationSum2(int[] candidates, int target){
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
         recursiveCombinationSum2(candidates, target, new ArrayList<>(), new boolean[candidates.length], res);
@@ -1585,28 +1588,29 @@ public class Leetcode50 {
             int targetSum,
             List<Integer> currentCache,
             boolean[] currentSelected,
-            List<List<Integer>> res) {
-        for (int i = 0; i < candidates.length && candidates[i] <= targetSum; i++) {
-            if (currentSelected[i]) {
+            List<List<Integer>> res){
+        for(int i = 0; i < candidates.length && candidates[i] <= targetSum; i++){
+            if(currentSelected[i]){
                 continue;
             }
-            else if (i < candidates.length - 1 && candidates[i] == candidates[i + 1] && !currentSelected[i + 1]) {
+            else if(i < candidates.length - 1 && candidates[i] == candidates[i + 1] && !currentSelected[i + 1]){
                 continue;
             }
-            else {
-                if (currentCache.size() > 0 && candidates[i] < currentCache.get(currentCache.size() - 1)) {
+            else{
+                if(currentCache.size() > 0 && candidates[i] < currentCache.get(currentCache.size() - 1)){
                     continue;
                 }
-                else {
+                else{
                     currentSelected[i] = true;
                     currentCache.add(candidates[i]);
-                    if (targetSum == candidates[i]) {
+                    if(targetSum == candidates[i]){
                         res.add(new ArrayList<>(currentCache));
                         currentCache.remove(currentCache.size() - 1);
                         currentSelected[i] = false;
                     }
-                    else {
-                        recursiveCombinationSum2(candidates, targetSum - candidates[i], currentCache, currentSelected, res);
+                    else{
+                        recursiveCombinationSum2(candidates, targetSum - candidates[i], currentCache, currentSelected
+                                , res);
                         currentSelected[i] = false;
                         currentCache.remove(currentCache.size() - 1);
                     }
@@ -1619,16 +1623,16 @@ public class Leetcode50 {
     /**
      * #43
      * <br/>字符串乘法
+     *
      * @param num1 num1
      * @param num2 num2
      * @return multiply
      */
     @SuppressWarnings("unused")
-    public static String multiply(String num1, String num2) {
+    public static String multiply(String num1, String num2){
         //TODO implement this
         return null;
     }
-
 
 
     /**
@@ -1651,21 +1655,21 @@ public class Leetcode50 {
      * @return permutation
      */
     @SuppressWarnings("unused")
-    public static List<List<Integer>> permute(int[] nums) {
+    public static List<List<Integer>> permute(int[] nums){
         List<List<Integer>> res = new ArrayList<>();
         recursivePermute(nums, new boolean[nums.length], new ArrayList<>(), res);
         return res;
     }
 
-    public static void recursivePermute(int[] nums, boolean[] selected, List<Integer> cache, List<List<Integer>> res) {
-        for (int i = 0; i < nums.length; i++) {
-            if (!selected[i]) {
+    public static void recursivePermute(int[] nums, boolean[] selected, List<Integer> cache, List<List<Integer>> res){
+        for(int i = 0; i < nums.length; i++){
+            if(!selected[i]){
                 selected[i] = true;
                 cache.add(nums[i]);
-                if (cache.size() == nums.length) {
+                if(cache.size() == nums.length){
                     res.add(new ArrayList<>(cache));
                 }
-                else {
+                else{
                     recursivePermute(nums, selected, cache, res);
                 }
                 cache.remove(cache.size() - 1);
@@ -1691,7 +1695,7 @@ public class Leetcode50 {
      * @return unique permutation result
      */
     @SuppressWarnings("unused")
-    public static List<List<Integer>> permuteUnique(int[] nums) {
+    public static List<List<Integer>> permuteUnique(int[] nums){
         List<List<Integer>> finalRes = new ArrayList<>();
         Arrays.sort(nums);
         boolean[] encountered = new boolean[nums.length];
@@ -1703,16 +1707,16 @@ public class Leetcode50 {
             int[] nums,
             boolean[] inCache,
             List<Integer> currentCache,
-            List<List<Integer>> finalRes) {
-        if (currentCache.size() == nums.length) {
+            List<List<Integer>> finalRes){
+        if(currentCache.size() == nums.length){
             finalRes.add(new ArrayList<>(currentCache));
             return;
         }
-        for (int i = 0; i < nums.length; i++) {
-            if (i + 1 < nums.length && nums[i] == nums[i + 1] && !inCache[i + 1]) {
+        for(int i = 0; i < nums.length; i++){
+            if(i + 1 < nums.length && nums[i] == nums[i + 1] && !inCache[i + 1]){
                 continue;
             }
-            else if (!inCache[i]) {
+            else if(!inCache[i]){
                 inCache[i] = true;
                 currentCache.add(nums[i]);
                 recursivePermuteUnique(nums, inCache, currentCache, finalRes);
@@ -1725,10 +1729,11 @@ public class Leetcode50 {
     /**
      * #48
      * <br/>旋转图像
+     *
      * @param matrix image
      */
     @SuppressWarnings("unused")
-    public static void rotate(int[][] matrix) {
+    public static void rotate(int[][] matrix){
         if(matrix.length <= 1){
             return;
         }
@@ -1740,7 +1745,7 @@ public class Leetcode50 {
             }
         }
         for(int i = 0; i < matrix.length; i++){
-            for(int j = 0; j < matrix.length/2; j++){
+            for(int j = 0; j < matrix.length / 2; j++){
                 int t = matrix[i][j];
                 matrix[i][j] = matrix[i][matrix.length - 1 - j];
                 matrix[i][matrix.length - 1 - j] = t;
