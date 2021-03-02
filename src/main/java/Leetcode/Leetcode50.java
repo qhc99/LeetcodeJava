@@ -1368,8 +1368,7 @@ public class Leetcode50{
     }
 
     private static boolean isRelated(MatrixIndex a, MatrixIndex b){
-        return a.row == b.row || a.col == b.col
-                || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
+        return a.row == b.row || a.col == b.col || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
     }
 
     private static Set<Character> getAvailableChars(MatrixIndex mi, char[][] board){
