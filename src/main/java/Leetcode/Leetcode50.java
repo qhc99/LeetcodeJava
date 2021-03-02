@@ -1268,19 +1268,19 @@ public class Leetcode50{
     @SuppressWarnings("unused")
     public static void solveSudoku(char[][] board){
         // initialization
-        List<MatrixIndex> mIndices = new ArrayList<>(81);
-        Map<MatrixIndex, List<MatrixIndex>> relatedSpaces = new HashMap<>(81);
-        List<Set<Character>> rowsFilled = new ArrayList<>(9);
+        List<MatrixIndex> spaceIndices = new ArrayList<>(81);
+        Map<MatrixIndex, List<MatrixIndex>> relatedSpacesMap = new HashMap<>(81);
+        List<Set<Character>> rowsFilledCharSets = new ArrayList<>(9);
         for(int i = 0; i < 9; i++){
-            rowsFilled.add(new HashSet<>(9));
+            rowsFilledCharSets.add(new HashSet<>(9));
         }
-        List<Set<Character>> colsFilled = new ArrayList<>(9);
+        List<Set<Character>> colsFilledCharSets = new ArrayList<>(9);
         for(int i = 0; i < 9; i++){
-            colsFilled.add(new HashSet<>(9));
+            colsFilledCharSets.add(new HashSet<>(9));
         }
-        List<Set<Character>> groupsFilled = new ArrayList<>(9);
+        List<Set<Character>> groupsFilledCharSets = new ArrayList<>(9);
         for(int i = 0; i < 9; i++){
-            groupsFilled.add(new HashSet<>(9));
+            groupsFilledCharSets.add(new HashSet<>(9));
         }
 
         // analyse
@@ -1289,105 +1289,120 @@ public class Leetcode50{
                 char fill = board[r][c];
                 if(fill == '.'){
                     var ptr = new MatrixIndex(r, c);
-                    mIndices.add(ptr);
-                    relatedSpaces.put(ptr, new ArrayList<>(27));
-                    for(int i = 1; i < mIndices.size() - 1; i++){
-                        var storePtr = mIndices.get(i);
+                    spaceIndices.add(ptr);
+                    relatedSpacesMap.put(ptr, new ArrayList<>(27));
+                    for(int i = 1; i < spaceIndices.size() - 1; i++){
+                        var storePtr = spaceIndices.get(i);
                         if(!ptr.equals(storePtr) && isRelated(storePtr, ptr)){
-                            relatedSpaces.get(ptr).add(storePtr);
-                            relatedSpaces.get(storePtr).add(ptr);
+                            relatedSpacesMap.get(ptr).add(storePtr);
+                            relatedSpacesMap.get(storePtr).add(ptr);
                         }
                     }
                 }
                 else{
-                    rowsFilled.get(r).add(fill);
-                    colsFilled.get(c).add(fill);
-                    groupsFilled.get(groupIndex(r,c)).add(fill);
+                    rowsFilledCharSets.get(r).add(fill);
+                    colsFilledCharSets.get(c).add(fill);
+                    groupsFilledCharSets.get(getGroupIndex(r,c)).add(fill);
                 }
             }
         }
 
-        mIndices.sort((m1, m2) ->
+        // sort according to related spaces
+        spaceIndices.sort((m1, m2) ->
         {
-            var rc1 = relatedSpaces.get(m1).size();
-            var rc2 = relatedSpaces.get(m2).size();
+            var rc1 = relatedSpacesMap.get(m1).size();
+            var rc2 = relatedSpacesMap.get(m2).size();
             return rc1 - rc2;
         });
 
-        List<MatrixIndex> sortedGroupedSpaces = new ArrayList<>(mIndices.size());
-        var spacesSet = new HashSet<>(mIndices);
-        for(var s : mIndices){
-            if(spacesSet.contains(s)){
-                sortedGroupedSpaces.add(s);
-                spacesSet.remove(s);
-                var rs = relatedSpaces.get(s);
+        for(var v : relatedSpacesMap.values()){
+            v.sort((m1, m2) ->
+            {
+                var rc1 = relatedSpacesMap.get(m1).size();
+                var rc2 = relatedSpacesMap.get(m2).size();
+                return rc1 - rc2;
+            });
+        }
+
+        // group according to whether related
+        List<MatrixIndex> sortedGroupedSpaceIndices = new ArrayList<>(spaceIndices.size());
+        var spaceIndicesSet = new HashSet<>(spaceIndices);
+        for(var spaceIdx : spaceIndices){
+            if(spaceIndicesSet.contains(spaceIdx)){
+                sortedGroupedSpaceIndices.add(spaceIdx);
+                spaceIndicesSet.remove(spaceIdx);
+                var rs = relatedSpacesMap.get(spaceIdx);
                 for(var e : rs){
-                    if(!spacesSet.contains(e)){
-                        continue;
+                    if(spaceIndicesSet.contains(e)){
+                        sortedGroupedSpaceIndices.add(e);
+                        spaceIndicesSet.remove(e);
                     }
-                    sortedGroupedSpaces.add(e);
-                    spacesSet.remove(e);
                 }
             }
         }
 
-        // get available chars each space
-        Map<MatrixIndex, Set<Character>> availableChars = new HashMap<>(mIndices.size());
-        for(var mIdx : mIndices){
-            var s = new HashSet<Character>(9);
+        // get available chars for each space
+        Map<MatrixIndex, Set<Character>> availableCharsMap = new HashMap<>(spaceIndices.size());
+        for(var space : spaceIndices){
+            var set = new HashSet<Character>(9);
             for(int i = 1; i <= 9; i++){
-                s.add((char) (i + '0'));
+                set.add((char) (i + '0'));
             }
 
-            for(var c : rowsFilled.get(mIdx.row)){
-                s.remove(c);
+            for(var c : rowsFilledCharSets.get(space.row)){
+                set.remove(c);
             }
 
-            for(var c : colsFilled.get(mIdx.col)){
-                s.remove(c);
+            for(var c : colsFilledCharSets.get(space.col)){
+                set.remove(c);
             }
 
-            for(var c : groupsFilled.get(groupIndex(mIdx.row, mIdx.col))){
-                s.remove(c);
+            for(var c : groupsFilledCharSets.get(getGroupIndex(space.row, space.col))){
+                set.remove(c);
             }
-            availableChars.put(mIdx,s);
+            availableCharsMap.put(space,set);
         }
-        depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>(81));
+        depthFirstSearchSudoku(sortedGroupedSpaceIndices, 0, board, availableCharsMap, relatedSpacesMap, new HashSet<>(81));
     }
 
     static boolean depthFirstSearchSudoku(
             List<MatrixIndex> spaces,
             int spaceIdx,
             char[][] board,
-            Map<MatrixIndex, Set<Character>> availableChars,
-            Map<MatrixIndex, List<MatrixIndex>> relatedSpaces,
-            Set<MatrixIndex> encountered){
+            Map<MatrixIndex, Set<Character>> availableCharsMap,
+            Map<MatrixIndex, List<MatrixIndex>> relatedSpacesMap,
+            Set<MatrixIndex> encounteredSpaces){
         if(spaceIdx == spaces.size()){
             return true;
         }
 
         MatrixIndex currentSpace = spaces.get(spaceIdx);
-        encountered.add(currentSpace);
+        encounteredSpaces.add(currentSpace);
         int rIdx = currentSpace.row;
         int cIdx = currentSpace.col;
-        for(var chr : availableChars.get(currentSpace)){
+        for(var chr : availableCharsMap.get(currentSpace)){
             board[rIdx][cIdx] = chr;
-            List<Boolean> removeRecord = new ArrayList<>(relatedSpaces.size());
-            for(var relatedSpace : relatedSpaces.get(currentSpace)){
-                if(!encountered.contains(relatedSpace)){
-                    removeRecord.add(availableChars.get(relatedSpace).remove(chr));
+            List<Boolean> removeRecord = new ArrayList<>(relatedSpacesMap.size());
+            for(var relatedSpace : relatedSpacesMap.get(currentSpace)){
+                if(!encounteredSpaces.contains(relatedSpace)){
+                    removeRecord.add(availableCharsMap.get(relatedSpace).remove(chr));
                 }
             }
-            boolean success = depthFirstSearchSudoku(spaces, spaceIdx + 1, board, availableChars, relatedSpaces,
-                    encountered);
+            boolean success = depthFirstSearchSudoku(
+                    spaces,
+                    spaceIdx + 1,
+                    board,
+                    availableCharsMap,
+                    relatedSpacesMap,
+                    encounteredSpaces);
             if(success){
                 return true;
             }
             int accIdx = 0;
-            for(var relatedSpace : relatedSpaces.get(currentSpace)){
-                if(!encountered.contains(relatedSpace)){
+            for(var relatedSpace : relatedSpacesMap.get(currentSpace)){
+                if(!encounteredSpaces.contains(relatedSpace)){
                     if(removeRecord.get(accIdx++)){
-                        availableChars.get(relatedSpace).add(chr);
+                        availableCharsMap.get(relatedSpace).add(chr);
                     }
                 }
             }
@@ -1395,22 +1410,22 @@ public class Leetcode50{
         }
 
         board[rIdx][cIdx] = '.';
-        encountered.remove(currentSpace);
+        encounteredSpaces.remove(currentSpace);
         return false;
     }
 
-    private static int groupIndex(int row, int columns){
+    private static int getGroupIndex(int row, int columns){
         return (row / 3) * 3 + columns / 3;
     }
 
     private static boolean isRelated(MatrixIndex a, MatrixIndex b){
-        return a.row == b.row || a.col == b.col || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
+        return a.row == b.row || a.col == b.col || getGroupIndex(a.row, a.col) == getGroupIndex(b.row, b.col);
     }
 
     private static class MatrixIndex{
         public final int row;
         public final int col;
-        final int hash;
+        private final int hash;
 
         public MatrixIndex(int r, int c){
             row = r;
@@ -1420,7 +1435,10 @@ public class Leetcode50{
 
         @Override
         public boolean equals(Object other){
-            if(other instanceof MatrixIndex){
+            if(this == other){
+                return true;
+            }
+            else if(other instanceof MatrixIndex){
                 var t = (MatrixIndex) other;
                 return t.row == row && t.col == col;
             }
