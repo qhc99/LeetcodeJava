@@ -1267,36 +1267,56 @@ public class Leetcode50{
      */
     @SuppressWarnings("unused")
     public static void solveSudoku(char[][] board){
-        List<MatrixIndex> spaces = new ArrayList<>();
-        Map<MatrixIndex, List<MatrixIndex>> relatedSpaces = new HashMap<>();
+        // initialization
+        List<MatrixIndex> mIndices = new ArrayList<>(81);
+        Map<MatrixIndex, List<MatrixIndex>> relatedSpaces = new HashMap<>(81);
+        List<Set<Character>> rowsFilled = new ArrayList<>(9);
+        for(int i = 0; i < 9; i++){
+            rowsFilled.add(new HashSet<>(9));
+        }
+        List<Set<Character>> colsFilled = new ArrayList<>(9);
+        for(int i = 0; i < 9; i++){
+            colsFilled.add(new HashSet<>(9));
+        }
+        List<Set<Character>> groupsFilled = new ArrayList<>(9);
+        for(int i = 0; i < 9; i++){
+            groupsFilled.add(new HashSet<>(9));
+        }
+
+        // analyse
         for(int r = 0; r < 9; r++){
             for(int c = 0; c < 9; c++){
-                char f = board[r][c];
-                if(f == '.'){
+                char fill = board[r][c];
+                if(fill == '.'){
                     var ptr = new MatrixIndex(r, c);
-                    spaces.add(ptr);
-                    relatedSpaces.put(ptr, new ArrayList<>());
-                    for(int i = 0; i < spaces.size() - 1; i++){
-                        var storePtr = spaces.get(i);
+                    mIndices.add(ptr);
+                    relatedSpaces.put(ptr, new ArrayList<>(27));
+                    for(int i = 1; i < mIndices.size() - 1; i++){
+                        var storePtr = mIndices.get(i);
                         if(!ptr.equals(storePtr) && isRelated(storePtr, ptr)){
                             relatedSpaces.get(ptr).add(storePtr);
                             relatedSpaces.get(storePtr).add(ptr);
                         }
                     }
                 }
+                else{
+                    rowsFilled.get(r).add(fill);
+                    colsFilled.get(c).add(fill);
+                    groupsFilled.get(groupIndex(r,c)).add(fill);
+                }
             }
         }
 
-        spaces.sort((m1, m2) ->
+        mIndices.sort((m1, m2) ->
         {
             var rc1 = relatedSpaces.get(m1).size();
             var rc2 = relatedSpaces.get(m2).size();
             return rc1 - rc2;
         });
 
-        List<MatrixIndex> sortedGroupedSpaces = new ArrayList<>(spaces.size());
-        var spacesSet = new HashSet<>(spaces);
-        for(var s : spaces){
+        List<MatrixIndex> sortedGroupedSpaces = new ArrayList<>(mIndices.size());
+        var spacesSet = new HashSet<>(mIndices);
+        for(var s : mIndices){
             if(spacesSet.contains(s)){
                 sortedGroupedSpaces.add(s);
                 spacesSet.remove(s);
@@ -1311,12 +1331,28 @@ public class Leetcode50{
             }
         }
 
-        Map<MatrixIndex, Set<Character>> availableChars = new HashMap<>();
-        for(var space : spaces){
-            availableChars.put(space, getAvailableChars(space, board));
-        }
+        // get available chars each space
+        Map<MatrixIndex, Set<Character>> availableChars = new HashMap<>(mIndices.size());
+        for(var mIdx : mIndices){
+            var s = new HashSet<Character>(9);
+            for(int i = 1; i <= 9; i++){
+                s.add((char) (i + '0'));
+            }
 
-        depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>());
+            for(var c : rowsFilled.get(mIdx.row)){
+                s.remove(c);
+            }
+
+            for(var c : colsFilled.get(mIdx.col)){
+                s.remove(c);
+            }
+
+            for(var c : groupsFilled.get(groupIndex(mIdx.row, mIdx.col))){
+                s.remove(c);
+            }
+            availableChars.put(mIdx,s);
+        }
+        depthFirstSearchSudoku(sortedGroupedSpaces, 0, board, availableChars, relatedSpaces, new HashSet<>(81));
     }
 
     static boolean depthFirstSearchSudoku(
@@ -1336,10 +1372,10 @@ public class Leetcode50{
         int cIdx = currentSpace.col;
         for(var chr : availableChars.get(currentSpace)){
             board[rIdx][cIdx] = chr;
-            List<Boolean> record = new ArrayList<>();
+            List<Boolean> removeRecord = new ArrayList<>(relatedSpaces.size());
             for(var relatedSpace : relatedSpaces.get(currentSpace)){
                 if(!encountered.contains(relatedSpace)){
-                    record.add(availableChars.get(relatedSpace).remove(chr));
+                    removeRecord.add(availableChars.get(relatedSpace).remove(chr));
                 }
             }
             boolean success = depthFirstSearchSudoku(spaces, spaceIdx + 1, board, availableChars, relatedSpaces,
@@ -1350,7 +1386,7 @@ public class Leetcode50{
             int accIdx = 0;
             for(var relatedSpace : relatedSpaces.get(currentSpace)){
                 if(!encountered.contains(relatedSpace)){
-                    if(record.get(accIdx++)){
+                    if(removeRecord.get(accIdx++)){
                         availableChars.get(relatedSpace).add(chr);
                     }
                 }
@@ -1369,53 +1405,6 @@ public class Leetcode50{
 
     private static boolean isRelated(MatrixIndex a, MatrixIndex b){
         return a.row == b.row || a.col == b.col || groupIndex(a.row, a.col) == groupIndex(b.row, b.col);
-    }
-
-    private static Set<Character> getAvailableChars(MatrixIndex mi, char[][] board){
-        int rIdx = mi.row, cIdx = mi.col;
-        Map<Integer, int[][]> groupIdxToBoxIdx = Map.of(
-                0, new int[][]{{0, 1, 2}, {0, 1, 2}},
-                1, new int[][]{{0, 1, 2}, {3, 4, 5}},
-                2, new int[][]{{0, 1, 2}, {6, 7, 8}},
-                3, new int[][]{{3, 4, 5}, {0, 1, 2}},
-                4, new int[][]{{3, 4, 5}, {3, 4, 5}},
-                5, new int[][]{{3, 4, 5}, {6, 7, 8}},
-                6, new int[][]{{6, 7, 8}, {0, 1, 2}},
-                7, new int[][]{{6, 7, 8}, {3, 4, 5}},
-                8, new int[][]{{6, 7, 8}, {6, 7, 8}});
-        var availableChars = new HashSet<Character>();
-        for(int i = 1; i <= 9; i++){
-            availableChars.add((char) (i + '0'));
-        }
-
-        for(int j = 0; j < 9; j++){
-            char chr = board[rIdx][j];
-            if(chr != '.'){
-                availableChars.remove(chr);
-            }
-        }
-
-        for(int i = 0; i < 9; i++){
-            char chr = board[i][cIdx];
-            if(chr != '.'){
-                availableChars.remove(chr);
-            }
-        }
-
-        int groupIdx = (rIdx / 3) * 3 + cIdx / 3;
-        int[][] groupIndices = groupIdxToBoxIdx.get(groupIdx);
-        int[] rowIndices = groupIndices[0];
-        int[] colIndices = groupIndices[1];
-        for(var i : rowIndices){
-            for(var j : colIndices){
-                char chr = board[i][j];
-                if(chr != '.'){
-                    availableChars.remove(chr);
-                }
-            }
-        }
-
-        return availableChars;
     }
 
     private static class MatrixIndex{
