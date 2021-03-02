@@ -1288,14 +1288,14 @@ public class Leetcode50{
             for(int c = 0; c < 9; c++){
                 char fill = board[r][c];
                 if(fill == '.'){
-                    var ptr = new MatrixIndex(r, c);
-                    spaceIndices.add(ptr);
-                    relatedSpacesMap.put(ptr, new ArrayList<>(27));
-                    for(int i = 1; i < spaceIndices.size() - 1; i++){
-                        var storePtr = spaceIndices.get(i);
-                        if(!ptr.equals(storePtr) && isRelated(storePtr, ptr)){
-                            relatedSpacesMap.get(ptr).add(storePtr);
-                            relatedSpacesMap.get(storePtr).add(ptr);
+                    var space = new MatrixIndex(r, c);
+                    spaceIndices.add(space);
+                    relatedSpacesMap.put(space, new ArrayList<>(27));
+                    for(int i = 0; i < spaceIndices.size() - 1; i++){
+                        var loopSpace = spaceIndices.get(i);
+                        if(!space.equals(loopSpace) && isRelated(loopSpace, space)){
+                            relatedSpacesMap.get(space).add(loopSpace);
+                            relatedSpacesMap.get(loopSpace).add(space);
                         }
                     }
                 }
@@ -1435,10 +1435,7 @@ public class Leetcode50{
 
         @Override
         public boolean equals(Object other){
-            if(this == other){
-                return true;
-            }
-            else if(other instanceof MatrixIndex){
+            if(other instanceof MatrixIndex){
                 var t = (MatrixIndex) other;
                 return t.row == row && t.col == col;
             }
