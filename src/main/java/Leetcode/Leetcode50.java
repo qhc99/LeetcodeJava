@@ -1277,9 +1277,10 @@ public class Leetcode50{
                     spaces.add(ptr);
                     relatedSpaces.put(ptr, new ArrayList<>());
                     for(int i = 0; i < spaces.size() - 1; i++){
-                        if(!ptr.equals(spaces.get(i)) && isRelated(spaces.get(i), ptr)){
-                            relatedSpaces.get(ptr).add(spaces.get(i));
-                            relatedSpaces.get(spaces.get(i)).add(ptr);
+                        var storePtr = spaces.get(i);
+                        if(!ptr.equals(storePtr) && isRelated(storePtr, ptr)){
+                            relatedSpaces.get(ptr).add(storePtr);
+                            relatedSpaces.get(storePtr).add(ptr);
                         }
                     }
                 }
