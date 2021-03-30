@@ -3,7 +3,7 @@ package Leetcode;
 
 import java.util.*;
 
-public class Leetcode100 {
+public class Leetcode100{
 
     /**
      * #55
@@ -14,10 +14,11 @@ public class Leetcode100 {
      * 输出: true
      * 解释: 我们可以先跳 1 步，从位置 0 到达 位置 1, 然后再从位置 1 跳 3 步到达最后一个位置。
      * </pre>
+     *
      * @param nums int array
      * @return res
      */
-    public static boolean canJump(int[] nums) {
+    public static boolean canJump(int[] nums){
         int remotest = 0;
         for(int i = 0; i < nums.length; i++){
             if(i <= remotest){
@@ -47,13 +48,13 @@ public class Leetcode100 {
      * @return path sum
      */
     @SuppressWarnings("unused")
-    public static int minPathSum(int[][] grid) {
+    public static int minPathSum(int[][] grid){
         int r_len = grid.length;
         int c_len = grid[0].length;
-        for (int s = 1; s <= r_len + c_len - 2; s++) {
-            for (int i = 0; i < r_len && i <= s; i++) {
+        for(int s = 1; s <= r_len + c_len - 2; s++){
+            for(int i = 0; i < r_len && i <= s; i++){
                 int j = s - i;
-                if (j < 0 || j >= c_len) {
+                if(j < 0 || j >= c_len){
                     continue;
                 }
                 grid[i][j] += minPath(i, j, grid);
@@ -62,10 +63,42 @@ public class Leetcode100 {
         return grid[r_len - 1][c_len - 1];
     }
 
-    private static int minPath(int i, int j, int[][] cache) {
+    private static int minPath(int i, int j, int[][] cache){
         double u = (i - 1 < 0) ? Double.POSITIVE_INFINITY : cache[i - 1][j];
         double l = (j - 1 < 0) ? Double.POSITIVE_INFINITY : cache[i][j - 1];
         return (int) Math.min(l, u);
+    }
+
+    /**
+     * #74
+     * <br/>搜索二维矩阵
+     *
+     * @param matrix matrix
+     * @param target integer target
+     * @return target exist
+     */
+    public static boolean searchMatrix(int[][] matrix, int target){
+        int len = matrix.length * matrix[0].length;
+        int col_len = matrix[0].length;
+        int l_idx = 0, r_idx = len;
+
+        while(r_idx - l_idx > 0) {
+            int mid = (r_idx + l_idx) / 2;
+            int r = mid / col_len;
+            int c = mid - col_len * r;
+            int v = matrix[r][c];
+            if(target > v){
+                l_idx = mid+1;
+            }
+            else if(target < v){
+                r_idx = mid;
+            }
+            else{
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -90,20 +123,20 @@ public class Leetcode100 {
      * @return subsets of nums
      */
     @SuppressWarnings("unused")
-    public static List<List<Integer>> subsets(int[] nums) {
+    public static List<List<Integer>> subsets(int[] nums){
         List<List<Integer>> res = new ArrayList<>();
         recursiveSubsets(nums, 0, res);
         return res;
     }
 
-    private static void recursiveSubsets(int[] nums, int idx, List<List<Integer>> res) {
-        if (idx == nums.length) {
+    private static void recursiveSubsets(int[] nums, int idx, List<List<Integer>> res){
+        if(idx == nums.length){
             res.add(new ArrayList<>());
         }
-        else {
+        else{
             recursiveSubsets(nums, idx + 1, res);
             List<List<Integer>> temp = new ArrayList<>();
-            for (var list : res) {
+            for(var list : res){
                 List<Integer> newList = new ArrayList<>(list);
                 newList.add(nums[idx]);
                 temp.add(newList);
@@ -129,13 +162,13 @@ public class Leetcode100 {
      * @return count
      */
     @SuppressWarnings("unused")
-    public static int numTrees(int n) {
+    public static int numTrees(int n){
         int[] G = new int[n + 1];
         G[0] = 1;
         G[1] = 1;
-        for (int i = 2; i <= n; i++) {
+        for(int i = 2; i <= n; i++){
             G[i] = 0;
-            for (int j = 1; j <= i; j++) {
+            for(int j = 1; j <= i; j++){
                 G[i] += G[j - 1] * G[i - j];
             }
         }

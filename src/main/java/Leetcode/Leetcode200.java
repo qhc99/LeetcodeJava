@@ -5,7 +5,7 @@ import java.util.*;
 public class Leetcode200{
 
     /**
-     *
+     * #173
      */
     public static class BSTIterator {
         private final Deque<TreeNode> stack = new LinkedList<>();
@@ -55,59 +55,20 @@ public class Leetcode200{
         }
     }
 
-    /*
-    *
-    private final class BSTIterator implements Iterator<Tuple<K, V>> {
-        private final Deque<Node<K, V>> stack = new LinkedList<>();
-        private Node<K, V> ptr;
-        private boolean poppedBefore = false;
-        private boolean finish = false;
-
-        public BSTIterator() {
-            iterating = true;
-            ptr = root;
-            if (ptr == sentinel) {
-                finish = true;
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            if(!iterating){
-                throw new IllegalStateException("concurrent modification");
-            }
-            return !finish && ptr != null;
-        }
-
-        @Override
-        public Tuple<K, V> next() {
-            while (ptr != null) {
-                if (ptr.left != sentinel && !poppedBefore) // if popped before, walk to right
-                {
-                    stack.push(ptr);
-                    ptr = ptr.left;
-                }
-                else {
-                    var t = ptr;
-                    if (ptr.right != sentinel) {
-                        ptr = ptr.right;
-                        poppedBefore = false;
-                    }
-                    else {
-                        if (stack.size() != 0) {
-                            ptr = stack.pop();
-                            poppedBefore = true;
-                        }
-                        else {
-                            ptr = null;
-                        }
-                    }
-                    return new Tuple<>(t.key, t.value);
-                }
-            }
-            finish = true;
-            throw new NoSuchElementException("Iterate finish.");
-        }
+    /**
+     * #190
+     * @param n number
+     * @return binary reversed
+     */
+    public static int reverseBits(int n) {
+        int M1 = 0x55555555; // 01010101010101010101010101010101
+        int M2 = 0x33333333; // 00110011001100110011001100110011
+        int M4 = 0x0f0f0f0f; // 00001111000011110000111100001111
+        int M8 = 0x00ff00ff; // 00000000111111110000000011111111
+        n = (n >>> 1) & M1 | ((n & M1) << 1);
+        n = (n >>> 2) & M2 | ((n & M2) << 2);
+        n = (n >>> 4) & M4 | ((n & M4) << 4);
+        n = (n >>> 8) & M8 | ((n & M8) << 8);
+        return n >>> 16 | n << 16;
     }
-    * */
 }
