@@ -2,6 +2,7 @@ package Leetcode;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class Leetcode100{
 
@@ -143,6 +144,36 @@ public class Leetcode100{
             }
             res.addAll(temp);
         }
+    }
+
+    /**
+     * #90
+     * <br/>子集 II
+     * @param nums number array
+     * @return subset
+     */
+
+
+    public static List<List<Integer>> subsetsWithDup(int[] nums) {
+        List<Integer> t = new ArrayList<>();
+        List<List<Integer>> ans = new ArrayList<>();
+        Arrays.sort(nums);
+        dfs(false, 0, nums, t, ans);
+        return ans;
+    }
+
+    public static void dfs(boolean choosePre, int cur, int[] nums, List<Integer> t, List<List<Integer>> ans) {
+        if (cur == nums.length) {
+            ans.add(new ArrayList<>(t));
+            return;
+        }
+        dfs(false, cur + 1, nums, t, ans);
+        if (!choosePre && cur > 0 && nums[cur - 1] == nums[cur]) {
+            return;
+        }
+        t.add(nums[cur]);
+        dfs(true, cur + 1, nums, t, ans);
+        t.remove(t.size() - 1);
     }
 
     /**
