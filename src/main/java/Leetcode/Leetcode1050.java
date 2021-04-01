@@ -2,7 +2,47 @@ package Leetcode;
 
 import java.util.*;
 
+
 public class Leetcode1050 {
+
+    /**
+     * #1006
+     * <br/>笨阶乘
+     * <pre>
+     * clumsy(10) = 10 * 9 / 8 + 7 - 6 * 5 / 4 + 3 - 2 * 1
+     * </pre>
+     * @param N number
+     * @return result
+     */
+    public static int clumsy(int N) {
+        Deque<Integer> stack = new LinkedList<>();
+        stack.addLast(N);
+        N--;
+        int flag = 0;
+        while(N >= 1){
+            int reminder = flag%4;
+            switch(reminder){
+                case 0->{
+                    stack.addLast(stack.removeLast()*N);
+                    flag++;
+                }
+                case 1->{
+                    stack.addLast(stack.removeLast()/N);
+                    flag++;
+                }
+                case 2->{
+                    stack.addLast(N);
+                    flag++;
+                }
+                case 3->{
+                    stack.addLast(-N);
+                    flag = 0;
+                }
+            }
+            N--;
+        }
+        return stack.parallelStream().mapToInt(Integer::intValue).sum();
+    }
 
     /**
      * #1024
