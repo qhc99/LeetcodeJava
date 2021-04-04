@@ -41,6 +41,28 @@ public class Leetcode800 {
     }
 
     /**
+     * #781
+     * <br/>森林中的兔子
+     * <br/>森林中，每个兔子都有颜色。其中一些兔子（可能是全部）告诉你还有多少其他的兔子和自己有相同的颜色。
+     * 我们将这些回答放在answers数组里。
+     * <br/>要求返回森林中兔子的最少数量。
+     * @param answers answers
+     * @return count of rabbit
+     */
+    public static int numRabbits(int[] answers) {
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int y : answers) {
+            count.put(y, count.getOrDefault(y, 0) + 1);
+        }
+        int ans = 0;
+        for (Map.Entry<Integer, Integer> entry : count.entrySet()) {
+            int y = entry.getKey(), x = entry.getValue();
+            ans += (x + y) / (y + 1) * (y + 1);
+        }
+        return ans;
+    }
+
+    /**
      * #785
      * <br>bipartite graph: vertex and its neighbors has different color
      *
