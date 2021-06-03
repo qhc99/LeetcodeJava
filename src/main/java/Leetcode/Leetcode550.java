@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 public class Leetcode550 {
     /**
@@ -52,6 +53,39 @@ public class Leetcode550 {
             }
         }
     }
+
+    /**
+     * #525
+     * <br/> 连续数组
+     * <br/>给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
+     * @param nums nums
+     * @return len
+     */
+    public static int findMaxLength(int[] nums) {
+        int len = nums.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = 0;
+        for(int i = 0; i < len; i++){
+            if(nums[i] == 0){
+                nums[i] = -1;
+            }
+            if(i > 0){
+                nums[i] += nums[i-1];
+            }
+            if(nums[i] == 0){
+                max = Math.max(i+1, max);
+            }
+            if(!map.containsKey(nums[i])){
+                map.put(nums[i], i);
+            }
+            else {
+                max = Math.max(i - map.get(nums[i]), max);
+            }
+        }
+
+        return max;
+    }
+
 
     /**
      * #538
