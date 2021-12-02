@@ -133,37 +133,34 @@ public class Leetcode50 {
     if (nums1.length > nums2.length) {
       return findMedianSortedArrays(nums2, nums1);
     }
-
-    int m = nums1.length;
-    int n = nums2.length;
+    int m = nums1.length, n = nums2.length;
     int left = 0, right = m;
-    // median1：前一部分的最大值
-    // median2：后一部分的最小值
-    int median1 = 0, median2 = 0;
-
-    while (left <= right) {
-      // 前一部分包含 nums1[0 .. i-1] 和 nums2[0 .. j-1]
-      // 后一部分包含 nums1[i .. m-1] 和 nums2[j .. n-1]
-      int i = (left + right) / 2;
+    while (left < right) {
+      int i = (left + right) / 2 + 1;
       int j = (m + n + 1) / 2 - i;
-
-      // nums_im1, nums_i, nums_jm1, nums_j 分别表示 nums1[i-1], nums1[i], nums2[j-1], nums2[j]
-      int nums1_im1 = (i == 0 ? Integer.MIN_VALUE : nums1[i - 1]);
-      int nums1_i = (i == m ? Integer.MAX_VALUE : nums1[i]);
-      int nums2_jm1 = (j == 0 ? Integer.MIN_VALUE : nums2[j - 1]);
-      int nums2_j = (j == n ? Integer.MAX_VALUE : nums2[j]);
-
-      if (nums1_im1 <= nums2_j) {
-        median1 = Math.max(nums1_im1, nums2_jm1);
-        median2 = Math.min(nums1_i, nums2_j);
-        left = i + 1;
+      int A_i_minus_1 = overflowGet(nums1, i-1);
+      int B_j = overflowGet(nums2, j);
+      if (A_i_minus_1 <= B_j) {
+        left = i;
       }
       else {
         right = i - 1;
       }
     }
+    int i = left, j = (m+n+1)/2-left;
+    if((m + n) % 2 == 0){
+      return (Math.max(overflowGet(nums1,i-1), overflowGet(nums2,j-1))+
+              Math.min(overflowGet(nums1,i), overflowGet(nums2,j))) / 2.;
+    }
+    else {
+      return Math.max(overflowGet(nums1, i-1), overflowGet(nums2, j-1));
+    }
+  }
 
-    return (m + n) % 2 == 0 ? (median1 + median2) / 2.0 : median1;
+  public static int overflowGet(int[] arr, int idx) {
+    if (idx < 0) return Integer.MIN_VALUE;
+    else if (idx >= arr.length) return Integer.MAX_VALUE;
+    else return arr[idx];
   }
 
 
@@ -1632,6 +1629,31 @@ public class Leetcode50 {
     }
   }
 
+  /**
+   * #42
+   *
+   * @param height
+   * @return
+   */
+  public static int trap(int[] height) {
+    int ans = 0;
+    int left = 0, right = height.length - 1;
+    int leftMax = 0, rightMax = 0;
+    while (left < right) {
+      leftMax = Math.max(leftMax, height[left]);
+      rightMax = Math.max(rightMax, height[right]);
+      if (height[left] < height[right]) {
+        ans += leftMax - height[left];
+        ++left;
+      }
+      else {
+        ans += rightMax - height[right];
+        --right;
+      }
+    }
+    return ans;
+  }
+
 
   /**
    * #43
@@ -1643,8 +1665,26 @@ public class Leetcode50 {
    */
   @SuppressWarnings("unused")
   public static String multiply(String num1, String num2) {
-    //TODO implement this
-    return null;
+    if (num1.equals("0") || num2.equals("0")) {
+      return "0";
+    }
+    int[] res = new int[num1.length() + num2.length()];
+    for (int i = num1.length() - 1; i >= 0; i--) {
+      int n1 = num1.charAt(i) - '0';
+      for (int j = num2.length() - 1; j >= 0; j--) {
+        int n2 = num2.charAt(j) - '0';
+        int sum = (res[i + j + 1] + n1 * n2);
+        res[i + j + 1] = sum % 10;
+        res[i + j] += sum / 10;
+      }
+    }
+
+    StringBuilder result = new StringBuilder();
+    for (int i = 0; i < res.length; i++) {
+      if (i == 0 && res[i] == 0) continue;
+      result.append(res[i]);
+    }
+    return result.toString();
   }
 
 
@@ -1765,4 +1805,6 @@ public class Leetcode50 {
       }
     }
   }
+
+
 }

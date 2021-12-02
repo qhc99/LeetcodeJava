@@ -95,6 +95,12 @@ public class Leetcode450 {
     return split <= limit;
   }
 
+  /**
+   * #438
+   * @param s
+   * @param p
+   * @return
+   */
   public static List<Integer> findAnagrams(String s, String p) {
     int p_len = p.length();
     Map<Character, Integer> chars = new HashMap<>(p_len);
@@ -134,7 +140,7 @@ public class Leetcode450 {
     return ans;
   }
 
-  public static boolean canFillIn(char c, Map<Character, Integer> current, Map<Character, Integer> chars) {
+  private static boolean canFillIn(char c, Map<Character, Integer> current, Map<Character, Integer> chars) {
     return current.getOrDefault(c,0) + 1 <= chars.get(c);
   }
 }
