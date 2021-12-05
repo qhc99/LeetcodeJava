@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode50 {
   /**
    * #1
@@ -771,7 +772,7 @@ public class Leetcode50 {
    */
   public static ListNode mergeKLists(ListNode[] lists) {
     if (lists.length == 0) return null;
-    PriorityQueue<ListNode> priorityQueue = new PriorityQueue<ListNode>(lists.length,
+    PriorityQueue<ListNode> priorityQueue = new PriorityQueue<>(lists.length,
             Comparator.comparing(listNode -> listNode.val));
     for (var lt : lists) {
       if (lt != null) {
