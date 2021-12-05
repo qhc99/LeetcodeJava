@@ -1,11 +1,40 @@
 package Leetcode;
 
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Leetcode100 {
+
+  /**
+   * #54
+   * @param matrix
+   * @return
+   */
+  public static List<Integer> spiralOrder(int[][] matrix) {
+    int top = 0, left = 0, bot = matrix.length-1, right = matrix[0].length-1;
+    List<Integer> ans = new ArrayList<>((bot+1)*(right+1));
+    while (top <= bot && left <= right){
+      for(int i = left; i <= right; i++){
+        ans.add(matrix[top][i]);
+      }
+      for(int i = top+1; i <= bot; i++){
+        ans.add(matrix[i][right]);
+      }
+      if(left < right && top < bot){
+        for(int i = right - 1; i >= left; i--){
+          ans.add(matrix[bot][i]);
+        }
+        for(int i = bot -1; i > top; i--){
+          ans.add(matrix[i][left]);
+        }
+      }
+      top++;
+      left++;
+      bot--;
+      right--;
+    }
+    return ans;
+  }
 
   /**
    * #55
@@ -31,6 +60,67 @@ public class Leetcode100 {
       }
     }
     return remotest >= nums.length - 1;
+  }
+
+  /**
+   * #56
+   * @param intervals
+   * @return
+   */
+  public static int[][] merge(int[][] intervals) {
+    Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+    List<int[]> ans = new ArrayList<>(intervals.length);
+    for(int i = 0; i < intervals.length-1; i++){
+      var interval = intervals[i];
+      var interval_next = intervals[i+1];
+      int l1 = interval[0], r1 = interval[1];
+      int l2 = interval_next[0], r2 = interval_next[1];
+      if((l2 <= r1 && l2 >= l1) || (r2 <= r1 && r2 >= l1)){
+        interval_next[0] = Math.min(l1,l2);
+        interval_next[1] = Math.max(r1,r2);
+      }
+      else {
+        ans.add(interval);
+      }
+    }
+    ans.add(intervals[intervals.length-1]);
+    return ans.toArray(new int[][]{});
+  }
+
+  /**
+   * #57
+   * @param intervals
+   * @param newInterval
+   * @return
+   */
+  public static int[][] insert(int[][] intervals, int[] newInterval) {
+    int[][] newIntervals = new int[intervals.length+1][];
+    System.arraycopy(intervals,0,newIntervals,0, intervals.length);
+    newIntervals[newIntervals.length-1] = newInterval;
+    Arrays.sort(newIntervals, Comparator.comparingInt(i -> i[0]));
+    List<int[]> ans = new ArrayList<>(newIntervals.length);
+    for(var i : newIntervals){
+      if(ans.size() == 0){
+        ans.add(i);
+      }
+      else {
+        var last = ans.get(ans.size()-1);
+        if(intersect(last,i)){
+          last[0] = Math.min(last[0], i[0]);
+          last[1] = Math.max(last[1], i[1]);
+        }
+        else {
+          ans.add(i);
+        }
+      }
+    }
+    return ans.toArray(new int[][]{});
+  }
+
+  public static boolean intersect(int[] a, int[] b){
+    int l1 = a[0], r1 = a[1];
+    int l2 = b[0], r2 = b[1];
+    return (l2 >= l1 && l2 <= r1) || (r2 >= l1 && r2 <= r1);
   }
 
   /**

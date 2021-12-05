@@ -138,7 +138,7 @@ public class Leetcode50 {
     while (left < right) {
       int i = (left + right) / 2 + 1;
       int j = (m + n + 1) / 2 - i;
-      int A_i_minus_1 = overflowGet(nums1, i-1);
+      int A_i_minus_1 = overflowGet(nums1, i - 1);
       int B_j = overflowGet(nums2, j);
       if (A_i_minus_1 <= B_j) {
         left = i;
@@ -147,13 +147,13 @@ public class Leetcode50 {
         right = i - 1;
       }
     }
-    int i = left, j = (m+n+1)/2-left;
-    if((m + n) % 2 == 0){
-      return (Math.max(overflowGet(nums1,i-1), overflowGet(nums2,j-1))+
-              Math.min(overflowGet(nums1,i), overflowGet(nums2,j))) / 2.;
+    int i = left, j = (m + n + 1) / 2 - left;
+    if ((m + n) % 2 == 0) {
+      return (Math.max(overflowGet(nums1, i - 1), overflowGet(nums2, j - 1)) +
+              Math.min(overflowGet(nums1, i), overflowGet(nums2, j))) / 2.;
     }
     else {
-      return Math.max(overflowGet(nums1, i-1), overflowGet(nums2, j-1));
+      return Math.max(overflowGet(nums1, i - 1), overflowGet(nums2, j - 1));
     }
   }
 
@@ -378,39 +378,30 @@ public class Leetcode50 {
    * @return is match
    */
   @SuppressWarnings("unused")
-  public boolean isMatch(String s, String p) {
-    int m = s.length();
-    int n = p.length();
-
-    boolean[][] f = new boolean[m + 1][n + 1];
-    f[0][0] = true;
-    for (int i = 0; i <= m; ++i) {
-      for (int j = 1; j <= n; ++j) {
-        if (p.charAt(j - 1) == '*') {
-          f[i][j] = f[i][j - 2];
-          if (matches(s, p, i, j - 1)) {
-            f[i][j] = f[i][j] || f[i - 1][j];
-          }
+  public static boolean isMatch(String s, String p) {
+    int m = s.length(), n = p.length();
+    boolean[][] dp = new boolean[m + 1][n + 1];
+    dp[0][0] = true;
+    for (int j = 1; j <= n; j++) {
+      var char_p = p.charAt(j - 1);
+      for (int i = 0; i <= m; i++) {
+        if (char_p != '*') {
+          dp[i][j] = charMatchAt(s, p, i - 1, j - 1) && dp[i - 1][j - 1];
         }
         else {
-          if (matches(s, p, i, j)) {
-            f[i][j] = f[i - 1][j - 1];
-          }
+          dp[i][j] = charMatchAt(s, p, i - 1, j - 2) ? (dp[i][j - 2] || dp[i - 1][j]) : dp[i][j - 2];
         }
       }
     }
-    return f[m][n];
+    return dp[m][n];
   }
 
-  private boolean matches(String s, String p, int i, int j) {
-    if (i == 0) {
-      return false;
-    }
-    if (p.charAt(j - 1) == '.') {
-      return true;
-    }
-    return s.charAt(i - 1) == p.charAt(j - 1);
-
+  private static boolean charMatchAt(String s, String p, int pi, int pj) {
+    if (pi < 0) return false;
+    var cs = s.charAt(pi);
+    var cp = p.charAt(pj);
+    if (cp == '.') return true;
+    else return cs == cp;
   }
 
 
@@ -544,6 +535,49 @@ public class Leetcode50 {
   }
 
   /**
+   * #17
+   *
+   * @param digits
+   * @return
+   */
+  public static List<String> letterCombinations(String digits) {
+    if (digits.length() == 0) {
+      return List.of();
+    }
+    Map<Character, List<String>> map =
+            Map.ofEntries(
+                    Map.entry('2', List.of("a", "b", "c")),
+                    Map.entry('3', List.of("d", "e", "f")),
+                    Map.entry('4', List.of("g", "h", "i")),
+                    Map.entry('5', List.of("j", "k", "l")),
+                    Map.entry('6', List.of("m", "n", "o")),
+                    Map.entry('7', List.of("p", "q", "r", "s")),
+                    Map.entry('8', List.of("t", "u", "v")),
+                    Map.entry('9', List.of("w", "x", "y", "z")));
+    Queue<StringBuilder> queue = new ArrayDeque<>((int) Math.pow(3, digits.length()));
+    var chars = map.get(digits.charAt(0));
+    for (var c : chars) {
+      queue.add(new StringBuilder(c));
+    }
+    for (int i = 1; i < digits.length(); i++) {
+      while (queue.size() > 0 && queue.peek().length() == i) {
+        var b = queue.poll();
+        var crs = map.get(digits.charAt(i));
+        for (int j = 0; j < crs.size() - 1; j++) {
+          queue.add(new StringBuilder(b).append(crs.get(j)));
+        }
+        queue.add(b.append(crs.get(crs.size() - 1)));
+      }
+    }
+    List<String> ans = new ArrayList<>(queue.size());
+    while (queue.size() > 0) {
+      var b = queue.poll();
+      ans.add(b.toString());
+    }
+    return ans;
+  }
+
+  /**
    * #18
    * <br/>四数之和
    * <br/>给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
@@ -643,6 +677,50 @@ public class Leetcode50 {
     return this_order;
   }
 
+
+  /**
+   * #22
+   *
+   * @param n
+   * @return
+   */
+  public static List<String> generateParenthesisNew(int n) {
+    class Tuple {
+      final StringBuilder strB;
+      final int unmatched;
+      final int left_count;
+
+      public Tuple(StringBuilder s, int st, int c) {
+        strB = s;
+        unmatched = st;
+        left_count = c;
+      }
+    }
+    Deque<Tuple> queue = new ArrayDeque<>(n);
+    queue.add(new Tuple(new StringBuilder("("), 1, 1));
+    for (int i = 1; i < 2 * n; i++) {
+      while (queue.size() > 0 && queue.peek().strB.length() == i) {
+        var t = queue.poll();
+        if (t.unmatched > 0 && t.left_count < n) {
+          queue.add(new Tuple(new StringBuilder(t.strB).append(")"), t.unmatched - 1, t.left_count));
+          queue.add(new Tuple(t.strB.append("("), t.unmatched + 1, t.left_count + 1));
+        }
+        else if (t.left_count < n) {
+          queue.add(new Tuple(t.strB.append("("), t.unmatched + 1, t.left_count + 1));
+        }
+        else if (t.unmatched > 0) {
+          queue.add(new Tuple(t.strB.append(")"), t.unmatched - 1, t.left_count));
+        }
+        else throw new RuntimeException();
+      }
+    }
+    List<String> ans = new ArrayList<>(queue.size());
+    for (var t : queue) {
+      ans.add(t.strB.toString());
+    }
+    return ans;
+  }
+
   /**
    * #22
    * <br/>k pairs parenthesis permutation
@@ -687,88 +765,38 @@ public class Leetcode50 {
 
   /**
    * #23
-   * <br/>合并K个排序链表<p>
-   * <br/>输入:<br/>
-   * <p>
-   * [
-   * 1->4->5,
-   * 1->3->4,
-   * 2->6
-   * ]
-   * </pre>
-   * 输出: 1->1->2->3->4->4->5->6
    *
-   * @param lists list of list
-   * @return merged list
+   * @param lists
+   * @return
    */
-  @SuppressWarnings("unused")
   public static ListNode mergeKLists(ListNode[] lists) {
-    if (lists.length == 0) {
-      return null;
+    if (lists.length == 0) return null;
+    PriorityQueue<ListNode> priorityQueue = new PriorityQueue<ListNode>(lists.length,
+            Comparator.comparing(listNode -> listNode.val));
+    for (var lt : lists) {
+      if (lt != null) {
+        priorityQueue.add(lt);
+      }
     }
-    ListNode[] lst = new ListNode[lists.length];
-    int heap_size = lst.length;
-    int idx = 0;
-    for (var i : lists) {
-      if (i != null) {
-        lst[idx++] = i;
+    ListNode ans = null, tail = null;
+    while (priorityQueue.size() > 0) {
+      var lt = priorityQueue.poll();
+      if (ans == null) {
+        ans = lt;
+      }
+      if (tail == null) {
+        tail = ans;
       }
       else {
-        heap_size--;
+        tail.next = lt;
+        tail = lt;
+      }
+      lt = lt.next;
+      if (lt != null) {
+        priorityQueue.add(lt);
       }
     }
-    if (heap_size == 0) {
-      return null;
-    }
-    buildMinHeap(lst, heap_size);
-    ListNode head;
-    ListNode head_ptr;
-    head = lst[0];
-    head_ptr = head;
-    lst[0] = lst[0].next;
-    if (lst[0] == null) {
-      lst[0] = lst[heap_size - 1];
-      heap_size--;
-      minHeapify(lst, 0, heap_size);
-    }
-    while (heap_size > 0) {
-      minHeapify(lst, 0, heap_size);
-      head_ptr.next = lst[0];
-      head_ptr = head_ptr.next;
-      lst[0] = lst[0].next;
-      if (lst[0] == null) {
-        lst[0] = lst[heap_size - 1];
-        heap_size--;
-        minHeapify(lst, 0, heap_size);
-      }
-    }
-    return head;
-  }
-
-  private static void minHeapify(ListNode[] arr, int idx, int heap_size) {
-    int l = 2 * (idx + 1);
-    int l_idx = l - 1;
-    int r = 2 * (idx + 1) + 1;
-    int r_idx = r - 1;
-    int min_idx = idx;
-    if ((l_idx < heap_size) && (arr[l_idx].val < arr[min_idx].val)) {
-      min_idx = l_idx;
-    }
-    if ((r_idx < heap_size) && (arr[r_idx].val < arr[min_idx].val)) {
-      min_idx = r_idx;
-    }
-    if (min_idx != idx) {
-      var t = arr[min_idx];
-      arr[min_idx] = arr[idx];
-      arr[idx] = t;
-      minHeapify(arr, min_idx, heap_size);
-    }
-  }
-
-  private static void buildMinHeap(ListNode[] arr, int heap_size) {
-    for (int i = heap_size / 2 - 1; i >= 0; i--) {
-      minHeapify(arr, i, heap_size);
-    }
+    return ans;
   }
 
   /**
@@ -953,6 +981,48 @@ public class Leetcode50 {
     }
     return can_chain;
   }
+
+  /**
+   * #32
+   *
+   * @param nums
+   */
+  public static void nextPermutationNew(int[] nums) {
+    int k = nums.length - 2;
+    for (; k >= 0; k--) {
+      if (nums[k] < nums[k + 1]) {
+        break;
+      }
+    }
+    if (k == -1) {
+      reverseArray(nums, 0);
+      return;
+    }
+    int l = nums.length - 1;
+    for (; l >= 0; l--) {
+      if (nums[l] > nums[k]) {
+        break;
+      }
+    }
+    swap(nums, k, l);
+    reverseArray(nums, k + 1);
+  }
+
+  private static void reverseArray(int[] nums, int left) {
+    int right = nums.length - 1;
+    while (left < right) {
+      swap(nums, left, right);
+      left++;
+      right--;
+    }
+  }
+
+  private static void swap(int[] nums, int a, int b) {
+    var t = nums[a];
+    nums[a] = nums[b];
+    nums[b] = t;
+  }
+
 
   /**
    * #31
@@ -1636,22 +1706,23 @@ public class Leetcode50 {
    * @return
    */
   public static int trap(int[] height) {
-    int ans = 0;
-    int left = 0, right = height.length - 1;
-    int leftMax = 0, rightMax = 0;
-    while (left < right) {
-      leftMax = Math.max(leftMax, height[left]);
-      rightMax = Math.max(rightMax, height[right]);
-      if (height[left] < height[right]) {
-        ans += leftMax - height[left];
-        ++left;
+    int left = 0;
+    int right = height.length-1;
+    int left_max = height[left], right_max = height[right];
+    int volume = 0;
+    while (left < right){
+      if(left_max <= right_max){
+        volume += left_max - height[left];
+        left++;
+        left_max = Math.max(left_max, height[left]);
       }
       else {
-        ans += rightMax - height[right];
-        --right;
+        volume += right_max - height[right];
+        right--;
+        right_max = Math.max(right_max, height[right]);
       }
     }
-    return ans;
+    return volume;
   }
 
 
@@ -1685,6 +1756,39 @@ public class Leetcode50 {
       result.append(res[i]);
     }
     return result.toString();
+  }
+
+  /**
+   * #44
+   * @param s
+   * @param p
+   * @return
+   */
+  public static boolean isMatchWildcard(String s, String p) {
+    int m = s.length(), n = p.length();
+    boolean[][] dp = new boolean[m+1][n+1];
+    dp[0][0] = true;
+    for (int j = 1; j <= n; j++) {
+      var char_p = p.charAt(j-1);
+      for(int i = 0; i <= m; i++){
+        if(char_p != '*'){
+          dp[i][j] = charMatchAtWildcard(s, p, i - 1, j - 1) && dp[i - 1][j - 1];
+        }
+        else {
+          if(i - 1 >= 0) dp[i][j] =  dp[i][j-1] || dp[i-1][j];
+          else  dp[i][j] =  dp[i][j-1];
+        }
+      }
+    }
+    return dp[m][n];
+  }
+
+  private static boolean charMatchAtWildcard(String s, String p, int pi, int pj) {
+    if(pi < 0) return false;
+    var cs = s.charAt(pi);
+    var cp = p.charAt(pj);
+    if (cp == '?') return true;
+    else return cs == cp;
   }
 
 
@@ -1804,6 +1908,26 @@ public class Leetcode50 {
         matrix[i][matrix.length - 1 - j] = t;
       }
     }
+  }
+
+  /**
+   * #50
+   * @param x
+   * @param n
+   * @return
+   */
+  public static double myPow(double x, int n) {
+    double ans = 1;
+    boolean isMinus = n < 0;
+    long ln = n;
+    ln = Math.abs(ln);
+    while (ln > 0){
+      long bin = ln % 2;
+      if(bin != 0) ans *= bin * x;
+      x *= x;
+      ln/=2;
+    }
+    return isMinus ? 1. / ans : ans;
   }
 
 

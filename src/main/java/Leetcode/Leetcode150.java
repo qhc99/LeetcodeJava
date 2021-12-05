@@ -134,6 +134,31 @@ public class Leetcode150 {
   }
 
   /**
+   * #128
+   * @param nums
+   * @return
+   */
+  public static int longestConsecutive(int[] nums) {
+    Set<Integer> sets = new HashSet<>(nums.length * 2);
+    for(var i : nums){
+      sets.add(i);
+    }
+    int ans = 0;
+    for(var n : nums){
+      if(!sets.contains(n-1)){
+        n++;
+        int count = 1;
+        while (sets.contains(n)){
+          count++;
+          n++;
+        }
+        ans = Math.max(ans, count);
+      }
+    }
+    return ans;
+  }
+
+  /**
    * #129
    * <br/>
    * <pre>
@@ -177,6 +202,51 @@ public class Leetcode150 {
       solveSumNumbers(node.right, num, sum);
       solveSumNumbers(node.left, num, sum);
     }
+  }
+
+  /**
+   * #133
+   * @param node
+   * @return
+   */
+  public Node cloneGraph(Node node) {
+    if(node == null){
+      return null;
+    }
+
+    Node graph = getMapped(node);
+    Queue<Node> nodeQueue = new ArrayDeque<>(), newNodeQueue = new ArrayDeque<>();
+    nodeQueue.add(node);
+    newNodeQueue.add(graph);
+    Set<Node> visited = new HashSet<>();
+    visited.add(node);
+    while (nodeQueue.size() > 0 && newNodeQueue.size() > 0){
+      var n = nodeQueue.poll();
+      visited.add(n);
+      var mappedNode = newNodeQueue.poll();
+      for(var neighbor : n.neighbors){
+        var mappedNeighbor = getMapped(neighbor);
+        assert mappedNode != null;
+        mappedNode.neighbors.add(mappedNeighbor);
+        if(!visited.contains(neighbor)){
+          newNodeQueue.add(mappedNeighbor);
+          nodeQueue.add(neighbor);
+          visited.add(neighbor);
+        }
+      }
+    }
+    return graph;
+  }
+
+  Map<Node, Node> map = new HashMap<>();
+  public Node getMapped(Node n){
+    var ans  = map.get(n);
+    if(ans == null){
+      var m = new Node(n.val, new ArrayList<>(n.neighbors.size()));
+      map.put(n, m);
+      return m;
+    }
+    else return ans;
   }
 
   /**

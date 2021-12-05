@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.Deque;
 import java.util.LinkedList;
+import java.util.Queue;
 
 
 public class Leetcode1050 {
@@ -82,5 +83,118 @@ public class Leetcode1050 {
       }
     }
     return count;
+  }
+
+  /**
+   * #1032
+   */
+  public static class StreamChecker {
+
+    public static class ModifiedTernaryTries {
+      Node root;
+
+      public static class Node {
+        private char ctr;
+        private boolean contain;
+        private Node left, mid, right;
+
+        public char getChar() {
+          return ctr;
+        }
+
+        public boolean isContain() {
+          return contain;
+        }
+
+        public Node getLeft() {
+          return left;
+        }
+
+        public Node getMid() {
+          return mid;
+        }
+
+        public Node getRight() {
+          return right;
+        }
+      }
+
+      public void put(String key) {
+        root = put(root, key, 0);
+      }
+
+      private Node put(Node x, String key, int d) {
+        char c = key.charAt(d);
+        if (x == null) {
+          x = new Node();
+          x.ctr = c;
+        }
+        if (c < x.ctr) {
+          x.left = put(x.left, key, d);
+        }
+        else if (c > x.ctr) {
+          x.right = put(x.right, key, d);
+        }
+        else if (d < key.length() - 1) {
+          x.mid = put(x.mid, key, d + 1);
+        }
+        else {
+          x.contain = true;
+        }
+        return x;
+      }
+
+      Queue<Node> nodeQueue = new LinkedList<>();
+
+      public boolean query(char letter) {
+        boolean ans = false;
+        var s = search(root, letter);
+        int count = nodeQueue.size();
+        if (s != null) {
+          nodeQueue.add(s.mid);
+          ans = ans || s.contain;
+        }
+
+        while (count > 0) {
+          var ptr = nodeQueue.poll();
+          if (ptr != null) {
+            Node n = search(ptr, letter);
+            if (n != null) {
+              ans = ans || n.contain;
+              nodeQueue.add(n.mid);
+            }
+          }
+          count--;
+        }
+
+        return ans;
+      }
+
+      Node search(Node current, char letter) {
+        if (current == null) {
+          return null;
+        }
+        if (letter == current.ctr) {
+          return current;
+        }
+        else if (letter < current.ctr) {
+          return search(current.left, letter);
+        }
+        else return search(current.right, letter);
+      }
+    }
+
+
+    ModifiedTernaryTries tries = new ModifiedTernaryTries();
+
+    public StreamChecker(String[] words) {
+      for (var w : words) {
+        tries.put(w);
+      }
+    }
+
+    public boolean query(char letter) {
+      return tries.query(letter);
+    }
   }
 }
