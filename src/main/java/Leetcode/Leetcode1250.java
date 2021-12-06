@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode1250 {
 
   /**
@@ -37,13 +38,28 @@ public class Leetcode1250 {
    * @return length
    */
   public static int longestSubsequence(int[] arr, int difference) {
-    Map<Integer,Integer> m = new HashMap<>(arr.length);
+    Map<Integer, Integer> m = new HashMap<>(arr.length);
     int ans = 1;
-    for(var i : arr){
+    for (var i : arr) {
       var t = m.getOrDefault(i - difference, 0) + 1;
       m.put(i, t);
       ans = Math.max(ans, t);
     }
     return ans;
+  }
+
+  /**
+   * #1217
+   *
+   * @param position
+   * @return
+   */
+  public static int minCostToMoveChips(int[] position) {
+    int odd = 0, even = 0;
+    for (var p : position) {
+      if (p % 2 == 0) even++;
+      else odd++;
+    }
+    return Math.min(odd, even);
   }
 }

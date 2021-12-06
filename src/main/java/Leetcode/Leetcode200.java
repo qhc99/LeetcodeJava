@@ -1,9 +1,8 @@
 package Leetcode;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.NoSuchElementException;
+import java.util.*;
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode200 {
 
   /**
@@ -26,6 +25,37 @@ public class Leetcode200 {
   }
 
   /**
+   * #155
+   */
+  public static class MinStack {
+
+    Deque<Integer> deque = new LinkedList<>();
+    Deque<Integer> minDeque = new LinkedList<>();
+
+    public MinStack() {
+      minDeque.add(Integer.MAX_VALUE);
+    }
+
+    public void push(int val) {
+      deque.addLast(val);
+      minDeque.addLast(Math.min(minDeque.getLast(), val));
+    }
+
+    public void pop() {
+      deque.removeLast();
+      minDeque.removeLast();
+    }
+
+    public int top() {
+      return deque.getLast();
+    }
+
+    public int getMin() {
+      return minDeque.getLast();
+    }
+  }
+
+  /**
    * #160 相交链表
    *
    * @param headA linked list
@@ -42,6 +72,79 @@ public class Leetcode200 {
       pB = pB == null ? headA : pB.next;
     }
     return pA;
+  }
+
+  /**
+   * #162
+   *
+   * @param nums
+   * @return
+   */
+  public static int findPeakElement(int[] nums) {
+    int len = nums.length;
+    if (len == 1) {
+      return 0;
+    }
+
+
+    if (nums[0] > nums[1]) {
+      return 0;
+    }
+    else if (nums[len - 1] > nums[len - 2]) {
+      return len-1;
+    }
+    for (int i = 1; i < len - 1; i++) {
+      if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
+        return i;
+      }
+    }
+
+    throw new RuntimeException();
+  }
+
+  /**
+   * #166
+   * @param numerator
+   * @param denominator
+   * @return
+   */
+  public static String fractionToDecimal(int numerator, int denominator) {
+    StringBuilder sb = new StringBuilder();
+    boolean geqZero = (long)numerator * (long)denominator >= 0;
+    long nu = Math.abs((long)numerator);
+    long de = Math.abs((long)denominator);
+    var integer = nu / de;
+    sb.append(integer);
+    var frac = nu % de;
+    if(frac != 0){
+      sb.append(".");
+      int idx = sb.length();
+      Map<Long, Integer> remainderToIdx = new HashMap<>(16);
+      remainderToIdx.put(frac, idx);
+      while (frac != 0){
+        var this_remainder = frac;
+        frac *= 10;
+        var d = frac / de;
+        sb.append(d);
+
+        idx++;
+        frac %= de;
+
+        var searchIdx = remainderToIdx.get(frac);
+        if(searchIdx != null){
+         sb.append(")");
+         sb.insert(searchIdx, "(");
+         break;
+        }
+        else {
+          remainderToIdx.put(this_remainder, idx-1);
+        }
+      }
+    }
+    if(!geqZero){
+      sb.insert(0, "-");
+    }
+    return sb.toString();
   }
 
   /**
