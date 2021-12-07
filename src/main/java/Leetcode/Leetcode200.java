@@ -91,7 +91,7 @@ public class Leetcode200 {
       return 0;
     }
     else if (nums[len - 1] > nums[len - 2]) {
-      return len-1;
+      return len - 1;
     }
     for (int i = 1; i < len - 1; i++) {
       if (nums[i] > nums[i - 1] && nums[i] > nums[i + 1]) {
@@ -104,24 +104,25 @@ public class Leetcode200 {
 
   /**
    * #166
+   *
    * @param numerator
    * @param denominator
    * @return
    */
   public static String fractionToDecimal(int numerator, int denominator) {
     StringBuilder sb = new StringBuilder();
-    boolean geqZero = (long)numerator * (long)denominator >= 0;
-    long nu = Math.abs((long)numerator);
-    long de = Math.abs((long)denominator);
+    boolean geqZero = (long) numerator * (long) denominator >= 0;
+    long nu = Math.abs((long) numerator);
+    long de = Math.abs((long) denominator);
     var integer = nu / de;
     sb.append(integer);
     var frac = nu % de;
-    if(frac != 0){
+    if (frac != 0) {
       sb.append(".");
       int idx = sb.length();
       Map<Long, Integer> remainderToIdx = new HashMap<>(16);
       remainderToIdx.put(frac, idx);
-      while (frac != 0){
+      while (frac != 0) {
         var this_remainder = frac;
         frac *= 10;
         var d = frac / de;
@@ -131,17 +132,17 @@ public class Leetcode200 {
         frac %= de;
 
         var searchIdx = remainderToIdx.get(frac);
-        if(searchIdx != null){
-         sb.append(")");
-         sb.insert(searchIdx, "(");
-         break;
+        if (searchIdx != null) {
+          sb.append(")");
+          sb.insert(searchIdx, "(");
+          break;
         }
         else {
-          remainderToIdx.put(this_remainder, idx-1);
+          remainderToIdx.put(this_remainder, idx - 1);
         }
       }
     }
-    if(!geqZero){
+    if (!geqZero) {
       sb.insert(0, "-");
     }
     return sb.toString();
@@ -214,5 +215,68 @@ public class Leetcode200 {
     n = (n >>> 4) & M4 | ((n & M4) << 4);
     n = (n >>> 8) & M8 | ((n & M8) << 8);
     return n >>> 16 | n << 16;
+  }
+
+  /**
+   * #200
+   *
+   * @param grid
+   * @return
+   */
+  public static int numIslands(char[][] grid) {
+    class BooleanMatrix {
+      final int M;
+      final int N;
+      final BitSet[] matrix;
+
+      public BooleanMatrix(int m, int n) {
+        M = m;
+        N = n;
+        matrix = new BitSet[m];
+        for (int i = 0; i < m; i++) {
+          matrix[i] = new BitSet(n);
+        }
+      }
+
+      public boolean get(int m, int n) {
+        return matrix[m].get(n);
+      }
+
+      public void set(int m, int n, boolean b) {
+        matrix[m].set(n, b);
+      }
+    }
+    int m = grid.length, n = grid[0].length;
+    var bMatrix = new BooleanMatrix(m, n);
+
+    var funcVisit = new Object() {
+      void apply(int i, int j) {
+        if (grid[i][j] == '1' && !bMatrix.get(i, j)) {
+          bMatrix.set(i, j, true);
+          if (i - 1 >= 0) {
+            apply(i - 1, j);
+          }
+          if (i + 1 < m) {
+            apply(i + 1, j);
+          }
+          if (j + 1 < n) {
+            apply(i, j + 1);
+          }
+          if (j - 1 >= 0) {
+            apply(i, j - 1);
+          }
+        }
+      }
+    };
+    int ans = 0;
+    for (int i = 0; i < m; i++) {
+      for (int j = 0; j < n; j++) {
+        if (grid[i][j] == '1' && !bMatrix.get(i, j)) {
+          ans++;
+          funcVisit.apply(i, j);
+        }
+      }
+    }
+    return ans;
   }
 }
