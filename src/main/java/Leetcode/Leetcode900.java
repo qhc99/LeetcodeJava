@@ -8,6 +8,7 @@ import java.util.List;
 public class Leetcode900 {
   /**
    * #878
+   * periodical method
    * @param n
    * @param a
    * @param b
