@@ -1,10 +1,8 @@
 package Leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode450 {
 
   /**
@@ -96,7 +94,39 @@ public class Leetcode450 {
   }
 
   /**
+   * #416
+   *
+   * @param nums
+   * @return
+   */
+  public static boolean canPartition(int[] nums) {
+    if (nums.length <= 1) {
+      return false;
+    }
+
+    var sum = Arrays.stream(nums).sum();
+    if (sum % 2 == 1) {
+      return false;
+    }
+
+    BitSet dp = new BitSet(sum / 2 + 1);
+    dp.set(0, true);
+
+    for (int c = 1; c <= nums.length; c++) {
+      var num = nums[c - 1];
+      for (int j = sum / 2; j - num >= 0; j--) {
+        if(dp.get(j-num)){
+          dp.set(j, true);
+        }
+      }
+    }
+
+    return dp.get(sum / 2);
+  }
+
+  /**
    * #438
+   *
    * @param s
    * @param p
    * @return
@@ -115,7 +145,7 @@ public class Leetcode450 {
       var c = s.charAt(r);
       if (chars.containsKey(c)) {
         if (canFillIn(c, current, chars)) {
-          current.put(c, current.getOrDefault(c,0) + 1);
+          current.put(c, current.getOrDefault(c, 0) + 1);
           if (r + 1 - l == p_len) {
             ans.add(l);
             var last_c = s.charAt(l);
@@ -129,7 +159,7 @@ public class Leetcode450 {
             current.put(last_c, current.get(last_c) - 1);
             l++;
           } while (!canFillIn(c, current, chars));
-          current.put(c, current.getOrDefault(c,0) + 1);
+          current.put(c, current.getOrDefault(c, 0) + 1);
         }
       }
       else {
@@ -141,6 +171,6 @@ public class Leetcode450 {
   }
 
   private static boolean canFillIn(char c, Map<Character, Integer> current, Map<Character, Integer> chars) {
-    return current.getOrDefault(c,0) + 1 <= chars.get(c);
+    return current.getOrDefault(c, 0) + 1 <= chars.get(c);
   }
 }
