@@ -158,7 +158,6 @@ public class Leetcode250 {
    * @return res
    */
   public static boolean isPalindrome(ListNode head) {
-    //TODO O(1) memory
     List<Integer> vals = new ArrayList<>();
 
     // 将链表的值复制到数组中
