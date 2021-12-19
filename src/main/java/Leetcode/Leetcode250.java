@@ -1,9 +1,6 @@
 package Leetcode;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode250 {
@@ -154,7 +151,7 @@ public class Leetcode250 {
       }
     }
     List<String> ans_list = new ArrayList<>(ans.size());
-    for(var s : ans){
+    for (var s : ans) {
       ans_list.add(s);
     }
 
@@ -226,6 +223,107 @@ public class Leetcode250 {
     return ans.toString();
   }
 
+
+  /**
+   * #224
+   *
+   * @param s
+   * @return
+   */
+  public static int calculate(String s) {
+    var calculator = new StackCalculator();
+    int num = 0;
+    for (int i = 0; i < s.length(); i++) {
+      char ctr = s.charAt(i);
+      calculator.acceptChar(ctr);
+    }
+    return calculator.getResult();
+  }
+
+  private static class StackCalculator {
+    static class Data {
+      int num;
+      char str;
+
+
+      Data(int n, char ctr) {
+        this.num = n;
+        this.str = ctr;
+      }
+    }
+
+    Deque<Data> stack = new ArrayDeque<>();
+    int num;
+    boolean parsingDigit = false;
+
+    public void acceptChar(char ctr) {
+      switch (ctr) {
+        case ' ' -> tryStopParseDigitAndCompute();
+        case '(' -> {
+          tryStopParseDigitAndCompute();
+          stack.addLast(new Data(0, '('));
+        }
+        case ')' -> {
+          tryStopParseDigitAndCompute();
+          var num_node = stack.pollLast();
+          stack.pollLast();
+          computeAlongStack(num_node.num);
+        }
+        case '+' -> {
+          tryStopParseDigitAndCompute();
+          stack.addLast(new Data(0, '+'));
+        }
+        case '-' -> {
+          tryStopParseDigitAndCompute();
+          stack.addLast(new Data(0, '-'));
+        }
+        default -> {
+          parsingDigit = true;
+          var digit = Integer.parseInt(String.valueOf(ctr));
+          num = num * 10 + digit;
+        }
+      }
+    }
+
+    public int getResult(){
+      tryStopParseDigitAndCompute();
+      return stack.pollLast().num;
+    }
+
+    private void computeAlongStack(int digits){
+      while (stack.peekLast() != null && stack.peekLast().str != '(') {
+        switch (stack.peekLast().str) {
+          case '+' -> {
+            stack.pollLast();
+            var numData = stack.pollLast();
+            digits += numData.num;
+          }
+          case '-' -> {
+            stack.pollLast();
+            if(stack.peekLast() != null && stack.peekLast().str == 'd'){
+              var numData = stack.pollLast().num;
+              digits = numData - digits;
+            }
+            else {
+              stack.pollLast();
+              digits = -digits;
+            }
+          }
+          case 'd' -> throw new RuntimeException();
+        }
+      }
+      stack.addLast(new Data(digits, 'd'));
+    }
+
+    private void tryStopParseDigitAndCompute() {
+      if (parsingDigit) {
+        parsingDigit = false;
+        int digits = num;
+        num = 0;
+        computeAlongStack(digits);
+      }
+    }
+  }
 
   /**
    * #234
