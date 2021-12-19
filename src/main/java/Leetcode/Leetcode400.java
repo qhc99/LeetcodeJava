@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode400 {
 
   /**
@@ -94,5 +95,119 @@ public class Leetcode400 {
       b++;
     }
     return false;
+  }
+
+  /**
+   * 394
+   *
+   * @param s
+   * @return
+   */
+  public static String decodeString(String s) {
+    StringBuilder ans = null;
+    int idx = 0;
+    while (idx < s.length()) { // link early return
+      var d = recursiveDecode(s, idx);
+      idx = d.end_idx;
+      if (ans == null) ans = d.builder;
+      else ans.append(d.builder);
+      idx++;
+    }
+    return ans.toString();
+  }
+
+  static class Data {
+    final StringBuilder builder;
+    final int end_idx;
+
+    Data(StringBuilder sb, int e) {
+      builder = sb;
+      end_idx = e;
+    }
+  }
+
+  private static Data recursiveDecode(String s, int idx) {
+    var sb = new StringBuilder();
+    int num = 0;
+    while (idx < s.length()) {
+      var ctr = s.charAt(idx);
+      switch (ctr) {
+        case '[' -> {
+          var d = recursiveDecode(s, ++idx);
+          idx = d.end_idx;
+          sb.append(d.builder.toString().repeat(num));
+          num = 0;
+        }
+        case ']' -> {
+          return new Data(sb, idx);
+        }
+        default -> {
+          var op_int = tryParseInt(String.valueOf(ctr));
+          if (op_int.isPresent()) {
+            num = num * 10 + op_int.get();
+          }
+          else {
+            sb.append(ctr);
+          }
+        }
+      }
+      idx++;
+    }
+    return new Data(sb, idx);
+  }
+
+  private static Optional<Integer> tryParseInt(String s) {
+    int radix = 10;
+    if (s == null) {
+      return Optional.empty();
+    }
+
+    if (radix < Character.MIN_RADIX) {
+      return Optional.empty();
+    }
+
+    if (radix > Character.MAX_RADIX) {
+      return Optional.empty();
+    }
+
+    boolean negative = false;
+    int i = 0, len = s.length();
+    int limit = -Integer.MAX_VALUE;
+
+    if (len > 0) {
+      char firstChar = s.charAt(0);
+      if (firstChar < '0') { // Possible leading "+" or "-"
+        if (firstChar == '-') {
+          negative = true;
+          limit = Integer.MIN_VALUE;
+        }
+        else if (firstChar != '+') {
+          return Optional.empty();
+        }
+
+        if (len == 1) { // Cannot have lone "+" or "-"
+          return Optional.empty();
+        }
+        i++;
+      }
+      int multmin = limit / radix;
+      int result = 0;
+      while (i < len) {
+        // Accumulating negatively avoids surprises near MAX_VALUE
+        int digit = Character.digit(s.charAt(i++), radix);
+        if (digit < 0 || result < multmin) {
+          return Optional.empty();
+        }
+        result *= radix;
+        if (result < limit + digit) {
+          return Optional.empty();
+        }
+        result -= digit;
+      }
+      return Optional.of(negative ? result : -result);
+    }
+    else {
+      return Optional.empty();
+    }
   }
 }
