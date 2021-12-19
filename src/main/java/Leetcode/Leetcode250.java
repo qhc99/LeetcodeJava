@@ -1,8 +1,9 @@
 package Leetcode;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode250 {
@@ -86,6 +87,82 @@ public class Leetcode250 {
   }
 
   /**
+   * #212
+   *
+   * @param board
+   * @param words
+   * @return
+   */
+  @SuppressWarnings("UseBulkOperation")
+  public static List<String> findWords(char[][] board, String[] words) {
+    if (words.length == 0) return new ArrayList<>();
+    Trie trie = new Trie();
+    int max_len = 0;
+    for (var w : words) {
+      max_len = Math.max(max_len, w.length());
+      trie.insert(w);
+    }
+    StringBuilder sb = new StringBuilder();
+    int finalMax_len = max_len;
+    Set<String> ans = new HashSet<>();
+    var findWordsDFS_Func = new Object() {
+      public void apply(int r, int c, Trie.Node ptr, int depth) {
+        if (depth > finalMax_len || ptr == null) {
+          return;
+        }
+        var ctr = board[r][c];
+        if (ctr == '#') {
+          return;
+        }
+        while (ptr != null) {
+          if (ptr.ctr == ctr) {
+            sb.append(ctr);
+            board[r][c] = '#';
+            if (ptr.contain) {
+              ans.add(sb.toString());
+            }
+            ptr = ptr.mid;
+
+            if (r - 1 >= 0) {
+              apply(r - 1, c, ptr, depth + 1);
+            }
+            if (r + 1 < board.length) {
+              apply(r + 1, c, ptr, depth + 1);
+            }
+            if (c - 1 >= 0) {
+              apply(r, c - 1, ptr, depth + 1);
+            }
+            if (c + 1 < board[0].length) {
+              apply(r, c + 1, ptr, depth + 1);
+            }
+
+            board[r][c] = ctr;
+            sb.deleteCharAt(sb.length() - 1);
+
+            break;
+          }
+          else if (ctr < ptr.ctr) {
+            ptr = ptr.left;
+          }
+          else ptr = ptr.right;
+        }
+      }
+    };
+    for (int i = 0; i < board.length; i++) {
+      for (int j = 0; j < board[0].length; j++) {
+        findWordsDFS_Func.apply(i, j, trie.head, 1);
+      }
+    }
+    List<String> ans_list = new ArrayList<>(ans.size());
+    for(var s : ans){
+      ans_list.add(s);
+    }
+
+    return ans_list;
+  }
+
+
+  /**
    * #214
    *
    * @param s
@@ -111,7 +188,7 @@ public class Leetcode250 {
         arm_len++;
       }
       ArmLen[pos] = arm_len;
-      if(arm_len > target_len && (pos - (arm_len - 1) == 0)){
+      if (arm_len > target_len && (pos - (arm_len - 1) == 0)) {
         target_len = arm_len;
         target_pos = pos;
       }
@@ -119,18 +196,18 @@ public class Leetcode250 {
       int mid_pos = pos, mid_arm_len = arm_len;
       pos++;
       arm_len = 1;
-      while (pos <= mid_pos + mid_arm_len - 1){
+      while (pos <= mid_pos + mid_arm_len - 1) {
         int sym_pos = mid_pos - (pos - mid_pos);
         int sym_pos_arm_len = ArmLen[sym_pos];
 
         int mid_left_bound = mid_pos - (mid_arm_len - 1);
         int sym_left_bound = sym_pos - (sym_pos_arm_len - 1);
 
-        if(sym_left_bound > mid_left_bound){
+        if (sym_left_bound > mid_left_bound) {
           ArmLen[pos] = sym_pos_arm_len;
           pos++;
         }
-        else if (sym_left_bound < mid_left_bound){
+        else if (sym_left_bound < mid_left_bound) {
           ArmLen[pos] = sym_pos - mid_left_bound + 1;
           pos++;
         }
