@@ -393,6 +393,39 @@ public class Leetcode250 {
   }
 
   /**
+   * #228
+   * @param nums
+   * @return
+   */
+  public static List<String> summaryRanges(int[] nums) {
+    if(nums.length == 0) return new ArrayList<>();
+    int left = nums[0];
+    List<String> ans = new ArrayList<>();
+    for(int i = 1; i < nums.length; i++){
+      if(nums[i] - 1 != nums[i-1]){
+        int right = nums[i-1];
+        if(right == left){
+          ans.add(String.valueOf(left));
+        }
+        else {
+          ans.add(left + "->" + right);
+        }
+        left = nums[i];
+      }
+    }
+    {
+      int right = nums[nums.length-1];
+      if(right == left){
+        ans.add(String.valueOf(left));
+      }
+      else {
+        ans.add(left + "->" + right);
+      }
+    }
+    return ans;
+  }
+
+  /**
    * #234
    * <br/>回文链表
    *
