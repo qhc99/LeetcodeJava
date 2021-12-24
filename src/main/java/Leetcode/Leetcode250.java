@@ -223,6 +223,73 @@ public class Leetcode250 {
     return ans.toString();
   }
 
+  /**
+   * #218
+   *
+   * @param buildings
+   * @return
+   */
+  public static List<List<Integer>> getSkyline(int[][] buildings) {
+    class RightHeight {
+      final int right;
+      final int height;
+
+      RightHeight(int r, int h) {
+        right = r;
+        height = h;
+      }
+    }
+
+    class XHeight {
+      final int x;
+      final int height;
+      final int right;
+
+      XHeight(int x, int h, int i) {
+        this.x = x;
+        this.height = h;
+        right = i;
+      }
+    }
+
+    List<XHeight> scan = new ArrayList<>(buildings.length * 2);
+    for (var b : buildings) {
+      int x = b[0];
+      int x1 = b[1];
+      int h = b[2];
+      scan.add(new XHeight(x, h, x1));
+      scan.add(new XHeight(x1, h, x1));
+    }
+    scan.sort(Comparator.comparing(t -> t.x));
+
+    PriorityQueue<RightHeight> queue = new PriorityQueue<>((a,b)->b.height-a.height);
+    List<List<Integer>> ans = new ArrayList<>();
+    for (var s : scan) {
+      int x = s.x;
+      int height = s.height;
+      int right = s.right;
+      if (x != right) {
+        queue.add(new RightHeight(right, height));
+      }
+      while (queue.size() > 0 && x >= queue.peek().right) {
+        queue.poll();
+      }
+      int max_height = queue.peek() != null ? queue.peek().height : 0;
+      ans.add(List.of(x, max_height));
+
+      if (ans.size() >= 2 && ans.get(ans.size() - 1).get(0).equals(ans.get(ans.size() - 2).get(0))) {
+        var last = ans.remove(ans.size() - 1);
+        var t = ans.remove(ans.size() - 1);
+        ans.add(List.of(x, Math.max(t.get(1), last.get(1))));
+      }
+      if(ans.size() >= 2 && ans.get(ans.size() - 1).get(1).equals(ans.get(ans.size() - 2).get(1))){
+        ans.remove(ans.size()-1);
+      }
+
+    }
+    return ans;
+  }
+
 
   /**
    * #224
@@ -285,12 +352,12 @@ public class Leetcode250 {
       }
     }
 
-    public int getResult(){
+    public int getResult() {
       tryStopParseDigitAndCompute();
       return stack.pollLast().num;
     }
 
-    private void computeAlongStack(int digits){
+    private void computeAlongStack(int digits) {
       while (stack.peekLast() != null && stack.peekLast().str != '(') {
         switch (stack.peekLast().str) {
           case '+' -> {
@@ -300,7 +367,7 @@ public class Leetcode250 {
           }
           case '-' -> {
             stack.pollLast();
-            if(stack.peekLast() != null && stack.peekLast().str == 'd'){
+            if (stack.peekLast() != null && stack.peekLast().str == 'd') {
               var numData = stack.pollLast().num;
               digits = numData - digits;
             }
