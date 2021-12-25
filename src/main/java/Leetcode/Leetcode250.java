@@ -424,9 +424,7 @@ public class Leetcode250 {
 
     public void acceptChar(char ctr) {
       switch (ctr) {
-        case ' ' -> {
-          tryStopParsingInt();
-        }
+        case ' ' -> tryStopParsingInt();
         case '*' -> {
           tryStopParsingInt();
           tryEvalMulDiv();
