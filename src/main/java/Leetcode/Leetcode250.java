@@ -262,7 +262,7 @@ public class Leetcode250 {
     }
     scan.sort(Comparator.comparing(t -> t.x));
 
-    PriorityQueue<RightHeight> queue = new PriorityQueue<>((a,b)->b.height-a.height);
+    PriorityQueue<RightHeight> queue = new PriorityQueue<>((a, b) -> b.height - a.height);
     List<List<Integer>> ans = new ArrayList<>();
     for (var s : scan) {
       int x = s.x;
@@ -282,8 +282,8 @@ public class Leetcode250 {
         var t = ans.remove(ans.size() - 1);
         ans.add(List.of(x, Math.max(t.get(1), last.get(1))));
       }
-      if(ans.size() >= 2 && ans.get(ans.size() - 1).get(1).equals(ans.get(ans.size() - 2).get(1))){
-        ans.remove(ans.size()-1);
+      if (ans.size() >= 2 && ans.get(ans.size() - 1).get(1).equals(ans.get(ans.size() - 2).get(1))) {
+        ans.remove(ans.size() - 1);
       }
 
     }
@@ -311,7 +311,6 @@ public class Leetcode250 {
     static class Data {
       int num;
       char str;
-
 
       Data(int n, char ctr) {
         this.num = n;
@@ -393,18 +392,129 @@ public class Leetcode250 {
   }
 
   /**
+   * #227
+   *
+   * @param s
+   * @return
+   */
+  public static int calculate2(String s) {
+    var cal = new StackCalculator2();
+    for(int i = 0; i < s.length(); i++){
+      var c = s.charAt(i);
+      cal.acceptChar(c);
+    }
+    return cal.getResult();
+  }
+
+  private static class StackCalculator2 {
+    static class Data {
+      int num;
+      char str;
+
+      Data(int n, char ctr) {
+        this.num = n;
+        this.str = ctr;
+      }
+    }
+
+    Deque<Data> stack = new ArrayDeque<>();
+    int num = 0;
+    boolean parsingNum = false;
+    boolean hasMulOrDiv = false;
+
+    public void acceptChar(char ctr) {
+      switch (ctr) {
+        case ' ' -> {
+          tryStopParsingInt();
+        }
+        case '*' -> {
+          tryStopParsingInt();
+          tryEvalMulDiv();
+          hasMulOrDiv = true;
+          stack.addLast(new Data(0,'*'));
+        }
+        case '/'-> {
+          tryStopParsingInt();
+          tryEvalMulDiv();
+          hasMulOrDiv = true;
+          stack.addLast(new Data(0,'/'));
+        }
+        case '+'-> {
+          tryStopParsingInt();
+          tryEvalMulDiv();
+          evalStack();
+          stack.addLast(new Data(0,'+'));
+        }
+        case '-'-> {
+          tryStopParsingInt();
+          tryEvalMulDiv();
+          evalStack();
+          stack.addLast(new Data(0,'-'));
+        }
+        default -> {
+          parsingNum = true;
+          num = num * 10 + Integer.parseInt(String.valueOf(ctr));
+        }
+      }
+    }
+
+    public int getResult(){
+      tryStopParsingInt();
+      tryEvalMulDiv();
+      evalStack();
+      return stack.pollLast().num;
+    }
+
+    private void tryEvalMulDiv(){
+      if(hasMulOrDiv){
+        hasMulOrDiv = false;
+        var num1 = stack.pollLast();
+        var op = stack.pollLast();
+        var num2 = stack.pollLast();
+        switch (op.str) {
+          case '*' -> stack.addLast(new Data(num2.num * num1.num, 'd'));
+          case '/' -> stack.addLast(new Data(num2.num / num1.num, 'd'));
+          default -> throw new RuntimeException();
+        }
+      }
+    }
+
+    private void tryStopParsingInt(){
+      if(parsingNum){
+        parsingNum = false;
+        stack.addLast(new Data(num,'d'));
+        num = 0;
+      }
+    }
+
+    private void evalStack() {
+      while (stack.size() >= 3) {
+        var num1 = stack.pollLast();
+        var op = stack.pollLast();
+        var num2 = stack.pollLast();
+        switch (op.str) {
+          case '-' -> stack.addLast(new Data(num2.num - num1.num, 'd'));
+          case '+' -> stack.addLast(new Data(num2.num + num1.num, 'd'));
+          default -> throw new RuntimeException();
+        }
+      }
+    }
+  }
+
+  /**
    * #228
+   *
    * @param nums
    * @return
    */
   public static List<String> summaryRanges(int[] nums) {
-    if(nums.length == 0) return new ArrayList<>();
+    if (nums.length == 0) return new ArrayList<>();
     int left = nums[0];
     List<String> ans = new ArrayList<>();
-    for(int i = 1; i < nums.length; i++){
-      if(nums[i] - 1 != nums[i-1]){
-        int right = nums[i-1];
-        if(right == left){
+    for (int i = 1; i < nums.length; i++) {
+      if (nums[i] - 1 != nums[i - 1]) {
+        int right = nums[i - 1];
+        if (right == left) {
           ans.add(String.valueOf(left));
         }
         else {
@@ -414,8 +524,8 @@ public class Leetcode250 {
       }
     }
     {
-      int right = nums[nums.length-1];
-      if(right == left){
+      int right = nums[nums.length - 1];
+      if (right == left) {
         ans.add(String.valueOf(left));
       }
       else {
