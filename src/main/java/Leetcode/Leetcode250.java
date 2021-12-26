@@ -1,7 +1,5 @@
 package Leetcode;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Target;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -547,18 +545,18 @@ public class Leetcode250 {
    * @return
    */
   public static int kthSmallest(TreeNode root, int k) {
-    var tree = new OrderStatTree<Integer,Void>(Comparator.comparingInt(Integer::intValue));
+    var tree = new OrderStatTree<Integer, Void>(Comparator.comparingInt(Integer::intValue));
     add(root, tree);
     return tree.getKeyOfRank(k);
   }
 
-  private static void add(TreeNode n, OrderStatTree<Integer, Void> tree){
-    if(n == null){
+  private static void add(TreeNode n, OrderStatTree<Integer, Void> tree) {
+    if (n == null) {
       return;
     }
     tree.insertKV(n.val, null);
-    add(n.left,tree);
-    add(n.right,tree);
+    add(n.left, tree);
+    add(n.right, tree);
   }
 
   private static class Tuple<T1, T2> {
@@ -762,8 +760,24 @@ public class Leetcode250 {
     Item get();
   }
 
+  /**
+   * #231
+   *
+   * @param n
+   * @return
+   */
+  public static boolean isPowerOfTwo(int n) {
+    if(n <= 0) return false;
+    while (n != 1) {
+      var rem = n % 2;
+      if (rem == 1) return false;
+      n /= 2;
+    }
+    return true;
+  }
+
   @SuppressWarnings({"ClassCanBeRecord", "PatternVariableCanBeUsed"})
-  static class RBTreeTemplate<Key, Node>{
+  static class RBTreeTemplate<Key, Node> {
 
     final Node sentinel;
     final Comparator<Key> comparator;
@@ -781,19 +795,19 @@ public class Leetcode250 {
     final BiConsumer<Node, Boolean> setColor;
     final Function<Node, Key> getKey;
 
-    RBTreeTemplate( Node sentinel,
-                    Comparator<Key> comparator,
-                    Function<Node, Key> getKey,
-                    Gettable<Node> getRoot,
-                    Consumer<Node> setRoot,
-                    Function<Node, Node> getParent,
-                    BiConsumer<Node, Node> setParent,
-                    Function<Node, Node> getLeft,
-                    BiConsumer<Node, Node> setLeft,
-                    Function<Node, Node> getRight,
-                    BiConsumer<Node, Node> setRight,
-                    Function<Node, Boolean> getColor,
-                    BiConsumer<Node, Boolean> setColor){
+    RBTreeTemplate(Node sentinel,
+                   Comparator<Key> comparator,
+                   Function<Node, Key> getKey,
+                   Gettable<Node> getRoot,
+                   Consumer<Node> setRoot,
+                   Function<Node, Node> getParent,
+                   BiConsumer<Node, Node> setParent,
+                   Function<Node, Node> getLeft,
+                   BiConsumer<Node, Node> setLeft,
+                   Function<Node, Node> getRight,
+                   BiConsumer<Node, Node> setRight,
+                   Function<Node, Boolean> getColor,
+                   BiConsumer<Node, Boolean> setColor) {
       this.sentinel = sentinel;
       this.comparator = comparator;
       this.getRoot = getRoot;
@@ -815,45 +829,45 @@ public class Leetcode250 {
      * @param z node or sentinel
      */
     @SuppressWarnings({"SuspiciousNameCombination"})
-    void insert(Node z){
+    void insert(Node z) {
       var y = sentinel;
       var x = getRoot.get();
-      while(x != sentinel) {
+      while (x != sentinel) {
         y = x;
         {//
-          if(x instanceof OrderStatTree.Node<?, ?>){
+          if (x instanceof OrderStatTree.Node<?, ?>) {
             OrderStatTree.Node<?, ?> xo = (OrderStatTree.Node<?, ?>) x;
             xo.size++;
           }
         }
-        if(comparator.compare(getKey.apply(z), getKey.apply(x)) < 0){
+        if (comparator.compare(getKey.apply(z), getKey.apply(x)) < 0) {
           x = getLeft.apply(x);
         }
-        else if(comparator.compare(getKey.apply(z), getKey.apply(x)) > 0){
+        else if (comparator.compare(getKey.apply(z), getKey.apply(x)) > 0) {
           x = getRight.apply(x);
         }
-        else{
+        else {
           throw new IllegalArgumentException("duplicate key.");
         }
       }
       setParent.accept(z, y);
-      if(y == sentinel){
+      if (y == sentinel) {
         setRoot.accept(z);
       }
-      else if(comparator.compare(getKey.apply(z), getKey.apply(y)) < 0){
+      else if (comparator.compare(getKey.apply(z), getKey.apply(y)) < 0) {
         setLeft.accept(y, z);
       }
-      else if(comparator.compare(getKey.apply(z), getKey.apply(y)) > 0){
+      else if (comparator.compare(getKey.apply(z), getKey.apply(y)) > 0) {
         setRight.accept(y, z);
       }
-      else{
+      else {
         throw new RuntimeException("impossible error.");
       }
       setLeft.accept(z, sentinel);
       setRight.accept(z, sentinel);
       setColor.accept(z, RED);
       {//
-        if(z instanceof OrderStatTree.Node<?, ?>){
+        if (z instanceof OrderStatTree.Node<?, ?>) {
           OrderStatTree.Node<?, ?> zo = (OrderStatTree.Node<?, ?>) z;
           zo.size = 1;
         }
@@ -861,18 +875,18 @@ public class Leetcode250 {
       insertFixUp(z);
     }
 
-    private void insertFixUp(Node z){
-      while(getColor.apply(getParent.apply(z)) == RED) {
-        if(getParent.apply(z) == getLeft.apply(getParent.apply(getParent.apply(z)))){
+    private void insertFixUp(Node z) {
+      while (getColor.apply(getParent.apply(z)) == RED) {
+        if (getParent.apply(z) == getLeft.apply(getParent.apply(getParent.apply(z)))) {
           var y = getRight.apply(getParent.apply(getParent.apply(z)));
-          if(getColor.apply(y) == RED){
+          if (getColor.apply(y) == RED) {
             setColor.accept(getParent.apply(z), BLACK);
             setColor.accept(y, BLACK);
             setColor.accept(getParent.apply(getParent.apply(z)), RED);
             z = getParent.apply(getParent.apply(z));
           }
-          else{
-            if(z == getRight.apply(getParent.apply(z))){
+          else {
+            if (z == getRight.apply(getParent.apply(z))) {
               z = getParent.apply(z);
               leftRotate(z);
             }
@@ -881,16 +895,16 @@ public class Leetcode250 {
             rightRotate(getParent.apply(getParent.apply(z)));
           }
         }
-        else{
+        else {
           var y = getLeft.apply(getParent.apply(getParent.apply(z)));
-          if(getColor.apply(y) == RED){
+          if (getColor.apply(y) == RED) {
             setColor.accept(getParent.apply(z), BLACK);
             setColor.accept(y, BLACK);
             setColor.accept(getParent.apply(getParent.apply(z)), RED);
             z = getParent.apply(getParent.apply(z));
           }
-          else{
-            if(z == getLeft.apply(getParent.apply(z))){
+          else {
+            if (z == getLeft.apply(getParent.apply(z))) {
               z = getParent.apply(z);
               rightRotate(z);
             }
@@ -903,26 +917,26 @@ public class Leetcode250 {
       setColor.accept(getRoot.get(), BLACK);
     }
 
-    void delete(Node z){
+    void delete(Node z) {
       var y = z;
       var y_origin_color = getColor.apply(y);
       Node x;
-      if(getLeft.apply(z) == sentinel){
+      if (getLeft.apply(z) == sentinel) {
         x = getRight.apply(z);
         RBTransplant(z, getRight.apply(z));
       }
-      else if(getRight.apply(z) == sentinel){
+      else if (getRight.apply(z) == sentinel) {
         x = getLeft.apply(z);
         RBTransplant(z, getLeft.apply(z));
       }
-      else{
+      else {
         y = minimumNodeOf(getRight.apply(z));
         y_origin_color = getColor.apply(y);
         x = getRight.apply(y);
-        if(getParent.apply(y) == z){
+        if (getParent.apply(y) == z) {
           setParent.accept(x, y);
         }
-        else{
+        else {
           RBTransplant(y, getRight.apply(y));
           setRight.accept(y, getRight.apply(z));
           setParent.accept(getRight.apply(y), y);
@@ -934,40 +948,40 @@ public class Leetcode250 {
       }
 
       {//
-        if(y instanceof OrderStatTree.Node<?, ?>){
-          if(getRight.apply(y) != sentinel){
+        if (y instanceof OrderStatTree.Node<?, ?>) {
+          if (getRight.apply(y) != sentinel) {
             y = minimumNodeOf(getRight.apply(y));
           }
           //noinspection PatternVariableCanBeUsed
           var yo = (OrderStatTree.Node<?, ?>) y;
-          while(yo != sentinel) {
+          while (yo != sentinel) {
             yo.size = yo.right.size + yo.left.size + 1;
             yo = yo.parent;
           }
         }
       }
 
-      if(y_origin_color == BLACK){
+      if (y_origin_color == BLACK) {
         deleteFixUp(x);
       }
     }
 
-    private void deleteFixUp(Node x){
-      while(x != getRoot.get() && getColor.apply(x) == BLACK) {
-        if(x == getLeft.apply(getParent.apply(x))){
+    private void deleteFixUp(Node x) {
+      while (x != getRoot.get() && getColor.apply(x) == BLACK) {
+        if (x == getLeft.apply(getParent.apply(x))) {
           var w = getRight.apply(getParent.apply(x));
-          if(getColor.apply(w) == RED){
+          if (getColor.apply(w) == RED) {
             setColor.accept(w, BLACK);
             setColor.accept(getParent.apply(x), RED);
             leftRotate(getParent.apply(x));
             w = getRight.apply(getParent.apply(x));
           }
-          if(getColor.apply(getLeft.apply(w)) == BLACK && getColor.apply(getRight.apply(w)) == BLACK){
+          if (getColor.apply(getLeft.apply(w)) == BLACK && getColor.apply(getRight.apply(w)) == BLACK) {
             setColor.accept(w, RED);
             x = getParent.apply(x);
           }
-          else{
-            if(getColor.apply(getRight.apply(w)) == BLACK){
+          else {
+            if (getColor.apply(getRight.apply(w)) == BLACK) {
               setColor.accept(getLeft.apply(w), BLACK);
               setColor.accept(w, RED);
               rightRotate(w);
@@ -980,20 +994,20 @@ public class Leetcode250 {
             x = getRoot.get();
           }
         }
-        else{
+        else {
           var w = getLeft.apply(getParent.apply(x));
-          if(getColor.apply(w) == RED){
+          if (getColor.apply(w) == RED) {
             setColor.accept(w, BLACK);
             setColor.accept(getParent.apply(x), RED);
             rightRotate(getParent.apply(x));
             w = getLeft.apply(getParent.apply(x));
           }
-          if(getColor.apply(getLeft.apply(w)) == BLACK && getColor.apply(getRight.apply(w)) == BLACK){
+          if (getColor.apply(getLeft.apply(w)) == BLACK && getColor.apply(getRight.apply(w)) == BLACK) {
             setColor.accept(w, RED);
             x = getParent.apply(x);
           }
-          else{
-            if(getColor.apply(getLeft.apply(w)) == BLACK){
+          else {
+            if (getColor.apply(getLeft.apply(w)) == BLACK) {
               setColor.accept(getRight.apply(w), BLACK);
               setColor.accept(w, RED);
               leftRotate(w);
@@ -1010,49 +1024,49 @@ public class Leetcode250 {
       setColor.accept(x, BLACK);
     }
 
-    private Node minimumNodeOf(Node x){
-      while(getLeft.apply(x) != sentinel) {
+    private Node minimumNodeOf(Node x) {
+      while (getLeft.apply(x) != sentinel) {
         x = getLeft.apply(x);
       }
       return x;
     }
 
-    private void RBTransplant(Node u, Node v){
-      if(getParent.apply(u) == sentinel){
+    private void RBTransplant(Node u, Node v) {
+      if (getParent.apply(u) == sentinel) {
         setRoot.accept(v);
       }
-      else if(u == getLeft.apply(getParent.apply(u))){
+      else if (u == getLeft.apply(getParent.apply(u))) {
         setLeft.accept(getParent.apply(u), v);
       }
-      else{
+      else {
         setRight.accept(getParent.apply(u), v);
       }
       setParent.accept(v, getParent.apply(u));
     }
 
-    private void leftRotate(Node x){
+    private void leftRotate(Node x) {
       var y = getRight.apply(x);
 
       setRight.accept(x, getLeft.apply(y));
-      if(getLeft.apply(y) != sentinel){
+      if (getLeft.apply(y) != sentinel) {
         setParent.accept(getLeft.apply(y), x);
       }
 
       setParent.accept(y, getParent.apply(x));
-      if(getParent.apply(x) == sentinel){
+      if (getParent.apply(x) == sentinel) {
         setRoot.accept(y);
       }
-      else if(x == getLeft.apply(getParent.apply(x))){
+      else if (x == getLeft.apply(getParent.apply(x))) {
         setLeft.accept(getParent.apply(x), y);
       }
-      else{
+      else {
         setRight.accept(getParent.apply(x), y);
       }
 
       setLeft.accept(y, x);
       setParent.accept(x, y);
       {//
-        if(x instanceof OrderStatTree.Node<?, ?> && y instanceof OrderStatTree.Node<?, ?>){
+        if (x instanceof OrderStatTree.Node<?, ?> && y instanceof OrderStatTree.Node<?, ?>) {
           OrderStatTree.Node<?, ?> xo = (OrderStatTree.Node<?, ?>) x;
           OrderStatTree.Node<?, ?> yo = (OrderStatTree.Node<?, ?>) y;
           yo.size = xo.size;
@@ -1061,29 +1075,29 @@ public class Leetcode250 {
       }
     }
 
-    private void rightRotate(Node x){
+    private void rightRotate(Node x) {
       var y = getLeft.apply(x);
 
       setLeft.accept(x, getRight.apply(y));
-      if(getRight.apply(y) != sentinel){
+      if (getRight.apply(y) != sentinel) {
         setParent.accept(getRight.apply(y), x);
       }
 
       setParent.accept(y, getParent.apply(x));
-      if(getParent.apply(x) == sentinel){
+      if (getParent.apply(x) == sentinel) {
         setRoot.accept(y);
       }
-      else if(x == getRight.apply(getParent.apply(x))){
+      else if (x == getRight.apply(getParent.apply(x))) {
         setRight.accept(getParent.apply(x), y);
       }
-      else{
+      else {
         setLeft.accept(getParent.apply(x), y);
       }
 
       setRight.accept(y, x);
       setParent.accept(x, y);
       {//
-        if(x instanceof OrderStatTree.Node<?, ?>&& y instanceof OrderStatTree.Node<?, ?>){
+        if (x instanceof OrderStatTree.Node<?, ?> && y instanceof OrderStatTree.Node<?, ?>) {
           OrderStatTree.Node<?, ?> yo = (OrderStatTree.Node<?, ?>) y;
           OrderStatTree.Node<?, ?> xo = (OrderStatTree.Node<?, ?>) x;
           yo.size = xo.size;

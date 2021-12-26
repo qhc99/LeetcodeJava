@@ -11,24 +11,22 @@ public class Leetcode950 {
    * @return
    */
   public static int atMostNGivenDigitSet(String[] digits, int n) {
-    int min_num_of_every_len = Integer.parseInt(digits[0]);
-    int start_digit = min_num_of_every_len;
-    int order = 1;
-    while (min_num_of_every_len <= n) {
-      order = order * digits.length + 1;
-      min_num_of_every_len = min_num_of_every_len * 10 + start_digit;
+    var S = String.valueOf(n);
+    int len_n = S.length();
+    int[] dp = new int[len_n + 1]; // preprocess
+    dp[len_n] = 1;
+    for (int idx = len_n - 1; idx >= 0; idx--) {
+      var S_digit = Integer.parseInt(String.valueOf(S.charAt(idx)));
+      for (var num_s : digits) {
+        var num = Integer.parseInt(num_s);
+        if (num < S_digit)  dp[idx] += Math.pow(digits.length, len_n - 1 - idx);
+        else if(num == S_digit) dp[idx] += dp[idx + 1];
+      }
     }
-
-    int start = order;
-    int end = order * digits.length + 1;
-
-    while (end - start > 1) {
-      var mid = (start + end) / 2;
-      var num = nthNum(digits, mid);
-      if (num <= n) start = mid;
-      else end = mid;
+    for(int i = 1; i < len_n; i++){
+      dp[0] += Math.pow(digits.length,i);
     }
-    return start;
+    return dp[0];
   }
 
   /**
