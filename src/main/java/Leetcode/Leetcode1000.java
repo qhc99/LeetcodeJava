@@ -1,5 +1,9 @@
 package Leetcode;
 
+import java.util.Comparator;
+import java.util.PriorityQueue;
+
+@SuppressWarnings("JavaDoc")
 public class Leetcode1000 {
 
   /**
@@ -51,4 +55,30 @@ public class Leetcode1000 {
   }
 
 
+  /**
+   * #973
+   * @param points
+   * @param k
+   * @return
+   */
+  public static int[][] kClosest(int[][] points, int k) {
+    class Data{
+      final int dist;
+      final int[] point;
+      Data(int d, int[] p){
+        dist = d;
+        point = p;
+      }
+    }
+    PriorityQueue<Data> queue = new PriorityQueue<>(Comparator.comparing(d->d.dist));
+    int[][] ans = new int[k][];
+    for(var p : points){
+      queue.add(new Data(p[0]*p[0]+p[1]*p[1], p));
+    }
+    for(int i = 0; i < k; i++){
+      ans[i] = queue.poll().point;
+    }
+
+    return ans;
+  }
 }
