@@ -767,7 +767,7 @@ public class Leetcode250 {
    * @return
    */
   public static boolean isPowerOfTwo(int n) {
-    if(n <= 0) return false;
+    if (n <= 0) return false;
     while (n != 1) {
       var rem = n % 2;
       if (rem == 1) return false;
@@ -1157,5 +1157,52 @@ public class Leetcode250 {
     else {
       return root;
     }
+  }
+
+  /**
+   * #239
+   *
+   * @param nums
+   * @param k
+   * @return
+   */
+  public static int[] maxSlidingWindow(int[] nums, int k) {
+    if (k == 1) return nums;
+    var reverse_bin_str = toReversedBinaryString(k);
+    int[][] dp = new int[reverse_bin_str.length()][];
+    dp[0] = nums;
+    for (int i = 1; i < dp.length; i++) {
+      int wind_len = (int) Math.pow(2, i);
+      dp[i] = new int[nums.length + 1 - wind_len];
+    }
+    for (int i = 1; i < dp.length; i++) {
+      int wind_len = (int) Math.pow(2, i);
+      for (int j = 0; j < dp[i].length; j++) {
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j + wind_len / 2 ]);
+      }
+    }
+    int[] ans = new int[nums.length + 1 - k];
+    for (int i = 0; i < ans.length; i++) {
+      int max = Integer.MIN_VALUE;
+      int start = i;
+      for (int j = 0; j < reverse_bin_str.length(); j++) {
+        if(reverse_bin_str.charAt(j) == '1'){
+          max = Math.max(max, dp[j][start]);
+          start += Math.pow(2, j);
+        }
+      }
+      ans[i] = max;
+    }
+    return ans;
+  }
+
+  private static String toReversedBinaryString(int k) {
+    StringBuilder sb = new StringBuilder();
+    while (k != 0) {
+      var rem = k % 2;
+      sb.append(rem);
+      k = k / 2;
+    }
+    return sb.toString();
   }
 }
