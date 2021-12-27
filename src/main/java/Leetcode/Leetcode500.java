@@ -1,5 +1,6 @@
 package Leetcode;
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode500 {
 
   /**
@@ -40,4 +41,27 @@ public class Leetcode500 {
     }
     return ans;
   }
+
+  /**
+   * #476
+   * @param num
+   * @return
+   */
+  public static int findComplement(int num) {
+    int i = 31;
+    while (i >= 1 && kthBinDigit(num,i) == 0){
+      i--;
+    }
+    num = lastKBinDigits(~num,i);
+    return num;
+  }
+
+  private static int lastKBinDigits(int num, int k){
+    return num & ((1 << k) - 1);
+  }
+
+  private static int kthBinDigit(int num, int k){
+    return num >>> k & 1;
+  }
+
 }
