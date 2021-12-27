@@ -1178,7 +1178,7 @@ public class Leetcode250 {
     for (int i = 1; i < dp.length; i++) {
       int wind_len = (int) Math.pow(2, i);
       for (int j = 0; j < dp[i].length; j++) {
-        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j + wind_len / 2 ]);
+        dp[i][j] = Math.max(dp[i - 1][j], dp[i - 1][j + wind_len / 2]);
       }
     }
     int[] ans = new int[nums.length + 1 - k];
@@ -1186,7 +1186,7 @@ public class Leetcode250 {
       int max = Integer.MIN_VALUE;
       int start = i;
       for (int j = 0; j < reverse_bin_str.length(); j++) {
-        if(reverse_bin_str.charAt(j) == '1'){
+        if (reverse_bin_str.charAt(j) == '1') {
           max = Math.max(max, dp[j][start]);
           start += Math.pow(2, j);
         }
@@ -1204,5 +1204,75 @@ public class Leetcode250 {
       k = k / 2;
     }
     return sb.toString();
+  }
+
+  public static int[] maxSlidingWindow2(int[] nums, int k) {
+    if (k == 1) return nums;
+    PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> b - a);
+    int[] ans = new int[nums.length + 1 - k];
+    for (int i = 0; i < k; i++) {
+      queue.add(nums[i]);
+    }
+    Map<Integer, Integer> waitToDelete = new HashMap<>();
+    for (int i = 0, tail = 0, head = k; i < ans.length; i++, tail++, head++) {
+      while (waitToDelete.containsKey(queue.peek())) {
+        var peek = queue.poll();
+        var count = waitToDelete.get(peek);
+        if (count == 1) waitToDelete.remove(peek);
+        else waitToDelete.put(peek, count - 1);
+      }
+      ans[i] = queue.peek();
+      waitToDelete.put(nums[tail], waitToDelete.getOrDefault(nums[tail], 0) + 1);
+      if (head < nums.length) {
+        queue.add(nums[head]);
+      }
+    }
+    return ans;
+  }
+
+  public static int[] maxSlidingWindow3(int[] nums, int k) {
+    if (k == 1) return nums;
+    int[] ans = new int[nums.length + 1 - k];
+    class IndexValue {
+      final int idx;
+      final int val;
+
+      IndexValue(int i, int v) {
+        idx = i;
+        val = v;
+      }
+    }
+
+    Deque<IndexValue> deque = new ArrayDeque<>(k);
+    var funcAddToDeque = new Object() {
+      void apply(int i, int current_val) {
+        if (deque.size() == 0) {
+          deque.addLast(new IndexValue(i, current_val));
+        }
+        else if (deque.peekLast().val > current_val) {
+          deque.addLast(new IndexValue(i, current_val));
+        }
+        else {
+          while (deque.size() > 0 && deque.peekLast().val <= current_val) {
+            deque.pollLast();
+          }
+          deque.addLast(new IndexValue(i, current_val));
+        }
+      }
+    };
+    for (int i = 0; i < k; i++) {
+      funcAddToDeque.apply(i, nums[i]);
+    }
+
+    for (int i = 0, head = k; i < ans.length; i++, head++) {
+      while (deque.size() > 0 && deque.peekFirst().idx < i) {
+        deque.pollFirst();
+      }
+      ans[i] = deque.peekFirst().val;
+      if(head < nums.length){
+        funcAddToDeque.apply(head, nums[head]);
+      }
+    }
+    return ans;
   }
 }
