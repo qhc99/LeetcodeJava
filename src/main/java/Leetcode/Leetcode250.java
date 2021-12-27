@@ -1346,4 +1346,15 @@ public class Leetcode250 {
     };
     return funcMatrixBinarySearch.apply(new MatrixRange(0, matrix.length, 0, matrix[0].length));
   }
+
+  public static boolean searchMatrix2(int[][] matrix, int target){
+    int x = 0, y = matrix[0].length-1;
+    while (x < matrix.length && y >= 0){
+      var val = matrix[x][y];
+      if(val == target) return true;
+      else if(val > target) y--;
+      else x++;
+    }
+    return false;
+  }
 }
