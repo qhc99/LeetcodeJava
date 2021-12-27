@@ -1269,10 +1269,81 @@ public class Leetcode250 {
         deque.pollFirst();
       }
       ans[i] = deque.peekFirst().val;
-      if(head < nums.length){
+      if (head < nums.length) {
         funcAddToDeque.apply(head, nums[head]);
       }
     }
     return ans;
+  }
+
+  /**
+   * #240
+   *
+   * @param matrix
+   * @param target
+   * @return
+   */
+  public static boolean searchMatrix(int[][] matrix, int target) {
+    class MatrixRange {
+      final int RowStart;
+      final int RowEnd;
+      final int ColStart;
+      final int ColEnd;
+
+      MatrixRange(int rs, int re, int cs, int ce) {
+        RowStart = rs;
+        RowEnd = re;
+        ColStart = cs;
+        ColEnd = ce;
+      }
+    }
+    var funcMatrixBinarySearch = new Object() {
+      /**
+       *
+       * @param mr always square
+       */
+      boolean apply(MatrixRange mr) {
+        int rLen = mr.RowEnd - mr.RowStart;
+        int cLen = mr.ColEnd - mr.ColStart;
+        if(rLen < 1 || cLen < 1){
+          return false;
+        }
+        else if (rLen == 1) {
+          int s = mr.ColStart, e = mr.ColEnd;
+          while (e - s > 1) {
+            var mid = (s + e) / 2;
+            if(matrix[mr.RowStart][mid] <= target) s = mid;
+            else e = mid;
+          }
+          return matrix[mr.RowStart][s] == target;
+        }
+        else if (cLen == 1) {
+          int s = mr.RowStart, e = mr.RowEnd;
+          while (e - s > 1){
+            var mid = (s + e) / 2;
+            if(matrix[mid][mr.ColStart] <= target) s = mid;
+            else e = mid;
+          }
+          return matrix[s][mr.ColStart] == target;
+        }
+        else {
+          int s = 0, e = Math.min(rLen, cLen);
+          while (e - s > 1) {
+            var mid = (s + e) / 2;
+            if (matrix[mr.RowStart+mid][mr.ColStart+mid] <= target) s = mid;
+            else e = mid;
+          }
+          if (matrix[mr.RowStart+s][mr.ColStart+s] == target) {
+            return true;
+          }
+          else {
+            var res1 = apply(new MatrixRange(mr.RowStart+s+1,mr.RowEnd,mr.ColStart,mr.ColStart+s+1));
+            var res2 = apply(new MatrixRange(mr.RowStart,mr.RowStart+s+1,mr.ColStart+s+1,mr.ColEnd));
+            return res1 || res2;
+          }
+        }
+      }
+    };
+    return funcMatrixBinarySearch.apply(new MatrixRange(0, matrix.length, 0, matrix[0].length));
   }
 }
