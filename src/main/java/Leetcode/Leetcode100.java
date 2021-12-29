@@ -2,7 +2,10 @@ package Leetcode;
 
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode100 {
 
   /**
@@ -117,10 +120,36 @@ public class Leetcode100 {
     return ans.toArray(new int[][]{});
   }
 
-  public static boolean intersect(int[] a, int[] b){
+  private static boolean intersect(int[] a, int[] b){
     int l1 = a[0], r1 = a[1];
     int l2 = b[0], r2 = b[1];
     return (l2 >= l1 && l2 <= r1) || (r2 >= l1 && r2 <= r1);
+  }
+
+  /**
+   *
+   * @param n
+   * @param k
+   * @return
+   */
+  public static String getPermutation(int n, int k) {
+    int[] factorial = new int[]{1,1,2,6,24,120,720,5040,40320};
+    List<Integer> digits = IntStream.range(1, n + 1).boxed().collect(Collectors.toList());
+    StringBuilder ans = new StringBuilder();
+    var recurFunc = new Object(){
+      void apply(int N, int K){
+        if(N == 0) return;
+        int idx = (K-1)/factorial[N-1];
+        String s = digits.get((K-1)/factorial[N-1]).toString();
+        digits.remove(idx);
+        ans.append(s);
+        K = (K - 1)%factorial[N-1]+1;
+        apply(N-1,K);
+      }
+    };
+
+    recurFunc.apply(n,k);
+    return ans.toString();
   }
 
   /**

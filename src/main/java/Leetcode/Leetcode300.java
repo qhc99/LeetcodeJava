@@ -68,6 +68,19 @@ public class Leetcode300 {
       }
     }
     return s;
+  }
 
+  /**
+   * #279
+   * @param n
+   * @return
+   */
+  public int numSquares(int n) {
+    int ans = 0;
+    while (n != 0){
+      ans++;
+      n -= (int)Math.sqrt(n);
+    }
+    return ans;
   }
 }
