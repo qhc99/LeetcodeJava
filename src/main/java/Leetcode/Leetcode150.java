@@ -134,6 +134,64 @@ public class Leetcode150 {
     return depth;
   }
 
+
+  static class Node {
+    public int val;
+    public Node left;
+    public Node right;
+    public Node next;
+
+    public Node() {}
+
+    public Node(int _val) {
+      val = _val;
+    }
+
+    public Node(int _val, Node _left, Node _right, Node _next) {
+      val = _val;
+      left = _left;
+      right = _right;
+      next = _next;
+    }
+  }
+
+  /**
+   * #116
+   *
+   * @param root
+   * @return
+   */
+  public static Node connect(Node root) {
+    if (root == null) return null;
+    //noinspection FieldMayBeFinal
+    class NodeList {
+      Node head;
+      Node tail;
+      NodeList(Node h, Node t){
+        head = h;
+        tail = t;
+      }
+    }
+    var recurConnectFunc = new Object() {
+      List<NodeList> apply(Node n) {
+        if (n == null) return new ArrayList<>(0);
+        var left = apply(n.left);
+        var right = apply(n.right);
+        for(int i = 0; i < left.size(); i++){
+          var nL = left.get(i);
+          var nR = right.get(i);
+          nL.tail.next = nR.head;
+          nL.tail = nR.tail;
+        }
+        left.add(new NodeList(n,n));
+        return left;
+      }
+    };
+    recurConnectFunc.apply(root);
+
+    return root;
+  }
+
   /**
    * #128
    *
@@ -212,16 +270,16 @@ public class Leetcode150 {
    * @param node
    * @return
    */
-  public Node cloneGraph(Node node) {
+  public Leetcode.Node cloneGraph(Leetcode.Node node) {
     if (node == null) {
       return null;
     }
 
-    Node graph = getMapped(node);
-    Queue<Node> nodeQueue = new ArrayDeque<>(), newNodeQueue = new ArrayDeque<>();
+    Leetcode.Node graph = getMapped(node);
+    Queue<Leetcode.Node> nodeQueue = new ArrayDeque<>(), newNodeQueue = new ArrayDeque<>();
     nodeQueue.add(node);
     newNodeQueue.add(graph);
-    Set<Node> visited = new HashSet<>();
+    Set<Leetcode.Node> visited = new HashSet<>();
     visited.add(node);
     while (nodeQueue.size() > 0 && newNodeQueue.size() > 0) {
       var n = nodeQueue.poll();
@@ -241,12 +299,12 @@ public class Leetcode150 {
     return graph;
   }
 
-  Map<Node, Node> map = new HashMap<>();
+  Map<Leetcode.Node, Leetcode.Node> map = new HashMap<>();
 
-  public Node getMapped(Node n) {
+  public Leetcode.Node getMapped(Leetcode.Node n) {
     var ans = map.get(n);
     if (ans == null) {
-      var m = new Node(n.val, new ArrayList<>(n.neighbors.size()));
+      var m = new Leetcode.Node(n.val, new ArrayList<>(n.neighbors.size()));
       map.put(n, m);
       return m;
     }
@@ -407,14 +465,14 @@ public class Leetcode150 {
 
     public void put(int key, int value) {
       var search = map.get(key);
-      if(search != null){
+      if (search != null) {
         search.val = value;
         removeNodeFromList(search);
         addNodeToHead(search);
       }
       else {
-        var node = new DNode(key,value);
-        if(count < size){
+        var node = new DNode(key, value);
+        if (count < size) {
           count++;
         }
         else {
