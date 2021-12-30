@@ -110,11 +110,11 @@ public class Leetcode300 {
    */
   public static List<String> addOperators(String num, int target) {
     class SharedStack {
-      final long num;
-      final char ctr; // p d * / + -
+      final double num;
+      final char ctr; // p d * + -
       final SharedStack prev;
 
-      SharedStack(long n, char c, SharedStack p) {
+      SharedStack(double n, char c, SharedStack p) {
         num = n;
         ctr = c;
         prev = p;
@@ -155,37 +155,22 @@ public class Leetcode300 {
           }
         }
         else {
-          var mergedStack = mergeMulDiv(stack);
-          if(mergedStack != null){
-            apply(idx + 1,
-                    new SharedStack(0, '*', mergedStack),
-                    new SharedString('*', expr));
-            if (idx + 1 < digits_ctr.length && digits_ctr[idx + 1] != '0') {
-              apply(idx + 1,
-                      new SharedStack(0, '/', stack),
-                      new SharedString('/', expr));
-            }
+          var mulDivMergedStack = mergeMulDiv(stack);
+          if (mulDivMergedStack != null) {
+            apply(idx + 1, new SharedStack(0, '*', mulDivMergedStack), new SharedString('*', expr));
           }
           var computedStack = computeRightToLeft(stack);
-          if(computedStack != null){
-            apply(idx + 1,
-                    new SharedStack(0, '+', computedStack),
-                    new SharedString('+', expr));
-            apply(idx + 1,
-                    new SharedStack(0, '-', computedStack),
-                    new SharedString('-', expr));
+          if (computedStack != null) {
+            apply(idx + 1, new SharedStack(0, '+', computedStack), new SharedString('+', expr));
+            apply(idx + 1, new SharedStack(0, '-', computedStack), new SharedString('-', expr));
           }
-
           if (stack.num != 0) {
-            apply(idx + 1,
-                    new SharedStack(0, 'p', stack),
-                    expr);
+            apply(idx + 1, new SharedStack(0, 'p', stack), expr);
           }
         }
       }
 
       SharedStack computeRightToLeft(SharedStack stack) {
-        var origin = stack;
         var numR = stack.num;
         stack = stack.prev;
         while (stack != null) {
@@ -195,10 +180,6 @@ public class Leetcode300 {
           stack = stack.prev;
           switch (op) {
             case '*' -> numR *= numL;
-            case '/' -> {
-              if (numR == 0) return null;
-              else numR = numL / numR;
-            }
             case '+' -> numR += numL;
             case '-' -> numR = numL - numR;
             default -> throw new RuntimeException(String.valueOf(op));
@@ -208,22 +189,19 @@ public class Leetcode300 {
       }
 
       SharedStack mergeMulDiv(SharedStack stack) {
-        var origin = stack;
         var numR = stack.num;
         stack = stack.prev;
-        while (stack != null && (stack.ctr == '*' || stack.ctr == '/')) {
+        while (stack != null && (stack.ctr == '*')) {
           var op = stack.ctr;
           stack = stack.prev;
           var numL = stack.num;
           stack = stack.prev;
 
-          switch (op) {
-            case '*' -> numR *= numL;
-            case '/' -> {
-              if (numR == 0) return null;
-              numR = numL / numR;
-            }
-            default -> throw new RuntimeException();
+          if (op == '*') {
+            numR *= numL;
+          }
+          else {
+            throw new RuntimeException();
           }
         }
         return new SharedStack(numR, 'd', stack);

@@ -1,10 +1,9 @@
 package Leetcode;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 
+@SuppressWarnings("JavaDoc")
 public class Leetcode1050 {
 
   /**
@@ -45,6 +44,16 @@ public class Leetcode1050 {
       N--;
     }
     return stack.parallelStream().mapToInt(Integer::intValue).sum();
+  }
+
+  /**
+   * #1015
+   * @param k
+   * @return
+   */
+  public static int smallestRepunitDivByK(int k) {
+    int d = k % 10;
+    return 0;
   }
 
   /**
