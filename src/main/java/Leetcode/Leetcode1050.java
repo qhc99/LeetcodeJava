@@ -1,6 +1,8 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 
 @SuppressWarnings("JavaDoc")
@@ -48,12 +50,43 @@ public class Leetcode1050 {
 
   /**
    * #1015
+   *
    * @param k
    * @return
    */
   public static int smallestRepunitDivByK(int k) {
     int d = k % 10;
+    // TOD 1015
     return 0;
+  }
+
+  /**
+   * #1026
+   *
+   * @param root
+   * @return
+   */
+  public static int maxAncestorDiff(TreeNode root) {
+    int[] ans = new int[1];
+    ans[0] = Integer.MIN_VALUE;
+    var func = new Object() {
+      void apply(TreeNode n, int max_ancestor, int min_ancestor) {
+        max_ancestor = Math.max(n.val, max_ancestor);
+        min_ancestor = Math.min(n.val, min_ancestor);
+        if (n.left != null) {
+          ans[0] = Math.max(ans[0], Math.abs(max_ancestor - n.left.val));
+          ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.left.val));
+          apply(n.left, max_ancestor, min_ancestor);
+        }
+        if(n.right != null){
+          ans[0] = Math.max(ans[0], Math.abs(max_ancestor - n.right.val));
+          ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.right.val));
+          apply(n.right, max_ancestor, min_ancestor);
+        }
+      }
+    };
+    func.apply(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+    return ans[0];
   }
 
   /**
