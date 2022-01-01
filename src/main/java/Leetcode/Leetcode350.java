@@ -39,13 +39,22 @@ public class Leetcode350 {
   }
 
   /**
+   * #312
+   * @param nums
+   * @return
+   */
+  public static int maxCoins(int[] nums) {
+    return 0;
+  }
+
+
+  Map<TreeNode, Integer> select_max = new HashMap<>();
+  Map<TreeNode, Integer> non_select_max = new HashMap<>();
+  /**
    * #337
    * @param root
    * @return
    */
-
-  Map<TreeNode, Integer> select_max = new HashMap<>();
-  Map<TreeNode, Integer> non_select_max = new HashMap<>();
   public int rob(TreeNode root) {
     if(root == null){
       return 0;
@@ -54,7 +63,7 @@ public class Leetcode350 {
     return Math.max(select_max.get(root), non_select_max.get(root));
   }
 
-  public void robSolve(TreeNode n){
+  private void robSolve(TreeNode n){
     if(n == null){
       return;
     }
