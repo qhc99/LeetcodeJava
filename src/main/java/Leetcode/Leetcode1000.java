@@ -81,4 +81,27 @@ public class Leetcode1000 {
 
     return ans;
   }
+
+  /**
+   * #997
+   * @param n
+   * @param trust
+   * @return
+   */
+  public static int findJudge(int n, int[][] trust) {
+    int[] in = new int[n+1];
+    int[] out = new int[n+1];
+    for(var t : trust){
+      var a = t[0];
+      var b = t[1];
+      out[a]++;
+      in[b]++;
+    }
+    for(int i = 1; i <= n ; i++){
+      if(in[i] == n - 1 && out[i] == 0){
+        return i;
+      }
+    }
+    return -1;
+  }
 }
