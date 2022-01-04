@@ -48,11 +48,13 @@ public class Leetcode500 {
    * @return
    */
   public static int findComplement(int num) {
+    if(num == 0) return 1;
     int i = 31;
     while (i >= 1 && kthBinDigit(num,i) == 0){
       i--;
     }
     num = lastKBinDigits(~num,i);
+
     return num;
   }
 
