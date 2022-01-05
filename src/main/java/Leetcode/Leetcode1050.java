@@ -1,8 +1,6 @@
 package Leetcode;
 
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 
 @SuppressWarnings("JavaDoc")
@@ -49,15 +47,55 @@ public class Leetcode1050 {
   }
 
   /**
+   * #1010
+   *
+   * @param time
+   * @return
+   */
+  public static int numPairsDivisibleBy60(int[] time) {
+    Map<Integer, Integer> remCount = new HashMap<>();
+    for (var t : time) {
+      var r = t % 60;
+      remCount.put(r, remCount.getOrDefault(r, 0) + 1);
+    }
+
+    int ans = 0;
+    for (int i = 1; i < 30; i++) {
+      if (remCount.containsKey(i) && remCount.containsKey(60 - i)) {
+        ans += remCount.get(i) * remCount.get(60 - i);
+      }
+    }
+    if(remCount.containsKey(30)){
+      var c = remCount.get(30);
+      ans += c * (c - 1) / 2;
+    }
+
+    if(remCount.containsKey(0)){
+      var c = remCount.get(0);
+      ans += c * (c - 1) / 2;
+    }
+
+    return ans;
+  }
+
+  /**
    * #1015
    *
    * @param k
    * @return
    */
   public static int smallestRepunitDivByK(int k) {
-    int d = k % 10;
-    // TOD 1015
-    return 0;
+    if (k % 2 == 0 || k % 5 == 0) {
+      return -1;
+    }
+    int temp = 1;
+    int len = 1;
+    while (temp % k != 0) {
+      temp = temp % k;
+      temp = temp * 10 + 1;
+      len += 1;
+    }
+    return len;
   }
 
   /**
@@ -78,7 +116,7 @@ public class Leetcode1050 {
           ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.left.val));
           apply(n.left, max_ancestor, min_ancestor);
         }
-        if(n.right != null){
+        if (n.right != null) {
           ans[0] = Math.max(ans[0], Math.abs(max_ancestor - n.right.val));
           ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.right.val));
           apply(n.right, max_ancestor, min_ancestor);
