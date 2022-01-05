@@ -141,7 +141,8 @@ public class Leetcode150 {
     public Node right;
     public Node next;
 
-    public Node() {}
+    public Node() {
+    }
 
     public Node(int _val) {
       val = _val;
@@ -167,7 +168,8 @@ public class Leetcode150 {
     class NodeList {
       Node head;
       Node tail;
-      NodeList(Node h, Node t){
+
+      NodeList(Node h, Node t) {
         head = h;
         tail = t;
       }
@@ -177,13 +179,13 @@ public class Leetcode150 {
         if (n == null) return new ArrayList<>(0);
         var left = apply(n.left);
         var right = apply(n.right);
-        for(int i = 0; i < left.size(); i++){
+        for (int i = 0; i < left.size(); i++) {
           var nL = left.get(i);
           var nR = right.get(i);
           nL.tail.next = nR.head;
           nL.tail = nR.tail;
         }
-        left.add(new NodeList(n,n));
+        left.add(new NodeList(n, n));
         return left;
       }
     };
@@ -262,6 +264,71 @@ public class Leetcode150 {
       solveSumNumbers(node.right, num, sum);
       solveSumNumbers(node.left, num, sum);
     }
+  }
+
+  /**
+   * #131
+   *
+   * @param s
+   * @return
+   */
+  public static List<List<String>> partition(String s) {
+    boolean[][] pLenMinus1_startAt = new boolean[s.length()][];
+    for (int i = 0; i < pLenMinus1_startAt.length; i++) {
+      pLenMinus1_startAt[i] = new boolean[s.length() - i];
+    }
+    if (s.length() >= 1) {
+      var t = pLenMinus1_startAt[0];
+      Arrays.fill(t, true);
+    }
+    if (s.length() >= 2) {
+      var t = pLenMinus1_startAt[1];
+      for (int i = 0; i < t.length; i++) {
+        if (s.charAt(i) == s.charAt(i + 1)) {
+          t[i] = true;
+        }
+      }
+    }
+    for (int i = 2; i < pLenMinus1_startAt.length; i++) {
+      var current = pLenMinus1_startAt[i];
+      var prev = pLenMinus1_startAt[i - 2];
+      for (int j = 0; j < current.length; j++) {
+        if (prev[j + 1] && s.charAt(j) == s.charAt(j + i)) {
+          current[j] = true;
+        }
+      }
+    }
+    List<List<String>> ans = new ArrayList<>();
+    Map<Integer, List<Integer>> pLenOfPos = new HashMap<>(s.length());
+    for (int l = 1; l < s.length(); l++) {
+      for (int i = 0; i < pLenMinus1_startAt[l].length; i++) {
+        if (pLenMinus1_startAt[l][i]) {
+          var t = pLenOfPos.computeIfAbsent(i, o -> new ArrayList<>());
+          t.add(l + 1);
+        }
+      }
+    }
+    var recurFunc = new Object() {
+      void apply(int idx, List<String> a) {
+        if (idx == s.length()) {
+          ans.add(a);
+          return;
+        }
+        var pLen = pLenOfPos.get(idx);
+        if(pLen != null){
+          for (var l : pLen) {
+            List<String> t = new ArrayList<>(a);
+            t.add(s.substring(idx, idx + l));
+            apply(idx + l, t);
+          }
+        }
+        a.add(s.substring(idx, idx + 1));
+        apply(idx + 1, a);
+      }
+    };
+    recurFunc.apply(0, new ArrayList<>());
+
+    return ans;
   }
 
   /**
