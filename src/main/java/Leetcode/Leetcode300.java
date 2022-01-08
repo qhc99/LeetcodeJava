@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 @SuppressWarnings("JavaDoc")
@@ -209,5 +210,45 @@ public class Leetcode300 {
     };
     recurFunc.apply(0, null, null);
     return ans;
+  }
+
+  /**
+   * #284
+   */
+  static class PeekingIterator implements Iterator<Integer> {
+    final Iterator<Integer> iterator;
+    Integer peek;
+
+    public PeekingIterator(Iterator<Integer> iterator) {
+      // initialize any member here.
+      this.iterator = iterator;
+      if (iterator.hasNext()) {
+        peek = iterator.next();
+      }
+    }
+
+    // Returns the next element in the iteration without advancing the iterator.
+    public Integer peek() {
+      return peek;
+    }
+
+    // hasNext() and next() should behave the same as in the Iterator interface.
+    // Override them if needed.
+    @Override
+    public Integer next() {
+      var t = peek;
+      if (iterator.hasNext()) {
+        peek = iterator.next();
+      }
+      else {
+        peek = null;
+      }
+      return t;
+    }
+
+    @Override
+    public boolean hasNext() {
+      return peek != null;
+    }
   }
 }
