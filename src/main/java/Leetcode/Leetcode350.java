@@ -1,5 +1,6 @@
 package Leetcode;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -44,7 +45,36 @@ public class Leetcode350 {
    * @return
    */
   public static int maxCoins(int[] nums) {
-    return 0;
+    int[] paddedNum = new int[nums.length+2];
+    paddedNum[0] = 1;
+    paddedNum[paddedNum.length-1] = 1;
+    System.arraycopy(nums,0,paddedNum,1,nums.length);
+    int[][] cache = new int[paddedNum.length][paddedNum.length];
+    for(var c : cache){
+      Arrays.fill(c,-1);
+    }
+    var recurFunc = new Object(){
+      void apply(int i, int j){
+        if(i >= j - 1){
+          cache[i][j] = 0;
+        }
+        else if(cache[i][j] == -1){
+          int mid = i + 1;
+          int max = Integer.MIN_VALUE;
+          int temp = paddedNum[i] * paddedNum[j];
+          while (mid <= j - 1){
+            apply(i, mid);
+            apply(mid,j);
+            max = Math.max(max, temp * paddedNum[mid] + cache[i][mid] + cache[mid][j]);
+            mid++;
+          }
+
+          cache[i][j] = max;
+        }
+      }
+    };
+    recurFunc.apply(0,paddedNum.length-1);
+    return cache[0][paddedNum.length-1];
   }
 
 
