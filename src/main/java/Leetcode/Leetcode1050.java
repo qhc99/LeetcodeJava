@@ -99,6 +99,38 @@ public class Leetcode1050 {
   }
 
   /**
+   * #1022
+   * @param root
+   * @return
+   */
+  public static int sumRootToLeaf(TreeNode root) {
+    int[] sum = new int[1];
+    StringBuilder str = new StringBuilder();
+    var recurFunc = new Object(){
+      void apply(TreeNode n){
+        var len = str.length();
+        str.append(n.val);
+        if(n.left == null && n.right == null){
+          sum[0] += Integer.parseInt(str.toString(),2);
+        }
+        else if(n.left == null){
+          apply(n.right);
+        }
+        else if(n.right == null){
+          apply(n.left);
+        }
+        else {
+          apply(n.left);
+          apply(n.right);
+        }
+        str.delete(len, str.length());
+      }
+    };
+    recurFunc.apply(root);
+    return sum[0];
+  }
+
+  /**
    * #1026
    *
    * @param root
