@@ -1,9 +1,6 @@
 package Leetcode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode300 {
@@ -249,6 +246,41 @@ public class Leetcode300 {
     @Override
     public boolean hasNext() {
       return peek != null;
+    }
+  }
+
+  /**
+   * #295
+   */
+  static class MedianFinder {
+    PriorityQueue<Integer> lessMaxQueue = new PriorityQueue<>((a, b) -> b - a);
+    PriorityQueue<Integer> gEqMinQueue = new PriorityQueue<>(Comparator.comparingInt(a -> a));
+
+    public void addNum(int num) {
+      if (lessMaxQueue.size() == 0 && gEqMinQueue.size() == 0) {
+        lessMaxQueue.add(num);
+        return;
+      }
+
+      var median = findMedian();
+      if (num < median) lessMaxQueue.add(num);
+      else gEqMinQueue.add(num);
+      while (lessMaxQueue.size() > gEqMinQueue.size() + 1) {
+        gEqMinQueue.add(lessMaxQueue.poll());
+      }
+      while (gEqMinQueue.size() > lessMaxQueue.size()){
+        lessMaxQueue.add(gEqMinQueue.poll());
+      }
+    }
+
+    public double findMedian() {
+      if (lessMaxQueue.size() == gEqMinQueue.size()) {
+        return (lessMaxQueue.peek() + gEqMinQueue.peek()) / 2.;
+      }
+      else if (lessMaxQueue.size() == gEqMinQueue.size() + 1) {
+        return lessMaxQueue.peek();
+      }
+      else throw new RuntimeException();
     }
   }
 }
