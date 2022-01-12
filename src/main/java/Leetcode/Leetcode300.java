@@ -268,7 +268,7 @@ public class Leetcode300 {
       while (lessMaxQueue.size() > gEqMinQueue.size() + 1) {
         gEqMinQueue.add(lessMaxQueue.poll());
       }
-      while (gEqMinQueue.size() > lessMaxQueue.size()){
+      while (gEqMinQueue.size() > lessMaxQueue.size()) {
         lessMaxQueue.add(gEqMinQueue.poll());
       }
     }
@@ -281,6 +281,71 @@ public class Leetcode300 {
         return lessMaxQueue.peek();
       }
       else throw new RuntimeException();
+    }
+  }
+
+  /**
+   * #297
+   */
+  public static class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {
+      Map<TreeNode, Short> idOfNode = new HashMap<>(10);
+      Queue<TreeNode> deque = new ArrayDeque<>();
+      var id = new Object() {
+        short data = 0;
+      };
+      if (root == null) {
+        return "";
+      }
+      StringBuilder strB = new StringBuilder();
+      int count = 0;
+      deque.add(root);
+      while (deque.size() > 0) {
+        int s = deque.size();
+        while (s-- > 0) {
+          count++;
+          var n = deque.poll();
+          var id_n = idOfNode.computeIfAbsent(n, a -> ++id.data);
+          var id_l = n.left != null ? idOfNode.computeIfAbsent(n.left, a -> ++id.data) : 0;
+          var id_r = n.right != null ? idOfNode.computeIfAbsent(n.right, a -> ++id.data) : 0;
+          strB.append(";").append(id_n).append(",").append(n.val).append(",").append(id_l).append(",").append(id_r);
+          if (id_l != 0) deque.add(n.left);
+          if (id_r != 0) deque.add(n.right);
+        }
+      }
+      strB.insert(0, count);
+      return strB.toString();
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+      if (data.equals("")) {
+        return null;
+      }
+      var d = data.split(";");
+      Map<Short, TreeNode> memory = new HashMap<>(Integer.parseInt(d[0]));
+      memory.put((short) 0, null);
+      for (int i = 1; i < d.length; i++) {
+        var node_info = d[i];
+        var infos = node_info.split(",");
+        var id_n = Short.parseShort(infos[0]);
+        var n_val = Integer.parseInt(infos[1]);
+        memory.put(id_n, new TreeNode(n_val));
+      }
+      for (int i = 1; i < d.length; i++) {
+        var node_info = d[i];
+        var infos = node_info.split(",");
+        var id_n = Short.parseShort(infos[0]);
+        var id_l = Short.parseShort(infos[2]);
+        var id_r = Short.parseShort(infos[3]);
+
+        var n = memory.get(id_n);
+        n.left = memory.get(id_l);
+        n.right = memory.get(id_r);
+      }
+      return memory.get((short) 1);
     }
   }
 }
