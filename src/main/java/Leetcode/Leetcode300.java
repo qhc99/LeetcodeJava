@@ -250,6 +250,59 @@ public class Leetcode300 {
   }
 
   /**
+   * #289
+   *
+   * @param board
+   */
+  public static void gameOfLife(int[][] board) {
+    var neighborsFunc = new Object() {
+      int apply(int i, int j) {
+        int count = 0;
+        for (int r = i - 1; r <= i + 1; r++) {
+          if (r >= 0 && r < board.length) {
+            for (int c = j - 1; c <= j + 1; c++) {
+              if (c >= 0 && c < board[0].length) {
+                if(r != i || c != j){
+                  if(board[r][c] >= 1){
+                    count++;
+                  }
+                }
+              }
+            }
+          }
+        }
+        return count;
+      }
+    };
+    for(int i = 0; i < board.length; i++){
+      for(int j = 0; j < board[0].length; j++){
+        var n = neighborsFunc.apply(i,j);
+        if(board[i][j] == 1){
+          if(n < 2 || n > 3){
+            board[i][j] = 2;
+          }
+        }
+        else if(board[i][j] == 0){
+          if(n == 3){
+            board[i][j] = -1;
+          }
+        }
+        else throw new RuntimeException();
+      }
+    }
+    for(int i = 0; i < board.length; i++){
+      for(int j = 0; j < board[0].length; j++){
+        if(board[i][j] == -1){
+          board[i][j] = 1;
+        }
+        else if(board[i][j] == 2){
+          board[i][j] = 0;
+        }
+      }
+    }
+  }
+
+  /**
    * #295
    */
   static class MedianFinder {
