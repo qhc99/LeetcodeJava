@@ -109,7 +109,7 @@ public class Leetcode300 {
   public static List<String> addOperators(String num, int target) {
     class SharedStack {
       final double num;
-      final char ctr; // p d * + -
+      final char ctr; // p d * / + -
       final SharedStack prev;
 
       SharedStack(double n, char c, SharedStack p) {
@@ -178,6 +178,10 @@ public class Leetcode300 {
           stack = stack.prev;
           switch (op) {
             case '*' -> numR *= numL;
+            case '/' -> {
+              if (numR == 0) return null;
+              else numR = numL / numR;
+            }
             case '+' -> numR += numL;
             case '-' -> numR = numL - numR;
             default -> throw new RuntimeException(String.valueOf(op));
@@ -189,17 +193,19 @@ public class Leetcode300 {
       SharedStack mergeMulDiv(SharedStack stack) {
         var numR = stack.num;
         stack = stack.prev;
-        while (stack != null && (stack.ctr == '*')) {
+        while (stack != null && (stack.ctr == '*' || stack.ctr == '/')) {
           var op = stack.ctr;
           stack = stack.prev;
           var numL = stack.num;
           stack = stack.prev;
 
-          if (op == '*') {
-            numR *= numL;
-          }
-          else {
-            throw new RuntimeException();
+          switch (op) {
+            case '*' -> numR *= numL;
+            case '/' -> {
+              if (numR == 0) return null;
+              numR = numL / numR;
+            }
+            default -> throw new RuntimeException();
           }
         }
         return new SharedStack(numR, 'd', stack);
@@ -208,6 +214,154 @@ public class Leetcode300 {
     recurFunc.apply(0, null, null);
     return ans;
   }
+  public static List<String> addOperators2(String num, int target) {
+    class StackData {
+      final char ctr; // p d * + -
+      final double num;
+
+      StackData(double n, char c) {
+        ctr = c;
+        num = n;
+      }
+    }
+    var digits_ctr = num.toCharArray();
+    List<String> ans = new ArrayList<>();
+    final List<Character> expr = new ArrayList<>();
+    final List<StackData> stack = new ArrayList<>();
+    var recurFunc = new Object() {
+
+      void apply(int idx, List<StackData> stack) {
+        if(stack.size() >= 1 && stack.get(stack.size()-1).ctr == 'd'){
+          throw new RuntimeException();
+        }
+        int current_digit = digits_ctr[idx] - '0';
+        boolean parsed = false;
+        double before_parse_num = 0;
+        if (stack.size() != 0 && stack.get(stack.size() - 1).ctr == 'p') {
+          stack.remove(stack.size() - 1);
+          before_parse_num = stack.remove(stack.size() - 1).num;
+          stack.add(new StackData(before_parse_num * 10 + current_digit, 'd'));
+          parsed = true;
+        }
+        else
+          stack.add(new StackData(current_digit, 'd'));
+
+        expr.add(digits_ctr[idx]);
+
+        if (idx == digits_ctr.length - 1) {
+          var res = computeRightToLeft(stack);
+          if (res.size() == 0) return;
+          if (res.get(0).num == target) {
+            var sb = new StringBuilder();
+            for (var c : expr) {
+              sb.append(c);
+            }
+            ans.add(sb.toString());
+          }
+        }
+        else {
+          var mulDivMergedStack = mergeMulDiv(stack);
+          expr.add('*');
+          if (mulDivMergedStack == stack) {
+            stack.add(new StackData(0, '*'));
+            apply(idx + 1, stack);
+            stack.remove(stack.size() - 1);
+          }
+          else {
+            mulDivMergedStack.add(new StackData(0,'*'));
+            apply(idx + 1, mulDivMergedStack);
+          }
+          expr.remove(expr.size() - 1);
+
+
+          var computedStack = computeRightToLeft(stack);
+          expr.add('+');
+          if (stack == computedStack) {
+            stack.add(new StackData(0, '+'));
+            apply(idx + 1, stack);
+            stack.remove(stack.size() - 1);
+          }
+          else {
+            computedStack.add(new StackData(0,'+'));
+            apply(idx + 1, computedStack);
+            computedStack.remove(computedStack.size()-1);
+          }
+          expr.remove(expr.size() - 1);
+
+          expr.add('-');
+          if (stack == computedStack) {
+            stack.add(new StackData(0, '-'));
+            apply(idx + 1, stack);
+            stack.remove(stack.size() - 1);
+          }
+          else {
+            computedStack.add(new StackData(0,'-'));
+            apply(idx + 1, computedStack);
+          }
+          expr.remove(expr.size() - 1);
+
+          if (stack.get(stack.size() - 1).num != 0) {
+            stack.add(new StackData(0, 'p'));
+            apply(idx + 1, stack);
+            stack.remove(stack.size() - 1);
+          }
+        }
+
+        stack.remove(stack.size() - 1);
+        if (parsed) {
+          stack.add(new StackData(before_parse_num, 'd'));
+          stack.add(new StackData(0, 'p'));
+        }
+        expr.remove(expr.size() - 1);
+      }
+
+
+      List<StackData> computeRightToLeft(List<StackData> stack) {
+        if (stack.size() == 0) {
+          return stack;
+        }
+        var numR = stack.get(stack.size() - 1).num;
+        int idx = stack.size() - 2;
+        while (idx >= 1) {
+          var op = stack.get(idx).ctr;
+          idx--;
+          var numL = stack.get(idx).num;
+          idx--;
+
+          switch (op) {
+            case '*' -> numR *= numL;
+            case '+' -> numR += numL;
+            case '-' -> numR = numL - numR;
+            default -> throw new RuntimeException(String.valueOf(op));
+          }
+        }
+        return new ArrayList<>(List.of(new StackData(numR, 'd')));
+      }
+
+      List<StackData> mergeMulDiv(List<StackData> stack) {
+        if (stack.size() < 3 || stack.get(stack.size() - 2).ctr != '*') {
+          return stack;
+        }
+        var numR = stack.get(stack.size() - 1).num;
+        int idx = stack.size() - 2;
+        while (idx >= 1 && stack.get(idx).ctr == '*') {
+          idx--;
+          var numL = stack.get(idx).num;
+          idx--;
+          numR *= numL;
+        }
+        List<StackData> ans = new ArrayList<>();
+        for (int i = 0; i <= idx; i++) {
+          ans.add(stack.get(i));
+        }
+        ans.add(new StackData(numR, 'd'));
+        return ans;
+      }
+    };
+    recurFunc.apply(0, stack);
+    return ans;
+  }
+
 
   /**
    * #284
@@ -262,8 +416,8 @@ public class Leetcode300 {
           if (r >= 0 && r < board.length) {
             for (int c = j - 1; c <= j + 1; c++) {
               if (c >= 0 && c < board[0].length) {
-                if(r != i || c != j){
-                  if(board[r][c] >= 1){
+                if (r != i || c != j) {
+                  if (board[r][c] >= 1) {
                     count++;
                   }
                 }
@@ -274,28 +428,28 @@ public class Leetcode300 {
         return count;
       }
     };
-    for(int i = 0; i < board.length; i++){
-      for(int j = 0; j < board[0].length; j++){
-        var n = neighborsFunc.apply(i,j);
-        if(board[i][j] == 1){
-          if(n < 2 || n > 3){
+    for (int i = 0; i < board.length; i++) {
+      for (int j = 0; j < board[0].length; j++) {
+        var n = neighborsFunc.apply(i, j);
+        if (board[i][j] == 1) {
+          if (n < 2 || n > 3) {
             board[i][j] = 2;
           }
         }
-        else if(board[i][j] == 0){
-          if(n == 3){
+        else if (board[i][j] == 0) {
+          if (n == 3) {
             board[i][j] = -1;
           }
         }
         else throw new RuntimeException();
       }
     }
-    for(int i = 0; i < board.length; i++){
-      for(int j = 0; j < board[0].length; j++){
-        if(board[i][j] == -1){
+    for (int i = 0; i < board.length; i++) {
+      for (int j = 0; j < board[0].length; j++) {
+        if (board[i][j] == -1) {
           board[i][j] = 1;
         }
-        else if(board[i][j] == 2){
+        else if (board[i][j] == 2) {
           board[i][j] = 0;
         }
       }
