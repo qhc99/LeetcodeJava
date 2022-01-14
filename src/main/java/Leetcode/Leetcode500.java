@@ -1,7 +1,34 @@
 package Leetcode;
 
+import java.util.*;
+
 @SuppressWarnings("JavaDoc")
 public class Leetcode500 {
+
+  /**
+   * #452
+   * @param points
+   * @return
+   */
+  public static int findMinArrowShots(int[][] points) {
+    Arrays.sort(points, Comparator.comparingInt(a -> a[0]));
+    if(points.length == 0) return 0;
+    int count = 0;
+
+    PriorityQueue<Integer> rights = new PriorityQueue<>();
+
+    for(int i = 0; i < points.length; i++){
+      count++;
+      var a = points[i];
+      var la = a[0];
+      var ra = a[1];
+      while (rights.size() > 0 && rights.peek() < la){
+        rights.poll();
+      }
+
+    }
+    return count;
+  }
 
   /**
    * #463

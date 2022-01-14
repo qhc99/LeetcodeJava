@@ -298,6 +298,51 @@ public class Leetcode50 {
     return automata.getResult();
   }
 
+  public static int myAtoi2(String str) {
+    @SuppressWarnings("SameParameterValue") var funcCheck = new Object() {
+      boolean multiplyNotOverflow(int x, int y) {
+        long r = (long) x * (long) y;
+        return (int) r == r;
+      }
+
+      boolean addNotOverflow(int x, int y){
+        int r = x + y;
+        // HD 2-12 Overflow iff both arguments have the opposite sign of the result
+        return !(((x ^ r) & (y ^ r)) < 0);
+      }
+    };
+
+    str = str.strip();
+    if (str.equals("")) return 0;
+    boolean minus = false;
+    int idx = 0;
+    if (str.charAt(idx) == '-') {
+      minus = true;
+      idx++;
+    }
+    else if (str.charAt(idx) == '+') {
+      idx++;
+    }
+    int res = 0;
+    while (idx < str.length()) {
+      var c = str.charAt(idx);
+      int diff = c - '0';
+      if (diff >= 0 && diff <= 9) {
+        if (funcCheck.multiplyNotOverflow(res, 10) && funcCheck.addNotOverflow(res * 10, diff)) {
+          res *= 10;
+          res += diff;
+        }
+        else {
+          return minus ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        }
+      }
+      else break;
+      idx++;
+    }
+
+    return minus ? -res : res;
+  }
+
   private static final class Automation {
     private final Map<String, List<String>> transition_map = Map.of(
             "start", List.of("start", "signed", "in_number", "end"),
@@ -1708,11 +1753,11 @@ public class Leetcode50 {
    */
   public static int trap(int[] height) {
     int left = 0;
-    int right = height.length-1;
+    int right = height.length - 1;
     int left_max = height[left], right_max = height[right];
     int volume = 0;
-    while (left < right){
-      if(left_max <= right_max){
+    while (left < right) {
+      if (left_max <= right_max) {
         volume += left_max - height[left];
         left++;
         left_max = Math.max(left_max, height[left]);
@@ -1761,23 +1806,24 @@ public class Leetcode50 {
 
   /**
    * #44
+   *
    * @param s
    * @param p
    * @return
    */
   public static boolean isMatchWildcard(String s, String p) {
     int m = s.length(), n = p.length();
-    boolean[][] dp = new boolean[m+1][n+1];
+    boolean[][] dp = new boolean[m + 1][n + 1];
     dp[0][0] = true;
     for (int j = 1; j <= n; j++) {
-      var char_p = p.charAt(j-1);
-      for(int i = 0; i <= m; i++){
-        if(char_p != '*'){
+      var char_p = p.charAt(j - 1);
+      for (int i = 0; i <= m; i++) {
+        if (char_p != '*') {
           dp[i][j] = charMatchAtWildcard(s, p, i - 1, j - 1) && dp[i - 1][j - 1];
         }
         else {
-          if(i - 1 >= 0) dp[i][j] =  dp[i][j-1] || dp[i-1][j];
-          else  dp[i][j] =  dp[i][j-1];
+          if (i - 1 >= 0) dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
+          else dp[i][j] = dp[i][j - 1];
         }
       }
     }
@@ -1785,7 +1831,7 @@ public class Leetcode50 {
   }
 
   private static boolean charMatchAtWildcard(String s, String p, int pi, int pj) {
-    if(pi < 0) return false;
+    if (pi < 0) return false;
     var cs = s.charAt(pi);
     var cp = p.charAt(pj);
     if (cp == '?') return true;
@@ -1913,6 +1959,7 @@ public class Leetcode50 {
 
   /**
    * #50
+   *
    * @param x
    * @param n
    * @return
@@ -1922,11 +1969,11 @@ public class Leetcode50 {
     boolean isMinus = n < 0;
     long ln = n;
     ln = Math.abs(ln);
-    while (ln > 0){
+    while (ln > 0) {
       long bin = ln % 2;
-      if(bin != 0) ans *= bin * x;
+      if (bin != 0) ans *= bin * x;
       x *= x;
-      ln/=2;
+      ln /= 2;
     }
     return isMinus ? 1. / ans : ans;
   }
