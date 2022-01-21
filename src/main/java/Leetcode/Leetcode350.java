@@ -1,8 +1,6 @@
 package Leetcode;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode350 {
@@ -41,6 +39,86 @@ public class Leetcode350 {
       col2++;
       return matrixPrefixSum[row2][col2] - matrixPrefixSum[row2][col1 - 1] -
               (matrixPrefixSum[row1 - 1][col2] - matrixPrefixSum[row1 - 1][col1 - 1]);
+    }
+  }
+
+  /**
+   * #310
+   *
+   * @param n
+   * @param edges
+   * @return
+   */
+  public static List<Integer> findMinHeightTrees(int n, int[][] edges) {
+    if(edges.length == 0){
+      return List.of(0);
+    }
+    BitSet visited = new BitSet(n);
+    Map<Integer, List<Integer>> neighborsOf = new HashMap<>(n);
+    for (var e : edges) {
+      int n1 = e[0], n2 = e[1];
+      var nbs = neighborsOf.computeIfAbsent(n1, a -> new ArrayList<>());
+      nbs.add(n2);
+      nbs = neighborsOf.computeIfAbsent(n2, a -> new ArrayList<>());
+      nbs.add(n1);
+    }
+    class SharedList {
+      final int node;
+      final SharedList prev;
+
+      SharedList(int n, SharedList p) {
+        node = n;
+        prev = p;
+      }
+    }
+
+    int[] maxLen = new int[1];
+    var deepest_list = new Object() {
+      SharedList obj;
+    };
+    var func = new Object() {
+      void apply(int node, int len, SharedList prev, BitSet visited) {
+        if (visited.get(node)) {
+          return;
+        }
+        visited.set(node, true);
+        len++;
+        var list = new SharedList(node, prev);
+        if (maxLen[0] < len) {
+          maxLen[0] = len;
+          deepest_list.obj = list;
+        }
+        var nbs = neighborsOf.get(node);
+        for (var nb : nbs) {
+          apply(nb, len, list,visited);
+        }
+      }
+    };
+
+    for (var kv : neighborsOf.entrySet()) {
+      var k = kv.getKey();
+      var v = kv.getValue();
+      if (v.size() == 1) {
+        func.apply(k, 0, null, visited);
+        break;
+      }
+    }
+    visited = new BitSet(n);
+    maxLen[0] = 0;
+    var t = deepest_list.obj.node;
+    func.apply(t,0,null,visited);
+
+    List<Integer> a = new ArrayList<>(maxLen[0]);
+    SharedList ptr = deepest_list.obj;
+    while (ptr != null) {
+      a.add(ptr.node);
+      ptr = ptr.prev;
+    }
+    if (a.size() % 2 == 1) {
+      return List.of(a.get(a.size() / 2));
+    }
+    else {
+      return List.of(a.get(a.size() / 2), a.get(a.size() / 2 - 1));
     }
   }
 
