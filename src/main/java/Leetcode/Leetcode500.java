@@ -11,22 +11,21 @@ public class Leetcode500 {
    * @return
    */
   public static int findMinArrowShots(int[][] points) {
-    Arrays.sort(points, Comparator.comparingInt(a -> a[0]));
-    if(points.length == 0) return 0;
-    int count = 0;
-
-    PriorityQueue<Integer> rights = new PriorityQueue<>();
-
-    for(int i = 0; i < points.length; i++){
-      count++;
-      var a = points[i];
-      var la = a[0];
-      var ra = a[1];
-      while (rights.size() > 0 && rights.peek() < la){
-        rights.poll();
-      }
-
+    if(points.length == 1){
+      return 1;
     }
+    Arrays.sort(points, Comparator.comparingInt(a -> a[1]));
+    int count = 1;
+    int end = points[0][1];
+    for(int i = 1; i < points.length; i++){
+      var p = points[i];
+      int l = p[0], r = p[1];
+      if(!(end >= l && end <= r)){
+        count++;
+        end = r;
+      }
+    }
+
     return count;
   }
 
