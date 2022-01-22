@@ -43,6 +43,29 @@ public class Leetcode350 {
   }
 
   /**
+   * #309
+   *
+   * @param prices
+   * @return
+   */
+  public static int maxProfit(int[] prices) {
+    int[][] dp = new int[prices.length][3]; // 0, have, not freeze. 1, not have, freeze. 2 not have, not freeze.
+    dp[0][0] = -prices[0];
+    dp[0][1] = 0;
+    dp[0][2] = 0;
+
+    for (int i = 1; i <= prices.length - 1; i++) {
+      var p = prices[i];
+      dp[i][0] = Math.max(dp[i-1][0], dp[i-1][2]-p);
+      dp[i][1] = dp[i-1][0]+p;
+      dp[i][2] = Math.max(dp[i-1][1],dp[i-1][2]);
+    }
+    int n = prices.length;
+    return Math.max(dp[n-1][1], dp[n-1][2]);
+
+  }
+
+  /**
    * #310
    *
    * @param n
@@ -50,7 +73,7 @@ public class Leetcode350 {
    * @return
    */
   public static List<Integer> findMinHeightTrees(int n, int[][] edges) {
-    if(edges.length == 0){
+    if (edges.length == 0) {
       return List.of(0);
     }
     BitSet visited = new BitSet(n);
@@ -90,7 +113,7 @@ public class Leetcode350 {
         }
         var nbs = neighborsOf.get(node);
         for (var nb : nbs) {
-          apply(nb, len, list,visited);
+          apply(nb, len, list, visited);
         }
       }
     };
@@ -106,7 +129,7 @@ public class Leetcode350 {
     visited = new BitSet(n);
     maxLen[0] = 0;
     var t = deepest_list.obj.node;
-    func.apply(t,0,null,visited);
+    func.apply(t, 0, null, visited);
 
     List<Integer> a = new ArrayList<>(maxLen[0]);
     SharedList ptr = deepest_list.obj;
@@ -159,6 +182,17 @@ public class Leetcode350 {
     };
     recurFunc.apply(0, paddedNum.length - 1);
     return cache[0][paddedNum.length - 1];
+  }
+
+  /**
+   * #313
+   *
+   * @param n
+   * @param primes
+   * @return
+   */
+  public static int nthSuperUglyNumber(int n, int[] primes) {
+    return 0;
   }
 
   /**
