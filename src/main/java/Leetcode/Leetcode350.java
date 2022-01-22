@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode350 {
@@ -56,12 +57,12 @@ public class Leetcode350 {
 
     for (int i = 1; i <= prices.length - 1; i++) {
       var p = prices[i];
-      dp[i][0] = Math.max(dp[i-1][0], dp[i-1][2]-p);
-      dp[i][1] = dp[i-1][0]+p;
-      dp[i][2] = Math.max(dp[i-1][1],dp[i-1][2]);
+      dp[i][0] = Math.max(dp[i - 1][0], dp[i - 1][2] - p);
+      dp[i][1] = dp[i - 1][0] + p;
+      dp[i][2] = Math.max(dp[i - 1][1], dp[i - 1][2]);
     }
     int n = prices.length;
-    return Math.max(dp[n-1][1], dp[n-1][2]);
+    return Math.max(dp[n - 1][1], dp[n - 1][2]);
 
   }
 
@@ -192,7 +193,77 @@ public class Leetcode350 {
    * @return
    */
   public static int nthSuperUglyNumber(int n, int[] primes) {
+    // tTodo 313
     return 0;
+  }
+
+  /**
+   * #315
+   *
+   * @param array
+   * @return
+   */
+  public static List<Integer> countSmaller(int[] array) {
+    var funcMergeSort = new Object() {
+      final int[] ans = new int[array.length];
+
+      public void apply(int[] dataArr, int[] idxArr, int start, int end) {
+        if ((end - start) > 1) {
+          int middle = (start + end) / 2;
+          apply(dataArr, idxArr, start, middle);
+          apply(dataArr, idxArr, middle, end);
+          int left_len = middle - start;
+          int right_len = end - middle;
+          var left_cache = new int[left_len];
+          var right_cache = new int[right_len];
+          var left_idx_cache = new int[left_len];
+          var right_idx_cache = new int[right_len];
+          merge(dataArr, idxArr, start, left_cache, right_cache, left_idx_cache, right_idx_cache);
+        }
+      }
+
+      private void merge(
+              int[] dataArr, int[] idxArr, int start,
+              int[] dataCacheL, int[] dataCacheR, int[] idxCacheL, int[] idxCacheR) {
+        int right_idx = 0;
+        int left_idx = 0;
+        System.arraycopy(dataArr, start, dataCacheL, 0, dataCacheL.length);
+        System.arraycopy(dataArr, start + dataCacheL.length, dataCacheR, 0, dataCacheR.length);
+        System.arraycopy(idxArr, start, idxCacheL, 0, idxCacheL.length);
+        System.arraycopy(idxArr, start + idxCacheL.length, idxCacheR, 0, idxCacheR.length);
+
+        for (int i = start; (i < start + dataCacheL.length + dataCacheR.length) && (right_idx < dataCacheR.length) && (left_idx < dataCacheL.length); i++) {
+          if (dataCacheL[left_idx] <= dataCacheR[right_idx]) {
+            dataArr[i] = dataCacheL[left_idx];
+            idxArr[i] = idxCacheL[left_idx];
+            ans[idxCacheL[left_idx]] += right_idx;
+            left_idx++;
+          }
+          else {
+            dataArr[i] = dataCacheR[right_idx];
+            idxArr[i] = idxCacheR[right_idx];
+            right_idx++;
+          }
+        }
+        if (left_idx < dataCacheL.length) {
+          System.arraycopy(dataCacheL, left_idx, dataArr, start + left_idx + right_idx, dataCacheL.length - left_idx);
+          System.arraycopy(idxCacheL, left_idx, idxArr, start + left_idx + right_idx, idxCacheL.length - left_idx);
+          for(int i = left_idx; i < idxCacheL.length; i++){
+            ans[idxCacheL[i]] += right_idx;
+          }
+        }
+        else if (right_idx < dataCacheR.length) {
+          System.arraycopy(dataCacheR, right_idx, dataArr, start + left_idx + right_idx, dataCacheR.length - right_idx);
+          System.arraycopy(idxCacheR, right_idx, idxArr, start + left_idx + right_idx, idxCacheR.length - right_idx);
+        }
+      }
+    };
+    funcMergeSort.apply(array, IntStream.range(0, array.length).toArray(), 0, array.length);
+    List<Integer> ans = new ArrayList<>();
+    for (var i : funcMergeSort.ans) {
+      ans.add(i);
+    }
+    return ans;
   }
 
   /**
