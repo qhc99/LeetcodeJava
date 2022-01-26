@@ -248,7 +248,7 @@ public class Leetcode350 {
         if (left_idx < dataCacheL.length) {
           System.arraycopy(dataCacheL, left_idx, dataArr, start + left_idx + right_idx, dataCacheL.length - left_idx);
           System.arraycopy(idxCacheL, left_idx, idxArr, start + left_idx + right_idx, idxCacheL.length - left_idx);
-          for(int i = left_idx; i < idxCacheL.length; i++){
+          for (int i = left_idx; i < idxCacheL.length; i++) {
             ans[idxCacheL[i]] += right_idx;
           }
         }
@@ -264,6 +264,48 @@ public class Leetcode350 {
       ans.add(i);
     }
     return ans;
+  }
+
+  /**
+   * #316
+   *
+   * @param s
+   * @return
+   */
+  public static String removeDuplicateLetters(String s) {
+    // tTodo 316
+    return null;
+  }
+
+  /**
+   * #318
+   *
+   * @param words
+   * @return
+   */
+  public static int maxProduct(String[] words) {
+    BitSet[] characters = new BitSet[words.length];
+    for (int i = 0; i < words.length; i++) {
+      var w = words[i];
+      var b = new BitSet('z' - 'a' + 1);
+      characters[i] = b;
+      for (int j = 0; j < w.length(); j++) {
+        var c = w.charAt(j);
+        b.set(c - 'a', true);
+      }
+    }
+    int max = 0;
+    for(int i = 0; i < words.length; i++){
+      var i_chars = characters[i];
+      var i_len = words[i].length();
+      for(int j = i + 1; j < words.length; j++){
+        var j_chars = characters[j];
+        if(!i_chars.intersects(j_chars)){
+          max = Math.max(max, i_len * words[j].length());
+        }
+      }
+    }
+    return max;
   }
 
   /**
