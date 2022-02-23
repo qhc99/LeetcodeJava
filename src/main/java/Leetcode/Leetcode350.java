@@ -296,11 +296,11 @@ public class Leetcode350 {
       void add(char c) {
         stack[len] = c;
         len++;
-        set[last()-'a'] = true;
+        set[last() - 'a'] = true;
       }
 
       void pop() {
-        set[last()-'a'] = false;
+        set[last() - 'a'] = false;
         len--;
       }
 
@@ -329,11 +329,11 @@ public class Leetcode350 {
     }
     var s0 = s.charAt(0);
     stack.add(s0);
-    remain[s0-'a']--;
+    remain[s0 - 'a']--;
     for (int i = 1; i < s.length(); i++) {
       var c = s.charAt(i);
       if (stack.last() >= c) {
-        if(stack.notHas(c)) {
+        if (stack.notHas(c)) {
           while (stack.len > 0 && stack.last() >= c && remain[stack.last() - 'a'] > 0) {
             stack.pop();
           }
@@ -343,7 +343,7 @@ public class Leetcode350 {
       else if (stack.notHas(c)) {
         stack.add(c);
       }
-      remain[c-'a']--;
+      remain[c - 'a']--;
     }
     return stack.toString();
   }
@@ -377,6 +377,151 @@ public class Leetcode350 {
       }
     }
     return max;
+  }
+
+  /**
+   * #321
+   *
+   * @param nums1
+   * @param nums2
+   * @param k
+   * @return
+   */
+  public static int[] maxNumber(int[] nums1, int[] nums2, int k) {
+    if (nums1.length > nums2.length) {
+      var t = nums1;
+      nums1 = nums2;
+      nums2 = t;
+    }
+
+    var order1 = getOrder(nums1);
+    var order2 = getOrder(nums2);
+
+
+    int[] max = null;
+    for (int i = 0; i <= nums1.length && i <= k; i++) {
+      int j = k - i;
+      if (j <= nums2.length) {
+        var sub1 = subArray(nums1, order1, i);
+        var sub2 = subArray(nums2, order2, j);
+        int[] m = new int[k];
+        merge(m, 0, sub1, sub2);
+        if (max == null) {
+          max = m;
+        }
+        else if (larger(m, max)) {
+          max = m;
+        }
+      }
+    }
+
+    return max;
+  }
+
+  private static boolean larger(int[] a, int[] b) {
+    for (int i = 0; i < a.length; i++) {
+      if (a[i] > b[i]) {
+        return true;
+      }
+      else if (a[i] == b[i]) {
+        continue;
+      }
+      else {
+        return false;
+      }
+    }
+    return false;
+  }
+
+  private static int[] subArray(int[] num, int[] order, int k) {
+    if (k == num.length) {
+      return num;
+    }
+    else {
+      int[] ans = new int[k];
+      for (int i = 0, idx = 0; i < num.length && idx < k; i++) {
+        if (order[i] > num.length - k) {
+          ans[idx++] = num[i];
+        }
+      }
+      return ans;
+    }
+  }
+
+  private static int[] getOrder(int[] array) {
+    class NumIdx {
+      final int num;
+      final int idx;
+
+      NumIdx(int n, int i) {
+        num = n;
+        idx = i;
+      }
+    }
+    int[] order = new int[array.length];
+    int rm = 0;
+    Deque<NumIdx> stack = new ArrayDeque<>();
+    for (int i = 0; i < array.length; i++) {
+      var n = array[i];
+      if (stack.size() == 0 || stack.getLast().num >= n) {
+        stack.addLast(new NumIdx(n, i));
+      }
+      else {
+        while (stack.size() > 0 && stack.getLast().num < n) {
+          var t = stack.pollLast();
+          order[t.idx] = ++rm;
+        }
+        stack.addLast(new NumIdx(n, i));
+      }
+    }
+    while (stack.size() > 0) {
+      var t = stack.pollLast();
+      order[t.idx] = ++rm;
+    }
+    return order;
+  }
+
+  private static void merge(int[] array, int start, int[] cache1, int[] cache2) {
+    int right_idx = 0;
+    int left_idx = 0;
+    for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+      if (cache1[left_idx] > cache2[right_idx]) {
+        array[i] = cache1[left_idx++];
+      }
+      else if (cache1[left_idx] < cache2[right_idx]) {
+        array[i] = cache2[right_idx++];
+      }
+      else {
+        int r = right_idx + 1;
+        int l = left_idx + 1;
+        while (l < cache1.length && r < cache2.length) {
+          if(cache1[l] > cache2[r]){
+            array[i] = cache1[left_idx++];
+            break;
+          }
+          else if(cache1[l] < cache2[r]){
+            array[i] = cache2[right_idx++];
+            break;
+          }
+          else {
+            r++;
+            l++;
+          }
+        }
+        if(l >= cache1.length){
+          array[i] = cache2[right_idx++];
+        }
+        else if(r >= cache2.length){
+          array[i] = cache1[left_idx++];
+        }
+      }
+    }
+    if (left_idx < cache1.length) {
+      System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
+    }
+    else if (right_idx < cache2.length) {
+      System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
+    }
   }
 
   /**
