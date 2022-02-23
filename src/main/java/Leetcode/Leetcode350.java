@@ -196,20 +196,20 @@ public class Leetcode350 {
     int[] dp = new int[n];
     dp[0] = 1;
     int[] pointers = new int[primes.length];
-    for(int i = 1; i < n; i++){
+    for (int i = 1; i < n; i++) {
       int min = Integer.MAX_VALUE;
-      for(int j = 0; j < pointers.length; j++){
-        min = Math.min(min, primes[j]*dp[pointers[j]]);
+      for (int j = 0; j < pointers.length; j++) {
+        min = Math.min(min, primes[j] * dp[pointers[j]]);
       }
       dp[i] = min;
-      for(int j = 0; j < pointers.length; j++){
-        if(primes[j]*dp[pointers[j]] == min){
+      for (int j = 0; j < pointers.length; j++) {
+        if (primes[j] * dp[pointers[j]] == min) {
           pointers[j]++;
         }
       }
     }
 
-    return dp[n-1];
+    return dp[n - 1];
   }
 
   /**
@@ -288,8 +288,64 @@ public class Leetcode350 {
    * @return
    */
   public static String removeDuplicateLetters(String s) {
-    // odo 316
-    return null;
+    class CharStack {
+      final char[] stack = new char[s.length()];
+      final boolean[] set = new boolean['z' - 'a' + 1];
+      private int len = 0;
+
+      void add(char c) {
+        stack[len] = c;
+        len++;
+        set[last()-'a'] = true;
+      }
+
+      void pop() {
+        set[last()-'a'] = false;
+        len--;
+      }
+
+      char last() {
+        return stack[len - 1];
+      }
+
+      boolean notHas(char c) {
+        return !set[c - 'a'];
+      }
+
+      @Override
+      public String toString() {
+        var sb = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+          sb.append(stack[i]);
+        }
+        return sb.toString();
+      }
+    }
+    var stack = new CharStack();
+    int[] remain = new int['z' - 'a' + 1];
+    for (int i = 0; i < s.length(); i++) {
+      var c = s.charAt(i);
+      remain[c - 'a']++;
+    }
+    var s0 = s.charAt(0);
+    stack.add(s0);
+    remain[s0-'a']--;
+    for (int i = 1; i < s.length(); i++) {
+      var c = s.charAt(i);
+      if (stack.last() >= c) {
+        if(stack.notHas(c)) {
+          while (stack.len > 0 && stack.last() >= c && remain[stack.last() - 'a'] > 0) {
+            stack.pop();
+          }
+          stack.add(c);
+        }
+      }
+      else if (stack.notHas(c)) {
+        stack.add(c);
+      }
+      remain[c-'a']--;
+    }
+    return stack.toString();
   }
 
   /**
@@ -310,12 +366,12 @@ public class Leetcode350 {
       }
     }
     int max = 0;
-    for(int i = 0; i < words.length; i++){
+    for (int i = 0; i < words.length; i++) {
       var i_chars = characters[i];
       var i_len = words[i].length();
-      for(int j = i + 1; j < words.length; j++){
+      for (int j = i + 1; j < words.length; j++) {
         var j_chars = characters[j];
-        if(!i_chars.intersects(j_chars)){
+        if (!i_chars.intersects(j_chars)) {
           max = Math.max(max, i_len * words[j].length());
         }
       }
