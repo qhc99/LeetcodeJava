@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
 @SuppressWarnings("JavaDoc")
@@ -495,11 +496,11 @@ public class Leetcode350 {
         int r = right_idx + 1;
         int l = left_idx + 1;
         while (l < cache1.length && r < cache2.length) {
-          if(cache1[l] > cache2[r]){
+          if (cache1[l] > cache2[r]) {
             array[i] = cache1[left_idx++];
             break;
           }
-          else if(cache1[l] < cache2[r]){
+          else if (cache1[l] < cache2[r]) {
             array[i] = cache2[right_idx++];
             break;
           }
@@ -508,10 +509,10 @@ public class Leetcode350 {
             l++;
           }
         }
-        if(l >= cache1.length){
+        if (l >= cache1.length) {
           array[i] = cache2[right_idx++];
         }
-        else if(r >= cache2.length){
+        else if (r >= cache2.length) {
           array[i] = cache1[left_idx++];
         }
       }
@@ -522,6 +523,100 @@ public class Leetcode350 {
     else if (right_idx < cache2.length) {
       System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
     }
+  }
+
+  private static int randPartition(int[] a, int start, int end) { // base case (end -start)
+    int pivot_idx = ThreadLocalRandom.current().nextInt(start, end);
+    var pivot = a[pivot_idx];
+
+    var temp = a[end - 1];
+    a[end - 1] = pivot;
+    a[pivot_idx] = temp;
+
+    int i = start - 1;
+    for (int j = start; j < end - 1; j++) {
+      if (a[j] <= pivot) {
+        var t = a[j];
+        a[j] = a[++i];
+        a[i] = t;
+      }
+    }
+    a[end - 1] = a[++i];
+    a[i] = pivot;
+    return i; //pivot idx
+  }
+
+
+  /**
+   * #324
+   *
+   * @param nums
+   */
+  public static void wiggleSort(int[] nums) {
+    int mid = (nums.length-1) / 2;
+    int[] a = new int[nums.length];
+    System.arraycopy(nums, 0, a, 0, nums.length);
+    int mid_val = rankSearch(a, mid);
+    partition3way(a,mid_val);
+    int i = mid, j = nums.length - 1;
+    int idx = 0;
+    while (i >= 0 && j > mid) {
+      nums[idx++] = a[i--];
+      nums[idx++] = a[j--];
+    }
+    if(nums.length%2==1){
+      nums[idx] = a[0];
+    }
+  }
+
+  private static void exchange(int[] array, int i, int j) {
+    var t = array[i];
+    array[i] = array[j];
+    array[j] = t;
+  }
+
+  private static void partition3way(int[] array, int val){
+    int lt = 0, gt = array.length-1, i = 0;
+    while (i <= gt) {
+      if (array[i] < val) {
+        exchange(array, i++, lt++);
+      }
+      else if (array[i] > val) {
+        exchange(array, i, gt--);
+      }
+      else {
+        i++;
+      }
+    }
+  }
+
+  // select ith smallest element in array
+  private static int rankSearch(int[] a, int start, int end, int ith) {
+    if ((start - end) == 1) {
+      return a[start];
+    }
+    int pivot_idx = randPartition(a, start, end);
+    int left_total = pivot_idx - start;
+    if (ith == left_total) {
+      return a[pivot_idx];
+    }
+    else if (ith < left_total + 1) {
+      return rankSearch(a, start, pivot_idx, ith);
+    }
+    else {
+      return rankSearch(a, pivot_idx + 1, end, ith - left_total - 1);
+    }
+  }
+
+  /**
+   * @param a   will change array
+   * @param ith start from 0
+   */
+  public static int rankSearch(int[] a, int ith) {
+    if (a.length == 0) {
+      throw new IllegalArgumentException();
+    }
+    return rankSearch(a, 0, a.length, ith);
   }
 
   /**
