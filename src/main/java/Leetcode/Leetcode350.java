@@ -553,18 +553,18 @@ public class Leetcode350 {
    * @param nums
    */
   public static void wiggleSort(int[] nums) {
-    int mid = (nums.length-1) / 2;
+    int mid = (nums.length - 1) / 2;
     int[] a = new int[nums.length];
     System.arraycopy(nums, 0, a, 0, nums.length);
     int mid_val = rankSearch(a, mid);
-    partition3way(a,mid_val);
+    partition3way(a, mid_val);
     int i = mid, j = nums.length - 1;
     int idx = 0;
     while (i >= 0 && j > mid) {
       nums[idx++] = a[i--];
       nums[idx++] = a[j--];
     }
-    if(nums.length%2==1){
+    if (nums.length % 2 == 1) {
       nums[idx] = a[0];
     }
   }
@@ -575,8 +575,8 @@ public class Leetcode350 {
     array[j] = t;
   }
 
-  private static void partition3way(int[] array, int val){
-    int lt = 0, gt = array.length-1, i = 0;
+  private static void partition3way(int[] array, int val) {
+    int lt = 0, gt = array.length - 1, i = 0;
     while (i <= gt) {
       if (array[i] < val) {
         exchange(array, i++, lt++);
@@ -618,6 +618,79 @@ public class Leetcode350 {
     }
     return rankSearch(a, 0, a.length, ith);
   }
+
+  /**
+   * #327
+   *
+   * @param num
+   * @param lower
+   * @param upper
+   * @return
+   */
+  public static int countRangeSum(int[] num, int lower, int upper) {
+    var res = new Object() {
+      int n = 0;
+    };
+    var func = new Object() {
+      void solveCountRangeSum(long[] array, int start, int end) {
+        if ((end - start) > 1) {
+          int middle = (start + end) / 2;
+          solveCountRangeSum(array, start, middle);
+          solveCountRangeSum(array, middle, end);
+          int left_len = middle - start;
+          int right_len = end - middle;
+          var left_cache = new long[left_len];
+          var right_cache = new long[right_len];
+          merge(array, start, left_cache, right_cache);
+        }
+      }
+
+      void merge(long[] array, int start, long[] cache1, long[] cache2) {
+        int right_idx = 0;
+        int left_idx = 0;
+        System.arraycopy(array, start, cache1, 0, cache1.length);
+        System.arraycopy(array, start + cache1.length, cache2, 0, cache2.length);
+
+        int l = 0, r = 0;
+        for (var c1 : cache1) {
+          while (l < cache2.length && cache2[l] - c1 < lower) {
+            l++;
+          }
+          while (r < cache2.length && cache2[r] - c1 <= upper) {
+            r++;
+          }
+          res.n += r - l;
+        }
+
+        for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+          if (cache1[left_idx] <= cache2[right_idx]) {
+            array[i] = cache1[left_idx++];
+          }
+          else {
+            array[i] = cache2[right_idx++];
+          }
+        }
+        if (left_idx < cache1.length) {
+          System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
+        }
+        else if (right_idx < cache2.length) {
+          System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
+        }
+      }
+    };
+
+    var sum = new long[num.length + 1];
+    for(int i = 1; i < sum.length; i++){
+      sum[i] = num[i-1];
+    }
+    for (int i = 2; i < sum.length; i++) {
+      sum[i] += sum[i - 1];
+    }
+
+    func.solveCountRangeSum(sum, 0, sum.length);
+    return res.n;
+  }
+
 
   /**
    * #328
