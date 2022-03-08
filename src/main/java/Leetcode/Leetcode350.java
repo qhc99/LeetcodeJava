@@ -680,8 +680,8 @@ public class Leetcode350 {
     };
 
     var sum = new long[num.length + 1];
-    for(int i = 1; i < sum.length; i++){
-      sum[i] = num[i-1];
+    for (int i = 1; i < sum.length; i++) {
+      sum[i] = num[i - 1];
     }
     for (int i = 2; i < sum.length; i++) {
       sum[i] += sum[i - 1];
@@ -727,6 +727,74 @@ public class Leetcode350 {
 
   Map<TreeNode, Integer> select_max = new HashMap<>();
   Map<TreeNode, Integer> non_select_max = new HashMap<>();
+
+  /**
+   * #329
+   *
+   * @param matrix
+   * @return
+   */
+  public static int longestIncreasingPath(int[][] matrix) {
+    int m = matrix.length;
+    int n = matrix[0].length;
+    int[][] depthCache = new int[m][n];
+    var solver = new Object() {
+      int resGlobal = 0;
+
+      boolean isStart(int i, int j) {
+        int min = Integer.MAX_VALUE;
+        min = i - 1 >= 0 ? Math.min(min, matrix[i - 1][j]) : min;
+        min = i + 1 < m ? Math.min(min, matrix[i + 1][j]) : min;
+        min = j - 1 >= 0 ? Math.min(min, matrix[i][j - 1]) : min;
+        min = j + 1 < n ? Math.min(min, matrix[i][j + 1]) : min;
+        return min >= matrix[i][j];
+      }
+
+      void DFS(int i, int j) {
+        int res = Integer.MIN_VALUE;
+        int v = matrix[i][j];
+        if (i - 1 >= 0 && matrix[i - 1][j] > v) {
+          if (depthCache[i - 1][j] == 0) {
+            DFS(i - 1, j);
+          }
+          res = Math.max(res, depthCache[i - 1][j] + 1);
+        }
+        if (i + 1 < m && matrix[i + 1][j] > v) {
+          if (depthCache[i + 1][j] == 0) {
+            DFS(i + 1, j);
+          }
+          res = Math.max(res, depthCache[i + 1][j] + 1);
+        }
+        if (j - 1 >= 0 && matrix[i][j - 1] > v) {
+          if (depthCache[i][j - 1] == 0) {
+            DFS(i, j - 1);
+          }
+          res = Math.max(res, depthCache[i][j - 1] + 1);
+        }
+        if (j + 1 < n && matrix[i][j + 1] > v) {
+          if (depthCache[i][j + 1] == 0) {
+            DFS(i, j + 1);
+          }
+          res = Math.max(res, depthCache[i][j + 1] + 1);
+        }
+
+        depthCache[i][j] = Math.max(res, 1);
+        resGlobal = Math.max(resGlobal, depthCache[i][j]);
+      }
+
+      void solve() {
+        for(int i = 0; i < m; i++){
+          for(int j = 0; j < n; j++){
+            if(depthCache[i][j] == 0 && isStart(i,j)){
+              DFS(i,j);
+            }
+          }
+        }
+      }
+    };
+    solver.solve();
+    return solver.resGlobal;
+  }
 
   /**
    * #337
