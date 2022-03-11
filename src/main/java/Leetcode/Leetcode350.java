@@ -807,7 +807,7 @@ public class Leetcode350 {
     BitSet visited = new BitSet(nodes.length);
     var func = new Object() {
       int visit(int idx) {
-        if(idx >= nodes.length) return -1;
+        if (idx >= nodes.length) return -1;
         if (visited.get(idx)) return -1;
         visited.set(idx, true);
         var c = nodes[idx];
@@ -850,6 +850,100 @@ public class Leetcode350 {
     var r_n = non_select_max.getOrDefault(n.right, 0);
     select_max.put(n, n.val + l_n + r_n);
     non_select_max.put(n, Math.max(l_n, l_s) + Math.max(r_n, r_s));
+  }
+
+
+  // This is the interface that allows for creating nested lists.
+  // You should not implement it, or speculate about its implementation
+  public interface NestedInteger {
+
+    // @return true if this NestedInteger holds a single integer, rather than a nested list.
+    boolean isInteger();
+
+    // @return the single integer that this NestedInteger holds, if it holds a single integer
+    // Return null if this NestedInteger holds a nested list
+    Integer getInteger();
+
+    // @return the nested list that this NestedInteger holds, if it holds a nested list
+    // Return empty list if this NestedInteger holds a single integer
+    List<NestedInteger> getList();
+  }
+
+  /**
+   * #341
+   */
+  public static class NestedIterator implements Iterator<Integer> {
+
+    final Deque<Integer> indicesStack = new ArrayDeque<>();
+    final Deque<List<NestedInteger>> listStack = new ArrayDeque<>();
+    int store;
+    boolean prepared = false;
+
+    public NestedIterator(List<NestedInteger> nestedList) {
+      listStack.add(nestedList);
+      indicesStack.add(0);
+      clearUsedList();
+    }
+
+    @Override
+    public Integer next() {
+      if (prepared) {
+        prepared = false;
+        return store;
+      }
+      else throw new RuntimeException();
+    }
+
+    private Integer extractNext() {
+      if (listStack.peekLast().size() == 0) {
+        indicesStack.pollLast();
+        listStack.pollLast();
+        return null;
+      }
+      else {
+        var obj = listStack.peekLast().get(indicesStack.peekLast());
+        indicesStack.addLast(indicesStack.pollLast() + 1);
+        clearUsedList();
+        if (obj.isInteger()) {
+          return obj.getInteger();
+        }
+        else {
+          var l = obj.getList();
+          indicesStack.addLast(0);
+          listStack.addLast(l);
+          return extractNext();
+        }
+      }
+    }
+
+    private void clearUsedList() {
+      var idx = indicesStack.peekLast();
+      var l = listStack.peekLast();
+      while (listStack.size() > 0 && idx >= l.size()) {
+        indicesStack.pollLast();
+        idx = indicesStack.peekLast();
+        listStack.pollLast();
+        l = listStack.peekLast();
+      }
+    }
+
+    @Override
+    public boolean hasNext() {
+      if (prepared) {
+        return true;
+      }
+      else if(listStack.size() > 0) {
+        Integer p = null;
+        do {
+          p = extractNext();
+        } while (listStack.size() > 0 && p == null);
+        if (p != null) {
+          store = p;
+          prepared = true;
+        }
+      }
+      return prepared;
+    }
   }
 
 
