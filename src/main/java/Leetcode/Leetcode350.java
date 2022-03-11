@@ -783,10 +783,10 @@ public class Leetcode350 {
       }
 
       void solve() {
-        for(int i = 0; i < m; i++){
-          for(int j = 0; j < n; j++){
-            if(depthCache[i][j] == 0 && isStart(i,j)){
-              DFS(i,j);
+        for (int i = 0; i < m; i++) {
+          for (int j = 0; j < n; j++) {
+            if (depthCache[i][j] == 0 && isStart(i, j)) {
+              DFS(i, j);
             }
           }
         }
@@ -794,6 +794,32 @@ public class Leetcode350 {
     };
     solver.solve();
     return solver.resGlobal;
+  }
+
+  /**
+   * #331
+   *
+   * @param preorder
+   * @return
+   */
+  public static boolean isValidSerialization(String preorder) {
+    String[] nodes = preorder.split(",");
+    BitSet visited = new BitSet(nodes.length);
+    var func = new Object() {
+      int visit(int idx) {
+        if(idx >= nodes.length) return -1;
+        if (visited.get(idx)) return -1;
+        visited.set(idx, true);
+        var c = nodes[idx];
+        if (c.equals("#")) return idx;
+        else {
+          var left = visit(idx + 1);
+          if (left == -1) return -1;
+          return visit(left + 1);
+        }
+      }
+    };
+    return (func.visit(0) == nodes.length - 1) && (visited.stream().count() == nodes.length);
   }
 
   /**
