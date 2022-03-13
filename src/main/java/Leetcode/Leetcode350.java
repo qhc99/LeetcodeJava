@@ -823,6 +823,42 @@ public class Leetcode350 {
   }
 
   /**
+   * #332
+   *
+   * @param tickets
+   * @return
+   */
+  public static List<String> findItinerary(List<List<String>> tickets) {
+    Map<String, PriorityQueue<String>> neighbors = new HashMap<>();
+    for (var pair : tickets) {
+      var from = pair.get(0);
+      var to = pair.get(1);
+      if (!neighbors.containsKey(from)) {
+        neighbors.put(from, new PriorityQueue<>());
+      }
+      neighbors.get(from).add(to);
+    }
+    List<String> reversed_res = new ArrayList<>();
+    var func = new Object() {
+      void visit(String node) {
+        var ns = neighbors.get(node);
+        while (ns != null && ns.size() > 0) {
+          var n = ns.poll();
+          visit(n);
+        }
+        reversed_res.add(node);
+      }
+    };
+    func.visit("JFK");
+    for (int i = 0, j = reversed_res.size() - 1; i < j; i++, j--) {
+      var t = reversed_res.get(i);
+      reversed_res.set(i, reversed_res.get(j));
+      reversed_res.set(j, t);
+    }
+    return reversed_res;
+  }
+
+  /**
    * #337
    *
    * @param root
@@ -932,7 +968,7 @@ public class Leetcode350 {
       if (prepared) {
         return true;
       }
-      else if(listStack.size() > 0) {
+      else if (listStack.size() > 0) {
         Integer p = null;
         do {
           p = extractNext();
