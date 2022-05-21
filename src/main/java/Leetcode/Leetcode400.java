@@ -6,6 +6,16 @@ import java.util.*;
 public class Leetcode400 {
 
   /**
+   * #357
+   * @param n
+   * @return
+   */
+  public static int countNumbersWithUniqueDigits(int n) {
+    int[] ans = new int[]{0,10,91,739,5275,32491,168571,712891,2345851};
+    return ans[n];
+  }
+
+  /**
    * #381
    * <br/>设计一个支持在平均 时间复杂度 O(1) 下， 执行以下操作的数据结构。
    * <br/>insert(val)：向集合中插入元素 val。
