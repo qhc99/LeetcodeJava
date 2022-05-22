@@ -8,6 +8,43 @@ import java.util.stream.IntStream;
 public class Leetcode350 {
 
   /**
+   * #300
+   *
+   * @param nums
+   * @return
+   */
+  public static int lengthOfLIS(int[] nums) {
+    int[] dp = new int[nums.length + 1];
+    Arrays.fill(dp, Integer.MAX_VALUE);
+    dp[0] = Integer.MIN_VALUE;
+    for (int i = 1; i < dp.length; i++) {
+      var n = nums[i - 1];
+      fill(dp, n);
+    }
+
+    for (int i = dp.length - 1; i >= 0; i--) {
+      if (dp[i] != Integer.MAX_VALUE) {
+        return i;
+      }
+    }
+    throw new RuntimeException();
+  }
+
+  private static void fill(int[] dp, int val) {
+    int s = 0, e = dp.length;
+    while (e - s > 1) {
+      int mid = (s + e) / 2;
+      if (dp[mid] >= val) {
+        e = mid;
+      }
+      else if (dp[mid] < val) {
+        s = mid;
+      }
+    }
+    dp[e] = val;
+  }
+
+  /**
    * #304
    */
   public static class NumMatrix {

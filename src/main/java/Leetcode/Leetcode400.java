@@ -6,6 +6,28 @@ import java.util.*;
 public class Leetcode400 {
 
   /**
+   * #354
+   * @param envelopes
+   * @return
+   */
+  public static int maxEnvelopes(int[][] envelopes) {
+    Arrays.sort(envelopes,(a,b)->{
+      var t = a[0]-b[0];
+      if(t != 0){
+        return t;
+      }
+      else {
+        return b[1]-a[1];
+      }
+    });
+    int[] h = new int[envelopes.length];
+    for(int i = 0; i < h.length;i++){
+      h[i] = envelopes[i][1];
+    }
+    return Leetcode350.lengthOfLIS(h);
+  }
+
+  /**
    * #357
    * @param n
    * @return
