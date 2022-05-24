@@ -71,7 +71,7 @@ public class Leetcode400 {
           var l = set.ceiling(acc - k);
           if (l != null) {
             ans = Math.max(ans, acc - l);
-            if(ans == k){
+            if (ans == k) {
               return ans;
             }
           }
@@ -171,6 +171,65 @@ public class Leetcode400 {
     }
 
     return ans.stream().toList();
+  }
+
+
+  /**
+   * #373
+   *
+   * @param nums1
+   * @param nums2
+   * @param k
+   * @return
+   */
+  public static List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    class Data {
+      final int idx;
+      final int first;
+      final int second;
+      final int sum;
+
+      Data(int i, int f, int s, int sum) {
+        idx = i;
+        first = f;
+        second = s;
+        this.sum = sum;
+      }
+    }
+
+
+    PriorityQueue<Data> queue = new PriorityQueue<>(Comparator.comparing(d -> d.sum));
+    List<List<Integer>> ans = new ArrayList<>();
+    for (int i = 0; i < nums1.length; i++) {
+      queue.add(new Data(0, nums1[i], nums2[0], nums1[i] + nums2[0]));
+    }
+    while (queue.size() > 0 && k > 0) {
+      k--;
+      var d = queue.poll();
+      ans.add(List.of(d.first, d.second));
+      if (d.idx + 1 < nums2.length) {
+        queue.add(new Data(d.idx + 1, d.first, nums2[d.idx + 1], d.first + nums2[d.idx + 1]));
+      }
+    }
+    return ans;
+  }
+
+
+  /**
+   * #375
+   *
+   * @param n
+   * @return
+   */
+  public static int getMoneyAmount(int n) {
+    int s = 1, e = n + 1;
+    int ans = 0;
+    while (e - s > 2) {
+      int mid = (e + s) / 2;
+      ans += mid;
+      s = mid;
+    }
+    return ans;
   }
 
 
