@@ -7,21 +7,22 @@ public class Leetcode400 {
 
   /**
    * #354
+   *
    * @param envelopes
    * @return
    */
   public static int maxEnvelopes(int[][] envelopes) {
-    Arrays.sort(envelopes,(a,b)->{
-      var t = a[0]-b[0];
-      if(t != 0){
+    Arrays.sort(envelopes, (a, b) -> {
+      var t = a[0] - b[0];
+      if (t != 0) {
         return t;
       }
       else {
-        return b[1]-a[1];
+        return b[1] - a[1];
       }
     });
     int[] h = new int[envelopes.length];
-    for(int i = 0; i < h.length;i++){
+    for (int i = 0; i < h.length; i++) {
       h[i] = envelopes[i][1];
     }
     return Leetcode350.lengthOfLIS(h);
@@ -29,13 +30,149 @@ public class Leetcode400 {
 
   /**
    * #357
+   *
    * @param n
    * @return
    */
   public static int countNumbersWithUniqueDigits(int n) {
-    int[] ans = new int[]{0,10,91,739,5275,32491,168571,712891,2345851};
+    int[] ans = new int[]{0, 10, 91, 739, 5275, 32491, 168571, 712891, 2345851};
     return ans[n];
   }
+
+  /**
+   * #363
+   *
+   * @param matrix
+   * @param k
+   * @return
+   */
+  public static int maxSumSubmatrix(int[][] matrix, int k) {
+    int ans = Integer.MIN_VALUE;
+    var mat = new RegularizedMatrix(matrix);
+    var colAcc = new int[mat.lenRow + 1][mat.lenCol];
+    for (int i = 0; i < mat.lenRow; i++) {
+      for (int j = 0; j < mat.lenCol; j++) {
+        colAcc[i + 1][j] = mat.get(i, j) + colAcc[i][j];
+      }
+    }
+
+    for (int rs = 0; rs < colAcc.length; rs++) {
+      for (int re = rs + 1; re < colAcc.length; re++) {
+        int[] colSum = new int[mat.lenCol];
+        for (int n = 0; n < mat.lenCol; n++) {
+          colSum[n] = colAcc[re][n] - colAcc[rs][n];
+        }
+        // b - a <= k, a >= b - k
+        int acc = 0;
+        TreeSet<Integer> set = new TreeSet<>();
+        set.add(0);
+        for (var v : colSum) {
+          acc += v;
+          var l = set.ceiling(acc - k);
+          if (l != null) {
+            ans = Math.max(ans, acc - l);
+            if(ans == k){
+              return ans;
+            }
+          }
+          set.add(acc);
+        }
+      }
+    }
+    return ans;
+  }
+
+  static class RegularizedMatrix {
+    private final int[][] m;
+    private final boolean inverse;
+
+    public final int lenRow;
+    public final int lenCol;
+
+    RegularizedMatrix(int[][] m) {
+      this.m = m;
+      inverse = m.length > m[0].length;
+      if (inverse) {
+        lenCol = m.length;
+        lenRow = m[0].length;
+      }
+      else {
+        lenRow = m.length;
+        lenCol = m[0].length;
+      }
+    }
+
+    int get(int i, int j) {
+      if (inverse) return m[j][i];
+      else return m[i][j];
+    }
+
+    void set(int i, int j, int v) {
+      if (inverse) m[j][i] = v;
+      else m[i][j] = v;
+    }
+  }
+
+  /**
+   * #368
+   *
+   * @param nums
+   * @return
+   */
+  public static List<Integer> largestDivisibleSubset(int[] nums) {
+    class DPData {
+      final int pre_idx;
+      final int size;
+
+      DPData(int pre, int s) {
+        pre_idx = pre;
+        size = s;
+      }
+
+      @Override
+      public String toString() {
+        return "idx: " + pre_idx + " size: " + size;
+      }
+    }
+
+    Arrays.sort(nums);
+
+    DPData[] dp = new DPData[nums.length];
+    for (int i = 0; i < dp.length; i++) {
+      dp[i] = new DPData(i, 1);
+    }
+
+    for (int i = 1; i < nums.length; i++) {
+      var i_val = nums[i];
+      for (int j = 0; j < i; j++) {
+        var j_val = nums[j];
+        if (i_val % j_val == 0 && dp[j].size + 1 > dp[i].size) {
+          dp[i] = new DPData(j, dp[j].size + 1);
+        }
+      }
+    }
+
+    DPData max_dp_data = dp[0];
+    int max_dp_data_idx = 0;
+    for (int i = 0; i < dp.length; i++) {
+      var d = dp[i];
+      if (d.size > max_dp_data.size) {
+        max_dp_data = d;
+        max_dp_data_idx = i;
+      }
+    }
+    Deque<Integer> ans = new ArrayDeque<>(max_dp_data.size);
+
+    DPData ptr = max_dp_data;
+    for (int i = 0, idx = max_dp_data_idx; i < max_dp_data.size; i++) {
+      ans.addFirst(nums[idx]);
+      idx = ptr.pre_idx;
+      ptr = dp[idx];
+    }
+
+    return ans.stream().toList();
+  }
+
 
   /**
    * #381
