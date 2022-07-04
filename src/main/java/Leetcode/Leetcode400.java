@@ -232,6 +232,48 @@ public class Leetcode400 {
     return ans;
   }
 
+  /**
+   * #380
+   */
+  public static class RandomizedSet {
+    final HashMap<Integer, Integer> idxToVal = new HashMap<>(32);
+    final HashMap<Integer, Integer> valToIdx = new HashMap<>(32);
+    final Random random = new Random();
+
+    public RandomizedSet() {
+
+    }
+
+    public boolean insert(int val) {
+      if (!valToIdx.containsKey(val)) {
+        valToIdx.put(val, idxToVal.size());
+        idxToVal.put(idxToVal.size(), val);
+        return true;
+      }
+      else {
+        return false;
+      }
+    }
+
+    public boolean remove(int val) {
+      if (valToIdx.containsKey(val)) {
+        var val_idx = valToIdx.remove(val);
+        var tail_val = idxToVal.remove(idxToVal.size() - 1);
+        if(tail_val != val){
+          valToIdx.put(tail_val,val_idx);
+          idxToVal.put(val_idx,tail_val);
+        }
+        return true;
+      }
+      else return false;
+    }
+
+    public int getRandom() {
+      var idx = random.nextInt(0, idxToVal.size());
+      return idxToVal.get(idx);
+    }
+  }
+
 
   /**
    * #381
