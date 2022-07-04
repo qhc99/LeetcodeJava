@@ -222,14 +222,41 @@ public class Leetcode400 {
    * @return
    */
   public static int getMoneyAmount(int n) {
-    int s = 1, e = n + 1;
-    int ans = 0;
-    while (e - s > 2) {
-      int mid = (e + s) / 2;
-      ans += mid;
-      s = mid;
+    return getCost(1, n);
+  }
+
+  private record IntTuple(int start, int end) {
+
+  }
+
+  private static final HashMap<IntTuple, Integer> cache = new HashMap<>(32);
+
+  private static int getCost(int s, int e) {
+    if (s >= e) return 0;
+    var idx = new IntTuple(s, e);
+    var cache_val = cache.get(idx);
+    if (cache_val != null) return cache_val;
+    else {
+      int min = Integer.MAX_VALUE;
+      for (int i = s; i <= e; i++) {
+        var l = getCost(s, i - 1);
+        var r = getCost(i + 1, e);
+        min = Math.min(min, i + Math.max(l, r));
+      }
+      cache.put(idx, min);
+      return min;
     }
-    return ans;
+  }
+
+  /**
+   * #377
+   *
+   * @param nums
+   * @param target
+   * @return
+   */
+  public static int combinationSum4(int[] nums, int target) {
+
   }
 
   /**
@@ -259,9 +286,9 @@ public class Leetcode400 {
       if (valToIdx.containsKey(val)) {
         var val_idx = valToIdx.remove(val);
         var tail_val = idxToVal.remove(idxToVal.size() - 1);
-        if(tail_val != val){
-          valToIdx.put(tail_val,val_idx);
-          idxToVal.put(val_idx,tail_val);
+        if (tail_val != val) {
+          valToIdx.put(tail_val, val_idx);
+          idxToVal.put(val_idx, tail_val);
         }
         return true;
       }
