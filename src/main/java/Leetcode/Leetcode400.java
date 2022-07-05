@@ -256,7 +256,36 @@ public class Leetcode400 {
    * @return
    */
   public static int combinationSum4(int[] nums, int target) {
+    int[] dp = new int[target + 1];
+    for (var n : nums) {
+      if (n < dp.length) {
+        dp[n] = 1;
+      }
+    }
+    for (int i = 1; i < dp.length; i++) {
+      if (dp[i] > 0) {
+        for (var n : nums) {
+          if (i + n < dp.length) {
+            dp[i + n] += dp[i];
+          }
+        }
+      }
+    }
+    return dp[target];
+  }
 
+
+  /**
+   * #378
+   *
+   * @param matrix
+   * @param k
+   * @return
+   */
+  public static int kthSmallest(int[][] matrix, int k) {
+
+
+    return 0;
   }
 
   /**
@@ -361,6 +390,43 @@ public class Leetcode400 {
     public int getRandom() {
       return nums.get((int) (Math.random() * nums.size()));
     }
+  }
+
+  /**
+   * #388
+   *
+   * @param input
+   * @return
+   */
+  public static int lengthLongestPath(String input) {
+    var arr = input.split("((?<=\t)|(?=\t)|(?<=\n)|(?=\n))", -1);
+    int level = 0;
+    List<Integer> dir_stack = new ArrayList<>();
+    int max_len = 0;
+    for (var s : arr) {
+      if (s.equals("\n")) {
+        level = 0;
+      }
+      else if (s.equals("\t")) {
+        level++;
+      }
+      else if (s.contains(".")) {
+        int dir_len = 0;
+        for (int i = 0; i < level; i++) {
+          dir_len += dir_stack.get(i) + 1;
+        }
+        max_len = Math.max(max_len, dir_len + s.length());
+      }
+      else {
+        if (level < dir_stack.size()){
+          dir_stack.set(level,s.length());
+        }
+        else {
+          dir_stack.add(s.length());
+        }
+      }
+    }
+    return max_len;
   }
 
   /**
