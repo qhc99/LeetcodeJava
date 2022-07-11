@@ -497,7 +497,6 @@ public class Leetcode400 {
     int trail_num = 0;
     for (var d : data) {
       var current_type = valType(d);
-//      System.out.println(current_type);
       if (current_type == 6) return false;
 
       switch (prev_type) {
