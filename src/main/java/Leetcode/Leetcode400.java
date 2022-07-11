@@ -286,13 +286,13 @@ public class Leetcode400 {
     var n = matrix.length;
     int l = matrix[0][0];
     int r = matrix[n - 1][n - 1];
-    while (l < r){
-      int mid = l + (r - l) /2;
-      if(rankGEQ(matrix,mid,k)){
+    while (l < r) {
+      int mid = l + (r - l) / 2;
+      if (rankGEQ(matrix, mid, k)) {
         r = mid;
       }
       else {
-        l = mid+1;
+        l = mid + 1;
       }
     }
     return l;
@@ -306,7 +306,8 @@ public class Leetcode400 {
       if (matrix[i][j] <= mid) {
         num += i + 1;
         j++;
-      } else {
+      }
+      else {
         i--;
       }
     }
@@ -486,6 +487,82 @@ public class Leetcode400 {
   }
 
   /**
+   * #393
+   *
+   * @param data
+   * @return
+   */
+  public static boolean validUtf8(int[] data) {
+    int prev_type = 1;
+    int trail_num = 0;
+    for (var d : data) {
+      var current_type = valType(d);
+//      System.out.println(current_type);
+      if (current_type == 6) return false;
+
+      switch (prev_type) {
+        case 1 -> {
+          if (current_type >= 5) return false;
+          trail_num = current_type-1;
+        }
+        case 2 -> {
+          if (current_type != 5) return false;
+          trail_num = 0;
+        }
+        case 3 -> {
+          if (current_type != 5) return false;
+          trail_num = 1;
+        }
+        case 4 -> {
+          if (current_type != 5) return false;
+          trail_num = 2;
+        }
+        case 5 -> {
+          if (current_type != 5) {
+            if(trail_num != 0) return false;
+          }
+          else {
+            if(trail_num <= 0) return false;
+            trail_num--;
+          }
+        }
+        default -> {
+          System.out.println(prev_type);
+          throw new RuntimeException("algo error");
+        }
+      }
+      prev_type = current_type;
+    }
+    return trail_num == 0;
+  }
+
+  private static int valType(int d) {
+    int range_1_l = 0b00000000, range_1_r = 0b01111111;
+    int range_2_l = 0b11000000, range_2_r = 0b11011111;
+    int range_3_l = 0b11100000, range_3_r = 0b11101111;
+    int range_4_l = 0b11110000, range_4_r = 0b11110111;
+    int range_trail_l = 0b10000000, range_trail_r = 0b10111111;
+    if (d >= range_1_l && d <= range_1_r) {
+      return 1;
+    }
+    else if (d >= range_2_l && d <= range_2_r) {
+      return 2;
+    }
+    else if (d >= range_3_l && d <= range_3_r) {
+      return 3;
+    }
+    else if (d >= range_4_l && d <= range_4_r) {
+      return 4;
+    }
+    else if (d >= range_trail_l && d <= range_trail_r) {
+      return 5;
+    }
+    else {
+      return 6;
+    }
+  }
+
+  /**
    * 394
    *
    * @param s
@@ -601,6 +678,7 @@ public class Leetcode400 {
 
   /**
    * #397
+   *
    * @param n
    * @return
    */
