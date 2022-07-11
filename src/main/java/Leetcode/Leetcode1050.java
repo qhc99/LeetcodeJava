@@ -54,8 +54,8 @@ public class Leetcode1050 {
    */
   public static int numPairsDivisibleBy60(int[] time) {
     Map<Integer, Integer> remCount = new HashMap<>();
-    for (var t : time) {
-      var r = t % 60;
+    for (int t : time) {
+      int r = t % 60;
       remCount.put(r, remCount.getOrDefault(r, 0) + 1);
     }
 
@@ -66,12 +66,12 @@ public class Leetcode1050 {
       }
     }
     if(remCount.containsKey(30)){
-      var c = remCount.get(30);
+      int c = remCount.get(30);
       ans += c * (c - 1) / 2;
     }
 
     if(remCount.containsKey(0)){
-      var c = remCount.get(0);
+      int c = remCount.get(0);
       ans += c * (c - 1) / 2;
     }
 
@@ -106,28 +106,27 @@ public class Leetcode1050 {
   public static int sumRootToLeaf(TreeNode root) {
     int[] sum = new int[1];
     StringBuilder str = new StringBuilder();
-    var recurFunc = new Object(){
-      void apply(TreeNode n){
-        var len = str.length();
-        str.append(n.val);
-        if(n.left == null && n.right == null){
-          sum[0] += Integer.parseInt(str.toString(),2);
-        }
-        else if(n.left == null){
-          apply(n.right);
-        }
-        else if(n.right == null){
-          apply(n.left);
-        }
-        else {
-          apply(n.left);
-          apply(n.right);
-        }
-        str.delete(len, str.length());
-      }
-    };
-    recurFunc.apply(root);
+    sumRootToLeafRecursiveSolve(root,str,sum);
     return sum[0];
+  }
+
+  private static void sumRootToLeafRecursiveSolve(TreeNode n, StringBuilder str, int[] sum){
+    int len = str.length();
+    str.append(n.val);
+    if(n.left == null && n.right == null){
+      sum[0] += Integer.parseInt(str.toString(),2);
+    }
+    else if(n.left == null){
+      sumRootToLeafRecursiveSolve(n.right, str,sum);
+    }
+    else if(n.right == null){
+      sumRootToLeafRecursiveSolve(n.left,str,sum);
+    }
+    else {
+      sumRootToLeafRecursiveSolve(n.left,str,sum);
+      sumRootToLeafRecursiveSolve(n.right,str,sum);
+    }
+    str.delete(len, str.length());
   }
 
   /**
@@ -139,24 +138,24 @@ public class Leetcode1050 {
   public static int maxAncestorDiff(TreeNode root) {
     int[] ans = new int[1];
     ans[0] = Integer.MIN_VALUE;
-    var func = new Object() {
-      void apply(TreeNode n, int max_ancestor, int min_ancestor) {
-        max_ancestor = Math.max(n.val, max_ancestor);
-        min_ancestor = Math.min(n.val, min_ancestor);
-        if (n.left != null) {
-          ans[0] = Math.max(ans[0], Math.abs(max_ancestor - n.left.val));
-          ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.left.val));
-          apply(n.left, max_ancestor, min_ancestor);
-        }
-        if (n.right != null) {
-          ans[0] = Math.max(ans[0], Math.abs(max_ancestor - n.right.val));
-          ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.right.val));
-          apply(n.right, max_ancestor, min_ancestor);
-        }
-      }
-    };
-    func.apply(root, Integer.MIN_VALUE, Integer.MAX_VALUE);
+
+    maxAncestorDiffApply(root, Integer.MIN_VALUE, Integer.MAX_VALUE,ans);
     return ans[0];
+  }
+
+  private static void maxAncestorDiffApply(TreeNode n, int max_ancestor, int min_ancestor,int[] ans) {
+    max_ancestor = Math.max(n.val, max_ancestor);
+    min_ancestor = Math.min(n.val, min_ancestor);
+    if (n.left != null) {
+      ans[0] = Math.max(ans[0], Math.abs(max_ancestor - n.left.val));
+      ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.left.val));
+      maxAncestorDiffApply(n.left, max_ancestor, min_ancestor,ans);
+    }
+    if (n.right != null) {
+      ans[0] = Math.max(ans[0], Math.abs(max_ancestor - n.right.val));
+      ans[0] = Math.max(ans[0], Math.abs(min_ancestor - n.right.val));
+      maxAncestorDiffApply(n.right, max_ancestor, min_ancestor,ans);
+    }
   }
 
   /**
@@ -178,7 +177,7 @@ public class Leetcode1050 {
    */
   public static int videoStitching(int[][] clips, int T) {
     int[] startAndEnd = new int[T];
-    for (var clip : clips) {
+    for (int[] clip : clips) {
       if (clip[0] < T) {
         startAndEnd[clip[0]] = Math.max(startAndEnd[clip[0]], clip[1]);
       }
@@ -260,7 +259,7 @@ public class Leetcode1050 {
 
       public boolean query(char letter) {
         boolean ans = false;
-        var s = search(root, letter);
+        Node s = search(root, letter);
         int count = nodeQueue.size();
         if (s != null) {
           nodeQueue.add(s.mid);
@@ -268,7 +267,7 @@ public class Leetcode1050 {
         }
 
         while (count > 0) {
-          var ptr = nodeQueue.poll();
+          Node ptr = nodeQueue.poll();
           if (ptr != null) {
             Node n = search(ptr, letter);
             if (n != null) {
@@ -300,7 +299,7 @@ public class Leetcode1050 {
     ModifiedTernaryTries tries = new ModifiedTernaryTries();
 
     public StreamChecker(String[] words) {
-      for (var w : words) {
+      for (String w : words) {
         tries.put(w);
       }
     }

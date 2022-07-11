@@ -283,9 +283,34 @@ public class Leetcode400 {
    * @return
    */
   public static int kthSmallest(int[][] matrix, int k) {
+    var n = matrix.length;
+    int l = matrix[0][0];
+    int r = matrix[n - 1][n - 1];
+    while (l < r){
+      int mid = l + (r - l) /2;
+      if(rankGEQ(matrix,mid,k)){
+        r = mid;
+      }
+      else {
+        l = mid+1;
+      }
+    }
+    return l;
+  }
 
-
-    return 0;
+  private static boolean rankGEQ(int[][] matrix, int mid, int k) {
+    int i = matrix.length - 1;
+    int j = 0;
+    int num = 0;
+    while (i >= 0 && j < matrix.length) {
+      if (matrix[i][j] <= mid) {
+        num += i + 1;
+        j++;
+      } else {
+        i--;
+      }
+    }
+    return num >= k;
   }
 
   /**
@@ -418,8 +443,8 @@ public class Leetcode400 {
         max_len = Math.max(max_len, dir_len + s.length());
       }
       else {
-        if (level < dir_stack.size()){
-          dir_stack.set(level,s.length());
+        if (level < dir_stack.size()) {
+          dir_stack.set(level, s.length());
         }
         else {
           dir_stack.add(s.length());
@@ -572,5 +597,14 @@ public class Leetcode400 {
     else {
       return Optional.empty();
     }
+  }
+
+  /**
+   * #397
+   * @param n
+   * @return
+   */
+  public static int integerReplacement(int n) {
+    return 0;
   }
 }
