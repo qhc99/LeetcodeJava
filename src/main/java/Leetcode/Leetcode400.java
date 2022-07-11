@@ -682,6 +682,17 @@ public class Leetcode400 {
    * @return
    */
   public static int integerReplacement(int n) {
-    return 0;
+    if(n == 1){
+      return 0;
+    }
+
+    if(n % 2 == 0){
+      return 1 + integerReplacement(n/2);
+    }
+    else {
+      return 2 + Math.min(integerReplacement(n/2+1), integerReplacement(n/2));
+    }
   }
+
+  private static final Map<Integer, Integer> cacheIntRep = new HashMap<>(32);
 }
