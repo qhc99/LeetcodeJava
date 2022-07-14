@@ -456,6 +456,84 @@ public class Leetcode400 {
   }
 
   /**
+   * #391
+   *
+   * @param rectangles
+   * @return
+   */
+  public static boolean isRectangleCover(int[][] rectangles) {
+    record Point(int X, int Y) {
+    }
+    int area_sum = 0;
+    int whole_area = 0;
+    Point left_bottom = null;
+    Point right_bottom = null;
+    Point left_top = null;
+    Point right_top = null;
+    {
+      var first_rect = rectangles[0];
+      int x = first_rect[0], y = first_rect[1], a = first_rect[2], b = first_rect[3];
+      left_bottom = new Point(x, y);
+      right_top = new Point(a, b);
+      left_top = new Point(x, b);
+      right_bottom = new Point(a, y);
+    }
+
+    Map<Point, Integer> occurrence = new HashMap<>(4 * rectangles.length);
+    for (var rect : rectangles) {
+      int x = rect[0], y = rect[1], a = rect[2], b = rect[3];
+      var lb = new Point(x, y);
+      var rt = new Point(a, b);
+      var lt = new Point(x, b);
+      var rb = new Point(a, y);
+
+      area_sum += (a - x) * (b - y);
+
+      occurrence.put(lb, occurrence.getOrDefault(lb, 0) + 1);
+      occurrence.put(rt, occurrence.getOrDefault(rt, 0) + 1);
+      occurrence.put(lt, occurrence.getOrDefault(lt, 0) + 1);
+      occurrence.put(rb, occurrence.getOrDefault(rb, 0) + 1);
+
+      if (x <= left_bottom.X && y <= left_bottom.Y) {
+        left_bottom = lb;
+      }
+      if (a >= right_top.X && b >= right_top.Y) {
+        right_top = rt;
+      }
+      if (x <= left_top.X && b >= left_top.Y) {
+        left_top = lt;
+      }
+      if (a >= right_bottom.X && y <= right_bottom.Y) {
+        right_bottom = rb;
+      }
+    }
+
+    if (left_bottom.X != left_top.X || (right_top.X != right_bottom.X) ||
+            left_bottom.Y != right_bottom.Y || left_top.Y != right_top.Y) {
+      return false;
+    }
+
+    for (var p_o : occurrence.entrySet()) {
+      var p = p_o.getKey();
+      var o = p_o.getValue();
+      if (!(o == 2 || o == 4)) {
+        if(o == 1){
+          if (!(p.equals(left_bottom) ||
+                  p.equals(left_top) ||
+                  p.equals(right_bottom) ||
+                  p.equals(right_top))) {
+            return false;
+          }
+        }
+        else return false;
+      }
+    }
+
+    whole_area = (right_top.X - left_bottom.X) * (right_top.Y - left_bottom.Y);
+    return area_sum == whole_area;
+  }
+
+  /**
    * #392
    * s = "abc", t = "ahbgdc"
    * 返回 true.
@@ -502,7 +580,7 @@ public class Leetcode400 {
       switch (prev_type) {
         case 1 -> {
           if (current_type >= 5) return false;
-          trail_num = current_type-1;
+          trail_num = current_type - 1;
         }
         case 2 -> {
           if (current_type != 5) return false;
@@ -518,10 +596,10 @@ public class Leetcode400 {
         }
         case 5 -> {
           if (current_type != 5) {
-            if(trail_num != 0) return false;
+            if (trail_num != 0) return false;
           }
           else {
-            if(trail_num <= 0) return false;
+            if (trail_num <= 0) return false;
             trail_num--;
           }
         }
@@ -682,15 +760,15 @@ public class Leetcode400 {
    * @return
    */
   public static int integerReplacement(int n) {
-    if(n == 1){
+    if (n == 1) {
       return 0;
     }
 
-    if(n % 2 == 0){
-      return 1 + integerReplacement(n/2);
+    if (n % 2 == 0) {
+      return 1 + integerReplacement(n / 2);
     }
     else {
-      return 2 + Math.min(integerReplacement(n/2+1), integerReplacement(n/2));
+      return 2 + Math.min(integerReplacement(n / 2 + 1), integerReplacement(n / 2));
     }
   }
 
