@@ -517,7 +517,7 @@ public class Leetcode400 {
       var p = p_o.getKey();
       var o = p_o.getValue();
       if (!(o == 2 || o == 4)) {
-        if(o == 1){
+        if (o == 1) {
           if (!(p.equals(left_bottom) ||
                   p.equals(left_top) ||
                   p.equals(right_bottom) ||
@@ -773,4 +773,89 @@ public class Leetcode400 {
   }
 
   private static final Map<Integer, Integer> cacheIntRep = new HashMap<>(32);
+
+  /**
+   * #399
+   *
+   * @param equations
+   * @param values
+   * @param queries
+   * @return
+   */
+  public static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+    Map<String, Integer> symToIdx = new HashMap<>(equations.size() * 2);
+    {
+      int idx = 0;
+      for (int i = 0; i < equations.size(); i++) {
+        var eq = equations.get(i);
+        var first_symbol = eq.get(0);
+        var second_symbol = eq.get(1);
+        if (!symToIdx.containsKey(first_symbol)) {
+          symToIdx.put(first_symbol, idx++);
+        }
+        if (!symToIdx.containsKey(second_symbol)) {
+          symToIdx.put(second_symbol, idx++);
+        }
+      }
+    }
+    double[][] graph = new double[symToIdx.size()][symToIdx.size()];
+    for (var arr : graph) {
+      Arrays.fill(arr, -1);
+    }
+    for (int i = 0; i < equations.size(); i++) {
+      var eq = equations.get(i);
+      var first_symbol = eq.get(0);
+      var second_symbol = eq.get(1);
+      var first_idx = symToIdx.get(first_symbol);
+      var second_idx = symToIdx.get(second_symbol);
+      graph[first_idx][second_idx] = values[i];
+      graph[first_idx][first_idx] = 1;
+      graph[second_idx][second_idx] = 1;
+      graph[second_idx][first_idx] = 1/values[i];
+    }
+    double[] ans = new double[queries.size()];
+    var visited = new BitSet(graph.length);
+    for (int i = 0; i < queries.size(); i++) {
+      var q = queries.get(i);
+      var first_symbol = q.get(0);
+      var second_symbol = q.get(1);
+      if ((!symToIdx.containsKey(first_symbol)) || (!symToIdx.containsKey(second_symbol))) {
+        ans[i] = -1;
+      }
+      else {
+        var start_idx = symToIdx.get(first_symbol);
+        var target_idx = symToIdx.get(second_symbol);
+        ans[i] = DFS(graph, start_idx, target_idx, visited,1);
+      }
+    }
+    return ans;
+  }
+
+  private static double DFS(
+          double[][] graph,
+          Integer start_idx,
+          Integer target_idx,
+          BitSet visited,
+          double ans) {
+    visited.set(start_idx, true);
+
+    if (graph[start_idx][target_idx] != -1) {
+      visited.set(start_idx, false);
+      return ans * graph[start_idx][target_idx];
+    }
+    else {
+      for (int i = 0; i < graph.length; i++) {
+        if (!visited.get(i) && graph[start_idx][i] != -1) {
+          var val = DFS(graph,i,target_idx,visited, ans * graph[start_idx][i]);
+          if(val != -1){
+            visited.set(start_idx, false);
+            return val;
+          }
+        }
+      }
+    }
+
+    visited.set(start_idx, false);
+    return -1;
+  }
 }
