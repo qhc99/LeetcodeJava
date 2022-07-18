@@ -6,6 +6,33 @@ import java.util.*;
 public class Leetcode450 {
 
   /**
+   * #400
+   *
+   * @param n
+   * @return
+   */
+  public static int findNthDigit(int n) {
+    long len = 9;
+    int size = 1;
+    while (n - len*size > 0) {
+      n -= len*size;
+      len *= 10;
+      size++;
+    }
+    return ithDigit((n-1)%size, (int) (Math.pow(10, size - 1) - 1 + Math.ceil(((double) n) / size)), size);
+
+  }
+
+  private static int ithDigit(int i, int num, int size) {
+    while (i != 0) {
+      num -= ((int) (num / Math.pow(10, size - 1))) * Math.pow(10, size-1);
+      size--;
+      i--;
+    }
+    return (int) (num / Math.pow(10, size - 1));
+  }
+
+  /**
    * #404
    * <br>左叶子之和
    * <pre>
@@ -115,7 +142,7 @@ public class Leetcode450 {
     for (int c = 1; c <= nums.length; c++) {
       var num = nums[c - 1];
       for (int j = sum / 2; j - num >= 0; j--) {
-        if(dp.get(j-num)){
+        if (dp.get(j - num)) {
           dp.set(j, true);
         }
       }
