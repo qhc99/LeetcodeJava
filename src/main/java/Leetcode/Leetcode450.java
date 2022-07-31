@@ -14,22 +14,59 @@ public class Leetcode450 {
   public static int findNthDigit(int n) {
     long len = 9;
     int size = 1;
-    while (n - len*size > 0) {
-      n -= len*size;
+    while (n - len * size > 0) {
+      n -= len * size;
       len *= 10;
       size++;
     }
-    return ithDigit((n-1)%size, (int) (Math.pow(10, size - 1) - 1 + Math.ceil(((double) n) / size)), size);
+    return ithDigit((n - 1) % size, (int) (Math.pow(10, size - 1) - 1 + Math.ceil(((double) n) / size)), size);
 
   }
 
   private static int ithDigit(int i, int num, int size) {
     while (i != 0) {
-      num -= ((int) (num / Math.pow(10, size - 1))) * Math.pow(10, size-1);
+      num -= ((int) (num / Math.pow(10, size - 1))) * Math.pow(10, size - 1);
       size--;
       i--;
     }
     return (int) (num / Math.pow(10, size - 1));
+  }
+
+  /**
+   * #402
+   *
+   * @param num
+   * @param k
+   * @return
+   */
+  public static String removeKdigits(String num, int k) {
+
+    if (num.length() == 1) {
+      if (k == 1) return "0";
+      else if (k == 0) return num;
+      else throw new RuntimeException();
+    }
+
+    char[] chrs = num.toCharArray();
+    StringBuilder sb = new StringBuilder(num.length());
+    sb.append(chrs[0]);
+    for(int i = 1; i < chrs.length;i++){
+      var current = chrs[i];
+      while (sb.length() > 0 && k > 0 && sb.charAt(sb.length()-1) > current){
+        sb.deleteCharAt(sb.length()-1);
+        k--;
+      }
+      sb.append(current);
+    }
+
+    while (k > 0) {
+      k--;
+      sb.deleteCharAt(sb.length() - 1);
+    }
+    while (sb.length() > 0 && sb.charAt(0) == '0') {
+      sb.deleteCharAt(0);
+    }
+    return sb.length() > 0 ? sb.toString() : "0";
   }
 
   /**
