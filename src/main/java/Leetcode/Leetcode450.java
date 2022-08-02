@@ -50,10 +50,10 @@ public class Leetcode450 {
     char[] chrs = num.toCharArray();
     StringBuilder sb = new StringBuilder(num.length());
     sb.append(chrs[0]);
-    for(int i = 1; i < chrs.length;i++){
+    for (int i = 1; i < chrs.length; i++) {
       var current = chrs[i];
-      while (sb.length() > 0 && k > 0 && sb.charAt(sb.length()-1) > current){
-        sb.deleteCharAt(sb.length()-1);
+      while (sb.length() > 0 && k > 0 && sb.charAt(sb.length() - 1) > current) {
+        sb.deleteCharAt(sb.length() - 1);
         k--;
       }
       sb.append(current);
@@ -101,6 +101,37 @@ public class Leetcode450 {
         return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
       }
     }
+  }
+
+  /**
+   * #409
+   *
+   * @param s
+   * @return
+   */
+  public static int longestPalindrome(String s) {
+    boolean has_odd = false;
+    Map<Character, Integer> occur = new HashMap<>(26 * 2);
+    var chrs = s.toCharArray();
+    for (var c : chrs) {
+      var i = occur.get(c);
+      var put  = i != null ? i + 1 : 1;
+
+      occur.put(c, put);
+    }
+    var values = occur.values();
+    int ans = 0;
+    for (var v : values) {
+      if (v % 2 == 0) {
+        ans += v;
+      }
+      else {
+        has_odd = true;
+        ans += v - 1;
+      }
+    }
+
+    return has_odd ? ans + 1 : ans;
   }
 
   /**
