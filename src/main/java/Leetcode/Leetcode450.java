@@ -120,12 +120,12 @@ public class Leetcode450 {
     });
 
     TreeList<int[]> list = new TreeList<>();
-    for(var tuple : people){
-      list.add(tuple[1],tuple);
+    for (var tuple : people) {
+      list.add(tuple[1], tuple);
     }
 
     int[][] ans = new int[people.length][2];
-    for(int i = 0; i < people.length; i++){
+    for (int i = 0; i < people.length; i++) {
       ans[i] = list.get(i);
     }
     return ans;
@@ -1337,6 +1337,55 @@ public class Leetcode450 {
       }
     }
     return split <= limit;
+  }
+
+  /**
+   * #415
+   *
+   * @param num1
+   * @param num2
+   * @return
+   */
+  public static String addStrings(String num1, String num2) {
+    StringBuilder sb = new StringBuilder();
+    if (num1.length() < num2.length()) {
+      var t = num1;
+      num1 = num2;
+      num2 = t;
+    }
+    int i = num1.length() - 1, j = num2.length() - 1;
+    var n1 = num1.toCharArray();
+    var n2 = num2.toCharArray();
+    int next = 0;
+    while (j >= 0) {
+      int c1 = n1[i] - '0';
+      int c2 = n2[j] - '0';
+      int sum = c1 + c2 + next;
+      next = 0;
+      if (sum > 9) {
+        next = 1;
+        sum -= 10;
+      }
+      sb.insert(0, sum);
+      i--;
+      j--;
+    }
+    while (i >= 0) {
+      int c1 = n1[i] - '0';
+      int sum = c1 + next;
+      next = 0;
+      if (sum > 9) {
+        next = 1;
+        sum -= 10;
+      }
+      sb.insert(0, sum);
+      i--;
+    }
+    if (next == 1) {
+      sb.insert(0, 1);
+    }
+
+    return sb.toString();
   }
 
   /**
