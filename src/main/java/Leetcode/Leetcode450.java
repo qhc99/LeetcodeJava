@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings("JavaDoc")
+@SuppressWarnings("ALL")
 public class Leetcode450 {
 
   /**
@@ -1253,6 +1253,79 @@ public class Leetcode450 {
 
   }
 
+
+  /**
+   * #407
+   *
+   * @param heightMap
+   * @return
+   */
+  public static int trapRainWater(int[][] heightMap) {
+
+    int m = heightMap.length, n = heightMap[0].length;
+    BitSet isBrink = new BitSet(m * n);
+    PriorityQueue<PosHeight> queue = new PriorityQueue<>(2 * (m + n), Comparator.comparing(PosHeight::height));
+    for (int j = 0; j < n; j++) {
+      int i = 0;
+      if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+      isBrink.set(i * n + j, true);
+      i = m - 1;
+      if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+      isBrink.set(i * n + j, true);
+    }
+
+    for (int i = 0; i < m; i++) {
+      int j = 0;
+      if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+      isBrink.set(i * n + j, true);
+      j = n - 1;
+      if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+      isBrink.set(i * n + j, true);
+    }
+    int ans = 0;
+    while (queue.size() > 0) {
+      var gap = queue.poll();
+//      System.out.printf("poll %s \n",gap.toString());
+      int i = gap.i, j = gap.j;
+      ans = fill(i + 1, j, heightMap, queue, isBrink, ans);
+      ans = fill(i - 1, j, heightMap, queue,isBrink, ans);
+      ans = fill(i, j + 1, heightMap, queue,isBrink, ans);
+      ans = fill(i, j - 1, heightMap,queue, isBrink, ans);
+    }
+
+    return ans;
+  }
+
+  record PosHeight(int i, int j, int height) {
+  }
+
+  private static int fill(int i, int j, int[][] heightMap, PriorityQueue<PosHeight> queue, BitSet isBrink, int ans) {
+    int m = heightMap.length, n = heightMap[0].length;
+    if (i < m && i >= 0 && j < n && j >= 0 && !isBrink.get(i * n + j)) {
+      isBrink.set(i * n + j, true);
+      int min = Integer.MAX_VALUE;
+      if (i + 1 < m && isBrink.get((i+1) * n + j)) {
+        min = Math.min(heightMap[i + 1][j], min);
+      }
+      if (i - 1 >= 0 && isBrink.get((i-1) * n + j)) {
+        min = Math.min(heightMap[i - 1][j], min);
+      }
+      if (j + 1 < n && isBrink.get(i * n + j + 1)) {
+        min = Math.min(heightMap[i][j + 1], min);
+      }
+      if (j - 1 >= 0 && isBrink.get(i * n + j-1)) {
+        min = Math.min(heightMap[i][j - 1], min);
+      }
+      if(min > heightMap[i][j]){
+        ans += min -heightMap[i][j];
+        heightMap[i][j] = min;
+//        System.out.printf("i %s,j %s, min %s\n",i,j,min);
+      }
+      queue.add(new PosHeight(i,j,heightMap[i][j]));
+//      System.out.printf("add i %s, j %s, height %s\n",i,j,heightMap[i][j]);
+    }
+    return ans;
+  }
 
   /**
    * #409
