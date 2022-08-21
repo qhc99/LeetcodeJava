@@ -1288,9 +1288,9 @@ public class Leetcode450 {
 //      System.out.printf("poll %s \n",gap.toString());
       int i = gap.i, j = gap.j;
       ans = fill(i + 1, j, heightMap, queue, isBrink, ans);
-      ans = fill(i - 1, j, heightMap, queue,isBrink, ans);
-      ans = fill(i, j + 1, heightMap, queue,isBrink, ans);
-      ans = fill(i, j - 1, heightMap,queue, isBrink, ans);
+      ans = fill(i - 1, j, heightMap, queue, isBrink, ans);
+      ans = fill(i, j + 1, heightMap, queue, isBrink, ans);
+      ans = fill(i, j - 1, heightMap, queue, isBrink, ans);
     }
 
     return ans;
@@ -1304,24 +1304,24 @@ public class Leetcode450 {
     if (i < m && i >= 0 && j < n && j >= 0 && !isBrink.get(i * n + j)) {
       isBrink.set(i * n + j, true);
       int min = Integer.MAX_VALUE;
-      if (i + 1 < m && isBrink.get((i+1) * n + j)) {
+      if (i + 1 < m && isBrink.get((i + 1) * n + j)) {
         min = Math.min(heightMap[i + 1][j], min);
       }
-      if (i - 1 >= 0 && isBrink.get((i-1) * n + j)) {
+      if (i - 1 >= 0 && isBrink.get((i - 1) * n + j)) {
         min = Math.min(heightMap[i - 1][j], min);
       }
       if (j + 1 < n && isBrink.get(i * n + j + 1)) {
         min = Math.min(heightMap[i][j + 1], min);
       }
-      if (j - 1 >= 0 && isBrink.get(i * n + j-1)) {
+      if (j - 1 >= 0 && isBrink.get(i * n + j - 1)) {
         min = Math.min(heightMap[i][j - 1], min);
       }
-      if(min > heightMap[i][j]){
-        ans += min -heightMap[i][j];
+      if (min > heightMap[i][j]) {
+        ans += min - heightMap[i][j];
         heightMap[i][j] = min;
 //        System.out.printf("i %s,j %s, min %s\n",i,j,min);
       }
-      queue.add(new PosHeight(i,j,heightMap[i][j]));
+      queue.add(new PosHeight(i, j, heightMap[i][j]));
 //      System.out.printf("add i %s, j %s, height %s\n",i,j,heightMap[i][j]);
     }
     return ans;
@@ -1490,6 +1490,92 @@ public class Leetcode450 {
     }
 
     return dp.get(sum / 2);
+  }
+
+  /**
+   * #417
+   *
+   * @param heights
+   * @return
+   */
+  public static List<List<Integer>> pacificAtlantic(int[][] heights) {
+
+    int m = heights.length, n = heights[0].length;
+    Set<Tuple> set_pacific = new HashSet<>(m * n);
+    Set<Tuple> set_atlantic = new HashSet<>(m * n);
+    Deque<Tuple> bfs_pacific = new ArrayDeque<>(m * n);
+    Deque<Tuple> bfs_atlantic = new ArrayDeque<>(m * n);
+
+    for (int j = 0; j < n; j++) {
+      var t = new Tuple(0, j);
+      set_pacific.add(t);
+      bfs_pacific.addLast(t);
+    }
+    for (int i = 1; i < m; i++) {
+      var t = new Tuple(i, 0);
+      set_pacific.add(t);
+      bfs_pacific.addLast(t);
+    }
+    for (int j = 0; j < n; j++) {
+      var t = new Tuple(m - 1, j);
+      set_atlantic.add(t);
+      bfs_atlantic.addLast(t);
+    }
+    for (int i = 0; i < m - 1; i++) {
+      var t = new Tuple(i, n - 1);
+      set_atlantic.add(t);
+      bfs_atlantic.addLast(t);
+    }
+    while (bfs_pacific.size() > 0) {
+      var t = bfs_pacific.pollFirst();
+      bfs(t, bfs_pacific, heights, set_pacific);
+    }
+    while (bfs_atlantic.size() > 0) {
+      var t = bfs_atlantic.pollFirst();
+      bfs(t, bfs_atlantic, heights, set_atlantic);
+    }
+    List<List<Integer>> ans = new ArrayList<>();
+    for(var t : set_pacific){
+      if(set_atlantic.contains(t)){
+        ans.add(List.of(t.i,t.j));
+      }
+    }
+    return ans;
+  }
+
+  record Tuple(int i, int j) {
+  }
+
+  private static void bfs(Tuple t, Deque<Tuple> deque, int[][] heights, Set<Tuple> set) {
+    int i = t.i, j = t.j, m = heights.length, n = heights[0].length;
+    if (i - 1 >= 0) {
+      var tt = new Tuple(i - 1, j);
+      if (!set.contains(tt) && heights[i - 1][j] >= heights[i][j]) {
+        deque.addLast(tt);
+        set.add(tt);
+      }
+    }
+    if (i + 1 < m) {
+      var tt = new Tuple(i + 1, j);
+      if (!set.contains(tt) && heights[i + 1][j] >= heights[i][j]) {
+        deque.addLast(tt);
+        set.add(tt);
+      }
+    }
+    if (j - 1 >= 0) {
+      var tt = new Tuple(i, j - 1);
+      if (!set.contains(tt) && heights[i][j - 1] >= heights[i][j]) {
+        deque.addLast(tt);
+        set.add(tt);
+      }
+    }
+    if (j + 1 < n) {
+      var tt = new Tuple(i, j + 1);
+      if (!set.contains(tt) && heights[i][j + 1] >= heights[i][j]) {
+        deque.addLast(tt);
+        set.add(tt);
+      }
+    }
   }
 
   /**
