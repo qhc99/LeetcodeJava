@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings("JavaDoc")
+@SuppressWarnings({"JavaDoc", "unused"})
 public class Leetcode400 {
 
   /**
@@ -416,6 +416,35 @@ public class Leetcode400 {
     public int getRandom() {
       return nums.get((int) (Math.random() * nums.size()));
     }
+  }
+
+  /**
+   * #383
+   * @param ransomNote
+   * @param magazine
+   * @return
+   */
+  public static boolean canConstruct(String ransomNote, String magazine) {
+    int[] count_ransomNote = new int['z'-'a'+1];
+    int[] count_magazine = new int['z'-'a'+1];
+    var chars_ran = ransomNote.toCharArray();
+    var chars_mag = magazine.toCharArray();
+
+    for(int i = 0; i < chars_ran.length; i++){
+      var c = chars_ran[i];
+      count_ransomNote[c-'a']++;
+    }
+    for(int i = 0; i < chars_mag.length; i++){
+      var c = chars_mag[i];
+      count_magazine[c-'a']++;
+    }
+    for(int i = 0; i < count_ransomNote.length; i++){
+      if(count_magazine[i] < count_ransomNote[i]){
+        return false;
+      }
+    }
+
+    return true;
   }
 
   /**

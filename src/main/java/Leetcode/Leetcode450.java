@@ -1903,4 +1903,35 @@ public class Leetcode450 {
   private static boolean canFillIn(char c, Map<Character, Integer> current, Map<Character, Integer> chars) {
     return current.getOrDefault(c, 0) + 1 <= chars.get(c);
   }
+
+  /**
+   * #447
+   *
+   * @param points
+   * @return
+   */
+  public static int numberOfBoomerangs(int[][] points) {
+    int ans = 0;
+    for (int i = 0; i < points.length; i++) {
+      var p = points[i];
+      Map<Integer, Integer> distCount = new HashMap<>(points.length - i - 1);
+      for (int j = 0; j < points.length; j++) {
+        if(j!=i){
+          var pp = points[j];
+          var ds = distSquare(p, pp);
+          distCount.put(ds, distCount.getOrDefault(ds, 0) + 1);
+        }
+      }
+      for (var v : distCount.values()) {
+        ans += v * (v-1);
+      }
+    }
+    return ans;
+  }
+
+  private static int distSquare(int[] a, int[] b) {
+    var t1 = Math.abs(a[0] - b[0]);
+    var t2 = Math.abs(a[1] - b[1]);
+    return t1 * t1 + t2 * t2;
+  }
 }
