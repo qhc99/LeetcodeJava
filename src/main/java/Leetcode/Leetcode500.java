@@ -1,10 +1,29 @@
 package Leetcode;
 
-import java.util.Arrays;
-import java.util.Comparator;
+import java.util.*;
 
 @SuppressWarnings({"JavaDoc", "unused"})
 public class Leetcode500 {
+
+  /**
+   * #451
+   *
+   * @param s
+   * @return
+   */
+  public static String frequencySort(String s) {
+    List<Integer> chrs =  new ArrayList<>(s.chars().boxed().toList());
+    Map<Integer, Integer> freq = new HashMap<>(26);
+    for (var c : chrs) {
+      freq.put(c, freq.getOrDefault(c, 0) + 1);
+    }
+    chrs.sort((a,b)-> freq.get(b)*100-freq.get(a)*100+b-a);
+    StringBuilder sb = new StringBuilder();
+    for(var c: chrs){
+      sb.append((char)(int) c);
+    }
+    return sb.toString();
+  }
 
   /**
    * #452

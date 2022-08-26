@@ -1916,14 +1916,14 @@ public class Leetcode450 {
       var p = points[i];
       Map<Integer, Integer> distCount = new HashMap<>(points.length - i - 1);
       for (int j = 0; j < points.length; j++) {
-        if(j!=i){
+        if (j != i) {
           var pp = points[j];
           var ds = distSquare(p, pp);
           distCount.put(ds, distCount.getOrDefault(ds, 0) + 1);
         }
       }
       for (var v : distCount.values()) {
-        ans += v * (v-1);
+        ans += v * (v - 1);
       }
     }
     return ans;
@@ -1933,5 +1933,25 @@ public class Leetcode450 {
     var t1 = Math.abs(a[0] - b[0]);
     var t2 = Math.abs(a[1] - b[1]);
     return t1 * t1 + t2 * t2;
+  }
+
+  /**
+   * 3448
+   *
+   * @param nums
+   * @return
+   */
+  public static List<Integer> findDisappearedNumbers(int[] nums) {
+    for (int i = 0; i < nums.length; i++) {
+      var n = nums[i];
+      nums[(n % (nums.length + 1)) - 1] += nums.length + 1;
+    }
+    List<Integer> ans = new ArrayList<>(nums.length);
+    for (int i = 0; i < nums.length; i++) {
+      if(nums[i] <= nums.length){
+        ans.add(i+1);
+      }
+    }
+    return ans;
   }
 }
