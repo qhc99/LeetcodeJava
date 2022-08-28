@@ -102,6 +102,9 @@ public class Leetcode500 {
     return pi;
   }
 
+  /**
+   * #460
+   */
   public static class LFUCache {
 
     public static class DLinkMatrix {
