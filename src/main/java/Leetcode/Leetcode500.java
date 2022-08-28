@@ -12,15 +12,15 @@ public class Leetcode500 {
    * @return
    */
   public static String frequencySort(String s) {
-    List<Integer> chrs =  new ArrayList<>(s.chars().boxed().toList());
+    List<Integer> chrs = new ArrayList<>(s.chars().boxed().toList());
     Map<Integer, Integer> freq = new HashMap<>(26);
     for (var c : chrs) {
       freq.put(c, freq.getOrDefault(c, 0) + 1);
     }
-    chrs.sort((a,b)-> freq.get(b)*100-freq.get(a)*100+b-a);
+    chrs.sort((a, b) -> freq.get(b) * 100 - freq.get(a) * 100 + b - a);
     StringBuilder sb = new StringBuilder();
-    for(var c: chrs){
-      sb.append((char)(int) c);
+    for (var c : chrs) {
+      sb.append((char) (int) c);
     }
     return sb.toString();
   }
@@ -100,6 +100,204 @@ public class Leetcode500 {
       pi[q + 1] = k;
     }
     return pi;
+  }
+
+  public static class LFUCache {
+
+    public static class DLinkMatrix {
+
+      final DMNode head, tail;
+
+      DLinkMatrix() {
+        head = new DMNode(-1);
+        tail = new DMNode(-1);
+        head.right = tail;
+        head.left = tail;
+        tail.left = head;
+        tail.right = head;
+      }
+
+      static void insertAfter(DMNode n, DMNode insert) {
+        var r = n.right;
+        n.right = insert;
+        insert.left = n;
+
+        insert.right = r;
+        r.left = insert;
+      }
+
+      DMNode firstNode() {
+        if (head.right != tail) {
+          return head.right;
+        }
+        else throw new RuntimeException();
+      }
+
+      boolean isEmpty() {
+        return head.right == tail;
+      }
+
+      static class DMNode {
+        DMNode left;
+        DMNode right;
+        final int freq;
+
+        DMNode(int f) {
+          freq = f;
+        }
+
+        DLinkList list = new DLinkList();
+
+        void detach() {
+          var l = left;
+          var r = right;
+          l.right = r;
+          r.left = l;
+        }
+      }
+
+      static class DLinkList {
+        final DLNode head, tail;
+
+        DLinkList() {
+          head = new DLNode(-1);
+          tail = new DLNode(-1);
+          head.right = tail;
+          head.left = tail;
+          tail.left = head;
+          tail.right = head;
+        }
+
+        boolean isEmpty() {
+          return head.right == tail;
+        }
+
+        void addNode(DLNode n) {
+          var r = head.right;
+          head.right = n;
+          n.left = head;
+
+          r.left = n;
+          n.right = r;
+        }
+
+        DLNode lastNode() {
+          if (head.right != tail) {
+            return tail.left;
+          }
+          else throw new RuntimeException();
+        }
+
+        static class DLNode {
+          DLNode left;
+          DLNode right;
+          int key;
+
+          DLNode(int key) {
+            this.key = key;
+          }
+
+          void detach() {
+            var l = left;
+            var r = right;
+            l.right = r;
+            r.left = l;
+          }
+        }
+      }
+    }
+
+    static class Info {
+      int val;
+      DLinkMatrix.DMNode nodeM;
+      DLinkMatrix.DLinkList.DLNode nodeL;
+
+      Info(int val, DLinkMatrix.DMNode nodeM, DLinkMatrix.DLinkList.DLNode nodeL) {
+        this.val = val;
+        this.nodeL = nodeL;
+        this.nodeM = nodeM;
+      }
+    }
+
+    final Map<Integer, Info> key_info_map;
+
+    final int capacity;
+
+    final DLinkMatrix dLinkMatrix = new DLinkMatrix();
+
+    public LFUCache(int capacity) {
+      this.capacity = capacity;
+      key_info_map = new HashMap<>(capacity);
+    }
+
+    public int get(int key) {
+      if (capacity == 0) return -1;
+      var info = key_info_map.get(key);
+      int ans = -1;
+      if (info == null) return ans;
+      ans = info.val;
+
+      var mNode = info.nodeM;
+      var lNode = info.nodeL;
+      var freq = mNode.freq;
+      freq++;
+      if (mNode.right.freq == freq) {
+        lNode.detach();
+        if (mNode.list.isEmpty()) mNode.detach();
+        mNode.right.list.addNode(lNode);
+        info.nodeM = mNode.right;
+      }
+      else {
+        var rMNode = new DLinkMatrix.DMNode(freq);
+        DLinkMatrix.insertAfter(mNode, rMNode);
+        info.nodeM = rMNode;
+
+        lNode.detach();
+        if (mNode.list.isEmpty()) mNode.detach();
+        rMNode.list.addNode(lNode);
+      }
+      return ans;
+    }
+
+    public void put(int key, int value) {
+      if (capacity == 0) return;
+      if (key_info_map.containsKey(key)) {
+        get(key);
+        key_info_map.get(key).val = value;
+      }
+      else {
+        if (key_info_map.size() >= capacity) {
+          // evict
+          var n = dLinkMatrix.firstNode().list.lastNode();
+          key_info_map.remove(n.key);
+          n.detach();
+          if (dLinkMatrix.firstNode().list.isEmpty()) dLinkMatrix.firstNode().detach();
+        }
+
+        if (dLinkMatrix.isEmpty()) {
+          var mNode = new DLinkMatrix.DMNode(1);
+          var lNode = new DLinkMatrix.DLinkList.DLNode(key);
+          mNode.list.addNode(lNode);
+          DLinkMatrix.insertAfter(dLinkMatrix.head, mNode);
+          key_info_map.put(key, new Info(value, mNode, lNode));
+        }
+        else {
+          var fMNode = dLinkMatrix.firstNode();
+          if (fMNode.freq == 1) {
+            var lNode = new DLinkMatrix.DLinkList.DLNode(key);
+            fMNode.list.addNode(lNode);
+            key_info_map.put(key, new Info(value, fMNode, lNode));
+          }
+          else {
+            var mNode = new DLinkMatrix.DMNode(1);
+            DLinkMatrix.insertAfter(dLinkMatrix.head, mNode);
+            var lNode = new DLinkMatrix.DLinkList.DLNode(key);
+            mNode.list.addNode(lNode);
+            key_info_map.put(key, new Info(value, mNode, lNode));
+          }
+        }
+      }
+    }
   }
 
 
