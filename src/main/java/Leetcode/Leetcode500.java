@@ -401,9 +401,9 @@ public class Leetcode500 {
     double[] ans = new double[nums.length - k + 1];
     var MDH = new MedianDualHeap(k);
     int idx = 0;
-    for(var n : nums){
+    for (var n : nums) {
       MDH.add(n);
-      if(MDH.hasMediean()) ans[idx++] = MDH.median();
+      if (MDH.hasMediean()) ans[idx++] = MDH.median();
     }
     return ans;
   }
@@ -426,7 +426,7 @@ public class Leetcode500 {
       return maxHeap.isEmpty();
     }
 
-    public boolean hasMediean(){
+    public boolean hasMediean() {
       return queue.size() == capacity;
     }
 
@@ -436,7 +436,7 @@ public class Leetcode500 {
 
       if (isEmpty()) maxHeap.add(n);
       else {
-        if(n <= maxHeap.peek()) maxHeap.add(n);
+        if (n <= maxHeap.peek()) maxHeap.add(n);
         else minHeap.add(n);
 
         while (maxHeap.size() > minHeap.size() + 1) {
@@ -464,5 +464,30 @@ public class Leetcode500 {
     }
   }
 
+  /**
+   * #481
+   *
+   * @param n
+   * @return
+   */
+  public static int magicalString(int n) {
+    if (n <= 3) return 1;
+
+    Deque<Integer> deque = new ArrayDeque<>(256);
+    deque.add(2);
+    boolean isOne = true;
+    int l = 3, ans = 1;
+    while (l < n) {
+      int group = deque.poll();
+      if (isOne) ans += group;
+      deque.add(isOne ? 1 : 2);
+      if (group == 2) deque.add(isOne ? 1 : 2);
+      l += group;
+      isOne = !isOne;
+    }
+    if (l > n && !isOne) ans -= l - n;
+
+    return ans;
+  }
 
 }
