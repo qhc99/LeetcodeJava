@@ -473,7 +473,7 @@ public class Leetcode500 {
   public static int magicalString(int n) {
     if (n <= 3) return 1;
 
-    Deque<Integer> deque = new ArrayDeque<>(256);
+    Deque<Integer> deque = new ArrayDeque<>(n);
     deque.add(2);
     boolean isOne = true;
     int l = 3, ans = 1;
