@@ -344,6 +344,27 @@ public class Leetcode500 {
   }
 
   /**
+   * #475
+   *
+   * @param houses
+   * @param heaters
+   * @return
+   */
+  public static int findRadius(int[] houses, int[] heaters) {
+    var tree = new TreeSet<Integer>();
+    for (var n : heaters) tree.add(n);
+    int ans = -1;
+    for (var n : houses) {
+      var l = tree.floor(n);
+      var r = tree.ceiling(n);
+      if (l == null) ans = Math.max(ans, Math.abs(r - n));
+      else if (r == null) ans = Math.max(ans, Math.abs(l - n));
+      else ans = Math.max(ans, Math.min(Math.abs(l - n), Math.abs(r - n)));
+    }
+    return ans;
+  }
+
+  /**
    * #476
    *
    * @param num
@@ -367,5 +388,81 @@ public class Leetcode500 {
   private static int kthBinDigit(int num, int k) {
     return num >>> k & 1;
   }
+
+
+  /**
+   * #480
+   *
+   * @param nums
+   * @param k
+   * @return
+   */
+  public static double[] medianSlidingWindow(int[] nums, int k) {
+    double[] ans = new double[nums.length - k + 1];
+    var MDH = new MedianDualHeap(k);
+    int idx = 0;
+    for(var n : nums){
+      MDH.add(n);
+      if(MDH.hasMediean()) ans[idx++] = MDH.median();
+    }
+    return ans;
+  }
+
+  static final class MedianDualHeap {
+    final PriorityQueue<Long> minHeap;
+    final PriorityQueue<Long> maxHeap;
+
+    final Deque<Long> queue;
+    final int capacity;
+
+    MedianDualHeap(int cap) {
+      minHeap = new PriorityQueue<>((cap + 1) / 2);
+      maxHeap = new PriorityQueue<>((cap + 1) / 2, Comparator.reverseOrder());
+      queue = new ArrayDeque<>(cap + 1);
+      capacity = cap;
+    }
+
+    private boolean isEmpty() {
+      return maxHeap.isEmpty();
+    }
+
+    public boolean hasMediean(){
+      return queue.size() == capacity;
+    }
+
+    public void add(long n) {
+      queue.addLast(n);
+      pollQueueExcess();
+
+      if (isEmpty()) maxHeap.add(n);
+      else {
+        if(n <= maxHeap.peek()) maxHeap.add(n);
+        else minHeap.add(n);
+
+        while (maxHeap.size() > minHeap.size() + 1) {
+          minHeap.add(maxHeap.poll());
+        }
+
+        while (maxHeap.size() < minHeap.size()) {
+          maxHeap.add(minHeap.poll());
+        }
+      }
+    }
+
+    public double median() {
+      if (maxHeap.size() > minHeap.size()) return maxHeap.peek();
+      else return (minHeap.peek() + maxHeap.peek()) / 2.;
+    }
+
+    private void pollQueueExcess() {
+      if (queue.size() > capacity) {
+        var q = queue.pollFirst();
+        if (!minHeap.remove(q)) {
+          if (!maxHeap.remove(q)) throw new RuntimeException();
+        }
+      }
+    }
+  }
+
 
 }
