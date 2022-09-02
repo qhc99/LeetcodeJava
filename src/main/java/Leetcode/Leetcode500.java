@@ -490,4 +490,31 @@ public class Leetcode500 {
     return ans;
   }
 
+  /**
+   * #482
+   * @param s
+   * @param k
+   * @return
+   */
+  public static String licenseKeyFormatting(String s, int k) {
+    Deque<Character> stack = new ArrayDeque<>(s.length());
+    for(int i = 0; i < s.length(); i++){
+      var c = s.charAt(i);
+      if(c != '-'){
+        if(c >= 'a' && c <= 'z') c -= 'a'-'A';
+        stack.addLast(c);
+      }
+    }
+    StringBuilder sb = new StringBuilder();
+    int count = 0;
+    while (stack.size() > 0){
+      sb.insert(0,stack.pollLast());
+      count++;
+      if(count == k && stack.size() != 0) {
+        sb.insert(0,"-");
+        count = 0;
+      }
+    }
+    return sb.toString();
+  }
 }
