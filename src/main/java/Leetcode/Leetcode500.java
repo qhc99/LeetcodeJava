@@ -492,29 +492,67 @@ public class Leetcode500 {
 
   /**
    * #482
+   *
    * @param s
    * @param k
    * @return
    */
   public static String licenseKeyFormatting(String s, int k) {
     Deque<Character> stack = new ArrayDeque<>(s.length());
-    for(int i = 0; i < s.length(); i++){
+    for (int i = 0; i < s.length(); i++) {
       var c = s.charAt(i);
-      if(c != '-'){
-        if(c >= 'a' && c <= 'z') c -= 'a'-'A';
+      if (c != '-') {
+        if (c >= 'a' && c <= 'z') c -= 'a' - 'A';
         stack.addLast(c);
       }
     }
     StringBuilder sb = new StringBuilder();
     int count = 0;
-    while (stack.size() > 0){
-      sb.insert(0,stack.pollLast());
+    while (stack.size() > 0) {
+      sb.insert(0, stack.pollLast());
       count++;
-      if(count == k && stack.size() != 0) {
-        sb.insert(0,"-");
+      if (count == k && stack.size() != 0) {
+        sb.insert(0, "-");
         count = 0;
       }
     }
     return sb.toString();
+  }
+
+  /**
+   * #483
+   *
+   * @param n
+   * @return
+   */
+  public static String smallestGoodBase(String n) {
+    long x = Long.parseLong(n, 10);
+    for (int b = 2; b < x; b++) {
+      double ll = Math.log(x * b - x + 1) / Math.log(b);
+      long l = (long) ll;
+      if (l != ll) continue;
+      if (Math.pow(b, l) == x * b - x + 1) return String.valueOf(b);
+    }
+    throw new RuntimeException();
+  }
+
+  /**
+   * #485
+   *
+   * @param nums
+   * @return
+   */
+  public static int findMaxConsecutiveOnes(int[] nums) {
+    int max = 0, count = 0;
+    for (int i = 0; i < nums.length; i++) {
+      var n = nums[i];
+      if (n == 1) {
+        if (i - 1 >= 0 && nums[i - 1] == 1) count++;
+        else count = 1;
+      }
+      else max = Math.max(max, count);
+    }
+    max = Math.max(max, count);
+    return max;
   }
 }
