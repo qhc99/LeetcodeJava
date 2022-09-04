@@ -356,17 +356,17 @@ public class Leetcode500 {
     for (var s : strs) {
       var count = countZerosAndOnes(s);
       for (int i = m; i >= 0; i--) {
-        for(int j = n; j >= 0; j--){
-          if(i >= count[0] && j >= count[1]) {
-            dp[i][j] = Math.max(dp[i][j],dp[i-count[0]][j-count[1]] + 1);
+        for (int j = n; j >= 0; j--) {
+          if (i >= count[0] && j >= count[1]) {
+            dp[i][j] = Math.max(dp[i][j], dp[i - count[0]][j - count[1]] + 1);
           }
         }
       }
     }
     int max = -1;
-    for(var a : dp){
-      for(var num : a){
-        max = Math.max(num,max);
+    for (var a : dp) {
+      for (var num : a) {
+        max = Math.max(num, max);
       }
     }
     return max;
@@ -564,14 +564,21 @@ public class Leetcode500 {
    * @return
    */
   public static String smallestGoodBase(String n) {
-    long x = Long.parseLong(n, 10);
-    for (int b = 2; b < x; b++) {
-      double ll = Math.log(x * b - x + 1) / Math.log(b);
-      long l = (long) ll;
-      if (l != ll) continue;
-      if (Math.pow(b, l) == x * b - x + 1) return String.valueOf(b);
+    long N = Long.parseLong(n);
+    for (int m = (int) Math.floor(Math.log(N) / Math.log(2)); m > 1; m--) {
+      int b = (int) Math.pow(N, 1. / m);
+      if(b >= 2 && baseOnes(m,b) == N) return String.valueOf(b);
     }
-    throw new RuntimeException();
+    return String.valueOf(N - 1);
+  }
+
+  private static long baseOnes(int m, int b) {
+    long mul = 1, sum = 1;
+    for (int i = 0; i < m; i++) {
+      mul *= b;
+      sum += mul;
+    }
+    return sum;
   }
 
   /**
