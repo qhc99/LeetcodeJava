@@ -639,7 +639,7 @@ public class Leetcode500 {
     private void count(int[] a, int[] b) {
       int i = 0, j = 0;
       while (i < a.length) {
-        while (j < b.length && (long) a[i] > 2 * (long)b[j]) {
+        while (j < b.length && (long) a[i] > 2 * (long) b[j]) {
           j++;
         }
         count += j;
@@ -665,5 +665,31 @@ public class Leetcode500 {
         merge(array, start, left_cache, right_cache);
       }
     }
+  }
+
+  /**
+   * #498
+   *
+   * @param mat
+   * @return
+   */
+  public static int[] findDiagonalOrder(int[][] mat) {
+    int m = mat.length, n = mat[0].length;
+    int lines = m + n - 1;
+    int[] ans = new int[m * n];
+    int idx = 0;
+    for (int sum = 0; sum < lines; sum++) {
+      if (sum % 2 == 0) {
+        int i = Math.min(sum, m - 1);
+        int j = sum - i;
+        while (i >= 0 && j < n) ans[idx++] = mat[i--][j++];
+      }
+      else {
+        int j = Math.min(sum, n - 1);
+        int i = sum - j;
+        while (i < m && j >= 0) ans[idx++] = mat[i++][j--];
+      }
+    }
+    return ans;
   }
 }
