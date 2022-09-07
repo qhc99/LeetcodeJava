@@ -567,7 +567,7 @@ public class Leetcode500 {
     long N = Long.parseLong(n);
     for (int m = (int) Math.floor(Math.log(N) / Math.log(2)); m > 1; m--) {
       int b = (int) Math.pow(N, 1. / m);
-      if(b >= 2 && baseOnes(m,b) == N) return String.valueOf(b);
+      if (b >= 2 && baseOnes(m, b) == N) return String.valueOf(b);
     }
     return String.valueOf(N - 1);
   }
@@ -599,5 +599,71 @@ public class Leetcode500 {
     }
     max = Math.max(max, count);
     return max;
+  }
+
+  /**
+   * #493
+   *
+   * @param nums
+   * @return
+   */
+  public static int reversePairs(int[] nums) {
+    return (new ReversePairsSolver()).solve(nums);
+  }
+
+  static class ReversePairsSolver {
+    private void merge(int[] array, int start, int[] cache1, int[] cache2) {
+      int right_idx = 0;
+      int left_idx = 0;
+      System.arraycopy(array, start, cache1, 0, cache1.length);
+      System.arraycopy(array, start + cache1.length, cache2, 0, cache2.length);
+      count(cache1, cache2);
+      for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+        if (cache1[left_idx] <= cache2[right_idx]) {
+          array[i] = cache1[left_idx++];
+        }
+        else {
+          array[i] = cache2[right_idx++];
+        }
+      }
+      if (left_idx < cache1.length) {
+        System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
+      }
+      else if (right_idx < cache2.length) {
+        System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
+      }
+    }
+
+    private int count = 0;
+
+    private void count(int[] a, int[] b) {
+      int i = 0, j = 0;
+      while (i < a.length) {
+        while (j < b.length && (long) a[i] > 2 * (long)b[j]) {
+          j++;
+        }
+        count += j;
+        i++;
+      }
+    }
+
+    public int solve(int[] array) {
+      mergeSortReversePairs(array, 0, array.length);
+      return count;
+    }
+
+
+    private void mergeSortReversePairs(int[] array, int start, int end) {
+      if ((end - start) > 1) {
+        int middle = (start + end) / 2;
+        mergeSortReversePairs(array, start, middle);
+        mergeSortReversePairs(array, middle, end);
+        int left_len = middle - start;
+        int right_len = end - middle;
+        var left_cache = new int[left_len];
+        var right_cache = new int[right_len];
+        merge(array, start, left_cache, right_cache);
+      }
+    }
   }
 }
