@@ -1,9 +1,7 @@
 package Leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.IntStream;
 
 public class Leetcode550 {
   /**
@@ -56,10 +54,48 @@ public class Leetcode550 {
     }
   }
 
+  
+  /**
+   * #503
+   * @param nums
+   * @return 
+   */
+  public static int[] nextGreaterElements(int[] nums) {
+    int[] next = new int[nums.length];
+    Arrays.fill(next,Integer.MIN_VALUE);
+    for (int i = 0; i < nums.length - 1; i++) {
+      if (nums[i] > nums[nums.length - 1]) {
+        next[nums.length - 1] = nums[i];
+        break;
+      }
+    }
+    for (int i = nums.length - 2; i >= 0; i--) {
+      for (int ptr = i + 1; ptr != i; ) {
+        if (nums[ptr] > nums[i]) {
+          next[i] = nums[ptr];
+          break;
+        }
+        else if (next[ptr] > nums[i]) {
+          next[i] = next[ptr];
+          break;
+        }
+
+        ptr++;
+        if(ptr == nums.length) ptr = 0;
+      }
+    }
+
+    for(int i = 0; i < next.length; i++){
+      if(next[i] == Integer.MIN_VALUE) next[i] = -1;
+    }
+
+    return next;
+  }
+
   /**
    * #525
-   * <br/> 连续数组
-   * <br/>给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
+   * <br> 连续数组
+   * <br>给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
    *
    * @param nums nums
    * @return len
@@ -98,6 +134,83 @@ public class Leetcode550 {
     return max;
   }
 
+  /**
+   * # 506
+   */
+  public static String[] findRelativeRanks(int[] score) {
+    var idx = IntStream.range(0,score.length).toArray();
+    recursiveMergeSortWithIndex(score,idx);
+    String[] ans = new String[score.length];
+    for(int i = score.length-1; i >= 0; i--){
+      if(score.length - i == 1) ans[idx[i]] = "Gold Medal";
+      else if(score.length - i == 2) ans[idx[i]] = "Silver Medal";
+      else if(score.length - i == 3) ans[idx[i]] = "Bronze Medal";
+      else {
+        ans[idx[i]] = String.valueOf(score.length - i);
+      }
+    }
+    return ans;
+  }
+
+  private static void merge(int[] array, int[] idx, int start, int[] cache1, int[] cache2, int[] ci1,int[] ci2) {
+    int right_idx = 0;
+    int left_idx = 0;
+    System.arraycopy(array, start, cache1, 0, cache1.length);
+    System.arraycopy(array, start + cache1.length, cache2, 0, cache2.length);
+
+    System.arraycopy(idx, start, ci1, 0, cache1.length);
+    System.arraycopy(idx, start + cache1.length, ci2, 0, cache2.length);
+
+    for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+      if (cache1[left_idx] <= cache2[right_idx]) {
+        array[i] = cache1[left_idx];
+        idx[i] = ci1[left_idx++];
+      }
+      else {
+        array[i] = cache2[right_idx];
+        idx[i] = ci2[right_idx++];
+      }
+    }
+    if (left_idx < cache1.length) {
+      System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
+      System.arraycopy(ci1, left_idx, idx, start + left_idx + right_idx, cache1.length - left_idx);
+    }
+    else if (right_idx < cache2.length) {
+      System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
+      System.arraycopy(ci2, right_idx, idx, start + left_idx + right_idx, cache2.length - right_idx);
+    }
+  }
+
+  private static void recursiveMergeSortWithIndex(int[] array, int[] idx) {
+    recursiveMergeSortWithIndex(array, idx, 0, array.length);
+  }
+
+  private static void recursiveMergeSortWithIndex(int[] array, int[] idx, int start, int end) {
+    if ((end - start) > 1) {
+      int middle = (start + end) / 2;
+      recursiveMergeSortWithIndex(array,idx, start, middle);
+      recursiveMergeSortWithIndex(array,idx, middle, end);
+      int left_len = middle - start;
+      int right_len = end - middle;
+      var left_cache = new int[left_len];
+      var right_cache = new int[right_len];
+      var left_cache_i = new int[left_len];
+      var right_cache_i = new int[right_len];
+      merge(array, idx, start, left_cache, right_cache,left_cache_i,right_cache_i);
+    }
+  }
+
+  /**
+   * #514
+   */
+  public static int findRotateSteps(String ring, String key) {
+    int[] dp = IntStream.range(0,ring.length()).toArray();
+    Map<Character, List<Integer>> chrIndices = new HashMap<>(ring.length());
+    for(int i = 0; i < ring.length(); i++){
+      chrIndices.computeIfAbsent(ring.charAt(i),(arg)->new ArrayList<>()).add(i);
+    }
+    return 0;
+  }
 
   /**
    * #538
