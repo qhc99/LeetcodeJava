@@ -3,6 +3,7 @@ package Leetcode;
 import java.util.*;
 import java.util.stream.IntStream;
 
+@SuppressWarnings("ALL")
 public class Leetcode550 {
   /**
    * #501
@@ -54,15 +55,16 @@ public class Leetcode550 {
     }
   }
 
-  
+
   /**
    * #503
+   *
    * @param nums
-   * @return 
+   * @return
    */
   public static int[] nextGreaterElements(int[] nums) {
     int[] next = new int[nums.length];
-    Arrays.fill(next,Integer.MIN_VALUE);
+    Arrays.fill(next, Integer.MIN_VALUE);
     for (int i = 0; i < nums.length - 1; i++) {
       if (nums[i] > nums[nums.length - 1]) {
         next[nums.length - 1] = nums[i];
@@ -81,12 +83,12 @@ public class Leetcode550 {
         }
 
         ptr++;
-        if(ptr == nums.length) ptr = 0;
+        if (ptr == nums.length) ptr = 0;
       }
     }
 
-    for(int i = 0; i < next.length; i++){
-      if(next[i] == Integer.MIN_VALUE) next[i] = -1;
+    for (int i = 0; i < next.length; i++) {
+      if (next[i] == Integer.MIN_VALUE) next[i] = -1;
     }
 
     return next;
@@ -138,21 +140,22 @@ public class Leetcode550 {
    * # 506
    */
   public static String[] findRelativeRanks(int[] score) {
-    var idx = IntStream.range(0,score.length).toArray();
-    recursiveMergeSortWithIndex(score,idx);
+    var idx = IntStream.range(0, score.length).toArray();
+    recursiveMergeSortWithIndex(score, idx);
     String[] ans = new String[score.length];
-    for(int i = score.length-1; i >= 0; i--){
-      if(score.length - i == 1) ans[idx[i]] = "Gold Medal";
-      else if(score.length - i == 2) ans[idx[i]] = "Silver Medal";
-      else if(score.length - i == 3) ans[idx[i]] = "Bronze Medal";
+    for (int i = score.length - 1; i >= 0; i--) {
+      if (score.length - i == 1) ans[idx[i]] = "Gold Medal";
+      else if (score.length - i == 2) ans[idx[i]] = "Silver Medal";
+      else if (score.length - i == 3) ans[idx[i]] = "Bronze Medal";
       else {
         ans[idx[i]] = String.valueOf(score.length - i);
       }
     }
+
     return ans;
   }
 
-  private static void merge(int[] array, int[] idx, int start, int[] cache1, int[] cache2, int[] ci1,int[] ci2) {
+  private static void merge(int[] array, int[] idx, int start, int[] cache1, int[] cache2, int[] ci1, int[] ci2) {
     int right_idx = 0;
     int left_idx = 0;
     System.arraycopy(array, start, cache1, 0, cache1.length);
@@ -188,15 +191,15 @@ public class Leetcode550 {
   private static void recursiveMergeSortWithIndex(int[] array, int[] idx, int start, int end) {
     if ((end - start) > 1) {
       int middle = (start + end) / 2;
-      recursiveMergeSortWithIndex(array,idx, start, middle);
-      recursiveMergeSortWithIndex(array,idx, middle, end);
+      recursiveMergeSortWithIndex(array, idx, start, middle);
+      recursiveMergeSortWithIndex(array, idx, middle, end);
       int left_len = middle - start;
       int right_len = end - middle;
       var left_cache = new int[left_len];
       var right_cache = new int[right_len];
       var left_cache_i = new int[left_len];
       var right_cache_i = new int[right_len];
-      merge(array, idx, start, left_cache, right_cache,left_cache_i,right_cache_i);
+      merge(array, idx, start, left_cache, right_cache, left_cache_i, right_cache_i);
     }
   }
 
@@ -204,12 +207,69 @@ public class Leetcode550 {
    * #514
    */
   public static int findRotateSteps(String ring, String key) {
-    int[] dp = IntStream.range(0,ring.length()).toArray();
-    Map<Character, List<Integer>> chrIndices = new HashMap<>(ring.length());
-    for(int i = 0; i < ring.length(); i++){
-      chrIndices.computeIfAbsent(ring.charAt(i),(arg)->new ArrayList<>()).add(i);
+    Map<Character, List<Integer>> chrToRingIdx = new HashMap<>(ring.length());
+    Set<Character> chrOfKey = new HashSet<>(key.length());
+    for (int i = 0; i < key.length(); i++) {
+      chrOfKey.add(key.charAt(i));
     }
-    return 0;
+    for (int i = 0; i < ring.length(); i++) {
+      var c = ring.charAt(i);
+      if (chrOfKey.contains(c)) {
+        chrToRingIdx.computeIfAbsent(c, (arg) -> new ArrayList<>(ring.length())).add(i);
+      }
+    }
+
+    NodeFT[] prev = new NodeFT[ring.length()];
+    NodeFT[] current = new NodeFT[ring.length()];
+    {
+      var indices = chrToRingIdx.get(key.charAt(0));
+      for (int i = 0; i < indices.size(); i++) {
+        int idx = indices.get(i);
+        prev[i] = new NodeFT(idx, Math.min(idx, ring.length() - idx));
+      }
+    }
+    for (int i = 1; i < key.length(); i++) {
+      var indices = chrToRingIdx.get(key.charAt(i));
+      for (int j = 0; j < indices.size(); j++) {
+        current[j] = new NodeFT(indices.get(j), Integer.MAX_VALUE);
+        var cur = current[j];
+        for (int k = 0;  k < prev.length && prev[k] != null; k++) {
+          var n = prev[k];
+          int idx1 = n.idx_ring;
+          int idx2 = indices.get(j);
+          int idx_max = Math.max(idx1, idx2);
+          int idx_min = Math.min(idx1, idx2);
+          cur.rotates = Math.min(cur.rotates, n.rotates + Math.min(idx_max - idx_min, idx_min + ring.length() - idx_max));
+          if (j == indices.size() - 1) {
+            prev[k] = null;
+          }
+        }
+      }
+      var t = prev;
+      prev = current;
+      current = t;
+    }
+
+    int global_min = Integer.MAX_VALUE;
+    for (int i = 0; i < prev.length && prev[i] != null; i++) {
+      global_min = Math.min(prev[i].rotates, global_min);
+    }
+
+
+    return global_min + key.length();
+  }
+
+  /**
+   * Node for freedom trail
+   */
+  private static class NodeFT {
+    final int idx_ring;
+    int rotates;
+
+    NodeFT(int i_r, int r) {
+      idx_ring = i_r;
+      rotates = r;
+    }
   }
 
   /**
