@@ -233,7 +233,7 @@ public class Leetcode550 {
       for (int j = 0; j < indices.size(); j++) {
         current[j] = new NodeFT(indices.get(j), Integer.MAX_VALUE);
         var cur = current[j];
-        for (int k = 0;  k < prev.length && prev[k] != null; k++) {
+        for (int k = 0; k < prev.length && prev[k] != null; k++) {
           var n = prev[k];
           int idx1 = n.idx_ring;
           int idx2 = indices.get(j);
@@ -270,6 +270,53 @@ public class Leetcode550 {
       idx_ring = i_r;
       rotates = r;
     }
+  }
+
+  /**
+   * #521
+   *
+   * @param a
+   * @param b
+   * @return
+   */
+  public static int findLUSlength(String a, String b) {
+    return a.equals(b) ? -1 : b.length();
+  }
+
+
+  /**
+   * #522
+   *
+   * @param strs
+   * @return
+   */
+  public static int findLUSlength(String[] strs) {
+    Arrays.sort(strs, Comparator.comparing(String::length).reversed());
+    Set<String> non_solution = new HashSet<>(strs.length);
+    for (int i = 0; i < strs.length; i++) {
+      var s = strs[i];
+      if (!non_solution.contains(s)) {
+        for (int j = i + 1; j < strs.length; j++) {
+          var s1 = strs[j];
+          if (isSub(s1, s)) non_solution.add(s1);
+        }
+        if (!non_solution.contains(s)) return s.length();
+      }
+    }
+
+    return -1;
+  }
+
+  private static boolean isSub(String sub, String full) {
+    for (int i = 0, j = 0; j < full.length(); j++) {
+      var c = sub.charAt(i);
+      var cc = full.charAt(j);
+      if (c == cc) {
+        i++;
+        if (i == sub.length()) return true;
+      }
+    }
+    return false;
   }
 
   /**
