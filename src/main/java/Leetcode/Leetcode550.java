@@ -320,6 +320,45 @@ public class Leetcode550 {
   }
 
   /**
+   * #524
+   *
+   * @param s
+   * @param dictionary
+   * @return
+   */
+  public static String findLongestWord(String s, List<String> dictionary) {
+    int[] idx = new int[dictionary.size()];
+    for(int i = 0; i < s.length(); i++){
+      var c = s.charAt(i);
+      for(int j = 0; j < idx.length; j++){
+        var dict_i = idx[j];
+        var dict = dictionary.get(j);
+        if(dict_i < dict.length()){
+          if(dict.charAt(dict_i) == c){
+            idx[j]++;
+          }
+        }
+      }
+    }
+    String ans = "";
+    for(int i = 0; i < idx.length; i++){
+      var dict = dictionary.get(i);
+      if(idx[i] == dict.length()){
+        if(ans == null){
+          ans = dict;
+        }
+        else if(dict.length() != ans.length()){
+          ans =  dict.length() < ans.length() ? ans : dict;
+        }
+        else {
+          ans = dict.compareTo(ans) < 0 ? dict: ans;
+        }
+      }
+    }
+    return ans;
+  }
+
+  /**
    * #538
    * <br/>二叉搜索树转换为累加树
    * <pre>
