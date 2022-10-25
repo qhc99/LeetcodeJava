@@ -327,33 +327,57 @@ public class Leetcode550 {
    * @return
    */
   public static String findLongestWord(String s, List<String> dictionary) {
-    int[] idx = new int[dictionary.size()];
-    for(int i = 0; i < s.length(); i++){
-      var c = s.charAt(i);
-      for(int j = 0; j < idx.length; j++){
-        var dict_i = idx[j];
-        var dict = dictionary.get(j);
-        if(dict_i < dict.length()){
-          if(dict.charAt(dict_i) == c){
-            idx[j]++;
-          }
-        }
+    dictionary = new ArrayList<>(dictionary);
+    dictionary.sort((a, b) -> {
+      if (a.length() > b.length()) {
+        return -1;
+      }
+      else if (a.length() < b.length()) {
+        return 1;
+      }
+      else {
+        return a.compareTo(b);
+      }
+    });
+    var jump = preprocess(s);
+    for (var d : dictionary) {
+      if (isSub(s, d, jump)) {
+        return d;
       }
     }
-    String ans = "";
-    for(int i = 0; i < idx.length; i++){
-      var dict = dictionary.get(i);
-      if(idx[i] == dict.length()){
-        if(ans == null){
-          ans = dict;
-        }
-        else if(dict.length() != ans.length()){
-          ans =  dict.length() < ans.length() ? ans : dict;
-        }
-        else {
-          ans = dict.compareTo(ans) < 0 ? dict: ans;
-        }
+    return "";
+  }
+
+  private static boolean isSub(String s, String sub, int[][] jump) {
+    int i = 0;
+    int j = 0;
+    while (i < s.length() && j < sub.length()) {
+      var c = s.charAt(i);
+      var dc = sub.charAt(j);
+      if (c == dc) {
+        i++;
+        j++;
       }
+      else {
+        var next = jump[i][dc - 'a'];
+        if (next != -1) i = next;
+        else return false;
+      }
+    }
+    return j == sub.length();
+  }
+
+  private static int[][] preprocess(String s) {
+    int count = 'z' - 'a' + 1;
+    int[][] ans = new int[s.length()][count];
+    int[] arr = new int[count];
+    Arrays.fill(arr, -1);
+    for (int i = s.length() - 1; i >= 0; i--) {
+      int[] copy = new int[count];
+      System.arraycopy(arr, 0, copy, 0, count);
+      ans[i] = copy;
+      var c = s.charAt(i);
+      arr[c - 'a'] = i;
     }
     return ans;
   }
