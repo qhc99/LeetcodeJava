@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"JavaDoc", "unused"})
+@SuppressWarnings({"JavaDoc", "Unused"})
 public class Leetcode500 {
 
   /**
@@ -319,7 +319,6 @@ public class Leetcode500 {
    * @param grid lake and island
    * @return perimeter
    */
-  @SuppressWarnings("unused")
   public static int islandPerimeter(int[][] grid) {
     int[] dx = {0, 1, 0, -1};
     int[] dy = {1, 0, -1, 0};

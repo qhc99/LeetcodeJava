@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings("JavaDoc")
+@SuppressWarnings({"Unused","JavaDoc"})
 public class Leetcode50 {
   /**
    * #1
@@ -14,7 +14,6 @@ public class Leetcode50 {
    * @param target target sum
    * @return numbers array
    */
-  @SuppressWarnings("unused")
   public static int[] twoSum(int[] nums, int target) {
     Map<Integer, Integer> map = new HashMap<>();
     for (int i = 0; i < nums.length; i++) {
@@ -40,7 +39,6 @@ public class Leetcode50 {
    * @param l2 list number
    * @return add result
    */
-  @SuppressWarnings("unused")
   public static ListNode addTwoNumbers(ListNode l1, ListNode l2) {
     return recursiveAddTwoNumbers(l1, l2, 0);
   }
@@ -94,7 +92,7 @@ public class Leetcode50 {
    * @param s string
    * @return result
    */
-  @SuppressWarnings("SpellCheckingInspection, unused")
+  @SuppressWarnings("SpellCheckingInspection, Unused")
   public static int lengthOfLongestSubstring(String s) {
     Map<Character, Integer> map = new HashMap<>();
     int len = s.length();
@@ -129,7 +127,6 @@ public class Leetcode50 {
    * @param nums2 array
    * @return median
    */
-  @SuppressWarnings("unused")
   public static double findMedianSortedArrays(int[] nums1, int[] nums2) {
     if (nums1.length > nums2.length) {
       return findMedianSortedArrays(nums2, nums1);
@@ -175,7 +172,7 @@ public class Leetcode50 {
    * @param s string
    * @return longest palindrome
    */
-  @SuppressWarnings("SpellCheckingInspection, unused")
+  @SuppressWarnings("SpellCheckingInspection, Unused")
   public static String longestPalindrome(String s) {
     int len = s.length();
     if (len <= 1) {
@@ -231,7 +228,7 @@ public class Leetcode50 {
    * @param numRows row count
    * @return origin
    */
-  @SuppressWarnings("SpellCheckingInspection, unused")
+  @SuppressWarnings("SpellCheckingInspection, Unused")
   public static String convert(String s, int numRows) {
     int len = s.length();
     List<StringBuilder> rows = new ArrayList<>();
@@ -264,7 +261,6 @@ public class Leetcode50 {
    * @param x int
    * @return reversed int
    */
-  @SuppressWarnings("unused")
   public static int reverse(int x) {
     int rev = 0;
     while (x != 0) {
@@ -288,7 +284,7 @@ public class Leetcode50 {
    * @param str string
    * @return int
    */
-  @SuppressWarnings("SpellCheckingInspection, unused")
+  @SuppressWarnings("SpellCheckingInspection, Unused")
   public static int myAtoi(String str) {
     var automata = new Automation();
     int len = str.length();
@@ -394,7 +390,6 @@ public class Leetcode50 {
    * @param x int
    * @return x is palindrome
    */
-  @SuppressWarnings("unused")
   public static boolean isPalindrome(int x) {
     if (x < 0) {
       return false;
@@ -423,7 +418,6 @@ public class Leetcode50 {
    * @param p pattern
    * @return is match
    */
-  @SuppressWarnings("unused")
   public static boolean isMatch(String s, String p) {
     int m = s.length(), n = p.length();
     boolean[][] dp = new boolean[m + 1][n + 1];
@@ -458,7 +452,6 @@ public class Leetcode50 {
    * @param height partition array
    * @return max area
    */
-  @SuppressWarnings("unused")
   public static int maxArea(int[] height) {
     int len = height.length;
     int p = 0, q = len - 1;
@@ -506,7 +499,7 @@ public class Leetcode50 {
    * @param nums int array
    * @return set of three tuple
    */
-  @SuppressWarnings("unused")
+  
   public static List<List<Integer>> threeSum(int[] nums) {
     Arrays.sort(nums);
     List<List<Integer>> res = new ArrayList<>();
@@ -555,7 +548,7 @@ public class Leetcode50 {
    * @param target sum target
    * @return closest sum
    */
-  @SuppressWarnings("unused")
+  
   public int threeSumClosest(int[] nums, int target) {
     Arrays.sort(nums);
     int ans = nums[0] + nums[1] + nums[2];
@@ -640,7 +633,7 @@ public class Leetcode50 {
    * @param target sum target
    * @return list of four-tuple
    */
-  @SuppressWarnings("unused")
+  
   public List<List<Integer>> fourSum(int[] nums, int target) {
     int len = nums.length;
     List<List<Integer>> res = new ArrayList<>();
@@ -697,7 +690,7 @@ public class Leetcode50 {
    * @param n    order
    * @return processed linked list
    */
-  @SuppressWarnings("unused")
+  
   public static ListNode removeNthFromEnd(ListNode head, int n) {
     boolean is_len_one = (head.next == null);
     int head_order = RecursiveRemoveNthFromEnd(head, n);
@@ -775,7 +768,7 @@ public class Leetcode50 {
    * @param n order
    * @return result
    */
-  @SuppressWarnings("unused")
+  
   public static List<String> generateParenthesis(int n) {
     List<String> res = new ArrayList<>();
     StringBuilder init = new StringBuilder("(");
@@ -854,7 +847,7 @@ public class Leetcode50 {
    * @param k    group number
    * @return reversed linked list
    */
-  @SuppressWarnings("unused")
+  
   public static ListNode reverseKGroup(ListNode head, int k) {
     if (head == null || k <= 1) {
       return head;
@@ -909,7 +902,7 @@ public class Leetcode50 {
    * @param divisor  divisor
    * @return result
    */
-  @SuppressWarnings("unused")
+  
   public static int divide(int dividend, int divisor) {
     if ((dividend == Integer.MIN_VALUE) && (divisor == -1)) {
       return Integer.MAX_VALUE;
@@ -967,7 +960,7 @@ public class Leetcode50 {
    * @param words words
    * @return result index
    */
-  @SuppressWarnings("SpellCheckingInspection, unused")
+  @SuppressWarnings("SpellCheckingInspection, Unused")
   public static List<Integer> findSubstring(String s, String[] words) {
     List<Integer> res = new ArrayList<>();
     if (s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0) {
@@ -1079,7 +1072,7 @@ public class Leetcode50 {
    *
    * @param nums permutation
    */
-  @SuppressWarnings("unused")
+  
   public static void nextPermutation(int[] nums) {
     int len = nums.length;
     if (len == 0 || len == 1) {
@@ -1125,7 +1118,7 @@ public class Leetcode50 {
    * @param s string
    * @return max length
    */
-  @SuppressWarnings("unused")
+  
   public static int longestValidParentheses(String s) {
     int max_len = 0;
     int s_len = s.length();
@@ -1172,7 +1165,7 @@ public class Leetcode50 {
    * @param target target
    * @return index
    */
-  @SuppressWarnings("unused")
+  
   public static int search(int[] nums, int target) {
     int len = nums.length;
     if (len == 0) {
@@ -1261,7 +1254,7 @@ public class Leetcode50 {
    * @param target target
    * @return range
    */
-  @SuppressWarnings("unused")
+  
   public static int[] SearchRange(int[] nums, int target) {
     if (nums == null || nums.length == 0) {
       return new int[]{-1, -1};
@@ -1330,7 +1323,7 @@ public class Leetcode50 {
    * @param board 9*9 board
    * @return is valid sudoku
    */
-  @SuppressWarnings("unused")
+  
   public static boolean isValidSudoku(char[][] board) {
     List<Set<Character>> cols = new ArrayList<>();
     List<Set<Character>> rows = new ArrayList<>();
@@ -1388,7 +1381,7 @@ public class Leetcode50 {
    *
    * @param board 9*9 board
    */
-  @SuppressWarnings("unused")
+  
   public static void solveSudoku(char[][] board) {
     // initialization
     List<MatrixIndex> spaceIndices = new ArrayList<>(81);
@@ -1592,7 +1585,7 @@ public class Leetcode50 {
    * @param n order
    * @return result
    */
-  @SuppressWarnings("unused")
+  
   public static String countAndSay(int n) {
     String start = "1";
     System.out.println(start);
@@ -1643,7 +1636,7 @@ public class Leetcode50 {
    * @param target     sum
    * @return result
    */
-  @SuppressWarnings("unused")
+  
   public static List<List<Integer>> combinationSum(int[] candidates, int target) {
     List<List<Integer>> res = new ArrayList<>();
     Arrays.sort(candidates);
@@ -1701,7 +1694,7 @@ public class Leetcode50 {
    * @param target     sum
    * @return result
    */
-  @SuppressWarnings("unused")
+  
   public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
     List<List<Integer>> res = new ArrayList<>();
     Arrays.sort(candidates);
@@ -1780,7 +1773,7 @@ public class Leetcode50 {
    * @param num2 num2
    * @return multiply
    */
-  @SuppressWarnings("unused")
+  
   public static String multiply(String num1, String num2) {
     if (num1.equals("0") || num2.equals("0")) {
       return "0";
@@ -1858,7 +1851,7 @@ public class Leetcode50 {
    * @param nums int array
    * @return permutation
    */
-  @SuppressWarnings("unused")
+  
   public static List<List<Integer>> permute(int[] nums) {
     List<List<Integer>> res = new ArrayList<>();
     recursivePermute(nums, new boolean[nums.length], new ArrayList<>(), res);
@@ -1898,7 +1891,7 @@ public class Leetcode50 {
    * @param nums int array
    * @return unique permutation result
    */
-  @SuppressWarnings("unused")
+  
   public static List<List<Integer>> permuteUnique(int[] nums) {
     List<List<Integer>> finalRes = new ArrayList<>();
     Arrays.sort(nums);
@@ -1936,7 +1929,7 @@ public class Leetcode50 {
    *
    * @param matrix image
    */
-  @SuppressWarnings("unused")
+  
   public static void rotate(int[][] matrix) {
     if (matrix.length <= 1) {
       return;

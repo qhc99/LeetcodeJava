@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.Iterator;
 
-@SuppressWarnings({"unused", "JavadocDeclaration"})
+@SuppressWarnings({"Unused", "JavadocDeclaration"})
 public class Leetcode1700 {
   /**
    * #1662

@@ -168,7 +168,6 @@ public class Leetcode100 {
    * @param grid int graph
    * @return path sum
    */
-  @SuppressWarnings("unused")
   public static int minPathSum(int[][] grid) {
     int r_len = grid.length;
     int c_len = grid[0].length;
@@ -243,7 +242,6 @@ public class Leetcode100 {
    * @param nums int array
    * @return subsets of nums
    */
-  @SuppressWarnings("unused")
   public static List<List<Integer>> subsets(int[] nums) {
     List<List<Integer>> res = new ArrayList<>();
     recursiveSubsets(nums, 0, res);
@@ -313,7 +311,6 @@ public class Leetcode100 {
    * @param n range upper bound
    * @return count
    */
-  @SuppressWarnings("unused")
   public static int numTrees(int n) {
     int[] G = new int[n + 1];
     G[0] = 1;

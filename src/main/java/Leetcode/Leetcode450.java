@@ -85,7 +85,6 @@ public class Leetcode450 {
    * @param root root of bTree
    * @return sum of left leaves
    */
-  @SuppressWarnings("unused")
   public static int sumOfLeftLeaves(TreeNode root) {
     if (root == null) {
       return 0;
@@ -147,7 +146,6 @@ public class Leetcode450 {
    * See the License for the specific language governing permissions and
    * limitations under the License.
    */
-  @SuppressWarnings("unused")
   interface OrderedIterator<E> extends Iterator<E> {
 
     /**
@@ -200,7 +198,6 @@ public class Leetcode450 {
    *
    * @since 3.1
    */
-  @SuppressWarnings("unused")
   public static class TreeList<E> extends AbstractList<E> {
 //    add; toArray; iterator; insert; get; indexOf; remove
 //    TreeList = 1260;7360;3080;  160;   170;3400;  170;
@@ -1361,7 +1358,6 @@ public class Leetcode450 {
    * @param m    number of group
    * @return min group sum
    */
-  @SuppressWarnings("unused")
   public static int splitArray(int[] nums, int m) {
     long sum = 0;
     long max = 0;

@@ -1,6 +1,6 @@
 package Leetcode;
 
-@SuppressWarnings("unused")
+@SuppressWarnings("Unused")
 public class TreeNode {
   public int val;
   public TreeNode left;

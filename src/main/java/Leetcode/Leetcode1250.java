@@ -20,7 +20,6 @@ public class Leetcode1250 {
    * @param arr int array
    * @return is unique
    */
-  @SuppressWarnings("unused")
   public static boolean uniqueOccurrences(int[] arr) {
     Map<Integer, Integer> m = new HashMap<>();
     for (var i : arr) {

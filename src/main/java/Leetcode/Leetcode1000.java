@@ -14,7 +14,6 @@ public class Leetcode1000 {
    * @param root tree
    * @return number of camera
    */
-  @SuppressWarnings("unused")
   public int minCameraCover(TreeNode root) {
     var solver = new MinCameraCoverSolver();
     if (solver.dfs(root) == MinCameraCoverSolver.Status.NOT_BEING_MONITORED) {

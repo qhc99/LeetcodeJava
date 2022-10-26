@@ -303,7 +303,6 @@ public class Leetcode250 {
    */
   public static int calculate(String s) {
     var calculator = new StackCalculator();
-    int num = 0;
     for (int i = 0; i < s.length(); i++) {
       char ctr = s.charAt(i);
       calculator.acceptChar(ctr);
@@ -559,41 +558,7 @@ public class Leetcode250 {
     add(n.right, tree);
   }
 
-  private static class Tuple<T1, T2> {
-    final T1 first;
-    final T2 second;
-
-    public Tuple(T1 f, T2 s) {
-      first = f;
-      second = s;
-    }
-
-    public T1 first() {
-      return first;
-    }
-
-    public T2 second() {
-      return second;
-    }
-
-
-    @Override
-    public int hashCode() {
-      return Objects.hash(first, second);
-    }
-
-    @Override
-    public String toString() {
-      return "Tuple{" +
-              "first=" + first +
-              ", second=" + second +
-              '}';
-    }
-  }
-
   private static class OrderStatTree<K, V> {
-
-    final Comparator<K> comparator;
 
     final Node<K, V> sentinel = new Node<>(RBTreeTemplate.BLACK);
     Node<K, V> root = sentinel;
@@ -601,7 +566,6 @@ public class Leetcode250 {
     private final RBTreeTemplate<K, Node<K, V>> template;
 
     public OrderStatTree(Comparator<K> comparator) {
-      this.comparator = comparator;
       template = new RBTreeTemplate<>(
               sentinel, comparator,
               n -> n.key,
@@ -615,68 +579,6 @@ public class Leetcode250 {
               (n, r) -> n.right = r,
               n -> n.color,
               (n, c) -> n.color = c);
-    }
-
-    public static <V> OrderStatTree<Integer, V> ofInt() {
-      return new OrderStatTree<>(Integer::compareTo);
-    }
-
-    public static <V> OrderStatTree<Double, V> ofDouble() {
-      return new OrderStatTree<>(Double::compareTo);
-    }
-
-    /**
-     * 1d range search
-     *
-     * @param low  low
-     * @param high high (inclusive)
-     * @return list of key-value in range
-     */
-    public List<Tuple<K, V>> keyRangeSearch(K low, K high) {
-      List<Tuple<K, V>> res = new ArrayList<>();
-      if (root == sentinel) {
-        return res;
-      }
-      keyRangeSearch(root, low, high, res);
-      return res;
-    }
-
-    private void keyRangeSearch(Node<K, V> n, K low, K high, List<Tuple<K, V>> l) {
-      if (n == sentinel) {
-        return;
-      }
-
-      if (comparator.compare(n.key, low) > 0) {
-        keyRangeSearch(n.left, low, high, l);
-      }
-
-      if (comparator.compare(n.key, low) >= 0 && comparator.compare(n.key, high) <= 0) {
-        l.add(new Tuple<>(n.key, n.value));
-      }
-
-      if (comparator.compare(n.key, high) < 0) {
-        keyRangeSearch(n.right, low, high, l);
-      }
-    }
-
-
-    private Node<K, V> ceiling(Node<K, V> x, K key) {
-      if (x == sentinel) {
-        return sentinel;
-      }
-      else {
-        int cmp = comparator.compare(key, x.key);
-        if (cmp == 0) {
-          return x;
-        }
-        else if (cmp > 0) {
-          return ceiling(x.right, key);
-        }
-        else {
-          var t = ceiling(x.left, key);
-          return t != sentinel ? t : x;
-        }
-      }
     }
 
     public K getKeyOfRank(int rank) {
@@ -702,17 +604,6 @@ public class Leetcode250 {
       else {
         return getNodeOfRank(current.right, ith - rank);
       }
-    }
-
-    int getRankOfNode(Node<K, V> node) {
-      int rank = node.left.size + 1;
-      while (node != root) {
-        if (node == node.parent.right) {
-          rank += node.parent.left.size + 1;
-        }
-        node = node.parent;
-      }
-      return rank;
     }
 
     public int size() {
@@ -776,9 +667,8 @@ public class Leetcode250 {
     return true;
   }
 
-  @SuppressWarnings({"ClassCanBeRecord", "PatternVariableCanBeUsed"})
+  @SuppressWarnings({"ClassCanBeRecord", "PatternVariableCanBeUsed", "hiding"})
   static class RBTreeTemplate<Key, Node> {
-
     final Node sentinel;
     final Comparator<Key> comparator;
     final Gettable<Node> getRoot;
@@ -1146,7 +1036,6 @@ public class Leetcode250 {
    * @param q    node 2
    * @return closest ancestor
    */
-  @SuppressWarnings("unused")
   public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
     if (root.val > p.val && root.val > q.val) {
       return lowestCommonAncestor(root.left, p, q);

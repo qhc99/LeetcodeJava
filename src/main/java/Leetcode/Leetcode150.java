@@ -22,7 +22,6 @@ public class Leetcode150 {
    * @param inorder  inorder int array
    * @return origin tree
    */
-  @SuppressWarnings("unused")
   public static TreeNode buildTree(int[] preorder, int[] inorder) {
     if (preorder.length == 0) {
       return null;
@@ -75,7 +74,6 @@ public class Leetcode150 {
    * @param root root
    * @return down to up iteration
    */
-  @SuppressWarnings("unused")
   public List<List<Integer>> levelOrderBottom(TreeNode root) {
     List<List<Integer>> res = new ArrayList<>();
     Queue<TreeNode> queue = new LinkedList<>();
@@ -111,7 +109,6 @@ public class Leetcode150 {
    * @param root 二叉树
    * @return 最小深度
    */
-  @SuppressWarnings("unused")
   public static int minDepth(TreeNode root) {
     if (root == null) {
       return 0;
@@ -238,7 +235,6 @@ public class Leetcode150 {
    * @param root tree
    * @return sum
    */
-  @SuppressWarnings("unused")
   public static int sumNumbers(TreeNode root) {
     if (root == null) {
       return 0;
@@ -466,7 +462,6 @@ public class Leetcode150 {
    * @param root root
    * @return res array
    */
-  @SuppressWarnings("unused")
   public static List<Integer> preorderTraversal(TreeNode root) {
     List<Integer> res = new ArrayList<>();
     solvePreorderTraversal(root, res);

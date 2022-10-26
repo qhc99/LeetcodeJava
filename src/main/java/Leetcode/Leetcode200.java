@@ -225,13 +225,9 @@ public class Leetcode200 {
    */
   public static int numIslands(char[][] grid) {
     class BooleanMatrix {
-      final int M;
-      final int N;
       final BitSet[] matrix;
 
       public BooleanMatrix(int m, int n) {
-        M = m;
-        N = n;
         matrix = new BitSet[m];
         for (int i = 0; i < m; i++) {
           matrix[i] = new BitSet(n);

@@ -71,7 +71,6 @@ public class Leetcode800 {
    * @param graph graph
    * @return graph is bipartite
    */
-  @SuppressWarnings("unused")
   public static boolean isBipartite(int[][] graph) {
     int vertices_count = graph.length;
     Map<Integer, Color> vertex_color = new HashMap<>();

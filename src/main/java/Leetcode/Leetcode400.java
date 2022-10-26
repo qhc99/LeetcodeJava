@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"JavaDoc", "unused"})
+@SuppressWarnings({"JavaDoc", "Unused"})
 public class Leetcode400 {
 
   /**
@@ -183,6 +183,7 @@ public class Leetcode400 {
    * @return
    */
   public static List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    @SuppressWarnings("hiding")
     class Data {
       final int idx;
       final int first;
@@ -574,7 +575,7 @@ public class Leetcode400 {
    * @param t whole string
    * @return match result
    */
-  @SuppressWarnings("SpellCheckingInspection, unused")
+  @SuppressWarnings("SpellCheckingInspection, Unused")
   public static boolean isSubsequence(String s, String t) {
     int a = 0, b = 0;
     int s_len = s.length(), t_len = t.length();
@@ -800,8 +801,6 @@ public class Leetcode400 {
       return 2 + Math.min(integerReplacement(n / 2 + 1), integerReplacement(n / 2));
     }
   }
-
-  private static final Map<Integer, Integer> cacheIntRep = new HashMap<>(32);
 
   /**
    * #399

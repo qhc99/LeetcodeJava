@@ -12,7 +12,6 @@ public class Leetcode550 {
    * @param root tree
    * @return res
    */
-  @SuppressWarnings("unused")
   public static int[] findMode(TreeNode root) {
     var s = new Statistic();
     dfs(root, s);
@@ -400,7 +399,6 @@ public class Leetcode550 {
    * @param root tree root
    * @return converted tree
    */
-  @SuppressWarnings("unused")
   public static TreeNode convertBST(TreeNode root) {
     traverseAndConvertBST(root, 0);
     return root;
