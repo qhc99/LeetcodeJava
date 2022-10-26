@@ -2,6 +2,8 @@
 /out/
 /target/
 src/main/java/Main.java
+*.jar
+*.class
 
 # User-specific stuff
 .idea/**/workspace.xml
