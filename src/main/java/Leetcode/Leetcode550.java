@@ -416,4 +416,92 @@ public class Leetcode550 {
     sum = traverseAndConvertBST(r.left, sum);
     return sum;
   }
+
+  /**
+   * #542
+   *
+   * @param mat
+   * @return
+   */
+  public static int[][] updateMatrix(int[][] mat) {
+    Deque<Axis> axisDeque = new ArrayDeque<>(mat.length * mat[0].length);
+    Set<Axis> seen = new HashSet<>(mat.length * mat[0].length);
+    for (int i = 0; i < mat.length; i++) {
+      for (int j = 0; j < mat[0].length; j++) {
+        if (mat[i][j] == 0) {
+          var t = new Axis(i, j, 0);
+          seen.add(t);
+          axisDeque.addLast(t);
+        }
+      }
+    }
+    while (!axisDeque.isEmpty()) {
+      var a = axisDeque.pollFirst();
+      searchAround(a, mat, seen, axisDeque);
+    }
+    return mat;
+  }
+
+  private static void searchAround(Axis a, int[][] mat, Set<Axis> seen, Deque<Axis> deque) {
+    int x = a.x;
+    int y = a.y;
+    int l = a.layer;
+    if (x - 1 >= 0) {
+      var t = new Axis(x - 1, y, l + 1);
+      if (!seen.contains(t)) {
+        mat[x - 1][y] = l + 1;
+        deque.add(t);
+        seen.add(t);
+      }
+    }
+    if (y - 1 >= 0) {
+      var t = new Axis(x, y - 1, l + 1);
+      if (!seen.contains(t)) {
+        mat[x][y - 1] = l + 1;
+        deque.add(t);
+        seen.add(t);
+      }
+    }
+    if (x + 1 < mat.length) {
+      var t = new Axis(x + 1, y, l + 1);
+      if (!seen.contains(t)) {
+        mat[x + 1][y] = l + 1;
+        deque.add(t);
+        seen.add(t);
+      }
+    }
+    if (y + 1 < mat[0].length) {
+      var t = new Axis(x, y + 1, l + 1);
+      if (!seen.contains(t)) {
+        mat[x][y + 1] = l + 1;
+        deque.add(t);
+        seen.add(t);
+      }
+    }
+  }
+
+  private static class Axis {
+    final int layer;
+    final int x;
+    final int y;
+
+    Axis(int x, int y, int l) {
+      this.x = x;
+      this.y = y;
+      layer = l;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+      if (this == o) return true;
+      if (o == null || getClass() != o.getClass()) return false;
+      Axis axis = (Axis) o;
+      return x == axis.x && y == axis.y;
+    }
+
+    @Override
+    public int hashCode() {
+      return Objects.hash(x, y);
+    }
+  }
 }
