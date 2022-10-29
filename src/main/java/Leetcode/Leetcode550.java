@@ -492,6 +492,43 @@ public class Leetcode550 {
   }
 
   /**
+   * #541
+   *
+   * @param s
+   * @param k
+   * @return
+   */
+  public static String reverseStr(String s, int k) {
+    int start = 0, end = k - 1;
+    StringBuilder sb = new StringBuilder();
+    for (; start < s.length(); start += 2 * k, end += 2 * k) {
+      if (end >= s.length()) {
+        end = s.length() - 1;
+        reverseAppend(start, end, s, sb);
+        break;
+      }
+      else {
+        reverseAppend(start, end, s, sb);
+        append(start + k, end + k < s.length() ? end + k : s.length() - 1, s, sb);
+      }
+    }
+    return sb.toString();
+  }
+
+  private static void reverseAppend(int start, int end, String s, StringBuilder sb) {
+    for (int i = end; i >= start; i--) {
+      sb.append(s.charAt(i));
+    }
+  }
+
+  private static void append(int start, int end, String s, StringBuilder sb) {
+    for (int i = start; i <= end; i++) {
+      sb.append(s.charAt(i));
+    }
+  }
+
+
+  /**
    * #542
    *
    * @param mat
@@ -581,6 +618,39 @@ public class Leetcode550 {
     @Override
     public int hashCode() {
       return Objects.hash(x, y);
+    }
+  }
+
+  /**
+   * #543
+   *
+   * @param root
+   * @return
+   */
+  public static int diameterOfBinaryTree(TreeNode root) {
+    return recursivediameterOfBinaryTree(root).max_diam;
+  }
+
+  public static TreeDiamInfo recursivediameterOfBinaryTree(TreeNode node) {
+    var left = node.left == null ? new TreeDiamInfo(-1, 0, 0) : recursivediameterOfBinaryTree(node);
+    var right = node.right == null ? new TreeDiamInfo(-1, 0, 0) : recursivediameterOfBinaryTree(node);
+    var diam = left.max_depth + right.max_depth + 2;
+    var child_max_diam = Math.max(left.max_diam, right.max_diam);
+    return new TreeDiamInfo(
+            left.max_depth > right.max_depth ? left.max_depth +1 : right.max_depth + 1,
+            diam,
+            Math.max(child_max_diam,diam));
+  }
+
+  private static class TreeDiamInfo {
+    final int max_depth;
+    final int diam;
+    final int max_diam;
+
+    TreeDiamInfo(int depth, int diam, int max) {
+      this.max_depth = depth;
+      this.diam = diam;
+      max_diam = max;
     }
   }
 }
