@@ -1,14 +1,15 @@
 package Leetcode;
 
 
+@SuppressWarnings("unused")
 public class Leetcode700 {
 
   /**
    * #674
-   * <br/>回文子串个数
-   * <br/>输入："aaa"
-   * <br/>输出：6
-   * <br/>解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
+   * 回文子串个数
+   * 输入："aaa"
+   * 输出：6
+   * 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
    *
    * @param s String
    * @return count of sub string

@@ -5,9 +5,11 @@ import java.util.stream.IntStream;
 
 @SuppressWarnings("ALL")
 public class Leetcode550 {
+
   /**
    * #501
-   * <br/>二叉搜索树中的众数
+   * <br/>
+   * 二叉搜索树中的众数
    *
    * @param root tree
    * @return res
@@ -32,6 +34,7 @@ public class Leetcode550 {
   }
 
   static class Statistic {
+
     List<Integer> answer = new ArrayList<>();
     int base, count, maxCount;
 
@@ -53,7 +56,6 @@ public class Leetcode550 {
       }
     }
   }
-
 
   /**
    * #503
@@ -82,12 +84,16 @@ public class Leetcode550 {
         }
 
         ptr++;
-        if (ptr == nums.length) ptr = 0;
+        if (ptr == nums.length) {
+          ptr = 0;
+        }
       }
     }
 
     for (int i = 0; i < next.length; i++) {
-      if (next[i] == Integer.MIN_VALUE) next[i] = -1;
+      if (next[i] == Integer.MIN_VALUE) {
+        next[i] = -1;
+      }
     }
 
     return next;
@@ -95,8 +101,10 @@ public class Leetcode550 {
 
   /**
    * #525
-   * <br> 连续数组
-   * <br>给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
+   * <br>
+   * 连续数组
+   * <br>
+   * 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
    *
    * @param nums nums
    * @return len
@@ -143,9 +151,15 @@ public class Leetcode550 {
     recursiveMergeSortWithIndex(score, idx);
     String[] ans = new String[score.length];
     for (int i = score.length - 1; i >= 0; i--) {
-      if (score.length - i == 1) ans[idx[i]] = "Gold Medal";
-      else if (score.length - i == 2) ans[idx[i]] = "Silver Medal";
-      else if (score.length - i == 3) ans[idx[i]] = "Bronze Medal";
+      if (score.length - i == 1) {
+        ans[idx[i]] = "Gold Medal";
+      }
+      else if (score.length - i == 2) {
+        ans[idx[i]] = "Silver Medal";
+      }
+      else if (score.length - i == 3) {
+        ans[idx[i]] = "Bronze Medal";
+      }
       else {
         ans[idx[i]] = String.valueOf(score.length - i);
       }
@@ -163,7 +177,8 @@ public class Leetcode550 {
     System.arraycopy(idx, start, ci1, 0, cache1.length);
     System.arraycopy(idx, start + cache1.length, ci2, 0, cache2.length);
 
-    for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+    for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length)
+            && (left_idx < cache1.length); i++) {
       if (cache1[left_idx] <= cache2[right_idx]) {
         array[i] = cache1[left_idx];
         idx[i] = ci1[left_idx++];
@@ -238,7 +253,8 @@ public class Leetcode550 {
           int idx2 = indices.get(j);
           int idx_max = Math.max(idx1, idx2);
           int idx_min = Math.min(idx1, idx2);
-          cur.rotates = Math.min(cur.rotates, n.rotates + Math.min(idx_max - idx_min, idx_min + ring.length() - idx_max));
+          cur.rotates = Math.min(cur.rotates,
+                  n.rotates + Math.min(idx_max - idx_min, idx_min + ring.length() - idx_max));
           if (j == indices.size() - 1) {
             prev[k] = null;
           }
@@ -254,7 +270,6 @@ public class Leetcode550 {
       global_min = Math.min(prev[i].rotates, global_min);
     }
 
-
     return global_min + key.length();
   }
 
@@ -262,6 +277,7 @@ public class Leetcode550 {
    * Node for freedom trail
    */
   private static class NodeFT {
+
     final int idx_ring;
     int rotates;
 
@@ -282,7 +298,6 @@ public class Leetcode550 {
     return a.equals(b) ? -1 : b.length();
   }
 
-
   /**
    * #522
    *
@@ -297,9 +312,13 @@ public class Leetcode550 {
       if (!non_solution.contains(s)) {
         for (int j = i + 1; j < strs.length; j++) {
           var s1 = strs[j];
-          if (isSub(s1, s)) non_solution.add(s1);
+          if (isSub(s1, s)) {
+            non_solution.add(s1);
+          }
         }
-        if (!non_solution.contains(s)) return s.length();
+        if (!non_solution.contains(s)) {
+          return s.length();
+        }
       }
     }
 
@@ -312,7 +331,9 @@ public class Leetcode550 {
       var cc = full.charAt(j);
       if (c == cc) {
         i++;
-        if (i == sub.length()) return true;
+        if (i == sub.length()) {
+          return true;
+        }
       }
     }
     return false;
@@ -359,8 +380,12 @@ public class Leetcode550 {
       }
       else {
         var next = jump[i][dc - 'a'];
-        if (next != -1) i = next;
-        else return false;
+        if (next != -1) {
+          i = next;
+        }
+        else {
+          return false;
+        }
       }
     }
     return j == sub.length();
@@ -382,8 +407,59 @@ public class Leetcode550 {
   }
 
   /**
-   * #538
-   * <br/>二叉搜索树转换为累加树
+   * #526
+   *
+   * @param n
+   * @return
+   */
+  public static int countArrangement(int n) {
+    int[] F = new int[(int) Math.pow(2, n)];
+    BitSet b = new BitSet(n);
+    for (int l = 1; l <= n; l++) {
+      recursiveSet(n, l, 0, l, b, F);
+    }
+    return F[F.length - 1];
+  }
+
+  private static void recursiveSet(int size, int select_size, int i, int layer, BitSet b, int[] F) {
+    if (layer == 1) {
+      for (int j = i; j < size; j++) {
+        b.set(j, true);
+        int current = bitsetToInt(b);
+        if (select_size == 1) {
+          F[current] += 1;
+        }
+        else {
+          for (int t = 0; t < size; t++) {
+            if (b.get(t) && ((t + 1) % select_size == 0 || select_size % (t + 1) == 0)) {
+              int child = (int) (current - Math.pow(2, t));
+              F[current] += F[child];
+            }
+          }
+        }
+        b.clear(j);
+      }
+    }
+    else {
+      for (int j = i; j < size; j++) {
+        b.set(j, true);
+        recursiveSet(size, select_size, j + 1, layer - 1, b, F);
+        b.clear(j);
+      }
+    }
+  }
+
+  private static int bitsetToInt(BitSet bits) {
+    int value = 0;
+    for (int i = 0; i < bits.length(); ++i) {
+      value += bits.get(i) ? (1 << i) : 0;
+    }
+    return value;
+  }
+
+  /**
+   * #538 二叉搜索树转换为累加树
+   *
    * <pre>
    * 输入: 原始二叉搜索树:
    *               5
@@ -479,6 +555,7 @@ public class Leetcode550 {
   }
 
   private static class Axis {
+
     final int layer;
     final int x;
     final int y;
@@ -491,8 +568,12 @@ public class Leetcode550 {
 
     @Override
     public boolean equals(Object o) {
-      if (this == o) return true;
-      if (o == null || getClass() != o.getClass()) return false;
+      if (this == o) {
+        return true;
+      }
+      if (o == null || getClass() != o.getClass()) {
+        return false;
+      }
       Axis axis = (Axis) o;
       return x == axis.x && y == axis.y;
     }
