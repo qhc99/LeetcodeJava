@@ -52,11 +52,11 @@ public class Leetcode600 {
       var one_A_LL = dp[5];
       var one_A_A = dp[6];
       dp[0] = (zero_A_P + zero_A_L + zero_A_LL) % mod;
-      dp[1] = zero_A_P % mod;
-      dp[2] = zero_A_L % mod;
+      dp[1] = zero_A_P;
+      dp[2] = zero_A_L;
       dp[3] = (one_A_P + one_A_L + one_A_LL + one_A_A) % mod;
       dp[4] = (one_A_P + one_A_A) % mod;
-      dp[5] = one_A_L % mod;
+      dp[5] = one_A_L;
       dp[6] = (zero_A_P + zero_A_L + zero_A_LL) % mod;
     }
     long ans = 0;
