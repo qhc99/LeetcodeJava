@@ -1,7 +1,6 @@
 package Leetcode;
 
 
-@SuppressWarnings("unused")
 public class Leetcode700 {
 
   /**

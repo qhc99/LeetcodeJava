@@ -632,24 +632,21 @@ public class Leetcode550 {
   }
 
   public static TreeDiamInfo recursivediameterOfBinaryTree(TreeNode node) {
-    var left = node.left == null ? new TreeDiamInfo(-1, 0, 0) : recursivediameterOfBinaryTree(node);
-    var right = node.right == null ? new TreeDiamInfo(-1, 0, 0) : recursivediameterOfBinaryTree(node);
+    var left = node.left == null ? new TreeDiamInfo(-1, 0) : recursivediameterOfBinaryTree(node);
+    var right = node.right == null ? new TreeDiamInfo(-1, 0) : recursivediameterOfBinaryTree(node);
     var diam = left.max_depth + right.max_depth + 2;
     var child_max_diam = Math.max(left.max_diam, right.max_diam);
     return new TreeDiamInfo(
             left.max_depth > right.max_depth ? left.max_depth +1 : right.max_depth + 1,
-            diam,
             Math.max(child_max_diam,diam));
   }
 
   private static class TreeDiamInfo {
     final int max_depth;
-    final int diam;
     final int max_diam;
 
-    TreeDiamInfo(int depth, int diam, int max) {
+    TreeDiamInfo(int depth, int max) {
       this.max_depth = depth;
-      this.diam = diam;
       max_diam = max;
     }
   }

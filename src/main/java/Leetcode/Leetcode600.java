@@ -1,9 +1,10 @@
 package Leetcode;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 
-@SuppressWarnings({"JavadocDeclaration", "unused"})
+@SuppressWarnings({"JavadocDeclaration"})
 public class Leetcode600 {
 
   /**
@@ -87,5 +88,50 @@ public class Leetcode600 {
       mp.put(pre, mp.getOrDefault(pre, 0) + 1);
     }
     return count;
+  }
+
+  /**
+   * #583
+   *
+   * @param word1
+   * @param word2
+   * @return
+   */
+  public static int minDistance(String word1, String word2) {
+    if (word2.length() > word1.length()) {
+      var t = word1;
+      word1 = word2;
+      word2 = t;
+    }
+    int[] jump = new int['z' - 'a' + 1];
+    Arrays.fill(jump, word1.length());
+    int[][] next = new int[word1.length()][jump.length];
+    for (int i = word1.length() - 1; i >= 0; i--) {
+      var t = new int[jump.length];
+      System.arraycopy(jump, 0, t, 0, jump.length);
+      next[i] = t;
+      var c = word1.charAt(i);
+      jump[c - 'a'] = i;
+    }
+    int i = 0;
+    int j = 0;
+    int len = 0;
+    while ( j < word2.length()) {
+      jump = next[i];
+      int min = Integer.MAX_VALUE;
+      int min_idx = word2.length();
+      for (int k = j; k < word2.length(); k++) {
+        var c = word2.charAt(k);
+        if (jump[c - 'a'] < min) {
+          min = jump[c - 'a'];
+          min_idx = k;
+        }
+      }
+      j = min_idx + 1;
+      i = jump[word2.charAt(min_idx) - 'a'];
+      if (i < word1.length()) len++;
+      else break;
+    }
+    return word1.length() - len + word2.length() - len;
   }
 }
