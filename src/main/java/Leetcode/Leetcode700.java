@@ -1,8 +1,45 @@
 package Leetcode;
 
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 @SuppressWarnings("unused")
 public class Leetcode700 {
+
+    /**
+     * #652
+     *
+     * @param root
+     * @return
+     */
+    public static List<TreeNode> findDuplicateSubtrees(TreeNode root) {
+        Map<String, TreeNode> map = new HashMap<>(32);
+        scanTree(root,map);
+        return map.values().stream().filter(Objects::nonNull).toList();
+    }
+
+    private static String scanTree(TreeNode n, Map<String, TreeNode> str2node) {
+        if (n == null) {
+            return "null";
+        }
+
+        var l = scanTree(n.left, str2node);
+        var r = scanTree(n.right, str2node);
+        var s = "(" +
+                l +
+                "," +
+                n.val +
+                "," +
+                r +
+                ")";
+        if (!str2node.containsKey(s)) str2node.put(s, null);
+        else str2node.put(s, n);
+        return s;
+    }
+
 
     /**
      * #674
