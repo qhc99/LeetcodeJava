@@ -1,10 +1,7 @@
 package Leetcode;
 
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @SuppressWarnings("unused")
 public class Leetcode700 {
@@ -17,7 +14,7 @@ public class Leetcode700 {
      */
     public static List<TreeNode> findDuplicateSubtrees(TreeNode root) {
         Map<String, TreeNode> map = new HashMap<>(32);
-        scanTree(root,map);
+        scanTree(root, map);
         return map.values().stream().filter(Objects::nonNull).toList();
     }
 
@@ -38,6 +35,50 @@ public class Leetcode700 {
         if (!str2node.containsKey(s)) str2node.put(s, null);
         else str2node.put(s, n);
         return s;
+    }
+
+    /**
+     * #658
+     *
+     * @param arr
+     * @param k
+     * @param x
+     * @return
+     */
+    public static List<Integer> findClosestElements(int[] arr, int k, int x) {
+        int start = 0, end = arr.length;
+        while (end - start > 1) {
+            int mid = (start + end) / 2;
+            if (arr[mid] > x) end = mid;
+            else start = end;
+        }
+        int start_ans;
+        if (arr[start] == x || start + 1 >= arr.length) start_ans = start;
+        else {
+            int d1 = Math.abs(arr[start] - x);
+            int d2 = Math.abs(arr[start + 1] - x);
+            start_ans = d1 <= d2 ? start : start + 1;
+        }
+        int end_ans_inclusive = start_ans;
+        while (end_ans_inclusive + 1 - start_ans < k) {
+            if (start_ans - 1 < 0) {
+                end_ans_inclusive++;
+            }
+            else if (end_ans_inclusive + 1 >= arr.length) {
+                start_ans--;
+            }
+            else {
+                int d1 = Math.abs(arr[start_ans - 1] - x);
+                int d2 = Math.abs(arr[end_ans_inclusive + 1] - x);
+                if (d1 <= d2) start_ans--;
+                else end_ans_inclusive++;
+            }
+        }
+        List<Integer> ans = new ArrayList<>(end_ans_inclusive + 1 - start_ans);
+        for(int i = start_ans; i <= end_ans_inclusive; i++){
+            ans.add(arr[i]);
+        }
+        return ans;
     }
 
 
