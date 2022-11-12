@@ -75,10 +75,31 @@ public class Leetcode700 {
             }
         }
         List<Integer> ans = new ArrayList<>(end_ans_inclusive + 1 - start_ans);
-        for(int i = start_ans; i <= end_ans_inclusive; i++){
+        for (int i = start_ans; i <= end_ans_inclusive; i++) {
             ans.add(arr[i]);
         }
         return ans;
+    }
+
+    /**
+     * # 659
+     *
+     * @param nums
+     * @return
+     */
+    public static boolean isPossible(int[] nums) {
+        Map<Integer, PriorityQueue<Integer>> last_elem_2_len = new HashMap<>(nums.length);
+        for (var n : nums) {
+            if (!last_elem_2_len.containsKey(n - 1)) {
+                last_elem_2_len.computeIfAbsent(n, k -> new PriorityQueue<>(16)).add(1);
+            }
+            else {
+                var queue_n_minus_1 = last_elem_2_len.get(n - 1);
+                last_elem_2_len.computeIfAbsent(n, k -> new PriorityQueue<>(16)).add(queue_n_minus_1.poll() + 1);
+                if (queue_n_minus_1.isEmpty()) last_elem_2_len.remove(n - 1);
+            }
+        }
+        return last_elem_2_len.values().stream().allMatch(q -> q.peek() >= 3);
     }
 
 
