@@ -2,6 +2,8 @@ package Leetcode;
 
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 
 @SuppressWarnings("unused")
 public class Leetcode700 {
@@ -170,4 +172,76 @@ public class Leetcode700 {
 
         return res;
     }
+
+
+    /**
+     * #679
+     *
+     * @param cards
+     * @return
+     */
+    public static boolean judgePoint24(int[] cards) {
+        return judge24(Arrays.stream(cards).asDoubleStream().toArray());
+    }
+
+    private static boolean judge24(double[] nums) {
+        if (nums.length == 2) {
+            return can_be_24(nums[0], nums[1]);
+        }
+        else {
+            for (int i = 0; i < nums.length; i++) {
+                for (int j = i + 1; j < nums.length; j++) {
+                    double[] arr = new double[nums.length - 1];
+                    merge(i,j,nums,arr, Double::sum);
+                    if(judge24(arr)) return true;
+
+                    merge(i,j,nums,arr, (a,b)->a*b);
+                    if(judge24(arr)) return true;
+
+                    merge(i,j,nums,arr, (a,b)->a-b);
+                    if(judge24(arr)) return true;
+
+                    merge(i,j,nums,arr, (a,b)->b-a);
+                    if(judge24(arr)) return true;
+
+                    double a = nums[i],b = nums[j];
+                    if(Math.abs(b) > tol){
+                        merge(i,j,nums,arr, (a1,a2)->a1/a2);
+                        if(judge24(arr)) return true;
+                    }
+                    if(Math.abs(a) > tol){
+                        merge(i,j,nums,arr, (a1,a2)->a2/a1);
+                        if(judge24(arr)) return true;
+                    }
+                }
+            }
+            return false;
+        }
+    }
+
+    private static void merge(int i, int j, double[] nums, double[] res, BiFunction<Double, Double,Double> op) {
+        for(int k = 0,idx = 0; k < nums.length; k++){
+            if(k != i && k != j){
+                res[idx++] = nums[k];
+            }
+        }
+        res[res.length-1] = op.apply(nums[i],nums[j]);
+    }
+
+
+    private static boolean can_be_24(double a, double b) {
+        return approximate_24(a + b) ||
+                approximate_24(a - b) ||
+                approximate_24(b - a) ||
+                approximate_24(a * b) ||
+                (Math.abs(b) > tol && approximate_24(a / b)) ||
+                (Math.abs(a) > tol && approximate_24(b / a));
+    }
+
+    static final double tol = 10e-6;
+
+    private static boolean approximate_24(double d) {
+        return Math.abs(d - 24) <= tol;
+    }
+
 }
