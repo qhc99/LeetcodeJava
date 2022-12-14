@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.Random;
+import java.util.stream.IntStream;
 
 public class LocalityDemo {
 
@@ -74,7 +75,7 @@ public class LocalityDemo {
         PartitionMat a2 = new PartitionMat(m2, w_s);
         PartitionMat a3 = new PartitionMat(m3, w_s);
 
-        for (int i = 0; i < a3.rows; i++) {
+        IntStream.range(0,a3.rows).parallel().forEach(i->{
             for (int j = 0; j < a3.cols; j++) {
                 MatRange m3r = a3.at(i, j);
                 for (int k = 0; k < a1.cols; k++) {
@@ -83,7 +84,7 @@ public class LocalityDemo {
                     mul(m1, m1r, m2, m2r, m3, m3r);
                 }
             }
-        }
+        });
         var t2 = System.nanoTime();
 
         float ans = 0;
@@ -103,13 +104,13 @@ public class LocalityDemo {
             }
         }
         var t3 = System.nanoTime();
-        for (int i = 0; i < size_a; i++) {
+        IntStream.range(0,size_a).parallel().forEach(i->{
             for (int j = 0; j < size_c; j ++) {
                 for (int k = 0; k < size_b; k++) {
                     m3[i][j] += m1[i][k] * m2[k][j];
                 }
             }
-        }
+        });
         var t4 = System.nanoTime();
 
         ans = 0;
