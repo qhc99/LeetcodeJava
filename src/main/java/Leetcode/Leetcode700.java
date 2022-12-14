@@ -2,10 +2,9 @@ package Leetcode;
 
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
 
-@SuppressWarnings("unused")
+@SuppressWarnings("ALL")
 public class Leetcode700 {
 
     /**
@@ -192,26 +191,26 @@ public class Leetcode700 {
             for (int i = 0; i < nums.length; i++) {
                 for (int j = i + 1; j < nums.length; j++) {
                     double[] arr = new double[nums.length - 1];
-                    merge(i,j,nums,arr, Double::sum);
-                    if(judge24(arr)) return true;
+                    merge(i, j, nums, arr, Double::sum);
+                    if (judge24(arr)) return true;
 
-                    merge(i,j,nums,arr, (a,b)->a*b);
-                    if(judge24(arr)) return true;
+                    merge(i, j, nums, arr, (a, b) -> a * b);
+                    if (judge24(arr)) return true;
 
-                    merge(i,j,nums,arr, (a,b)->a-b);
-                    if(judge24(arr)) return true;
+                    merge(i, j, nums, arr, (a, b) -> a - b);
+                    if (judge24(arr)) return true;
 
-                    merge(i,j,nums,arr, (a,b)->b-a);
-                    if(judge24(arr)) return true;
+                    merge(i, j, nums, arr, (a, b) -> b - a);
+                    if (judge24(arr)) return true;
 
-                    double a = nums[i],b = nums[j];
-                    if(Math.abs(b) > tol){
-                        merge(i,j,nums,arr, (a1,a2)->a1/a2);
-                        if(judge24(arr)) return true;
+                    double a = nums[i], b = nums[j];
+                    if (Math.abs(b) > tol) {
+                        merge(i, j, nums, arr, (a1, a2) -> a1 / a2);
+                        if (judge24(arr)) return true;
                     }
-                    if(Math.abs(a) > tol){
-                        merge(i,j,nums,arr, (a1,a2)->a2/a1);
-                        if(judge24(arr)) return true;
+                    if (Math.abs(a) > tol) {
+                        merge(i, j, nums, arr, (a1, a2) -> a2 / a1);
+                        if (judge24(arr)) return true;
                     }
                 }
             }
@@ -219,13 +218,13 @@ public class Leetcode700 {
         }
     }
 
-    private static void merge(int i, int j, double[] nums, double[] res, BiFunction<Double, Double,Double> op) {
-        for(int k = 0,idx = 0; k < nums.length; k++){
-            if(k != i && k != j){
+    private static void merge(int i, int j, double[] nums, double[] res, BiFunction<Double, Double, Double> op) {
+        for (int k = 0, idx = 0; k < nums.length; k++) {
+            if (k != i && k != j) {
                 res[idx++] = nums[k];
             }
         }
-        res[res.length-1] = op.apply(nums[i],nums[j]);
+        res[res.length - 1] = op.apply(nums[i], nums[j]);
     }
 
 
@@ -242,6 +241,39 @@ public class Leetcode700 {
 
     private static boolean approximate_24(double d) {
         return Math.abs(d - 24) <= tol;
+    }
+
+
+    /**
+     * #668
+     *
+     * @param m
+     * @param n
+     * @param k
+     * @return
+     */
+    public static int findKthNumber(int m, int n, int k) {
+        int start = 1, end = m * n + 1;
+
+        while (end - start > 1) {
+            int mid = start + (end - start) / 2;
+            int order = count_of_less_than(mid, m, n);
+            if(order >=k){
+                end = mid;
+            }
+            else {
+                start = mid+1;
+            }
+        }
+        return start;
+    }
+
+    private static int count_of_less_than(int x, int m, int n) {
+        int ans = 0;
+        for (int i = x / n + 1; i <= m; i++) {
+            ans += x / i;
+        }
+        return ans + x / n * n;
     }
 
 }
