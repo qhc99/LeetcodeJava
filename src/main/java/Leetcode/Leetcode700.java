@@ -3,6 +3,8 @@ package Leetcode;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 public class Leetcode700 {
@@ -274,6 +276,33 @@ public class Leetcode700 {
             ans += x / i;
         }
         return ans + x / n * n;
+    }
+
+    /**
+     * #686
+     * @param a
+     * @param b
+     * @return
+     */
+    public static int repeatedStringMatch(String a, String b) {
+        int n = (int)Math.ceil(b.length()/(float)a.length());
+
+        var rep = a.repeat(n);
+        Pattern pattern = Pattern.compile(b);
+        Matcher matcher = pattern.matcher(rep);
+        if(matcher.find()){
+            return n;
+        }
+        else {
+            var rep1 = rep + a;
+            matcher = pattern.matcher(rep1);
+            if(matcher.find()){
+                return n+1;
+            }
+            else {
+                return -1;
+            }
+        }
     }
 
 }
