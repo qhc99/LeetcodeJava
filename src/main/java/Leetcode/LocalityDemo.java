@@ -42,7 +42,8 @@ public class LocalityDemo {
             }
         }
     }
-    public static void runDemo(){
+
+    public static void runDemo() {
         Random r = new Random();
 
         int size_a = 1300;
@@ -75,9 +76,14 @@ public class LocalityDemo {
         PartitionMat a2 = new PartitionMat(m2, w_s);
         PartitionMat a3 = new PartitionMat(m3, w_s);
 
-        IntStream.range(0,a3.rows).parallel().forEach(i->{
+        IntStream.range(0, a3.rows).parallel().forEach(i -> {
             for (int j = 0; j < a3.cols; j++) {
                 MatRange m3r = a3.at(i, j);
+                for (int p = 0; p + m3r.r1 < m3r.r2; p++) {
+                    for (int q = 0; q + m3r.c1 < m3r.c2; q++) {
+                        m3[p + m3r.r1][q + m3r.c1] = 0;
+                    }
+                }
                 for (int k = 0; k < a1.cols; k++) {
                     MatRange m1r = a1.at(i, k);
                     MatRange m2r = a2.at(k, j);
@@ -94,18 +100,18 @@ public class LocalityDemo {
             }
         }
         System.out.println("locality optimization:");
-        System.out.printf("spend %.2fms%n",(t2 - t1) / 1000000.);
-        System.out.printf("sum: %f\n",ans);
+        System.out.printf("spend %.2fms%n", (t2 - t1) / 1000000.);
+        System.out.printf("sum: %f\n", ans);
         System.out.println();
 
-        for (int i = 0; i < size_a; i++) {
+
+
+
+
+        var t3 = System.nanoTime();
+        IntStream.range(0, size_a).parallel().forEach(i -> {
             for (int j = 0; j < size_c; j++) {
                 m3[i][j] = 0;
-            }
-        }
-        var t3 = System.nanoTime();
-        IntStream.range(0,size_a).parallel().forEach(i->{
-            for (int j = 0; j < size_c; j ++) {
                 for (int k = 0; k < size_b; k++) {
                     m3[i][j] += m1[i][k] * m2[k][j];
                 }
@@ -122,7 +128,7 @@ public class LocalityDemo {
 
 
         System.out.println("naive implementation:");
-        System.out.printf("spend %.2fms%n",(t4 - t3) / 1000000.);
-        System.out.printf("sum: %f\n",ans);
+        System.out.printf("spend %.2fms%n", (t4 - t3) / 1000000.);
+        System.out.printf("sum: %f\n", ans);
     }
 }
