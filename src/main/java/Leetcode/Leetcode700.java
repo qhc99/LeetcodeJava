@@ -260,11 +260,11 @@ public class Leetcode700 {
         while (end - start > 1) {
             int mid = start + (end - start) / 2;
             int order = count_of_less_than(mid, m, n);
-            if(order >=k){
+            if (order >= k) {
                 end = mid;
             }
             else {
-                start = mid+1;
+                start = mid + 1;
             }
         }
         return start;
@@ -280,29 +280,77 @@ public class Leetcode700 {
 
     /**
      * #686
+     *
      * @param a
      * @param b
      * @return
      */
     public static int repeatedStringMatch(String a, String b) {
-        int n = (int)Math.ceil(b.length()/(float)a.length());
+        int n = (int) Math.ceil(b.length() / (float) a.length());
 
         var rep = a.repeat(n);
         Pattern pattern = Pattern.compile(b);
         Matcher matcher = pattern.matcher(rep);
-        if(matcher.find()){
+        if (matcher.find()) {
             return n;
         }
         else {
             var rep1 = rep + a;
             matcher = pattern.matcher(rep1);
-            if(matcher.find()){
-                return n+1;
+            if (matcher.find()) {
+                return n + 1;
             }
             else {
                 return -1;
             }
         }
+    }
+
+    /**
+     * #689
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public static int[] maxSumOfThreeSubarrays(int[] nums, int k) {
+        int w_sum_1 = 0, w_sum_2 = 0, w_sum_3 = 0;
+
+        for (int i = 0; i < k; i++) {
+            w_sum_1 += nums[i];
+            w_sum_2 += nums[i + k];
+            w_sum_3 += nums[i + k + k];
+        }
+        int max_1 = w_sum_1, max_2 = max_1 + w_sum_2, max_3 = max_2 + w_sum_3;
+        int max_pos_1 = 0;
+        int[] max_pos_2 = new int[]{0,k};
+        int[] max_pos_3 = new int[]{0, k,2*k};
+        for (int i = 0; i + 3 * k < nums.length; i++) {
+            w_sum_1 -= nums[i];
+            w_sum_1 += nums[i + k];
+            if (w_sum_1 > max_1) {
+                max_1 = w_sum_1;
+                max_pos_1 = i + 1;
+            }
+            w_sum_2 -= nums[i + k];
+            w_sum_2 += nums[i + 2 * k];
+            if (w_sum_2 + max_1 > max_2) {
+                max_2 = w_sum_2 + max_1;
+                max_pos_2[0] = max_pos_1;
+                max_pos_2[1] = i + k + 1;
+            }
+            w_sum_3 -= nums[i + 2 * k];
+            w_sum_3 += nums[i + 3 * k];
+            if (w_sum_3 + max_2 > max_3) {
+                max_3 = w_sum_3 + max_2;
+
+                max_pos_3[0] = max_pos_2[0];
+                max_pos_3[1] = max_pos_2[1];
+                max_pos_3[2] = i + 2 * k+1;
+            }
+        }
+        return max_pos_3;
+
     }
 
 }
