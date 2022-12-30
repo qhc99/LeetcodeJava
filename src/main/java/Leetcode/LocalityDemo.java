@@ -5,34 +5,34 @@ import java.util.stream.IntStream;
 
 public class LocalityDemo {
 
-    record MatRange(int r1, int c1, int r2, int c2) {
+    record MatBlock(int r1, int c1, int r2, int c2) {
     }
 
-    static class PartitionMat {
-        private final int p;
+    static class MatPartition {
+        private final int size_block;
         final int rows;
         final int cols;
         private final int m;
         private final int n;
 
-        PartitionMat(float[][] m, int parti) {
-            p = parti;
+        MatPartition(float[][] m, int block_size) {
+            size_block = block_size;
             this.m = m.length;
             this.n = m[0].length;
-            rows = (int) Math.ceil(this.m / (float) parti);
-            cols = (int) Math.ceil(this.n / (float) parti);
+            rows = (int) Math.ceil(this.m / (float) block_size);
+            cols = (int) Math.ceil(this.n / (float) block_size);
         }
 
 
-        MatRange at(int i, int j) {
-            return new MatRange(i * p, j * p,
-                    Math.min(i * p + p, m), Math.min(j * p + p, n));
+        MatBlock at(int i, int j) {
+            return new MatBlock(i * size_block, j * size_block,
+                    Math.min(i * size_block + size_block, m), Math.min(j * size_block + size_block, n));
         }
     }
 
-    static void mul(float[][] m1, MatRange m1r,
-                    float[][] m2, MatRange m2r,
-                    float[][] m3, MatRange m3r) {
+    static void mul(float[][] m1, MatBlock m1r,
+                    float[][] m2, MatBlock m2r,
+                    float[][] m3, MatBlock m3r) {
         for (int i = 0; i + m3r.r1 < m3r.r2; i++) {
             for (int j = 0; j + m3r.c1 < m3r.c2; j++) {
                 for (int k = 0; k + m2r.r1 < m2r.r2; k++) {
@@ -72,21 +72,21 @@ public class LocalityDemo {
 
         var t1 = System.nanoTime();
         int w_s = 32;
-        PartitionMat a1 = new PartitionMat(m1, w_s);
-        PartitionMat a2 = new PartitionMat(m2, w_s);
-        PartitionMat a3 = new PartitionMat(m3, w_s);
+        MatPartition p1 = new MatPartition(m1, w_s);
+        MatPartition p2 = new MatPartition(m2, w_s);
+        MatPartition p3 = new MatPartition(m3, w_s);
 
-        IntStream.range(0, a3.rows).parallel().forEach(i -> {
-            for (int j = 0; j < a3.cols; j++) {
-                MatRange m3r = a3.at(i, j);
+        IntStream.range(0, p3.rows).parallel().forEach(i -> {
+            for (int j = 0; j < p3.cols; j++) {
+                MatBlock m3r = p3.at(i, j);
                 for (int p = 0; p + m3r.r1 < m3r.r2; p++) {
                     for (int q = 0; q + m3r.c1 < m3r.c2; q++) {
                         m3[p + m3r.r1][q + m3r.c1] = 0;
                     }
                 }
-                for (int k = 0; k < a1.cols; k++) {
-                    MatRange m1r = a1.at(i, k);
-                    MatRange m2r = a2.at(k, j);
+                for (int k = 0; k < p1.cols; k++) {
+                    MatBlock m1r = p1.at(i, k);
+                    MatBlock m2r = p2.at(k, j);
                     mul(m1, m1r, m2, m2r, m3, m3r);
                 }
             }
@@ -94,6 +94,52 @@ public class LocalityDemo {
         var t2 = System.nanoTime();
 
         float ans = 0;
+        for (int i = 0; i < size_a; i++) {
+            for (int j = 0; j < size_a; j++) {
+                ans += m3[i][j];
+            }
+        }
+        System.out.println("locality parallel optimization:");
+        System.out.printf("spend %.2fms%n", (t2 - t1) / 1000000.);
+        System.out.printf("sum: %f\n", ans);
+        System.out.println();
+
+        for (int i = 0; i < size_a; i++) {
+            for (int j = 0; j < size_b; j++) {
+                m1[i][j] = r.nextFloat();
+            }
+        }
+        for (int i = 0; i < size_b; i++) {
+            for (int j = 0; j < size_c; j++) {
+                m2[i][j] = r.nextFloat();
+            }
+        }
+
+        for (int i = 0; i < size_a; i++) {
+            for (int j = 0; j < size_c; j++) {
+                m3[i][j] = 0;
+            }
+        }
+        t1 = System.nanoTime();
+
+        for(int i = 0; i < p3.rows; i++){
+            for (int j = 0; j < p3.cols; j++) {
+                MatBlock m3r = p3.at(i, j);
+                for (int p = 0; p + m3r.r1 < m3r.r2; p++) {
+                    for (int q = 0; q + m3r.c1 < m3r.c2; q++) {
+                        m3[p + m3r.r1][q + m3r.c1] = 0;
+                    }
+                }
+                for (int k = 0; k < p1.cols; k++) {
+                    MatBlock m1r = p1.at(i, k);
+                    MatBlock m2r = p2.at(k, j);
+                    mul(m1, m1r, m2, m2r, m3, m3r);
+                }
+            }
+        }
+        t2 = System.nanoTime();
+
+        ans = 0;
         for (int i = 0; i < size_a; i++) {
             for (int j = 0; j < size_a; j++) {
                 ans += m3[i][j];
@@ -108,6 +154,22 @@ public class LocalityDemo {
 
 
 
+        for (int i = 0; i < size_a; i++) {
+            for (int j = 0; j < size_b; j++) {
+                m1[i][j] = r.nextFloat();
+            }
+        }
+        for (int i = 0; i < size_b; i++) {
+            for (int j = 0; j < size_c; j++) {
+                m2[i][j] = r.nextFloat();
+            }
+        }
+
+        for (int i = 0; i < size_a; i++) {
+            for (int j = 0; j < size_c; j++) {
+                m3[i][j] = 0;
+            }
+        }
         var t3 = System.nanoTime();
         IntStream.range(0, size_a).parallel().forEach(i -> {
             for (int j = 0; j < size_c; j++) {
@@ -127,7 +189,7 @@ public class LocalityDemo {
         }
 
 
-        System.out.println("naive implementation:");
+        System.out.println("parallel implementation:");
         System.out.printf("spend %.2fms%n", (t4 - t3) / 1000000.);
         System.out.printf("sum: %f\n", ans);
     }
