@@ -1,10 +1,8 @@
 package Leetcode;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
-@SuppressWarnings("JavaDoc")
+@SuppressWarnings({"JavaDoc", "unused"})
 public class Leetcode750 {
 
     /**
@@ -183,6 +181,45 @@ public class Leetcode750 {
             }
         }
         return i;
+    }
+
+
+    /**
+     * #731
+     */
+    static class MyCalendarTwo {
+
+        public MyCalendarTwo() {
+
+        }
+
+        public boolean book(int start, int end) {
+            return false;
+        }
+    }
+
+    /**
+     * #739
+     * @param temperatures
+     * @return
+     */
+    public static int[] dailyTemperatures(int[] temperatures) {
+        Deque<int[]> stack = new ArrayDeque<>(temperatures.length);
+        int[] ans = new int[temperatures.length];
+        for(int i = 0; i < temperatures.length;i++){
+            var t = temperatures[i];
+            if(stack.size() == 0 || stack.getLast()[0] >= t){
+                stack.addLast(new int[]{t,i});
+            }
+            else {
+                while (stack.size() > 0 && stack.getLast()[0] < t){
+                    var idx = stack.pollLast()[1];
+                    ans[idx] = i - idx;
+                }
+                stack.addLast(new int[]{t,i});
+            }
+        }
+        return ans;
     }
 
 

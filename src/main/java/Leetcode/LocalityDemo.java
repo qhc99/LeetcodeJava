@@ -46,9 +46,9 @@ public class LocalityDemo {
     public static void runDemo() {
         Random r = new Random();
 
-        int size_a = 2300;
-        int size_b = 2300;
-        int size_c = 2300;
+        int size_a = 1300;
+        int size_b = 1300;
+        int size_c = 1300;
         float[][] m1 = new float[size_a][size_b];
         float[][] m2 = new float[size_b][size_c];
         float[][] m3 = new float[size_a][size_c];
