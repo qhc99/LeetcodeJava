@@ -30,9 +30,9 @@ public class LocalityDemo {
         }
     }
 
-    static void mul(float[][] m1, MatBlock m1r,
-                    float[][] m2, MatBlock m2r,
-                    float[][] m3, MatBlock m3r) {
+    static void mul_mat_block(float[][] m1, MatBlock m1r,
+                              float[][] m2, MatBlock m2r,
+                              float[][] m3, MatBlock m3r) {
         for (int i = 0; i + m3r.r1 < m3r.r2; i++) {
             for (int j = 0; j + m3r.c1 < m3r.c2; j++) {
                 for (int k = 0; k + m2r.r1 < m2r.r2; k++) {
@@ -46,9 +46,9 @@ public class LocalityDemo {
     public static void runDemo() {
         Random r = new Random();
 
-        int size_a = 1300;
-        int size_b = 1300;
-        int size_c = 1300;
+        int size_a = 2300;
+        int size_b = 2300;
+        int size_c = 2300;
         float[][] m1 = new float[size_a][size_b];
         float[][] m2 = new float[size_b][size_c];
         float[][] m3 = new float[size_a][size_c];
@@ -87,7 +87,7 @@ public class LocalityDemo {
                 for (int k = 0; k < p1.cols; k++) {
                     MatBlock m1r = p1.at(i, k);
                     MatBlock m2r = p2.at(k, j);
-                    mul(m1, m1r, m2, m2r, m3, m3r);
+                    mul_mat_block(m1, m1r, m2, m2r, m3, m3r);
                 }
             }
         });
@@ -133,7 +133,7 @@ public class LocalityDemo {
                 for (int k = 0; k < p1.cols; k++) {
                     MatBlock m1r = p1.at(i, k);
                     MatBlock m2r = p2.at(k, j);
-                    mul(m1, m1r, m2, m2r, m3, m3r);
+                    mul_mat_block(m1, m1r, m2, m2r, m3, m3r);
                 }
             }
         }
