@@ -2,12 +2,88 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"unused","JavaDoc"})
+@SuppressWarnings({ "unused", "JavaDoc" })
 public class Leetcode800 {
 
     /**
+     * #753
+     * 
+     * @param n
+     * @param k
+     * @return
+     */
+    public static String crackSafe(int n, int k) {
+        if (n == 1) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < k; i++) {
+                sb.append(i);
+            }
+            return sb.toString();
+        }
+        int[] biggest_edge = new int[(int) Math.pow(k, n - 1)];
+        Arrays.fill(biggest_edge, k - 1);
+        StringBuilder sb = new StringBuilder("0".repeat(n - 1));
+        int current = 0;
+        while (biggest_edge[current] != -1) {
+            int edge = biggest_edge[current]--;
+            sb.append(edge);
+            current = (current * k) % (int) Math.pow(k, n - 1) + edge;
+        }
+
+        return sb.toString();
+    }
+
+    /**
+     * max match length of prefix of P and suffix end with ith(start from 1)
+     * character
+     *
+     * @param P string
+     * @return prefix function (length = len(p) + 1)
+     */
+    private static int[] computePrefixFunction(String P) {
+        int m = P.length();
+        int[] pi = new int[m + 1];
+        pi[1] = 0;
+        for (int q = 1, k = 0; q < m; q++) {
+            while (k > 0 && P.charAt(k) != P.charAt(q)) {
+                k = pi[k];
+            }
+            if (P.charAt(k) == P.charAt(q)) {
+                k++;
+            }
+            pi[q + 1] = k;
+        }
+        return pi;
+    }
+
+    public static boolean next(int[] arr, int k) {
+        boolean remain = false;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            arr[i]++;
+            if (arr[i] == k) {
+                arr[i] = 0;
+                remain = true;
+            } else {
+                remain = false;
+                break;
+            }
+        }
+        return !remain;
+    }
+
+    private static String numArrToString(int[] arr) {
+        StringBuilder sb = new StringBuilder();
+        for (var i : arr) {
+            sb.append(i);
+        }
+        return sb.toString();
+    }
+
+    /**
      * #763
-     * <br/>划分字母区间
+     * <br/>
+     * 划分字母区间
+     * 
      * <pre>
      * 输入：S = "ababcbacadefegdehijhklij"
      * 输出：[9,7,8]
@@ -39,10 +115,13 @@ public class Leetcode800 {
 
     /**
      * #781
-     * <br/>森林中的兔子
-     * <br/>森林中，每个兔子都有颜色。其中一些兔子（可能是全部）告诉你还有多少其他的兔子和自己有相同的颜色。
+     * <br/>
+     * 森林中的兔子
+     * <br/>
+     * 森林中，每个兔子都有颜色。其中一些兔子（可能是全部）告诉你还有多少其他的兔子和自己有相同的颜色。
      * 我们将这些回答放在answers数组里。
-     * <br/>要求返回森林中兔子的最少数量。
+     * <br/>
+     * 要求返回森林中兔子的最少数量。
      *
      * @param answers answers
      * @return count of rabbit
@@ -62,7 +141,8 @@ public class Leetcode800 {
 
     /**
      * #785
-     * <br>bipartite graph: vertex and its neighbors has different color
+     * <br>
+     * bipartite graph: vertex and its neighbors has different color
      *
      * @param graph graph
      * @return graph is bipartite
@@ -100,8 +180,7 @@ public class Leetcode800 {
                 }
                 if (vertex_color.get(neighbor) == vertex_color.get(vertex)) {
                     return false;
-                }
-                else {
+                } else {
                     vertex_color.put(neighbor, (vertex_color.get(vertex) == Color.RED) ? Color.GREEN : Color.RED);
                 }
             }
@@ -120,15 +199,15 @@ public class Leetcode800 {
         int n = arr.length;
         PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> arr[x[0]] * arr[y[1]] - arr[y[0]] * arr[x[1]]);
         for (int j = 1; j < n; ++j) {
-            pq.offer(new int[]{0, j});
+            pq.offer(new int[] { 0, j });
         }
         for (int i = 1; i < k; ++i) {
             int[] frac = pq.remove();
             int x = frac[0], y = frac[1];
             if (x + 1 < y) {
-                pq.offer(new int[]{x + 1, y});
+                pq.offer(new int[] { x + 1, y });
             }
         }
-        return new int[]{arr[pq.peek()[0]], arr[pq.peek()[1]]};
+        return new int[] { arr[pq.peek()[0]], arr[pq.peek()[1]] };
     }
 }
