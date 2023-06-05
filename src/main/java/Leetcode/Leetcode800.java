@@ -2,6 +2,8 @@ package Leetcode;
 
 import java.util.*;
 
+import javax.management.RuntimeErrorException;
+
 @SuppressWarnings({ "unused", "JavaDoc" })
 public class Leetcode800 {
 
@@ -111,6 +113,71 @@ public class Leetcode800 {
             }
         }
         return res;
+    }
+
+    /**
+     * #778
+     * 
+     * @param grid
+     * @return
+     */
+    public static int swimInWater(int[][] grid) {
+        final int n = grid.length;
+        if (n == 1) {
+            return grid[0][0];
+        }
+
+        int currentHeight = grid[0][0];
+
+        Queue<SwimPoolHeight> surrounding = new PriorityQueue<>(Comparator.comparing(d -> d.height));
+        surrounding.add(new SwimPoolHeight(0, 1, grid[0][1]));
+        surrounding.add(new SwimPoolHeight(1, 0, grid[1][0]));
+
+        boolean[][] visited = new boolean[n][n];
+        visited[0][0] = true;
+        visited[0][1] = true;
+        visited[1][0] = true;
+
+        while (!surrounding.isEmpty()) {
+            while (surrounding.peek().height <= currentHeight) {
+                var d = surrounding.poll();
+                int x = d.x, y = d.y;
+                if (x == n - 1 && y == n - 1) {
+                    return currentHeight;
+                }
+                if (x - 1 >= 0 && !visited[x - 1][y]) {
+                    visited[x - 1][y] = true;
+                    surrounding.add(new SwimPoolHeight(x - 1, y, grid[x - 1][y]));
+                }
+                if (y - 1 >= 0 && !visited[x][y - 1]) {
+                    visited[x][y - 1] = true;
+                    surrounding.add(new SwimPoolHeight(x, y - 1, grid[x][y - 1]));
+                }
+                if (x + 1 < n && !visited[x + 1][y]) {
+                    visited[x + 1][y] = true;
+                    surrounding.add(new SwimPoolHeight(x + 1, y, grid[x + 1][y]));
+                }
+                if (y + 1 < n && !visited[x][y + 1]) {
+                    visited[x][y + 1] = true;
+                    surrounding.add(new SwimPoolHeight(x, y + 1, grid[x][y + 1]));
+                }
+            }
+            currentHeight = surrounding.peek().height;
+        }
+
+        throw new RuntimeException();
+    }
+
+    private static class SwimPoolHeight {
+        final int x;
+        final int y;
+        final int height;
+
+        public SwimPoolHeight(int x, int y, int h) {
+            this.x = x;
+            this.y = y;
+            this.height = h;
+        }
     }
 
     /**

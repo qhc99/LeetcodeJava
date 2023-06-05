@@ -2,21 +2,25 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"JavaDoc", "unused"})
+@SuppressWarnings({ "JavaDoc", "unused" })
 public class Leetcode200 {
 
     /**
      * #152
-     * <br/>乘积最大子数组
+     * <br/>
+     * 乘积最大子数组
      *
      * @param nums numbers
      * @return max sub array multiple
      */
     public static int maxProduct(int[] nums) {
-        int maxF = nums[0], minF = nums[0], ans = nums[0];
+        int maxF = nums[0];
+        int minF = nums[0];
+        int ans = nums[0];
         int length = nums.length;
         for (int i = 1; i < length; ++i) {
-            int mx = maxF, mn = minF;
+            int mx = maxF;
+            int mn = minF;
             maxF = Math.max(mx * nums[i], Math.max(nums[i], mn * nums[i]));
             minF = Math.min(mn * nums[i], Math.min(nums[i], mx * nums[i]));
             ans = Math.max(maxF, ans);
@@ -66,7 +70,8 @@ public class Leetcode200 {
         if (headA == null || headB == null) {
             return null;
         }
-        ListNode pA = headA, pB = headB;
+        ListNode pA = headA;
+        ListNode pB = headB;
         while (pA != pB) {
             pA = pA == null ? headB : pA.next;
             pB = pB == null ? headA : pB.next;
@@ -86,11 +91,9 @@ public class Leetcode200 {
             return 0;
         }
 
-
         if (nums[0] > nums[1]) {
             return 0;
-        }
-        else if (nums[len - 1] > nums[len - 2]) {
+        } else if (nums[len - 1] > nums[len - 2]) {
             return len - 1;
         }
         for (int i = 1; i < len - 1; i++) {
@@ -136,8 +139,7 @@ public class Leetcode200 {
                     sb.append(")");
                     sb.insert(searchIdx, "(");
                     break;
-                }
-                else {
+                } else {
                     remainderToIdx.put(this_remainder, idx - 1);
                 }
             }
@@ -171,19 +173,16 @@ public class Leetcode200 {
                 {
                     stack.push(ptr);
                     ptr = ptr.left;
-                }
-                else {
+                } else {
                     var t = ptr;
                     if (ptr.right != null) {
                         ptr = ptr.right;
                         poppedBefore = false;
-                    }
-                    else {
+                    } else {
                         if (stack.size() != 0) {
                             ptr = stack.pop();
                             poppedBefore = true;
-                        }
-                        else {
+                        } else {
                             ptr = null;
                         }
                     }
@@ -242,7 +241,8 @@ public class Leetcode200 {
                 matrix[m].set(n, b);
             }
         }
-        int m = grid.length, n = grid[0].length;
+        int m = grid.length;
+        int n = grid[0].length;
         var bMatrix = new BooleanMatrix(m, n);
 
         var funcVisit = new Object() {

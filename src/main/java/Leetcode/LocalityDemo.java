@@ -42,25 +42,25 @@ public class LocalityDemo {
             }
         }
     }
-
-    public static void reset_mat(float[][] m1, float[][] m2) {
-        Random r = new Random();
-        int size_a = m1.length, size_b = m2.length, size_c = m2[0].length;
-        for (int i = 0; i < size_a; i++) {
-            for (int j = 0; j < size_b; j++) {
+    private static Random r = new Random();
+    public static void resetMat(float[][] m1, float[][] m2) {
+        
+        int sizeA = m1.length, sizeB = m2.length, sizeC = m2[0].length;
+        for (int i = 0; i < sizeA; i++) {
+            for (int j = 0; j < sizeB; j++) {
                 m1[i][j] = r.nextFloat();
             }
         }
-        for (int i = 0; i < size_b; i++) {
-            for (int j = 0; j < size_c; j++) {
+        for (int i = 0; i < sizeB; i++) {
+            for (int j = 0; j < sizeC; j++) {
                 m2[i][j] = r.nextFloat();
             }
         }
     }
 
-    public static void space_locality(float[][] m1, float[][] m2, float[][] m3) {
+    public static void spaceLocality(float[][] m1, float[][] m2, float[][] m3) {
         int w_s = 64;
-        int size_a = m1.length, size_b = m2.length, size_c = m2[0].length;
+        int size_a = m1.length;
         MatPartition p1 = new MatPartition(m1, w_s);
         MatPartition p2 = new MatPartition(m2, w_s);
         MatPartition p3 = new MatPartition(m3, w_s);
@@ -95,13 +95,13 @@ public class LocalityDemo {
         System.out.println();
     }
 
-    public static void space_locality_parallel(float[][] m1, float[][] m2, float[][] m3) {
+    public static void spaceLocalityParallel(float[][] m1, float[][] m2, float[][] m3) {
         var t1 = System.nanoTime();
-        int w_s = 64;
-        int size_a = m1.length, size_b = m2.length, size_c = m2[0].length;
-        MatPartition p1 = new MatPartition(m1, w_s);
-        MatPartition p2 = new MatPartition(m2, w_s);
-        MatPartition p3 = new MatPartition(m3, w_s);
+        int windowSize = 64;
+        int sizeA = m1.length;
+        MatPartition p1 = new MatPartition(m1, windowSize);
+        MatPartition p2 = new MatPartition(m2, windowSize);
+        MatPartition p3 = new MatPartition(m3, windowSize);
 
         IntStream.range(0, p3.rows).parallel().forEach(i -> {
             for (int j = 0; j < p3.cols; j++) {
@@ -121,8 +121,8 @@ public class LocalityDemo {
         var t2 = System.nanoTime();
 
         float ans = 0;
-        for (int i = 0; i < size_a; i++) {
-            for (int j = 0; j < size_a; j++) {
+        for (int i = 0; i < sizeA; i++) {
+            for (int j = 0; j < sizeA; j++) {
                 ans += m3[i][j];
             }
         }
@@ -133,15 +133,15 @@ public class LocalityDemo {
     }
 
     public static void runDemo() {
-        int size_a = 1300;
-        int size_b = 1300;
-        int size_c = 1300;
-        float[][] m1 = new float[size_a][size_b];
-        float[][] m2 = new float[size_b][size_c];
-        float[][] m3 = new float[size_a][size_c];
-        reset_mat(m1, m2);
-        space_locality_parallel(m1, m2, m3);
-        reset_mat(m1, m2);
-        space_locality(m1, m2, m3);
+        int sizeA = 1300;
+        int sizeB = 1300;
+        int sizeC = 1300;
+        float[][] m1 = new float[sizeA][sizeB];
+        float[][] m2 = new float[sizeB][sizeC];
+        float[][] m3 = new float[sizeA][sizeC];
+        resetMat(m1, m2);
+        spaceLocalityParallel(m1, m2, m3);
+        resetMat(m1, m2);
+        spaceLocality(m1, m2, m3);
     }
 }
