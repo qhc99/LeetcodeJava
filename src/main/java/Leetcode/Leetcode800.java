@@ -161,7 +161,7 @@ public class Leetcode800 {
     public static int minSwapsCouples(int[] row) {
         int N = row.length / 2;
         DisjointSet[] unions = new DisjointSet[N];
-        for(int i = 0; i < unions.length; i++){
+        for (int i = 0; i < unions.length; i++) {
             unions[i] = new DisjointSet();
         }
         for (int i = 0; i < row.length; i += 2) {
@@ -170,8 +170,8 @@ public class Leetcode800 {
             DisjointSet.union(unions[couple1], unions[couple2]);
         }
         int count = 0;
-        for(var d : unions){
-            if(d == d.parent){
+        for (var d : unions) {
+            if (d == d.parent) {
                 count++;
             }
         }
@@ -241,6 +241,40 @@ public class Leetcode800 {
             this.y = y;
             this.height = h;
         }
+    }
+
+    /**
+     * # 780
+     * 
+     * @param sx
+     * @param sy
+     * @param tx
+     * @param ty
+     * @return
+     */
+    public static boolean reachingPoints(int sx, int sy, int tx, int ty) {
+        if (tx < sx || ty < sy) {
+            return false;
+        }
+        while (tx > sx && ty > sy) {
+            if (tx > ty && tx - ty >= sx) {
+                tx -= ty;
+            } else if (tx < ty && ty - tx >= sy) {
+                ty -= tx;
+            } else {
+                break;
+            }
+        }
+        if (tx == sx && ty == sy) {
+            return true;
+        } else if (tx == sx) {
+            int diff = ty - sy;
+            return diff % sx == 0;
+        } else if (ty == sy) {
+            int diff = tx - sx;
+            return diff % sy == 0;
+        } else
+            return false;
     }
 
     /**
