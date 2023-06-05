@@ -115,6 +115,69 @@ public class Leetcode800 {
         return res;
     }
 
+    public static final class DisjointSet {
+        private int rank = 0;
+        private DisjointSet parent = this;
+
+        /**
+         * find identifier of the set of an element
+         *
+         * @param x element
+         * @return identifier
+         */
+        private static DisjointSet findGroupId(DisjointSet x) {
+            if (x != x.parent) {
+                x.parent = findGroupId(x.parent);
+            }
+            return x.parent;
+        }
+
+        public static boolean inSameSet(DisjointSet a, DisjointSet b) {
+            return findGroupId(a) == findGroupId(b);
+        }
+
+        public static void union(DisjointSet a, DisjointSet b) {
+            link(findGroupId(a), findGroupId(b));
+        }
+
+        private static void link(DisjointSet x, DisjointSet y) {
+            if (x.rank > y.rank) {
+                y.parent = x;
+            } else {
+                x.parent = y;
+                if (x.rank == y.rank) {
+                    y.rank = y.rank + 1;
+                }
+            }
+        }
+    }
+
+    /**
+     * #765
+     * 
+     * @param row
+     * @return
+     */
+    public static int minSwapsCouples(int[] row) {
+        int N = row.length / 2;
+        DisjointSet[] unions = new DisjointSet[N];
+        for(int i = 0; i < unions.length; i++){
+            unions[i] = new DisjointSet();
+        }
+        for (int i = 0; i < row.length; i += 2) {
+            int couple1 = row[i] / 2;
+            int couple2 = row[i + 1] / 2;
+            DisjointSet.union(unions[couple1], unions[couple2]);
+        }
+        int count = 0;
+        for(var d : unions){
+            if(d == d.parent){
+                count++;
+            }
+        }
+        return N - count;
+    }
+
     /**
      * #778
      * 
