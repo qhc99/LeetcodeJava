@@ -226,6 +226,42 @@ public class Leetcode100 {
         return false;
     }
 
+    public static void sortColors(int[] nums) {
+        int zero = 0, one = 0, two = 0;
+        for(var n : nums){
+            switch(n){
+                case 0->{
+                    zero++;
+                }
+                case 1->{
+                    one++;
+                }
+                case 2->{
+                    two++;
+                }
+                default->{
+                    throw new RuntimeException("input is not 0, 1 or 2");
+                }
+            }
+        }
+        int i = 0;
+        while(i < nums.length && zero > 0){
+            nums[i] = 0;
+            i++;
+            zero--;
+        }
+        while(i < nums.length && one > 0){
+            nums[i] = 1;
+            i++;
+            one--;
+        }
+        while(i < nums.length && two > 0){
+            nums[i] = 2;
+            i++;
+            two--;
+        }
+    }
+
     /**
      * #78
      * <br/>子集
