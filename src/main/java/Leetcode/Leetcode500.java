@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"JavaDoc", "Unused"})
+@SuppressWarnings({ "JavaDoc", "Unused" })
 public class Leetcode500 {
 
     /**
@@ -73,7 +73,8 @@ public class Leetcode500 {
             }
             if (q == m) {
                 int res = i + 1 - m;
-                if (res != 0 && res != P.length()) return true;
+                if (res != 0 && res != P.length())
+                    return true;
                 q = PI[q];
             }
         }
@@ -81,7 +82,8 @@ public class Leetcode500 {
     }
 
     /**
-     * max match length of prefix of P and suffix end with ith(start from 1) character
+     * max match length of prefix of P and suffix end with ith(start from 1)
+     * character
      *
      * @param P string
      * @return prefix function (length = len(p) + 1)
@@ -132,8 +134,8 @@ public class Leetcode500 {
             DMNode firstNode() {
                 if (head.right != tail) {
                     return head.right;
-                }
-                else throw new RuntimeException();
+                } else
+                    throw new RuntimeException();
             }
 
             boolean isEmpty() {
@@ -187,8 +189,8 @@ public class Leetcode500 {
                 DLNode lastNode() {
                     if (head.right != tail) {
                         return tail.left;
-                    }
-                    else throw new RuntimeException();
+                    } else
+                        throw new RuntimeException();
                 }
 
                 static class DLNode {
@@ -234,10 +236,12 @@ public class Leetcode500 {
         }
 
         public int get(int key) {
-            if (capacity == 0) return -1;
+            if (capacity == 0)
+                return -1;
             var info = key_info_map.get(key);
             int ans = -1;
-            if (info == null) return ans;
+            if (info == null)
+                return ans;
             ans = info.val;
 
             var mNode = info.nodeM;
@@ -246,35 +250,37 @@ public class Leetcode500 {
             freq++;
             if (mNode.right.freq == freq) {
                 lNode.detach();
-                if (mNode.list.isEmpty()) mNode.detach();
+                if (mNode.list.isEmpty())
+                    mNode.detach();
                 mNode.right.list.addNode(lNode);
                 info.nodeM = mNode.right;
-            }
-            else {
+            } else {
                 var rMNode = new DLinkMatrix.DMNode(freq);
                 DLinkMatrix.insertAfter(mNode, rMNode);
                 info.nodeM = rMNode;
 
                 lNode.detach();
-                if (mNode.list.isEmpty()) mNode.detach();
+                if (mNode.list.isEmpty())
+                    mNode.detach();
                 rMNode.list.addNode(lNode);
             }
             return ans;
         }
 
         public void put(int key, int value) {
-            if (capacity == 0) return;
+            if (capacity == 0)
+                return;
             if (key_info_map.containsKey(key)) {
                 get(key);
                 key_info_map.get(key).val = value;
-            }
-            else {
+            } else {
                 if (key_info_map.size() >= capacity) {
                     // evict
                     var n = dLinkMatrix.firstNode().list.lastNode();
                     key_info_map.remove(n.key);
                     n.detach();
-                    if (dLinkMatrix.firstNode().list.isEmpty()) dLinkMatrix.firstNode().detach();
+                    if (dLinkMatrix.firstNode().list.isEmpty())
+                        dLinkMatrix.firstNode().detach();
                 }
 
                 if (dLinkMatrix.isEmpty()) {
@@ -283,15 +289,13 @@ public class Leetcode500 {
                     mNode.list.addNode(lNode);
                     DLinkMatrix.insertAfter(dLinkMatrix.head, mNode);
                     key_info_map.put(key, new Info(value, mNode, lNode));
-                }
-                else {
+                } else {
                     var fMNode = dLinkMatrix.firstNode();
                     if (fMNode.freq == 1) {
                         var lNode = new DLinkMatrix.DLinkList.DLNode(key);
                         fMNode.list.addNode(lNode);
                         key_info_map.put(key, new Info(value, fMNode, lNode));
-                    }
-                    else {
+                    } else {
                         var mNode = new DLinkMatrix.DMNode(1);
                         DLinkMatrix.insertAfter(dLinkMatrix.head, mNode);
                         var lNode = new DLinkMatrix.DLinkList.DLNode(key);
@@ -303,9 +307,15 @@ public class Leetcode500 {
         }
     }
 
-
+    /**
+     * Your LFUCache object will be instantiated and called as such:
+     * LFUCache obj = new LFUCache(capacity);
+     * int param_1 = obj.get(key);
+     * obj.put(key,value);
+     */
     /**
      * #463
+     * 
      * <pre>
      * 输入:
      * [[0,1,0,0],
@@ -320,8 +330,8 @@ public class Leetcode500 {
      * @return perimeter
      */
     public static int islandPerimeter(int[][] grid) {
-        int[] dx = {0, 1, 0, -1};
-        int[] dy = {1, 0, -1, 0};
+        int[] dx = { 0, 1, 0, -1 };
+        int[] dy = { 1, 0, -1, 0 };
         int n = grid.length, m = grid[0].length;
         int ans = 0;
         for (int i = 0; i < n; ++i) {
@@ -374,8 +384,10 @@ public class Leetcode500 {
     private static int[] countZerosAndOnes(String s) {
         int[] ans = new int[2];
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '0') ans[0]++;
-            else ans[1]++;
+            if (s.charAt(i) == '0')
+                ans[0]++;
+            else
+                ans[1]++;
         }
         return ans;
     }
@@ -389,14 +401,18 @@ public class Leetcode500 {
      */
     public static int findRadius(int[] houses, int[] heaters) {
         var tree = new TreeSet<Integer>();
-        for (var n : heaters) tree.add(n);
+        for (var n : heaters)
+            tree.add(n);
         int ans = -1;
         for (var n : houses) {
             var l = tree.floor(n);
             var r = tree.ceiling(n);
-            if (l == null) ans = Math.max(ans, Math.abs(r - n));
-            else if (r == null) ans = Math.max(ans, Math.abs(l - n));
-            else ans = Math.max(ans, Math.min(Math.abs(l - n), Math.abs(r - n)));
+            if (l == null)
+                ans = Math.max(ans, Math.abs(r - n));
+            else if (r == null)
+                ans = Math.max(ans, Math.abs(l - n));
+            else
+                ans = Math.max(ans, Math.min(Math.abs(l - n), Math.abs(r - n)));
         }
         return ans;
     }
@@ -408,7 +424,8 @@ public class Leetcode500 {
      * @return
      */
     public static int findComplement(int num) {
-        if (num == 0) return 1;
+        if (num == 0)
+            return 1;
         int i = 31;
         while (i >= 1 && kthBinDigit(num, i) == 0) {
             i--;
@@ -426,7 +443,6 @@ public class Leetcode500 {
         return num >>> k & 1;
     }
 
-
     /**
      * #480
      *
@@ -440,7 +456,8 @@ public class Leetcode500 {
         int idx = 0;
         for (var n : nums) {
             MDH.add(n);
-            if (MDH.hasMediean()) ans[idx++] = MDH.median();
+            if (MDH.hasMediean())
+                ans[idx++] = MDH.median();
         }
         return ans;
     }
@@ -471,10 +488,13 @@ public class Leetcode500 {
             queue.addLast(n);
             pollQueueExcess();
 
-            if (isEmpty()) maxHeap.add(n);
+            if (isEmpty())
+                maxHeap.add(n);
             else {
-                if (n <= maxHeap.peek()) maxHeap.add(n);
-                else minHeap.add(n);
+                if (n <= maxHeap.peek())
+                    maxHeap.add(n);
+                else
+                    minHeap.add(n);
 
                 while (maxHeap.size() > minHeap.size() + 1) {
                     minHeap.add(maxHeap.poll());
@@ -487,15 +507,18 @@ public class Leetcode500 {
         }
 
         public double median() {
-            if (maxHeap.size() > minHeap.size()) return maxHeap.peek();
-            else return (minHeap.peek() + maxHeap.peek()) / 2.;
+            if (maxHeap.size() > minHeap.size())
+                return maxHeap.peek();
+            else
+                return (minHeap.peek() + maxHeap.peek()) / 2.;
         }
 
         private void pollQueueExcess() {
             if (queue.size() > capacity) {
                 var q = queue.pollFirst();
                 if (!minHeap.remove(q)) {
-                    if (!maxHeap.remove(q)) throw new RuntimeException();
+                    if (!maxHeap.remove(q))
+                        throw new RuntimeException();
                 }
             }
         }
@@ -508,7 +531,8 @@ public class Leetcode500 {
      * @return
      */
     public static int magicalString(int n) {
-        if (n <= 3) return 1;
+        if (n <= 3)
+            return 1;
 
         Deque<Integer> deque = new ArrayDeque<>(n);
         deque.add(2);
@@ -516,13 +540,16 @@ public class Leetcode500 {
         int l = 3, ans = 1;
         while (l < n) {
             int group = deque.poll();
-            if (isOne) ans += group;
+            if (isOne)
+                ans += group;
             deque.add(isOne ? 1 : 2);
-            if (group == 2) deque.add(isOne ? 1 : 2);
+            if (group == 2)
+                deque.add(isOne ? 1 : 2);
             l += group;
             isOne = !isOne;
         }
-        if (l > n && !isOne) ans -= l - n;
+        if (l > n && !isOne)
+            ans -= l - n;
 
         return ans;
     }
@@ -539,7 +566,8 @@ public class Leetcode500 {
         for (int i = 0; i < s.length(); i++) {
             var c = s.charAt(i);
             if (c != '-') {
-                if (c >= 'a' && c <= 'z') c -= 'a' - 'A';
+                if (c >= 'a' && c <= 'z')
+                    c -= 'a' - 'A';
                 stack.addLast(c);
             }
         }
@@ -566,7 +594,8 @@ public class Leetcode500 {
         long N = Long.parseLong(n);
         for (int m = (int) Math.floor(Math.log(N) / Math.log(2)); m > 1; m--) {
             int b = (int) Math.pow(N, 1. / m);
-            if (b >= 2 && baseOnes(m, b) == N) return String.valueOf(b);
+            if (b >= 2 && baseOnes(m, b) == N)
+                return String.valueOf(b);
         }
         return String.valueOf(N - 1);
     }
@@ -591,10 +620,12 @@ public class Leetcode500 {
         for (int i = 0; i < nums.length; i++) {
             var n = nums[i];
             if (n == 1) {
-                if (i - 1 >= 0 && nums[i - 1] == 1) count++;
-                else count = 1;
-            }
-            else max = Math.max(max, count);
+                if (i - 1 >= 0 && nums[i - 1] == 1)
+                    count++;
+                else
+                    count = 1;
+            } else
+                max = Math.max(max, count);
         }
         max = Math.max(max, count);
         return max;
@@ -617,18 +648,17 @@ public class Leetcode500 {
             System.arraycopy(array, start, cache1, 0, cache1.length);
             System.arraycopy(array, start + cache1.length, cache2, 0, cache2.length);
             count(cache1, cache2);
-            for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+            for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length)
+                    && (left_idx < cache1.length); i++) {
                 if (cache1[left_idx] <= cache2[right_idx]) {
                     array[i] = cache1[left_idx++];
-                }
-                else {
+                } else {
                     array[i] = cache2[right_idx++];
                 }
             }
             if (left_idx < cache1.length) {
                 System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
-            }
-            else if (right_idx < cache2.length) {
+            } else if (right_idx < cache2.length) {
                 System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
             }
         }
@@ -650,7 +680,6 @@ public class Leetcode500 {
             mergeSortReversePairs(array, 0, array.length);
             return count;
         }
-
 
         private void mergeSortReversePairs(int[] array, int start, int end) {
             if ((end - start) > 1) {
@@ -681,12 +710,13 @@ public class Leetcode500 {
             if (sum % 2 == 0) {
                 int i = Math.min(sum, m - 1);
                 int j = sum - i;
-                while (i >= 0 && j < n) ans[idx++] = mat[i--][j++];
-            }
-            else {
+                while (i >= 0 && j < n)
+                    ans[idx++] = mat[i--][j++];
+            } else {
                 int j = Math.min(sum, n - 1);
                 int i = sum - j;
-                while (i < m && j >= 0) ans[idx++] = mat[i++][j--];
+                while (i < m && j >= 0)
+                    ans[idx++] = mat[i++][j--];
             }
         }
         return ans;
