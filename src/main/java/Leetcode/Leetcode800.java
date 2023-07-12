@@ -58,7 +58,7 @@ public class Leetcode800 {
         return pi;
     }
 
-    public static boolean next(int[] arr, int k) {
+    private static boolean next(int[] arr, int k) {
         boolean remain = false;
         for (int i = arr.length - 1; i >= 0; i--) {
             arr[i]++;
@@ -176,6 +176,32 @@ public class Leetcode800 {
             }
         }
         return N - count;
+    }
+
+    /**
+     * #768
+     * 
+     * @param arr
+     * @return
+     */
+    public int maxChunksToSorted(int[] arr) {
+        var future_min = new int[arr.length];
+        var current_min = Integer.MAX_VALUE;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            future_min[i] = current_min;
+            current_min = Math.min(current_min, arr[i]);
+        }
+        int current_max = arr[0];
+        int groups = 0;
+        int last_split = 0;
+        for (int i = 0; i < arr.length; i++) {
+            current_max = Math.max(current_max, arr[i]);
+            if(current_max <= future_min[i]){
+                groups++;
+                last_split = i;
+            }
+        }
+        return groups + (last_split == arr.length-1?0:1);
     }
 
     /**
