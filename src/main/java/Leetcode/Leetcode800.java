@@ -196,12 +196,12 @@ public class Leetcode800 {
         int last_split = 0;
         for (int i = 0; i < arr.length; i++) {
             current_max = Math.max(current_max, arr[i]);
-            if(current_max <= future_min[i]){
+            if (current_max <= future_min[i]) {
                 groups++;
                 last_split = i;
             }
         }
-        return groups + (last_split == arr.length-1?0:1);
+        return groups + (last_split == arr.length - 1 ? 0 : 1);
     }
 
     /**
@@ -325,6 +325,107 @@ public class Leetcode800 {
         for (Map.Entry<Integer, Integer> entry : count.entrySet()) {
             int y = entry.getKey(), x = entry.getValue();
             ans += (x + y) / (y + 1) * (y + 1);
+        }
+        return ans;
+    }
+
+    /**
+     * #782
+     * 
+     * @param board
+     * @return
+     */
+    public static int movesToChessboard(int[][] board) {
+        int n = board.length;
+        var r = new Ref();
+        int exchange = 0;
+        var col_mask = findExchange(board, true, r);
+        exchange = r.val;
+        var raw_mask = findExchange(board, false, r);
+        exchange += r.val;
+        if (col_mask == null || raw_mask == null) {
+            return -1;
+        }
+        for (var col : board) {
+            for (int i = 1; i < col_mask.length; i++) {
+                int idx = col_mask[i];
+                int prev_idx = col_mask[i - 1];
+                if (col[idx] == col[prev_idx]) {
+                    return -1;
+                }
+            }
+        }
+
+        return exchange;
+    }
+
+    private static class Ref {
+        int val;
+    }
+
+    private static int[] findExchange(int[][] board, boolean find_col, Ref ref) {
+        int n = board.length;
+        List<Integer> zero_odd = new ArrayList<>(n / 2 + 1);
+        List<Integer> zero_even = new ArrayList<>(n / 2 + 1);
+        List<Integer> one_odd = new ArrayList<>(n / 2 + 1);
+        List<Integer> one_even = new ArrayList<>(n / 2 + 1);
+        Deque<Integer> indices1 = null, indices2 = null;
+
+        for (int i = 0; i < n; i++) {
+            boolean is_one = find_col ? board[0][i] == 1 : board[i][0] == 1;
+            if (i % 2 == 0) {
+                if (is_one) {
+                    one_even.add(i);
+                } else {
+                    zero_even.add(i);
+                }
+            } else {
+                if (is_one) {
+                    one_odd.add(i);
+                } else {
+                    zero_odd.add(i);
+                }
+            }
+        }
+        int diff = (zero_even.size() + zero_odd.size()) - (one_even.size() + one_odd.size());
+        if (n % 2 == 0) {
+            if (diff != 0) {
+                return null;
+            }
+            if (zero_even.size() < zero_odd.size()) {
+                ref.val = zero_even.size();
+                indices1 = new ArrayDeque<>(zero_even);
+                indices2 = new ArrayDeque<>(one_odd);
+            } else {
+                ref.val = zero_odd.size();
+                indices1 = new ArrayDeque<>(zero_odd);
+                indices2 = new ArrayDeque<>(one_even);
+            }
+
+        } else {
+            if (Math.abs(diff) != 1) {
+                return null;
+            }
+            if (zero_even.size() == one_odd.size()) {
+                ref.val = zero_even.size();
+                indices1 = new ArrayDeque<>(zero_even);
+                indices2 = new ArrayDeque<>(one_odd);
+            } else {
+                ref.val = zero_odd.size();
+                indices1 = new ArrayDeque<>(zero_odd);
+                indices2 = new ArrayDeque<>(one_even);
+            }
+        }
+
+        int[] ans = new int[n];
+        for (int i = 0; i < n; i++) {
+            ans[i] = i;
+        }
+        while (!indices1.isEmpty()) {
+            var idx1 = indices1.pollLast();
+            var idx2 = indices2.pollLast();
+            ans[idx1] = idx2;
+            ans[idx2] = idx1;
         }
         return ans;
     }
