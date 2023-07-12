@@ -1,6 +1,6 @@
 package Leetcode;
 
-@SuppressWarnings({"JavaDoc", "unused"})
+@SuppressWarnings({"JavaDoc"})
 public class Leetcode950 {
 
     /**

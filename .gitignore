@@ -4,6 +4,7 @@
 src/main/java/Main.java
 *.jar
 *.class
+.VSCodeCounter
 
 # User-specific stuff
 .idea/**/workspace.xml

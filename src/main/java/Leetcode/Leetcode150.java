@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"JavaDoc", "unused"})
+@SuppressWarnings({"JavaDoc"})
 public class Leetcode150 {
     /**
      * #105
