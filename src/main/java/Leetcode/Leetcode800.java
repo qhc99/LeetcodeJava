@@ -501,4 +501,54 @@ public class Leetcode800 {
         }
         return new int[] { arr[pq.peek()[0]], arr[pq.peek()[1]] };
     }
+
+    private record DigitDp(int pos, boolean bound, boolean diff) {
+    }
+
+    /**
+     * #788
+     * 
+     * @param n
+     * @return
+     */
+    public static int rotatedDigits(int n) {
+        for (int i = 0; i < 5; i++) {
+            for (int j = 0; j < 2; j++) {
+                Arrays.fill(memo[i][j], -1);
+            }
+        }
+        digits = new ArrayList<>();
+        while (n != 0) {
+            digits.add(n % 10);
+            n /= 10;
+        }
+        Collections.reverse(digits);
+        return digitDp(0, 1, 0);
+    }
+
+    private static int[][][] memo = new int[5][2][2];
+    private static List<Integer> digits = null;
+    private static int[] check = { 0, 0, 1, -1, -1, 1, 1, -1, 0, 1 };
+
+    private static int digitDp(int pos, int bound, int diff) {
+        if (pos == digits.size()) {
+            return diff;
+        }
+        var m = memo[pos][bound][diff];
+        if (m != -1) {
+            return m;
+        }
+
+        int ans = 0;
+        for (int i = 0; i <= (bound == 1 ? digits.get(pos) : 9); i++) {
+            if (check[i] != -1) {
+                ans += digitDp(
+                        pos + 1,
+                        (bound == 1 && i == digits.get(pos)) ? 1 : 0,
+                        (diff == 1 || check[i] == 1) ? 1 : 0);
+            }
+        }
+        memo[pos][bound][diff] = ans;
+        return ans;
+    }
 }
