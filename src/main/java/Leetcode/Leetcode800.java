@@ -551,4 +551,63 @@ public class Leetcode800 {
         memo[pos][bound][diff] = ans;
         return ans;
     }
+
+    /**
+     * #789
+     * 
+     * @param ghosts
+     * @param target
+     * @return
+     */
+    public static boolean escapeGhosts(int[][] ghosts, int[] target) {
+        int dist_player = Math.abs(target[0]) + Math.abs(target[1]);
+        for (var g : ghosts) {
+            int dist_ghost = Math.abs(g[0] - target[0]) + Math.abs(g[1] - target[1]);
+            if (dist_ghost <= dist_player) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * #792
+     * 
+     * @param s
+     * @param words
+     * @return
+     */
+    public static int numMatchingSubseq(String s, String[] words) {
+        int count_alphabet = 'z' - 'a' + 1;
+        int[][] transition = new int[s.length() + 1][count_alphabet];
+        int[] latest_indices = new int[count_alphabet];
+        char[] chrs = s.toCharArray();
+        for (int i = chrs.length - 1; i >= 0; i--) {
+            char c = s.charAt(i);
+            transition[i + 1] = new int[count_alphabet];
+            System.arraycopy(latest_indices, 0, transition[i + 1], 0, count_alphabet);
+            latest_indices[c - 'a'] = i + 1;
+        }
+        transition[0] = latest_indices;
+        int ans = 0;
+        for (var word : words) {
+            if(is_sub_string(word, transition)){
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    private static boolean is_sub_string(String word, int[][] transition) {
+        int trainsition_idx = 0;
+        for (var c : word.toCharArray()) {
+            int[] t = transition[trainsition_idx];
+            int next = t[c - 'a'];
+            if (next == 0) {
+                return false;
+            }
+            trainsition_idx = next;
+        }
+        return true;
+    }
 }
