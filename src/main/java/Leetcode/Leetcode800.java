@@ -571,6 +571,25 @@ public class Leetcode800 {
     }
 
     /**
+     * #790
+     * 
+     * @param n
+     * @return
+     */
+    public static int numTilings(int n) {
+        int[][] dp = new int[n + 1][4]; // 00, 10,01,11
+        dp[0][3] = 1;
+        int mod = 1_000_000_007;
+        for (int i = 1; i <= n; i++) {
+            dp[i][0] = dp[i - 1][3];
+            dp[i][1] = (dp[i - 1][0] + dp[i - 1][2]) % mod;
+            dp[i][2] = (dp[i - 1][0] + dp[i - 1][1]) % mod;
+            dp[i][3] = (((dp[i - 1][3] + dp[i - 1][2]) % mod + dp[i - 1][1]) % mod + dp[i - 1][0]) % mod;
+        }
+        return dp[n][3];
+    }
+
+    /**
      * #792
      * 
      * @param s
@@ -591,7 +610,7 @@ public class Leetcode800 {
         transition[0] = latest_indices;
         int ans = 0;
         for (var word : words) {
-            if(is_sub_string(word, transition)){
+            if (is_sub_string(word, transition)) {
                 ans++;
             }
         }
