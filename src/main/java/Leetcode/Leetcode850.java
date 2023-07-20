@@ -171,4 +171,31 @@ public class Leetcode850 {
         }
     }
 
+    /**
+     * #808
+     * 
+     * @param n
+     * @return
+     */
+    public static double soupServings(int n) {
+        if (n >= 179 * 25) {
+            return 1;
+        }
+        n = n / 25 + ((n % 25 != 0) ? 1 : 0);
+        double[][] dp = new double[n + 1][n + 1];
+        dp[0][0] = 0.5;
+        for (int j = 1; j <= n; j++) {
+            dp[0][j] = 1;
+        }
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= n; j++) {
+                double p1 = dp[i - 4 >= 0 ? i - 4 : 0][j];
+                double p2 = dp[i - 3 >= 0 ? i - 3 : 0][j - 1 >= 0 ? j - 1 : 0];
+                double p3 = dp[i - 2 >= 0 ? i - 2 : 0][j - 2 >= 0 ? j - 2 : 0];
+                double p4 = dp[i - 1 >= 0 ? i - 1 : 0][j - 3 >= 0 ? j - 3 : 0];
+                dp[i][j] = (p1 + p2 + p3 + p4) * 0.25;
+            }
+        }
+        return dp[n][n];
+    }
 }
