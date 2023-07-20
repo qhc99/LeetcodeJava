@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.ToDoubleFunction;
 
 public class Leetcode850 {
     /**
@@ -249,8 +250,7 @@ public class Leetcode850 {
             if (i == 0) {
                 prev = c;
                 counter = 1;
-            } 
-            else if (c != prev) {
+            } else if (c != prev) {
                 sb.append(prev);
                 count_list.add(counter);
                 prev = c;
@@ -263,4 +263,125 @@ public class Leetcode850 {
         count_list.add(counter);
         return new CharCounter(sb.toString(), count_list);
     }
+
+    /**
+     * #812
+     * 
+     * @param points
+     * @return
+     */
+    public double largestTriangleArea(int[][] points) {
+        var convex_hull = ConvexHull.GrahamScan(new ArrayList<>(Arrays.stream(points).toList()), t -> t[0], t -> t[1]);
+        double ans = 0;
+        for (int i = 0; i < convex_hull.size(); i++) {
+            var p1 = convex_hull.get(i);
+            var x1 = p1[0];
+            var y1 = p1[1];
+            for (int j = i + 1; j < convex_hull.size(); j++) {
+                var p2 = convex_hull.get(j);
+                var x2 = p2[0];
+                var y2 = p2[1];
+                for (int k = j + 1; k < convex_hull.size(); k++) {
+                    var p3 = convex_hull.get(k);
+                    var x3 = p3[0];
+                    var y3 = p3[1];
+                    ans = Math.max(ans, 0.5 * Math.abs((x1 - x3) * (y2 - y1) - (x1 - x2) * (y3 - y1)));
+                }
+            }
+        }
+        return ans;
+    }
+
+    public static class ConvexHull {
+        public static <E> List<E> GrahamScan(
+                List<E> points,
+                ToDoubleFunction<E> getX,
+                ToDoubleFunction<E> getY) {
+            if (points.size() <= 3) {
+                return points;
+            }
+            var start = points.get(0);
+            int start_idx = 0;
+            for (var i = 0; i < points.size(); i++) {
+                var p = points.get(i);
+                if (getY.applyAsDouble(start) > getY.applyAsDouble(p)) {
+                    start = p;
+                    start_idx = i;
+                }
+            }
+
+            final var final_start = start;
+            swap(points, start_idx, points.size() - 1);
+            points.remove(points.size() - 1);
+            points.sort((a, b) -> {
+                var comp_a = ccw(final_start, a, b, getX, getY);
+                if (comp_a == 0) {
+                    var comp_d = distance(a, final_start, getX, getY) - distance(b, final_start, getX, getY);
+                    return comp_d < 0 ? -1 : comp_d > 0 ? 1 : 0;
+                } else
+                    return -comp_a < 0 ? -1 : -comp_a > 0 ? 1 : 0;
+            });
+            List<E> temp = new ArrayList<>(points.size() + 1);
+            temp.add(start);
+            temp.addAll(points);
+            points = temp;
+            int s = points.size() - 1;
+            while (s >= 0 && ccw(start, points.get(s), points.get(points.size() - 1), getX, getY) == 0) {
+                s--;
+            }
+            s++;
+
+            for (int e = points.size() - 1; s < e; e--, s++) {
+                swap(points, s, e);
+            }
+
+            Deque<E> points_stack = new ArrayDeque<>();
+
+            points_stack.addLast(points.get(0));
+            points_stack.addLast(points.get(1));
+
+            for (int i = 2; i < points.size(); i++) {
+                var p = points.get(i);
+                var last = points_stack.removeLast();
+                while (!points_stack.isEmpty() && ccw(points_stack.getLast(), last, p, getX, getY) < 0) {
+                    last = points_stack.removeLast();
+                }
+                points_stack.addLast(last);
+                points_stack.addLast(p);
+            }
+
+            List<E> res = new ArrayList<>(points_stack.size());
+            res.addAll(points_stack);
+            return res;
+        }
+
+        private static <E> void swap(List<E> points, int i, int j) {
+            var t = points.get(i);
+            points.set(i, points.get(j));
+            points.set(j, t);
+        }
+
+        private static <E> double distance(E a, E b, ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
+            double ax = getX.applyAsDouble(a);
+            double ay = getY.applyAsDouble(a);
+
+            double bx = getX.applyAsDouble(b);
+            double by = getY.applyAsDouble(b);
+            return Math.pow(ax - bx, 2) + Math.pow(ay - by, 2);
+        }
+
+        private static <E> double ccw(E a, E b, E c, ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
+            double ax = getX.applyAsDouble(a);
+            double ay = getY.applyAsDouble(a);
+
+            double bx = getX.applyAsDouble(b);
+            double by = getY.applyAsDouble(b);
+
+            double cx = getX.applyAsDouble(c);
+            double cy = getY.applyAsDouble(c);
+            // (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0]);
+            return (bx - ax) * (cy - by) - (by - ay) * (cx - bx);
+        }
+    }
+
 }
