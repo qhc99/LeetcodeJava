@@ -198,4 +198,69 @@ public class Leetcode850 {
         }
         return dp[n][n];
     }
+
+    /**
+     * #809
+     * 
+     * @param s
+     * @param words
+     * @return
+     */
+    public static int expressiveWords(String s, String[] words) {
+        var ss = preprocess(s);
+        CharCounter[] words_count = new CharCounter[words.length];
+        for (int i = 0; i < words.length; i++) {
+            words_count[i] = preprocess(words[i]);
+        }
+        int ans = 0;
+        for (int i = 0; i < words.length; i++) {
+            if (ss.chrs.equals(words_count[i].chrs) &&
+                    countMatch(ss.count_list, words_count[i].count_list)) {
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    public static boolean countMatch(List<Integer> a, List<Integer> b) {
+        if (a.size() != b.size()) {
+            return false;
+        }
+        for (int i = 0; i < a.size(); i++) {
+            if (a.get(i) != b.get(i) && (a.get(i) < b.get(i) || a.get(i) == 2)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public record CharCounter(String chrs, List<Integer> count_list) {
+    }
+
+    // hello -> hel2o
+    public static CharCounter preprocess(String s) {
+        char prev = ' ';
+        int counter = 0;
+        StringBuilder sb = new StringBuilder();
+        List<Integer> count_list = new ArrayList<>();
+        var chrs = s.toCharArray();
+        for (int i = 0; i < chrs.length; i++) {
+            var c = chrs[i];
+            if (i == 0) {
+                prev = c;
+                counter = 1;
+            } 
+            else if (c != prev) {
+                sb.append(prev);
+                count_list.add(counter);
+                prev = c;
+                counter = 1;
+            } else {
+                counter++;
+            }
+        }
+        sb.append(prev);
+        count_list.add(counter);
+        return new CharCounter(sb.toString(), count_list);
+    }
 }
