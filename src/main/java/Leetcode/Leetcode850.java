@@ -384,4 +384,38 @@ public class Leetcode850 {
         }
     }
 
+    /**
+     * #813
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public double largestSumOfAverages(int[] nums, int k) {
+        var n = nums.length;
+
+        var prefix_sum = new int[n + 1];
+        System.arraycopy(nums, 0, prefix_sum, 1, n);
+        for (int i = 1; i < prefix_sum.length; i++) {
+            prefix_sum[i] += prefix_sum[i - 1];
+        }
+
+        double[] dp = Arrays.stream(prefix_sum).mapToDouble(v -> v).toArray();
+        for (int i = 1; i < dp.length; i++) {
+            dp[i] /= i;
+        }
+
+        for (int j = 2; j <= k; j++) {
+            for (int i = n; i >= 1; i--) {
+                for (int x = j - 1; i <= i - 1; i++) {
+                    dp[i] = Math.max(
+                            dp[i],
+                            dp[x] + (prefix_sum[i] - prefix_sum[x]) / (i - x));
+                }
+            }
+        }
+
+        return dp[n];
+    }
+
 }
