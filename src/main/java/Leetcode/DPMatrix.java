@@ -1,6 +1,6 @@
 package Leetcode;
 
-public final class DPMatrix<V> {//matrix for dynamic programming problem
+public final class DPMatrix<V> {// matrix for dynamic programming problem
 
     public final int size;
 
@@ -13,7 +13,6 @@ public final class DPMatrix<V> {//matrix for dynamic programming problem
             matrix[i] = new Object[size - i];
         }
     }
-
 
     @SuppressWarnings("unchecked")
     public V getAt(int r, int c) {

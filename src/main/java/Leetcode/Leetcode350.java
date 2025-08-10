@@ -932,7 +932,8 @@ public class Leetcode350 {
                                             matchWord.length(), word))
                             || (matchWord.length() > word.length()
                                     && haspalindromePairSuffix(word.length(),
-                                            new StringBuilder(matchWord).reverse().toString()))) {
+                                            new StringBuilder(matchWord)
+                                                    .reverse().toString()))) {
 
                         List<Integer> pair = new ArrayList<>();
                         pair.add(i);
