@@ -1,7 +1,6 @@
 *.bat
 /out/
 /target/
-src/main/java/Main.java
 *.jar
 *.class
 .VSCodeCounter

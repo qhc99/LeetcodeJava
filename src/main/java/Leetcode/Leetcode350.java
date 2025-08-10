@@ -36,8 +36,7 @@ public class Leetcode350 {
             int mid = (s + e) / 2;
             if (dp[mid] >= val) {
                 e = mid;
-            }
-            else if (dp[mid] < val) {
+            } else if (dp[mid] < val) {
                 s = mid;
             }
         }
@@ -59,10 +58,10 @@ public class Leetcode350 {
             for (int i = 2; i < m + 1; i++) {
                 var row = matrix[i - 1];
                 for (int j = 1; j < n + 1; j++) {
-                    matrixPrefixSum[i][j] = row[j - 1] + matrixPrefixSum[i - 1][j];
+                    matrixPrefixSum[i][j] = row[j - 1]
+                            + matrixPrefixSum[i - 1][j];
                 }
             }
-
 
             for (int i = 1; i < m + 1; i++) {
                 for (int j = 1; j < n + 1; j++) {
@@ -76,8 +75,9 @@ public class Leetcode350 {
             col1++;
             row2++;
             col2++;
-            return matrixPrefixSum[row2][col2] - matrixPrefixSum[row2][col1 - 1] -
-                    (matrixPrefixSum[row1 - 1][col2] - matrixPrefixSum[row1 - 1][col1 - 1]);
+            return matrixPrefixSum[row2][col2] - matrixPrefixSum[row2][col1 - 1]
+                    - (matrixPrefixSum[row1 - 1][col2]
+                            - matrixPrefixSum[row1 - 1][col1 - 1]);
         }
     }
 
@@ -88,7 +88,9 @@ public class Leetcode350 {
      * @return
      */
     public static int maxProfit(int[] prices) {
-        int[][] dp = new int[prices.length][3]; // 0, have, not freeze. 1, not have, freeze. 2 not have, not freeze.
+        int[][] dp = new int[prices.length][3]; // 0, have, not freeze. 1, not
+                                                // have, freeze. 2 not have, not
+                                                // freeze.
         dp[0][0] = -prices[0];
         dp[0][1] = 0;
         dp[0][2] = 0;
@@ -178,8 +180,7 @@ public class Leetcode350 {
         }
         if (a.size() % 2 == 1) {
             return List.of(a.get(a.size() / 2));
-        }
-        else {
+        } else {
             return List.of(a.get(a.size() / 2), a.get(a.size() / 2 - 1));
         }
     }
@@ -203,15 +204,15 @@ public class Leetcode350 {
             void apply(int i, int j) {
                 if (i >= j - 1) {
                     cache[i][j] = 0;
-                }
-                else if (cache[i][j] == -1) {
+                } else if (cache[i][j] == -1) {
                     int mid = i + 1;
                     int max = Integer.MIN_VALUE;
                     int temp = paddedNum[i] * paddedNum[j];
                     while (mid <= j - 1) {
                         apply(i, mid);
                         apply(mid, j);
-                        max = Math.max(max, temp * paddedNum[mid] + cache[i][mid] + cache[mid][j]);
+                        max = Math.max(max, temp * paddedNum[mid]
+                                + cache[i][mid] + cache[mid][j]);
                         mid++;
                     }
 
@@ -271,47 +272,60 @@ public class Leetcode350 {
                     var right_cache = new int[right_len];
                     var left_idx_cache = new int[left_len];
                     var right_idx_cache = new int[right_len];
-                    merge(dataArr, idxArr, start, left_cache, right_cache, left_idx_cache, right_idx_cache);
+                    merge(dataArr, idxArr, start, left_cache, right_cache,
+                            left_idx_cache, right_idx_cache);
                 }
             }
 
-            private void merge(
-                    int[] dataArr, int[] idxArr, int start,
-                    int[] dataCacheL, int[] dataCacheR, int[] idxCacheL, int[] idxCacheR) {
+            private void merge(int[] dataArr, int[] idxArr, int start,
+                    int[] dataCacheL, int[] dataCacheR, int[] idxCacheL,
+                    int[] idxCacheR) {
                 int right_idx = 0;
                 int left_idx = 0;
-                System.arraycopy(dataArr, start, dataCacheL, 0, dataCacheL.length);
-                System.arraycopy(dataArr, start + dataCacheL.length, dataCacheR, 0, dataCacheR.length);
+                System.arraycopy(dataArr, start, dataCacheL, 0,
+                        dataCacheL.length);
+                System.arraycopy(dataArr, start + dataCacheL.length, dataCacheR,
+                        0, dataCacheR.length);
                 System.arraycopy(idxArr, start, idxCacheL, 0, idxCacheL.length);
-                System.arraycopy(idxArr, start + idxCacheL.length, idxCacheR, 0, idxCacheR.length);
+                System.arraycopy(idxArr, start + idxCacheL.length, idxCacheR, 0,
+                        idxCacheR.length);
 
-                for (int i = start; (i < start + dataCacheL.length + dataCacheR.length) && (right_idx < dataCacheR.length) && (left_idx < dataCacheL.length); i++) {
+                for (int i = start; (i < start + dataCacheL.length
+                        + dataCacheR.length) && (right_idx < dataCacheR.length)
+                        && (left_idx < dataCacheL.length); i++) {
                     if (dataCacheL[left_idx] <= dataCacheR[right_idx]) {
                         dataArr[i] = dataCacheL[left_idx];
                         idxArr[i] = idxCacheL[left_idx];
                         ans[idxCacheL[left_idx]] += right_idx;
                         left_idx++;
-                    }
-                    else {
+                    } else {
                         dataArr[i] = dataCacheR[right_idx];
                         idxArr[i] = idxCacheR[right_idx];
                         right_idx++;
                     }
                 }
                 if (left_idx < dataCacheL.length) {
-                    System.arraycopy(dataCacheL, left_idx, dataArr, start + left_idx + right_idx, dataCacheL.length - left_idx);
-                    System.arraycopy(idxCacheL, left_idx, idxArr, start + left_idx + right_idx, idxCacheL.length - left_idx);
+                    System.arraycopy(dataCacheL, left_idx, dataArr,
+                            start + left_idx + right_idx,
+                            dataCacheL.length - left_idx);
+                    System.arraycopy(idxCacheL, left_idx, idxArr,
+                            start + left_idx + right_idx,
+                            idxCacheL.length - left_idx);
                     for (int i = left_idx; i < idxCacheL.length; i++) {
                         ans[idxCacheL[i]] += right_idx;
                     }
-                }
-                else if (right_idx < dataCacheR.length) {
-                    System.arraycopy(dataCacheR, right_idx, dataArr, start + left_idx + right_idx, dataCacheR.length - right_idx);
-                    System.arraycopy(idxCacheR, right_idx, idxArr, start + left_idx + right_idx, idxCacheR.length - right_idx);
+                } else if (right_idx < dataCacheR.length) {
+                    System.arraycopy(dataCacheR, right_idx, dataArr,
+                            start + left_idx + right_idx,
+                            dataCacheR.length - right_idx);
+                    System.arraycopy(idxCacheR, right_idx, idxArr,
+                            start + left_idx + right_idx,
+                            idxCacheR.length - right_idx);
                 }
             }
         };
-        funcMergeSort.apply(array, IntStream.range(0, array.length).toArray(), 0, array.length);
+        funcMergeSort.apply(array, IntStream.range(0, array.length).toArray(),
+                0, array.length);
         List<Integer> ans = new ArrayList<>();
         for (var i : funcMergeSort.ans) {
             ans.add(i);
@@ -372,13 +386,13 @@ public class Leetcode350 {
             var c = s.charAt(i);
             if (stack.last() >= c) {
                 if (stack.notHas(c)) {
-                    while (stack.len > 0 && stack.last() >= c && remain[stack.last() - 'a'] > 0) {
+                    while (stack.len > 0 && stack.last() >= c
+                            && remain[stack.last() - 'a'] > 0) {
                         stack.pop();
                     }
                     stack.add(c);
                 }
-            }
-            else if (stack.notHas(c)) {
+            } else if (stack.notHas(c)) {
                 stack.add(c);
             }
             remain[c - 'a']--;
@@ -435,7 +449,6 @@ public class Leetcode350 {
         var order1 = getOrder(nums1);
         var order2 = getOrder(nums2);
 
-
         int[] max = null;
         for (int i = 0; i <= nums1.length && i <= k; i++) {
             int j = k - i;
@@ -446,8 +459,7 @@ public class Leetcode350 {
                 merge(m, 0, sub1, sub2);
                 if (max == null) {
                     max = m;
-                }
-                else if (larger(m, max)) {
+                } else if (larger(m, max)) {
                     max = m;
                 }
             }
@@ -460,11 +472,9 @@ public class Leetcode350 {
         for (int i = 0; i < a.length; i++) {
             if (a[i] > b[i]) {
                 return true;
-            }
-            else if (a[i] == b[i]) {
+            } else if (a[i] == b[i]) {
                 continue;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -474,8 +484,7 @@ public class Leetcode350 {
     private static int[] subArray(int[] num, int[] order, int k) {
         if (k == num.length) {
             return num;
-        }
-        else {
+        } else {
             int[] ans = new int[k];
             for (int i = 0, idx = 0; i < num.length && idx < k; i++) {
                 if (order[i] > num.length - k) {
@@ -503,8 +512,7 @@ public class Leetcode350 {
             var n = array[i];
             if (stack.size() == 0 || stack.getLast().num >= n) {
                 stack.addLast(new NumIdx(n, i));
-            }
-            else {
+            } else {
                 while (stack.size() > 0 && stack.getLast().num < n) {
                     var t = stack.pollLast();
                     order[t.idx] = ++rm;
@@ -519,50 +527,51 @@ public class Leetcode350 {
         return order;
     }
 
-    private static void merge(int[] array, int start, int[] cache1, int[] cache2) {
+    private static void merge(int[] array, int start, int[] cache1,
+            int[] cache2) {
         int right_idx = 0;
         int left_idx = 0;
-        for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+        for (int i = start; (i < start + cache1.length + cache2.length)
+                && (right_idx < cache2.length)
+                && (left_idx < cache1.length); i++) {
             if (cache1[left_idx] > cache2[right_idx]) {
                 array[i] = cache1[left_idx++];
-            }
-            else if (cache1[left_idx] < cache2[right_idx]) {
+            } else if (cache1[left_idx] < cache2[right_idx]) {
                 array[i] = cache2[right_idx++];
-            }
-            else {
+            } else {
                 int r = right_idx + 1;
                 int l = left_idx + 1;
                 while (l < cache1.length && r < cache2.length) {
                     if (cache1[l] > cache2[r]) {
                         array[i] = cache1[left_idx++];
                         break;
-                    }
-                    else if (cache1[l] < cache2[r]) {
+                    } else if (cache1[l] < cache2[r]) {
                         array[i] = cache2[right_idx++];
                         break;
-                    }
-                    else {
+                    } else {
                         r++;
                         l++;
                     }
                 }
                 if (l >= cache1.length) {
                     array[i] = cache2[right_idx++];
-                }
-                else if (r >= cache2.length) {
+                } else if (r >= cache2.length) {
                     array[i] = cache1[left_idx++];
                 }
             }
         }
         if (left_idx < cache1.length) {
-            System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
-        }
-        else if (right_idx < cache2.length) {
-            System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
+            System.arraycopy(cache1, left_idx, array,
+                    start + left_idx + right_idx, cache1.length - left_idx);
+        } else if (right_idx < cache2.length) {
+            System.arraycopy(cache2, right_idx, array,
+                    start + left_idx + right_idx, cache2.length - right_idx);
         }
     }
 
-    private static int randPartition(int[] a, int start, int end) { // base case (end -start)
+    private static int randPartition(int[] a, int start, int end) { // base case
+                                                                    // (end
+                                                                    // -start)
         int pivot_idx = ThreadLocalRandom.current().nextInt(start, end);
         var pivot = a[pivot_idx];
 
@@ -580,9 +589,8 @@ public class Leetcode350 {
         }
         a[end - 1] = a[++i];
         a[i] = pivot;
-        return i; //pivot idx
+        return i; // pivot idx
     }
-
 
     /**
      * #324
@@ -617,11 +625,9 @@ public class Leetcode350 {
         while (i <= gt) {
             if (array[i] < val) {
                 exchange(array, i++, lt++);
-            }
-            else if (array[i] > val) {
+            } else if (array[i] > val) {
                 exchange(array, i, gt--);
-            }
-            else {
+            } else {
                 i++;
             }
         }
@@ -636,11 +642,9 @@ public class Leetcode350 {
         int left_total = pivot_idx - start;
         if (ith == left_total) {
             return a[pivot_idx];
-        }
-        else if (ith < left_total + 1) {
+        } else if (ith < left_total + 1) {
             return rankSearch(a, start, pivot_idx, ith);
-        }
-        else {
+        } else {
             return rankSearch(a, pivot_idx + 1, end, ith - left_total - 1);
         }
     }
@@ -686,7 +690,8 @@ public class Leetcode350 {
                 int right_idx = 0;
                 int left_idx = 0;
                 System.arraycopy(array, start, cache1, 0, cache1.length);
-                System.arraycopy(array, start + cache1.length, cache2, 0, cache2.length);
+                System.arraycopy(array, start + cache1.length, cache2, 0,
+                        cache2.length);
 
                 int l = 0, r = 0;
                 for (var c1 : cache1) {
@@ -699,19 +704,23 @@ public class Leetcode350 {
                     res.n += r - l;
                 }
 
-                for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length) && (left_idx < cache1.length); i++) {
+                for (int i = start; (i < start + cache1.length + cache2.length)
+                        && (right_idx < cache2.length)
+                        && (left_idx < cache1.length); i++) {
                     if (cache1[left_idx] <= cache2[right_idx]) {
                         array[i] = cache1[left_idx++];
-                    }
-                    else {
+                    } else {
                         array[i] = cache2[right_idx++];
                     }
                 }
                 if (left_idx < cache1.length) {
-                    System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
-                }
-                else if (right_idx < cache2.length) {
-                    System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
+                    System.arraycopy(cache1, left_idx, array,
+                            start + left_idx + right_idx,
+                            cache1.length - left_idx);
+                } else if (right_idx < cache2.length) {
+                    System.arraycopy(cache2, right_idx, array,
+                            start + left_idx + right_idx,
+                            cache2.length - right_idx);
                 }
             }
         };
@@ -727,7 +736,6 @@ public class Leetcode350 {
         func.solveCountRangeSum(sum, 0, sum.length);
         return res.n;
     }
-
 
     /**
      * #328
@@ -751,8 +759,7 @@ public class Leetcode350 {
             if (i % 2 == 1) {
                 oddTail.next = ptr;
                 oddTail = ptr;
-            }
-            else {
+            } else {
                 evenTail.next = ptr;
                 evenTail = ptr;
             }
@@ -844,19 +851,24 @@ public class Leetcode350 {
         BitSet visited = new BitSet(nodes.length);
         var func = new Object() {
             int visit(int idx) {
-                if (idx >= nodes.length) return -1;
-                if (visited.get(idx)) return -1;
+                if (idx >= nodes.length)
+                    return -1;
+                if (visited.get(idx))
+                    return -1;
                 visited.set(idx, true);
                 var c = nodes[idx];
-                if (c.equals("#")) return idx;
+                if (c.equals("#"))
+                    return idx;
                 else {
                     var left = visit(idx + 1);
-                    if (left == -1) return -1;
+                    if (left == -1)
+                        return -1;
                     return visit(left + 1);
                 }
             }
         };
-        return (func.visit(0) == nodes.length - 1) && (visited.stream().count() == nodes.length);
+        return (func.visit(0) == nodes.length - 1)
+                && (visited.stream().count() == nodes.length);
     }
 
     /**
@@ -896,6 +908,54 @@ public class Leetcode350 {
     }
 
     /**
+     * #336
+     * 
+     * @param words
+     * @return
+     */
+    public List<List<Integer>> palindromePairs(String[] words) {
+        var reverseTrie = new Trie();
+        List<List<Integer>> ret = new ArrayList<>();
+        for (int i = 0; i < words.length; i++) {
+            var word = words[i];
+            reverseTrie.add(new StringBuilder(word).reverse().toString(), i);
+        }
+        for (int i = 0; i < words.length; i++) {
+            var word = words[i];
+            var wordMatches = reverseTrie.getMatches(word);
+            for (var idx : wordMatches) {
+                if (idx != i) {
+                    var matchWord = words[idx];
+                    if ((matchWord.length() == word.length())
+                            || (matchWord.length() < word.length()
+                                    && haspalindromePairSuffix(
+                                            matchWord.length(), word))
+                            || (matchWord.length() > word.length()
+                                    && haspalindromePairSuffix(word.length(),
+                                            new StringBuilder(matchWord).reverse().toString()))) {
+
+                        List<Integer> pair = new ArrayList<>();
+                        pair.add(i);
+                        pair.add(idx);
+                        ret.add(pair);
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    private boolean haspalindromePairSuffix(int start, String s) {
+        int end = s.length() - 1;
+        for (; start < end; start++, end--) {
+            if (s.charAt(start) != s.charAt(end)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * #337
      *
      * @param root
@@ -925,19 +985,21 @@ public class Leetcode350 {
         non_select_max.put(n, Math.max(l_n, l_s) + Math.max(r_n, r_s));
     }
 
-
     // This is the interface that allows for creating nested lists.
     // You should not implement it, or speculate about its implementation
     public interface NestedInteger {
 
-        // @return true if this NestedInteger holds a single integer, rather than a nested list.
+        // @return true if this NestedInteger holds a single integer, rather
+        // than a nested list.
         boolean isInteger();
 
-        // @return the single integer that this NestedInteger holds, if it holds a single integer
+        // @return the single integer that this NestedInteger holds, if it holds
+        // a single integer
         // Return null if this NestedInteger holds a nested list
         Integer getInteger();
 
-        // @return the nested list that this NestedInteger holds, if it holds a nested list
+        // @return the nested list that this NestedInteger holds, if it holds a
+        // nested list
         // Return empty list if this NestedInteger holds a single integer
         List<NestedInteger> getList();
     }
@@ -963,8 +1025,8 @@ public class Leetcode350 {
             if (prepared) {
                 prepared = false;
                 return store;
-            }
-            else throw new RuntimeException();
+            } else
+                throw new RuntimeException();
         }
 
         private Integer extractNext() {
@@ -972,15 +1034,13 @@ public class Leetcode350 {
                 indicesStack.pollLast();
                 listStack.pollLast();
                 return null;
-            }
-            else {
+            } else {
                 var obj = listStack.peekLast().get(indicesStack.peekLast());
                 indicesStack.addLast(indicesStack.pollLast() + 1);
                 clearUsedList();
                 if (obj.isInteger()) {
                     return obj.getInteger();
-                }
-                else {
+                } else {
                     var l = obj.getList();
                     indicesStack.addLast(0);
                     listStack.addLast(l);
@@ -1004,8 +1064,7 @@ public class Leetcode350 {
         public boolean hasNext() {
             if (prepared) {
                 return true;
-            }
-            else if (listStack.size() > 0) {
+            } else if (listStack.size() > 0) {
                 Integer p = null;
                 do {
                     p = extractNext();
@@ -1018,6 +1077,5 @@ public class Leetcode350 {
             return prepared;
         }
     }
-
 
 }
