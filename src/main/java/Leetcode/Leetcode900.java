@@ -3,10 +3,75 @@ package Leetcode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+
+interface Master {
+    public int guess(String word);
+}
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode900 {
+
+    /**
+     * #843
+     * 
+     * @param words
+     * @param master
+     */
+    public void findSecretWord(String[] words, Master master) {
+        int[][] wordsMatch = new int[words.length][];
+        for (int i = 0; i < words.length; i++) {
+            wordsMatch[i] = new int[words.length];
+        }
+        for (int i = 0; i < words.length; i++) {
+            for (int j = i + 1; j < words.length; j++) {
+                wordsMatch[i][j] = matchCount(words[i], words[j]);
+            }
+        }
+        Set<Integer> selectionSet = new HashSet<>(words.length);
+        Set<Integer> selected = new HashSet<>(words.length);
+        for (int i = 0; i < words.length; i++) {
+            selectionSet.add(i);
+        }
+        int select_idx = 0;
+
+        select_idx = selectionSet.iterator().next();
+        while (!selectionSet.isEmpty()) {
+            selectionSet.remove(select_idx);
+            selected.add(select_idx);
+            var w = words[select_idx];
+            int match = master.guess(w);
+            if (match == 6) {
+                return;
+            }
+            var to_remove = new HashSet<Integer>(selectionSet.size());
+            for (var s : selectionSet) {
+                if ((s < select_idx && wordsMatch[s][select_idx] != match)
+                        || (s > select_idx
+                                && wordsMatch[select_idx][s] != match)) {
+                    to_remove.add(s);
+                }
+
+            }
+            selectionSet.removeAll(to_remove);
+            select_idx = selectionSet.iterator().next();
+        }
+
+    }
+
+    private static int matchCount(String a, String b) {
+        int count = 0;
+        for (int i = 0; i < a.length(); i++) {
+            if (a.charAt(i) == b.charAt(i)) {
+                count++;
+            }
+        }
+        return count;
+    }
 
     /**
      * #854
@@ -73,6 +138,116 @@ public class Leetcode900 {
         }
         while (r_ptr < r.length) {
             a[s + a_ptr++] = r[r_ptr++];
+        }
+    }
+
+    /**
+     * #855
+     * 
+     */
+    public class ExamRoom {
+        class Range implements Comparable<Range> {
+            int[] arr = new int[2];
+
+            public Range(int a, int b) {
+                arr[0] = a;
+                arr[1] = b;
+            }
+
+            public int left() {
+                return arr[0];
+            }
+
+            public int right() {
+                return arr[1];
+            }
+
+            public int len() {
+                return (arr[0] == -1 || arr[1] == count) ? arr[1] - arr[0] - 1
+                        : (arr[1] - arr[0]) >> 1;
+            }
+
+            public int seat() {
+                if (arr[0] == -1) {
+                    return 0;
+                }
+                return arr[0] + len();
+            }
+
+            @Override
+            public int compareTo(Range o) {
+                var c = Integer.compare(this.len(), o.len());
+                if (c == 0) {
+                    return Integer.compare(o.seat(), seat());
+                }
+                return c;
+            }
+
+        }
+
+        TreeSet<Range> treeSet = new TreeSet<>();
+        HashMap<Integer, Range> left;
+        HashMap<Integer, Range> right;
+        int count;
+
+        public ExamRoom(int n) {
+            count = n;
+            left = new HashMap<>();
+            right = new HashMap<>();
+            var range = new Range(-1, n);
+            treeSet.add(range);
+            left.put(-1, range);
+            right.put(n, range);
+        }
+
+        void addRange(Range r) {
+            treeSet.add(r);
+            left.put(r.left(), r);
+            right.put(r.right(), r);
+        }
+
+        void removeRange(Range r) {
+            treeSet.remove(r);
+            left.remove(r.left());
+            right.remove(r.right());
+        }
+
+        public int seat() {
+            var range = treeSet.pollLast();
+            var s = range.seat();
+            var l_range = new Range(range.left(), s);
+            var r_range = new Range(s, range.right());
+            left.remove(range.left());
+            right.remove(range.right());
+            if (l_range.len() > 0) {
+                addRange(l_range);
+            }
+            if (r_range.len() > 0) {
+                addRange(r_range);
+            }
+            return s;
+        }
+
+        public void leave(int p) {
+            var l_range = right.get(p);
+            var r_range = left.get(p);
+            if (l_range != null) {
+                removeRange(l_range);
+            }
+            if (r_range != null) {
+                removeRange(r_range);
+            }
+            Range new_range = null;
+            if (l_range != null && r_range != null) {
+                new_range = new Range(l_range.left(), r_range.right());
+            } else if (l_range != null) {
+                new_range = new Range(l_range.left(), p + 1);
+            } else if (r_range != null) {
+                new_range = new Range(p - 1, r_range.right());
+            } else {
+                new_range = new Range(p - 1, p + 1);
+            }
+            addRange(new_range);
         }
     }
 
