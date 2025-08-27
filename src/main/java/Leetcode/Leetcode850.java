@@ -4,6 +4,7 @@ import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.HashSet;
 import java.util.List;
 import java.util.function.ToDoubleFunction;
 
@@ -28,7 +29,8 @@ public class Leetcode850 {
         return ans;
     }
 
-    private static boolean dfsSafeNodes(int node, int[][] graph, boolean[] safe, boolean[] visited, List<Integer> ans) {
+    private static boolean dfsSafeNodes(int node, int[][] graph, boolean[] safe,
+            boolean[] visited, List<Integer> ans) {
         visited[node] = true;
         var neighbors = graph[node];
         boolean is_safe = true;
@@ -101,7 +103,8 @@ public class Leetcode850 {
         return ans;
     }
 
-    private static void unionNeighbor(int i, int j, int[][] grid, DisjointSet[][] sets) {
+    private static void unionNeighbor(int i, int j, int[][] grid,
+            DisjointSet[][] sets) {
         if (grid[i][j] != 1) {
             return;
         }
@@ -213,8 +216,8 @@ public class Leetcode850 {
         }
         int ans = 0;
         for (int i = 0; i < words.length; i++) {
-            if (ss.chrs.equals(words_count[i].chrs) &&
-                    countMatch(ss.count_list, words_count[i].count_list)) {
+            if (ss.chrs.equals(words_count[i].chrs)
+                    && countMatch(ss.count_list, words_count[i].count_list)) {
                 ans++;
             }
         }
@@ -226,7 +229,8 @@ public class Leetcode850 {
             return false;
         }
         for (int i = 0; i < a.size(); i++) {
-            if (a.get(i) != b.get(i) && (a.get(i) < b.get(i) || a.get(i) == 2)) {
+            if (a.get(i) != b.get(i)
+                    && (a.get(i) < b.get(i) || a.get(i) == 2)) {
                 return false;
             }
         }
@@ -269,7 +273,9 @@ public class Leetcode850 {
      * @return
      */
     public double largestTriangleArea(int[][] points) {
-        var convex_hull = ConvexHull.GrahamScan(new ArrayList<>(Arrays.stream(points).toList()), t -> t[0], t -> t[1]);
+        var convex_hull = ConvexHull.GrahamScan(
+                new ArrayList<>(Arrays.stream(points).toList()), t -> t[0],
+                t -> t[1]);
         double ans = 0;
         for (int i = 0; i < convex_hull.size(); i++) {
             var p1 = convex_hull.get(i);
@@ -283,7 +289,8 @@ public class Leetcode850 {
                     var p3 = convex_hull.get(k);
                     var x3 = p3[0];
                     var y3 = p3[1];
-                    ans = Math.max(ans, 0.5 * Math.abs((x1 - x3) * (y2 - y1) - (x1 - x2) * (y3 - y1)));
+                    ans = Math.max(ans, 0.5 * Math.abs(
+                            (x1 - x3) * (y2 - y1) - (x1 - x2) * (y3 - y1)));
                 }
             }
         }
@@ -291,10 +298,8 @@ public class Leetcode850 {
     }
 
     public static class ConvexHull {
-        public static <E> List<E> GrahamScan(
-                List<E> points,
-                ToDoubleFunction<E> getX,
-                ToDoubleFunction<E> getY) {
+        public static <E> List<E> GrahamScan(List<E> points,
+                ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
             if (points.size() <= 3) {
                 return points;
             }
@@ -314,7 +319,8 @@ public class Leetcode850 {
             points.sort((a, b) -> {
                 var comp_a = ccw(final_start, a, b, getX, getY);
                 if (comp_a == 0) {
-                    var comp_d = distance(a, final_start, getX, getY) - distance(b, final_start, getX, getY);
+                    var comp_d = distance(a, final_start, getX, getY)
+                            - distance(b, final_start, getX, getY);
                     return comp_d < 0 ? -1 : comp_d > 0 ? 1 : 0;
                 } else
                     return -comp_a < 0 ? -1 : -comp_a > 0 ? 1 : 0;
@@ -324,7 +330,8 @@ public class Leetcode850 {
             temp.addAll(points);
             points = temp;
             int s = points.size() - 1;
-            while (s >= 0 && ccw(start, points.get(s), points.get(points.size() - 1), getX, getY) == 0) {
+            while (s >= 0 && ccw(start, points.get(s),
+                    points.get(points.size() - 1), getX, getY) == 0) {
                 s--;
             }
             s++;
@@ -341,7 +348,8 @@ public class Leetcode850 {
             for (int i = 2; i < points.size(); i++) {
                 var p = points.get(i);
                 var last = points_stack.removeLast();
-                while (!points_stack.isEmpty() && ccw(points_stack.getLast(), last, p, getX, getY) < 0) {
+                while (!points_stack.isEmpty() && ccw(points_stack.getLast(),
+                        last, p, getX, getY) < 0) {
                     last = points_stack.removeLast();
                 }
                 points_stack.addLast(last);
@@ -359,7 +367,8 @@ public class Leetcode850 {
             points.set(j, t);
         }
 
-        private static <E> double distance(E a, E b, ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
+        private static <E> double distance(E a, E b, ToDoubleFunction<E> getX,
+                ToDoubleFunction<E> getY) {
             double ax = getX.applyAsDouble(a);
             double ay = getY.applyAsDouble(a);
 
@@ -368,7 +377,8 @@ public class Leetcode850 {
             return Math.pow(ax - bx, 2) + Math.pow(ay - by, 2);
         }
 
-        private static <E> double ccw(E a, E b, E c, ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
+        private static <E> double ccw(E a, E b, E c, ToDoubleFunction<E> getX,
+                ToDoubleFunction<E> getY) {
             double ax = getX.applyAsDouble(a);
             double ay = getY.applyAsDouble(a);
 
@@ -406,14 +416,73 @@ public class Leetcode850 {
         for (int j = 2; j <= k; j++) {
             for (int i = n; i >= 1; i--) {
                 for (int x = j - 1; i <= i - 1; i++) {
-                    dp[i] = Math.max(
-                            dp[i],
+                    dp[i] = Math.max(dp[i],
                             dp[x] + (prefix_sum[i] - prefix_sum[x]) / (i - x));
                 }
             }
         }
 
         return dp[n];
+    }
+
+    /**
+     * #843
+     * 
+     * @param words
+     * @param master
+     */
+    public void findSecretWord(String[] words, Master master) {
+        int[][] cache = new int[words.length][words.length];
+        List<HashSet<Integer>> sets = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            sets.add(new HashSet<>());
+        }
+        for (int i = 0; i < words.length; i++) {
+            cache[i][i] = 6;
+            for (int j = i + 1; j < words.length; j++) {
+                cache[i][j] = similarity(words[i], words[j]);
+                cache[j][i] = cache[i][j];
+                var set = sets.get(cache[i][j]);
+                set.add(i);
+                set.add(j);
+            }
+        }
+
+        while (true) {
+            sets.sort((a, b) -> Integer.compare(a.size(), b.size()));
+            sets.removeIf((s) -> s.size() == 0);
+            if (sets.isEmpty()) {
+                return;
+            }
+            var set = sets.get(0);
+            var guess_idx = set.iterator().next();
+            var guess = words[guess_idx];
+            var ret = master.guess(guess);
+            if (ret == 6) {
+                return;
+            }
+            for (var s : sets) {
+                HashSet<Integer> toRemove = new HashSet<>();
+                for (var w_idx : s) {
+                    if (similarity(words[w_idx], words[guess_idx]) != ret) {
+                        toRemove.add(w_idx);
+                    }
+                }
+                s.removeAll(toRemove);
+            }
+        }
+    }
+
+    int similarity(String s1, String s2) {
+        var c1 = s1.toCharArray();
+        var c2 = s2.toCharArray();
+        int res = 0;
+        for (int i = 0; i < c1.length; i++) {
+            if (c1[i] == c2[i]) {
+                res++;
+            }
+        }
+        return res;
     }
 
 }

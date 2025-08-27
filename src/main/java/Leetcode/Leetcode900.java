@@ -4,9 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.TreeSet;
 
 interface Master {
@@ -15,64 +13,6 @@ interface Master {
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode900 {
-
-    /**
-     * #843
-     * 
-     * @param words
-     * @param master
-     */
-    public void findSecretWord(String[] words, Master master) {
-        int[][] wordsMatch = new int[words.length][];
-        for (int i = 0; i < words.length; i++) {
-            wordsMatch[i] = new int[words.length];
-        }
-        for (int i = 0; i < words.length; i++) {
-            for (int j = i + 1; j < words.length; j++) {
-                wordsMatch[i][j] = matchCount(words[i], words[j]);
-            }
-        }
-        Set<Integer> selectionSet = new HashSet<>(words.length);
-        Set<Integer> selected = new HashSet<>(words.length);
-        for (int i = 0; i < words.length; i++) {
-            selectionSet.add(i);
-        }
-        int select_idx = 0;
-
-        select_idx = selectionSet.iterator().next();
-        while (!selectionSet.isEmpty()) {
-            selectionSet.remove(select_idx);
-            selected.add(select_idx);
-            var w = words[select_idx];
-            int match = master.guess(w);
-            if (match == 6) {
-                return;
-            }
-            var to_remove = new HashSet<Integer>(selectionSet.size());
-            for (var s : selectionSet) {
-                if ((s < select_idx && wordsMatch[s][select_idx] != match)
-                        || (s > select_idx
-                                && wordsMatch[select_idx][s] != match)) {
-                    to_remove.add(s);
-                }
-
-            }
-            selectionSet.removeAll(to_remove);
-            select_idx = selectionSet.iterator().next();
-        }
-
-    }
-
-    private static int matchCount(String a, String b) {
-        int count = 0;
-        for (int i = 0; i < a.length(); i++) {
-            if (a.charAt(i) == b.charAt(i)) {
-                count++;
-            }
-        }
-        return count;
-    }
-
     /**
      * #854
      * 
