@@ -2,13 +2,13 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"Unused", "JavaDoc"})
+@SuppressWarnings({ "Unused", "JavaDoc" })
 public class Leetcode50 {
     /**
-     * #1
-     * <br/>给定 nums = [2, 7, 11, 15], target = 9
-     * <br/>因为 nums[0] + nums[1] = 2 + 7 = 9
-     * <br/>所以返回 [0, 1]
+     * #1 <br/>
+     * 给定 nums = [2, 7, 11, 15], target = 9 <br/>
+     * 因为 nums[0] + nums[1] = 2 + 7 = 9 <br/>
+     * 所以返回 [0, 1]
      *
      * @param nums   array
      * @param target target sum
@@ -22,18 +22,18 @@ public class Leetcode50 {
         for (int i = 0; i < nums.length; i++) {
             int complement = target - nums[i];
             if (map.containsKey(complement) && map.get(complement) != i) {
-                return new int[]{i, map.get(complement)};
+                return new int[] { i, map.get(complement) };
             }
         }
         throw new AssertionError();
     }
 
     /**
-     * #2
-     * <br/>reverse order integer addition
-     * <br/>输入：(2 -> 4 -> 3) + (5 -> 6 -> 4)
-     * <br/>输出：7 -> 0 -> 8
-     * <br/>原因：342 + 465 = 807
+     * #2 <br/>
+     * reverse order integer addition <br/>
+     * 输入：(2 -> 4 -> 3) + (5 -> 6 -> 4) <br/>
+     * 输出：7 -> 0 -> 8 <br/>
+     * 原因：342 + 465 = 807
      *
      * @param l1 list number
      * @param l2 list number
@@ -43,15 +43,14 @@ public class Leetcode50 {
         return recursiveAddTwoNumbers(l1, l2, 0);
     }
 
-    private static ListNode recursiveAddTwoNumbers(ListNode l1, ListNode l2, int digit) {
+    private static ListNode recursiveAddTwoNumbers(ListNode l1, ListNode l2,
+            int digit) {
         if (l1 == null && l2 == null) {
             return new ListNode(digit);
-        }
-        else if (l1 == null) {
+        } else if (l1 == null) {
             addDigit(l2, digit);
             return l2;
-        }
-        else if (l2 == null) {
+        } else if (l2 == null) {
             addDigit(l1, digit);
             return l1;
         }
@@ -75,19 +74,18 @@ public class Leetcode50 {
             l.val -= 10;
             if (l.next == null) {
                 l.next = new ListNode(1);
-            }
-            else {
+            } else {
                 addDigit(l.next, 1);
             }
         }
     }
 
     /**
-     * #3
-     * <br/>最长无重复字符长度
-     * <br/>输入: "abcabcbb"
-     * <br/>输出: 3
-     * <br/>解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
+     * #3 <br/>
+     * 最长无重复字符长度 <br/>
+     * 输入: "abcabcbb" <br/>
+     * 输出: 3 <br/>
+     * 解释: 因为无重复字符的最长子串是 "abc"，所以其长度为 3。
      *
      * @param s string
      * @return result
@@ -102,11 +100,9 @@ public class Leetcode50 {
             char c = s.charAt(idx);
             if (!map.containsKey(c)) {
                 map.put(c, idx);
-            }
-            else if (map.get(c) < head) {
+            } else if (map.get(c) < head) {
                 map.put(c, idx);
-            }
-            else {
+            } else {
                 head = map.get(c) + 1;
                 map.put(c, idx);
             }
@@ -117,11 +113,11 @@ public class Leetcode50 {
     }
 
     /**
-     * #4
-     * <br/>两个有序数组的中位数
-     * <br/>nums1 = [1, 3]
-     * <br/>nums2 = [2]
-     * <br/>则中位数是 2.0
+     * #4 <br/>
+     * 两个有序数组的中位数 <br/>
+     * nums1 = [1, 3] <br/>
+     * nums2 = [2] <br/>
+     * 则中位数是 2.0
      *
      * @param nums1 array
      * @param nums2 array
@@ -140,88 +136,105 @@ public class Leetcode50 {
             int B_j = overflowGet(nums2, j);
             if (A_i_minus_1 <= B_j) {
                 left = i;
-            }
-            else {
+            } else {
                 right = i - 1;
             }
         }
         int i = left, j = (m + n + 1) / 2 - left;
         if ((m + n) % 2 == 0) {
-            return (Math.max(overflowGet(nums1, i - 1), overflowGet(nums2, j - 1)) +
-                    Math.min(overflowGet(nums1, i), overflowGet(nums2, j))) / 2.;
-        }
-        else {
-            return Math.max(overflowGet(nums1, i - 1), overflowGet(nums2, j - 1));
+            return (Math.max(overflowGet(nums1, i - 1),
+                    overflowGet(nums2, j - 1))
+                    + Math.min(overflowGet(nums1, i), overflowGet(nums2, j)))
+                    / 2.;
+        } else {
+            return Math.max(overflowGet(nums1, i - 1),
+                    overflowGet(nums2, j - 1));
         }
     }
 
     public static int overflowGet(int[] arr, int idx) {
-        if (idx < 0) return Integer.MIN_VALUE;
-        else if (idx >= arr.length) return Integer.MAX_VALUE;
-        else return arr[idx];
+        if (idx < 0)
+            return Integer.MIN_VALUE;
+        else if (idx >= arr.length)
+            return Integer.MAX_VALUE;
+        else
+            return arr[idx];
     }
 
-
     /**
-     * #5
-     * <br/>最长回文字符串
-     * <br/>输入: "babad"
-     * <br/>输出: "bab"
-     * <br/>注意: "aba" 也是一个有效答案。
+     * #5 <br/>
+     * 最长回文字符串 <br/>
+     * 输入: "babad" <br/>
+     * 输出: "bab" <br/>
+     * 注意: "aba" 也是一个有效答案。
      *
      * @param s string
      * @return longest palindrome
      */
     @SuppressWarnings("SpellCheckingInspection, Unused")
-    public static String longestPalindrome(String s) {
-        int len = s.length();
-        if (len <= 1) {
-            return s;
+    public String longestPalindrome(String s) {
+        var str = new PaddedString(s);
+        int len = str.length();
+        int[] dp = new int[len];
+        Arrays.fill(dp, 1);
+        for (int i = 1; i < str.length(); i += 2) {
+            dp[i] = 2;
+        }
+        int l = 0, r = 0;
+        int maxL = 0, maxR = 0;
+        for (int idx = 1; idx < len; idx++) {
+            int mid = l + (r - l) / 2;
+            if (idx <= r) {
+                int symIdx = mid - (idx - mid);
+                int symLen = dp[symIdx];
+                dp[idx] = Math.min(symIdx + 1 - l, symLen);
+            }
+            while (idx + dp[idx] < len && idx - dp[idx] >= 0
+                    && str.charAt(idx + dp[idx]) == str.charAt(idx - dp[idx])) {
+                dp[idx]++;
+            }
+            int thisL = idx - dp[idx] + 1;
+            int thisR = idx + dp[idx] - 1;
+            if (thisR > r) {
+                r = thisR;
+                l = thisL;
+            }
+            if (thisR - thisL > maxR - maxL) {
+                maxL = thisL;
+                maxR = thisR;
+            }
+        }
+        return s.substring(maxL / 2, maxR / 2);
+    }
+
+    class PaddedString {
+        char[] arr;
+
+        PaddedString(String s) {
+            arr = s.toCharArray();
         }
 
-        int res_start = 0, res_end = 0; // zero index, close interval
-        boolean[][] S = new boolean[len - 1][len - 1];
-        // two
-        for (int i = 0; i + 2 - 1 < len; i++) {
-            if (s.charAt(i) == s.charAt(i + 1)) {
-                S[i][i] = true;
-                res_start = i;
-                res_end = i + 1;
-            }
+        char charAt(int idx) {
+            return (idx & 1) == 1 ? arr[idx / 2] : '#';
         }
-        //three
-        for (int i = 0; i + 3 - 1 < len; i++) {
-            if (s.charAt(i) == s.charAt(i + 2)) {
-                S[i][i + 1] = true;
-                res_start = i;
-                res_end = i + 2;
-            }
+
+        int length() {
+            return arr.length * 2 + 1;
         }
-        // other
-        for (int l = 4; l <= len; l++) {
-            for (int i = 0; i + l - 1 < len; i++) {
-                if (S[i + 1][i + l - 3]) {
-                    if (s.charAt(i) == s.charAt(i + l - 1)) {
-                        S[i][i + l - 2] = true;
-                        res_start = i;
-                        res_end = i + l - 1;
-                    }
-                }
-            }
-        }
-        return s.substring(res_start, res_end + 1);
     }
 
     /**
-     * #6
-     * <br/>Z形字符串转字符串
-     * <br/>input:<br/>
+     * #6 <br/>
+     * Z形字符串转字符串 <br/>
+     * input:<br/>
+     * 
      * <pre>
      *    L    D    C
      *    E  O E  T O
      *    E C  L E  D
      *    T    E    E
      * </pre>
+     * 
      * result: LEETCODELEETCODE
      *
      * @param s       z string
@@ -254,9 +267,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #7
-     * <br/>reverse int with restriction
-     * <br/>123 ---> 321
+     * #7 <br/>
+     * reverse int with restriction <br/>
+     * 123 ---> 321
      *
      * @param x int
      * @return reversed int
@@ -266,10 +279,12 @@ public class Leetcode50 {
         while (x != 0) {
             int pop = x % 10;
             x /= 10;
-            if (rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
+            if (rev > Integer.MAX_VALUE / 10
+                    || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
                 return 0;
             }
-            if (rev < Integer.MIN_VALUE / 10 || (rev == Integer.MIN_VALUE / 10 && pop < -8)) {
+            if (rev < Integer.MIN_VALUE / 10
+                    || (rev == Integer.MIN_VALUE / 10 && pop < -8)) {
                 return 0;
             }
             rev = rev * 10 + pop;
@@ -278,8 +293,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #8
-     * <br/>string to int
+     * #8 <br/>
+     * string to int
      *
      * @param str string
      * @return int
@@ -295,7 +310,8 @@ public class Leetcode50 {
     }
 
     public static int myAtoi2(String str) {
-        @SuppressWarnings("SameParameterValue") var funcCheck = new Object() {
+        @SuppressWarnings("SameParameterValue")
+        var funcCheck = new Object() {
             boolean multiplyNotOverflow(int x, int y) {
                 long r = (long) x * (long) y;
                 return (int) r == r;
@@ -303,20 +319,21 @@ public class Leetcode50 {
 
             boolean addNotOverflow(int x, int y) {
                 int r = x + y;
-                // HD 2-12 Overflow iff both arguments have the opposite sign of the result
+                // HD 2-12 Overflow iff both arguments have the opposite sign of
+                // the result
                 return !(((x ^ r) & (y ^ r)) < 0);
             }
         };
 
         str = str.strip();
-        if (str.equals("")) return 0;
+        if (str.equals(""))
+            return 0;
         boolean minus = false;
         int idx = 0;
         if (str.charAt(idx) == '-') {
             minus = true;
             idx++;
-        }
-        else if (str.charAt(idx) == '+') {
+        } else if (str.charAt(idx) == '+') {
             idx++;
         }
         int res = 0;
@@ -324,15 +341,15 @@ public class Leetcode50 {
             var c = str.charAt(idx);
             int diff = c - '0';
             if (diff >= 0 && diff <= 9) {
-                if (funcCheck.multiplyNotOverflow(res, 10) && funcCheck.addNotOverflow(res * 10, diff)) {
+                if (funcCheck.multiplyNotOverflow(res, 10)
+                        && funcCheck.addNotOverflow(res * 10, diff)) {
                     res *= 10;
                     res += diff;
-                }
-                else {
+                } else {
                     return minus ? Integer.MIN_VALUE : Integer.MAX_VALUE;
                 }
-            }
-            else break;
+            } else
+                break;
             idx++;
         }
 
@@ -340,12 +357,11 @@ public class Leetcode50 {
     }
 
     private static final class Automation {
-        private final Map<String, List<String>> transition_map = Map.of(
-                "start", List.of("start", "signed", "in_number", "end"),
-                "signed", List.of("end", "end", "in_number", "end"),
-                "in_number", List.of("end", "end", "in_number", "end"),
-                "end", List.of("end", "end", "end", "end")
-        );
+        private final Map<String, List<String>> transition_map = Map.of("start",
+                List.of("start", "signed", "in_number", "end"), "signed",
+                List.of("end", "end", "in_number", "end"), "in_number",
+                List.of("end", "end", "in_number", "end"), "end",
+                List.of("end", "end", "end", "end"));
         private String state = "start";
         private long ans = 0;
         private int sign = 1;
@@ -353,11 +369,9 @@ public class Leetcode50 {
         private int get_column(char c) {
             if (c == ' ') {
                 return 0;
-            }
-            else if (c == '+' || c == '-') {
+            } else if (c == '+' || c == '-') {
                 return 1;
-            }
-            else if (Character.isDigit(c)) {
+            } else if (Character.isDigit(c)) {
                 return 2;
             }
             return 3;
@@ -367,9 +381,9 @@ public class Leetcode50 {
             state = transition_map.get(state).get(get_column(c));
             if (state.equals("in_number")) {
                 ans = ans * 10 + Integer.parseInt(String.valueOf(c));
-                ans = sign == 1 ? Math.min(ans, Integer.MAX_VALUE) : Math.min(ans, -(long) Integer.MIN_VALUE);
-            }
-            else if (state.equals("signed")) {
+                ans = sign == 1 ? Math.min(ans, Integer.MAX_VALUE)
+                        : Math.min(ans, -(long) Integer.MIN_VALUE);
+            } else if (state.equals("signed")) {
                 sign = (c == '+') ? 1 : -1;
             }
         }
@@ -380,12 +394,12 @@ public class Leetcode50 {
     }
 
     /**
-     * #9
-     * <br/>回文整数
-     * <br/>输入: 121
-     * <br/>输出: true
-     * <br/>输入: -121
-     * <br/>输出: false
+     * #9 <br/>
+     * 回文整数 <br/>
+     * 输入: 121 <br/>
+     * 输出: true <br/>
+     * 输入: -121 <br/>
+     * 输出: false
      *
      * @param x int
      * @return x is palindrome
@@ -399,7 +413,8 @@ public class Leetcode50 {
         while (x != 0) {
             int pop = x % 10;
             x /= 10;
-            if (rev > Integer.MAX_VALUE / 10 || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
+            if (rev > Integer.MAX_VALUE / 10
+                    || (rev == Integer.MAX_VALUE / 10 && pop > 7)) {
                 return false;
             }
             if (rev < Integer.MIN_VALUE / 10) {
@@ -411,8 +426,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #10
-     * <br/>正则表达式匹配
+     * #10 <br/>
+     * 正则表达式匹配
      *
      * @param s string
      * @param p pattern
@@ -426,10 +441,12 @@ public class Leetcode50 {
             var char_p = p.charAt(j - 1);
             for (int i = 0; i <= m; i++) {
                 if (char_p != '*') {
-                    dp[i][j] = charMatchAt(s, p, i - 1, j - 1) && dp[i - 1][j - 1];
-                }
-                else {
-                    dp[i][j] = charMatchAt(s, p, i - 1, j - 2) ? (dp[i][j - 2] || dp[i - 1][j]) : dp[i][j - 2];
+                    dp[i][j] = charMatchAt(s, p, i - 1, j - 1)
+                            && dp[i - 1][j - 1];
+                } else {
+                    dp[i][j] = charMatchAt(s, p, i - 1, j - 2)
+                            ? (dp[i][j - 2] || dp[i - 1][j])
+                            : dp[i][j - 2];
                 }
             }
         }
@@ -437,17 +454,19 @@ public class Leetcode50 {
     }
 
     private static boolean charMatchAt(String s, String p, int pi, int pj) {
-        if (pi < 0) return false;
+        if (pi < 0)
+            return false;
         var cs = s.charAt(pi);
         var cp = p.charAt(pj);
-        if (cp == '.') return true;
-        else return cs == cp;
+        if (cp == '.')
+            return true;
+        else
+            return cs == cp;
     }
 
-
     /**
-     * #11
-     * <br/>盛最多水的容器
+     * #11 <br/>
+     * 盛最多水的容器
      *
      * @param height partition array
      * @return max area
@@ -461,21 +480,18 @@ public class Leetcode50 {
                 int current_area = (q - p) * Math.min(height[p], height[q]);
                 max_area = Math.max(max_area, current_area);
                 q--;
-            }
-            else if (height[p] < height[q]) {
+            } else if (height[p] < height[q]) {
                 int current_area = (q - p) * Math.min(height[p], height[q]);
                 max_area = Math.max(max_area, current_area);
                 p++;
-            }
-            else {
+            } else {
                 int current_area = (q - p) * Math.min(height[p], height[q]);
                 max_area = Math.max(max_area, current_area);
                 int l = height[p + 1];
                 int h = height[q - 1];
                 if (l < h) {
                     q--;
-                }
-                else {
+                } else {
                     p++;
                 }
             }
@@ -484,8 +500,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #15
-     * <br/>三数之和
+     * #15 <br/>
+     * 三数之和
+     * 
      * <pre>
      * 给定数组 nums = [-1, 0, 1, 2, -1, -4]，
      *
@@ -510,11 +527,9 @@ public class Leetcode50 {
                 while (left < right) {
                     if (nums[i] + nums[left] + nums[right] > 0) {
                         right--;
-                    }
-                    else if (nums[i] + nums[left] + nums[right] < 0) {
+                    } else if (nums[i] + nums[left] + nums[right] < 0) {
                         left++;
-                    }
-                    else {
+                    } else {
                         List<Integer> l = new ArrayList<>();
                         l.add(nums[i]);
                         l.add(nums[left]);
@@ -527,7 +542,6 @@ public class Leetcode50 {
                             left++;
                         }
 
-
                         left++;
                         right--;
                     }
@@ -539,10 +553,10 @@ public class Leetcode50 {
     }
 
     /**
-     * #16
-     * <br/>输入：nums = [-1,2,1,-4], target = 1
-     * <br/>输出：2
-     * <br/>解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
+     * #16 <br/>
+     * 输入：nums = [-1,2,1,-4], target = 1 <br/>
+     * 输出：2 <br/>
+     * 解释：与 target 最接近的和是 2 (-1 + 2 + 1 = 2) 。
      *
      * @param nums   array
      * @param target sum target
@@ -561,11 +575,9 @@ public class Leetcode50 {
                 }
                 if (t == target) {
                     return t;
-                }
-                else if (t > target) {
+                } else if (t > target) {
                     e--;
-                }
-                else {
+                } else {
                     s++;
                 }
             }
@@ -583,17 +595,17 @@ public class Leetcode50 {
         if (digits.length() == 0) {
             return List.of();
         }
-        Map<Character, List<String>> map =
-                Map.ofEntries(
-                        Map.entry('2', List.of("a", "b", "c")),
-                        Map.entry('3', List.of("d", "e", "f")),
-                        Map.entry('4', List.of("g", "h", "i")),
-                        Map.entry('5', List.of("j", "k", "l")),
-                        Map.entry('6', List.of("m", "n", "o")),
-                        Map.entry('7', List.of("p", "q", "r", "s")),
-                        Map.entry('8', List.of("t", "u", "v")),
-                        Map.entry('9', List.of("w", "x", "y", "z")));
-        Queue<StringBuilder> queue = new ArrayDeque<>((int) Math.pow(3, digits.length()));
+        Map<Character, List<String>> map = Map.ofEntries(
+                Map.entry('2', List.of("a", "b", "c")),
+                Map.entry('3', List.of("d", "e", "f")),
+                Map.entry('4', List.of("g", "h", "i")),
+                Map.entry('5', List.of("j", "k", "l")),
+                Map.entry('6', List.of("m", "n", "o")),
+                Map.entry('7', List.of("p", "q", "r", "s")),
+                Map.entry('8', List.of("t", "u", "v")),
+                Map.entry('9', List.of("w", "x", "y", "z")));
+        Queue<StringBuilder> queue = new ArrayDeque<>(
+                (int) Math.pow(3, digits.length()));
         var chars = map.get(digits.charAt(0));
         for (var c : chars) {
             queue.add(new StringBuilder(c));
@@ -617,17 +629,20 @@ public class Leetcode50 {
     }
 
     /**
-     * #18
-     * <br/>四数之和
-     * <br/>给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
+     * #18 <br/>
+     * 四数之和 <br/>
+     * 给定数组 nums = [1, 0, -1, 0, -2, 2]，和 target = 0。
      * <p>
-     * <br/>满足要求的四元组集合为：<br/>
+     * <br/>
+     * 满足要求的四元组集合为：<br/>
+     * 
      * <pre>
      * [
      *  [-1,  0, 0, 1],
      *  [-2, -1, 1, 2],
      *  [-2,  0, 0, 2]
-     * ]</pre>
+     * ]
+     * </pre>
      *
      * @param nums   array
      * @param target sum target
@@ -662,14 +677,12 @@ public class Leetcode50 {
                         while (a < b && nums[a] == nums[a - 1]) {
                             a++;
                         }
-                    }
-                    else if (t < target) {
+                    } else if (t < target) {
                         a++;
                         while (a < b && nums[a] == nums[a - 1]) {
                             a++;
                         }
-                    }
-                    else {
+                    } else {
                         b--;
                         while (a < b && nums[b] == nums[b + 1]) {
                             b--;
@@ -682,9 +695,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #19
-     * <br/>remove the nth node of reverse order
-     * <br/>1->2->3->4, 2 ---> 1->2->4
+     * #19 <br/>
+     * remove the nth node of reverse order <br/>
+     * 1->2->3->4, 2 ---> 1->2->4
      *
      * @param head linked list
      * @param n    order
@@ -696,11 +709,9 @@ public class Leetcode50 {
         int head_order = RecursiveRemoveNthFromEnd(head, n);
         if (is_len_one && n == 1) {
             return null;
-        }
-        else if (head_order == n) {
+        } else if (head_order == n) {
             return head.next;
-        }
-        else {
+        } else {
             return head;
         }
     }
@@ -715,7 +726,6 @@ public class Leetcode50 {
         }
         return this_order;
     }
-
 
     /**
      * #22
@@ -741,16 +751,18 @@ public class Leetcode50 {
             while (queue.size() > 0 && queue.peek().strB.length() == i) {
                 var t = queue.poll();
                 if (t.unmatched > 0 && t.left_count < n) {
-                    queue.add(new Tuple(new StringBuilder(t.strB).append(")"), t.unmatched - 1, t.left_count));
-                    queue.add(new Tuple(t.strB.append("("), t.unmatched + 1, t.left_count + 1));
-                }
-                else if (t.left_count < n) {
-                    queue.add(new Tuple(t.strB.append("("), t.unmatched + 1, t.left_count + 1));
-                }
-                else if (t.unmatched > 0) {
-                    queue.add(new Tuple(t.strB.append(")"), t.unmatched - 1, t.left_count));
-                }
-                else throw new RuntimeException();
+                    queue.add(new Tuple(new StringBuilder(t.strB).append(")"),
+                            t.unmatched - 1, t.left_count));
+                    queue.add(new Tuple(t.strB.append("("), t.unmatched + 1,
+                            t.left_count + 1));
+                } else if (t.left_count < n) {
+                    queue.add(new Tuple(t.strB.append("("), t.unmatched + 1,
+                            t.left_count + 1));
+                } else if (t.unmatched > 0) {
+                    queue.add(new Tuple(t.strB.append(")"), t.unmatched - 1,
+                            t.left_count));
+                } else
+                    throw new RuntimeException();
             }
         }
         List<String> ans = new ArrayList<>(queue.size());
@@ -761,9 +773,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #22
-     * <br/>k pairs parenthesis permutation
-     * <br/>3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
+     * #22 <br/>
+     * k pairs parenthesis permutation <br/>
+     * 3 ---> ["((()))", "(()())", "(())()", "()(())", "()()()"]
      *
      * @param n order
      * @return result
@@ -776,28 +788,29 @@ public class Leetcode50 {
         return res;
     }
 
-    private static void RecursiveGenerateParenthesis(StringBuilder stringBuilder,
-                                                     int str_len, int left_count,
-                                                     int stack_ptr, List<String> res, int n) {
+    private static void RecursiveGenerateParenthesis(
+            StringBuilder stringBuilder, int str_len, int left_count,
+            int stack_ptr, List<String> res, int n) {
         if (str_len == (2 * n)) {
             res.add(stringBuilder.toString());
-        }
-        else {
+        } else {
             str_len++;
             if (stack_ptr >= 1 && stack_ptr <= n - 1 && left_count <= n - 1) {
                 StringBuilder t = new StringBuilder(stringBuilder);
                 stringBuilder.append("(");
                 t.append(")");
-                RecursiveGenerateParenthesis(stringBuilder, str_len, left_count + 1, stack_ptr + 1, res, n);
-                RecursiveGenerateParenthesis(t, str_len, left_count, stack_ptr - 1, res, n);
-            }
-            else if (stack_ptr == 0 && left_count <= n - 1) {
+                RecursiveGenerateParenthesis(stringBuilder, str_len,
+                        left_count + 1, stack_ptr + 1, res, n);
+                RecursiveGenerateParenthesis(t, str_len, left_count,
+                        stack_ptr - 1, res, n);
+            } else if (stack_ptr == 0 && left_count <= n - 1) {
                 stringBuilder.append("(");
-                RecursiveGenerateParenthesis(stringBuilder, str_len, left_count + 1, stack_ptr + 1, res, n);
-            }
-            else {
+                RecursiveGenerateParenthesis(stringBuilder, str_len,
+                        left_count + 1, stack_ptr + 1, res, n);
+            } else {
                 stringBuilder.append(")");
-                RecursiveGenerateParenthesis(stringBuilder, str_len, left_count, stack_ptr - 1, res, n);
+                RecursiveGenerateParenthesis(stringBuilder, str_len, left_count,
+                        stack_ptr - 1, res, n);
             }
         }
     }
@@ -809,9 +822,10 @@ public class Leetcode50 {
      * @return
      */
     public static ListNode mergeKLists(ListNode[] lists) {
-        if (lists.length == 0) return null;
-        PriorityQueue<ListNode> priorityQueue = new PriorityQueue<>(lists.length,
-                Comparator.comparing(listNode -> listNode.val));
+        if (lists.length == 0)
+            return null;
+        PriorityQueue<ListNode> priorityQueue = new PriorityQueue<>(
+                lists.length, Comparator.comparing(listNode -> listNode.val));
         for (var lt : lists) {
             if (lt != null) {
                 priorityQueue.add(lt);
@@ -825,8 +839,7 @@ public class Leetcode50 {
             }
             if (tail == null) {
                 tail = ans;
-            }
-            else {
+            } else {
                 tail.next = lt;
                 tail = lt;
             }
@@ -839,9 +852,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #25
-     * <br/>reverse a linked list every k elements
-     * 1->2->3->4->5->6, 3  --->  3->2->1->6->5->4
+     * #25 <br/>
+     * reverse a linked list every k elements 1->2->3->4->5->6, 3 --->
+     * 3->2->1->6->5->4
      *
      * @param head linked list
      * @param k    group number
@@ -895,8 +908,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #29
-     * <br/>int divide without '/', '*', '%'
+     * #29 <br/>
+     * int divide without '/', '*', '%'
      *
      * @param dividend dividend
      * @param divisor  divisor
@@ -918,9 +931,11 @@ public class Leetcode50 {
         }
 
         long new_divisor = (divisor > 0) ? divisor : ((long) (~divisor)) + 1;
-        long new_dividend = (dividend > 0) ? dividend : ((long) (~dividend)) + 1;
+        long new_dividend = (dividend > 0) ? dividend
+                : ((long) (~dividend)) + 1;
         int res = 0;
-        int sign = ((dividend > 0 && divisor > 0) || (dividend < 0 && divisor < 0)) ? 1 : -1;
+        int sign = ((dividend > 0 && divisor > 0)
+                || (dividend < 0 && divisor < 0)) ? 1 : -1;
 
         if (new_dividend < new_divisor) {
             return 0;
@@ -939,8 +954,7 @@ public class Leetcode50 {
                 new_dividend -= (new_divisor << (i - 1));
                 res += 1 << (i - 1);
             }
-        }
-        while (i != 0);
+        } while (i != 0);
 
         return sign * res;
     }
@@ -950,8 +964,7 @@ public class Leetcode50 {
     }
 
     /**
-     * #30
-     * find possible chain result<BR>
+     * #30 find possible chain result<BR>
      * s = "barfoothefoobarman",<BR>
      * words = ["foo","bar"]<BR>
      * answer: [0, 9] //('barfoo' at 0, and 'foobar' at 9)<BR>
@@ -963,7 +976,8 @@ public class Leetcode50 {
     @SuppressWarnings("SpellCheckingInspection, Unused")
     public static List<Integer> findSubstring(String s, String[] words) {
         List<Integer> res = new ArrayList<>();
-        if (s == null || s.length() == 0 || words == null || words.length == 0 || words[0].length() == 0) {
+        if (s == null || s.length() == 0 || words == null || words.length == 0
+                || words[0].length() == 0) {
             return res;
         }
         Map<String, Integer> words_and_count = new HashMap<>();
@@ -1008,7 +1022,8 @@ public class Leetcode50 {
         return res;
     }
 
-    private static boolean canChain(int idx, int word_len, int words_count, String[] match_res) {
+    private static boolean canChain(int idx, int word_len, int words_count,
+            String[] match_res) {
         boolean can_chain = true;
         int count = 0;
         for (; count < words_count; idx += word_len) {
@@ -1062,13 +1077,12 @@ public class Leetcode50 {
         nums[b] = t;
     }
 
-
     /**
-     * #31
-     * <br/>下一个排列
-     * <br/>1,2,3 → 1,3,2
-     * <br/>3,2,1 → 1,2,3
-     * <br/>1,1,5 → 1,5,1
+     * #31 <br/>
+     * 下一个排列 <br/>
+     * 1,2,3 → 1,3,2 <br/>
+     * 3,2,1 → 1,2,3 <br/>
+     * 1,1,5 → 1,5,1
      *
      * @param nums permutation
      */
@@ -1090,7 +1104,8 @@ public class Leetcode50 {
         }
         int idx1 = i - 1;
         int idx2 = i;
-        while (idx2 < len && (!((idx2 == len - 1) || (nums[idx2] > nums[idx1] && nums[idx2 + 1] <= nums[idx1])))) {
+        while (idx2 < len && (!((idx2 == len - 1) || (nums[idx2] > nums[idx1]
+                && nums[idx2 + 1] <= nums[idx1])))) {
             idx2++;
         }
         int t = nums[idx1];
@@ -1112,8 +1127,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #32
-     * <br/>最长符号陪对<BR>
+     * #32 <br/>
+     * 最长符号陪对<BR>
      *
      * @param s string
      * @return max length
@@ -1131,13 +1146,11 @@ public class Leetcode50 {
         for (int i = 0; i < s_len; i++) {
             if (s.charAt(i) == '(') {
                 stack[stack_head++] = i;
-            }
-            else {
+            } else {
                 stack_head--;
                 if (stack_head == 0) {
                     stack[stack_head++] = i;
-                }
-                else {
+                } else {
                     max_len = Math.max(max_len, i - stack[stack_head - 1]);
                 }
             }
@@ -1146,12 +1159,14 @@ public class Leetcode50 {
     }
 
     /**
-     * #33
-     * <BR>旋转数组搜索
-     * <br/>input: nums = [4,5,6,7,0,1,2], target = 0
-     * <br/>result: 4
+     * #33 <BR>
+     * 旋转数组搜索 <br/>
+     * input: nums = [4,5,6,7,0,1,2], target = 0 <br/>
+     * result: 4
      * <p>
-     * <br/>search border case:<br/>
+     * <br/>
+     * search border case:<br/>
+     * 
      * <pre>
      * left_mid    right_mid       result
      * &gt mid       &gt mid      border in left
@@ -1181,23 +1196,21 @@ public class Leetcode50 {
 
         if (target > nums[len - 1]) {
             return binarySearchSubArray(nums, target, 0, border - 1);
-        }
-        else {
+        } else {
             return binarySearchSubArray(nums, target, border, len - 1);
         }
 
     }
 
-    private static int binarySearchSubArray(int[] nums, int target, int start, int end) {
+    private static int binarySearchSubArray(int[] nums, int target, int start,
+            int end) {
         while (end >= start) {
             int mid = (start + end) / 2;
             if (target == nums[mid]) {
                 return mid;
-            }
-            else if (target > nums[mid]) {
+            } else if (target > nums[mid]) {
                 start = mid + 1;
-            }
-            else {
+            } else {
                 end = mid - 1;
             }
         }
@@ -1211,30 +1224,29 @@ public class Leetcode50 {
             int mid_idx = (left_idx + right_idx) / 2;
             if ((mid_idx - 1) >= 0 && nums[mid_idx] < nums[mid_idx - 1]) {
                 return mid_idx;
-            }
-            else if ((mid_idx + 1) < len && nums[mid_idx] > nums[mid_idx + 1]) {
+            } else if ((mid_idx + 1) < len
+                    && nums[mid_idx] > nums[mid_idx + 1]) {
                 return mid_idx + 1;
             }
 
             int left_mid_idx = (left_idx + mid_idx) / 2;
             int right_mid_idx = (mid_idx + right_idx) / 2;
-            if (nums[left_mid_idx] > nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]) {
+            if (nums[left_mid_idx] > nums[mid_idx]
+                    && nums[right_mid_idx] > nums[mid_idx]) {
                 left_idx = left_mid_idx;
                 right_idx = mid_idx - 1;
-            }
-            else if (nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] < nums[mid_idx]) {
+            } else if (nums[left_mid_idx] < nums[mid_idx]
+                    && nums[right_mid_idx] < nums[mid_idx]) {
                 left_idx = mid_idx + 1;
                 right_idx = right_mid_idx;
-            }
-            else if (nums[left_mid_idx] < nums[mid_idx] && nums[right_mid_idx] > nums[mid_idx]) {
+            } else if (nums[left_mid_idx] < nums[mid_idx]
+                    && nums[right_mid_idx] > nums[mid_idx]) {
                 if (nums[mid_idx] > nums[left_idx]) {
                     left_idx = mid_idx + 1;
-                }
-                else {
+                } else {
                     right_idx = mid_idx - 1;
                 }
-            }
-            else {
+            } else {
                 return -1;
             }
 
@@ -1243,12 +1255,13 @@ public class Leetcode50 {
     }
 
     /**
-     * #34
-     * <BR>搜搜有序数组连续数字的边界<BR>
-     * <br/>输入: nums = [5,7,7,8,8,10], target = 8
-     * <br/>输出: [3,4]
-     * <br/>输入: nums = [5,7,7,8,8,10], target = 6
-     * <br/>输出: [-1,-1]
+     * #34 <BR>
+     * 搜搜有序数组连续数字的边界<BR>
+     * <br/>
+     * 输入: nums = [5,7,7,8,8,10], target = 8 <br/>
+     * 输出: [3,4] <br/>
+     * 输入: nums = [5,7,7,8,8,10], target = 6 <br/>
+     * 输出: [-1,-1]
      *
      * @param nums   array
      * @param target target
@@ -1257,7 +1270,7 @@ public class Leetcode50 {
 
     public static int[] SearchRange(int[] nums, int target) {
         if (nums == null || nums.length == 0) {
-            return new int[]{-1, -1};
+            return new int[] { -1, -1 };
         }
         int l = searchLowerBound(nums, target);
         int u = searchUpperBound(nums, target);
@@ -1267,7 +1280,7 @@ public class Leetcode50 {
         if (nums[nums.length - 1] == target) {
             u = nums.length - 1;
         }
-        return new int[]{l, u};
+        return new int[] { l, u };
     }
 
     private static int searchLowerBound(int[] nums, int target) {
@@ -1279,15 +1292,14 @@ public class Leetcode50 {
                     return mid + 1;
                 }
                 start = mid;
-            }
-            else if (nums[mid] > target) {
+            } else if (nums[mid] > target) {
                 end = mid;
-            }
-            else {
+            } else {
                 end--;
             }
         }
-        if (start + 1 < nums.length && nums[start] < target && nums[start + 1] == target) {
+        if (start + 1 < nums.length && nums[start] < target
+                && nums[start + 1] == target) {
             return start + 1;
         }
         return -1;
@@ -1299,26 +1311,25 @@ public class Leetcode50 {
             int mid = (start + end) / 2;
             if (nums[mid] < target) {
                 start = mid;
-            }
-            else if (nums[mid] > target) {
+            } else if (nums[mid] > target) {
                 if (mid - 1 >= 0 && nums[mid - 1] == target) {
                     return mid - 1;
                 }
                 end = mid;
-            }
-            else {
+            } else {
                 start++;
             }
         }
-        if (start - 1 >= 0 && nums[start] > target && nums[start - 1] == target) {
+        if (start - 1 >= 0 && nums[start] > target
+                && nums[start - 1] == target) {
             return start - 1;
         }
         return -1;
     }
 
     /**
-     * #36
-     * <BR>验证9*9方格是否为数独
+     * #36 <BR>
+     * 验证9*9方格是否为数独
      *
      * @param board 9*9 board
      * @return is valid sudoku
@@ -1344,14 +1355,11 @@ public class Leetcode50 {
                 var gm = groups.get((i / 3) * 3 + j / 3);
                 if (cm.contains(c)) {
                     return false;
-                }
-                else if (rm.contains(c)) {
+                } else if (rm.contains(c)) {
                     return false;
-                }
-                else if (gm.contains(c)) {
+                } else if (gm.contains(c)) {
                     return false;
-                }
-                else {
+                } else {
                     cm.add(c);
                     rm.add(c);
                     gm.add(c);
@@ -1362,21 +1370,20 @@ public class Leetcode50 {
     }
 
     /**
-     * #37
-     * <BR>解数独
+     * #37 <BR>
+     * 解数独
      *
      * <pre>
-     * char[][] t = new char[][]{
-     *     {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
-     *     {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
-     *     {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-     *     {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
-     *     {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-     *     {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
-     *     {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-     *     {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
-     *     {'.', '.', '.', '.', '8', '.', '.', '7', '9'}
-     * };
+     * char[][] t = new char[][] {
+     *         { '5', '3', '.', '.', '7', '.', '.', '.', '.' },
+     *         { '6', '.', '.', '1', '9', '5', '.', '.', '.' },
+     *         { '.', '9', '8', '.', '.', '.', '.', '6', '.' },
+     *         { '8', '.', '.', '.', '6', '.', '.', '.', '3' },
+     *         { '4', '.', '.', '8', '.', '3', '.', '.', '1' },
+     *         { '7', '.', '.', '.', '2', '.', '.', '.', '6' },
+     *         { '.', '6', '.', '.', '.', '.', '2', '8', '.' },
+     *         { '.', '.', '.', '4', '1', '9', '.', '.', '5' },
+     *         { '.', '.', '.', '.', '8', '.', '.', '7', '9' } };
      * </pre>
      *
      * @param board 9*9 board
@@ -1385,7 +1392,8 @@ public class Leetcode50 {
     public static void solveSudoku(char[][] board) {
         // initialization
         List<MatrixIndex> spaceIndices = new ArrayList<>(81);
-        Map<MatrixIndex, List<MatrixIndex>> relatedSpacesMap = new HashMap<>(81);
+        Map<MatrixIndex, List<MatrixIndex>> relatedSpacesMap = new HashMap<>(
+                81);
         List<Set<Character>> rowsFilledCharSets = new ArrayList<>(9);
         for (int i = 0; i < 9; i++) {
             rowsFilledCharSets.add(new HashSet<>(9));
@@ -1409,13 +1417,13 @@ public class Leetcode50 {
                     relatedSpacesMap.put(space, new ArrayList<>(27));
                     for (int i = 0; i < spaceIndices.size() - 1; i++) {
                         var loopSpace = spaceIndices.get(i);
-                        if (!space.equals(loopSpace) && isRelated(loopSpace, space)) {
+                        if (!space.equals(loopSpace)
+                                && isRelated(loopSpace, space)) {
                             relatedSpacesMap.get(space).add(loopSpace);
                             relatedSpacesMap.get(loopSpace).add(space);
                         }
                     }
-                }
-                else {
+                } else {
                     rowsFilledCharSets.get(r).add(fill);
                     colsFilledCharSets.get(c).add(fill);
                     groupsFilledCharSets.get(getGroupIndex(r, c)).add(fill);
@@ -1424,16 +1432,14 @@ public class Leetcode50 {
         }
 
         // sort according to related spaces
-        spaceIndices.sort((m1, m2) ->
-        {
+        spaceIndices.sort((m1, m2) -> {
             var rc1 = relatedSpacesMap.get(m1).size();
             var rc2 = relatedSpacesMap.get(m2).size();
             return rc1 - rc2;
         });
 
         for (var v : relatedSpacesMap.values()) {
-            v.sort((m1, m2) ->
-            {
+            v.sort((m1, m2) -> {
                 var rc1 = relatedSpacesMap.get(m1).size();
                 var rc2 = relatedSpacesMap.get(m2).size();
                 return rc1 - rc2;
@@ -1441,7 +1447,8 @@ public class Leetcode50 {
         }
 
         // group according to whether related
-        List<MatrixIndex> sortedGroupedSpaceIndices = new ArrayList<>(spaceIndices.size());
+        List<MatrixIndex> sortedGroupedSpaceIndices = new ArrayList<>(
+                spaceIndices.size());
         var spaceIndicesSet = new HashSet<>(spaceIndices);
         for (var spaceIdx : spaceIndices) {
             if (spaceIndicesSet.contains(spaceIdx)) {
@@ -1458,7 +1465,8 @@ public class Leetcode50 {
         }
 
         // get available chars for each space
-        Map<MatrixIndex, Set<Character>> availableCharsMap = new HashMap<>(spaceIndices.size());
+        Map<MatrixIndex, Set<Character>> availableCharsMap = new HashMap<>(
+                spaceIndices.size());
         for (var space : spaceIndices) {
             var set = new HashSet<Character>(9);
             for (int i = 1; i <= 9; i++) {
@@ -1473,18 +1481,18 @@ public class Leetcode50 {
                 set.remove(c);
             }
 
-            for (var c : groupsFilledCharSets.get(getGroupIndex(space.row, space.col))) {
+            for (var c : groupsFilledCharSets
+                    .get(getGroupIndex(space.row, space.col))) {
                 set.remove(c);
             }
             availableCharsMap.put(space, set);
         }
-        depthFirstSearchSudoku(sortedGroupedSpaceIndices, 0, board, availableCharsMap, relatedSpacesMap, new HashSet<>(81));
+        depthFirstSearchSudoku(sortedGroupedSpaceIndices, 0, board,
+                availableCharsMap, relatedSpacesMap, new HashSet<>(81));
     }
 
-    static boolean depthFirstSearchSudoku(
-            List<MatrixIndex> spaces,
-            int spaceIdx,
-            char[][] board,
+    static boolean depthFirstSearchSudoku(List<MatrixIndex> spaces,
+            int spaceIdx, char[][] board,
             Map<MatrixIndex, Set<Character>> availableCharsMap,
             Map<MatrixIndex, List<MatrixIndex>> relatedSpacesMap,
             Set<MatrixIndex> encounteredSpaces) {
@@ -1498,18 +1506,16 @@ public class Leetcode50 {
         int cIdx = currentSpace.col;
         for (var chr : availableCharsMap.get(currentSpace)) {
             board[rIdx][cIdx] = chr;
-            List<Boolean> removeRecord = new ArrayList<>(relatedSpacesMap.size());
+            List<Boolean> removeRecord = new ArrayList<>(
+                    relatedSpacesMap.size());
             for (var relatedSpace : relatedSpacesMap.get(currentSpace)) {
                 if (!encounteredSpaces.contains(relatedSpace)) {
-                    removeRecord.add(availableCharsMap.get(relatedSpace).remove(chr));
+                    removeRecord.add(
+                            availableCharsMap.get(relatedSpace).remove(chr));
                 }
             }
-            boolean success = depthFirstSearchSudoku(
-                    spaces,
-                    spaceIdx + 1,
-                    board,
-                    availableCharsMap,
-                    relatedSpacesMap,
+            boolean success = depthFirstSearchSudoku(spaces, spaceIdx + 1,
+                    board, availableCharsMap, relatedSpacesMap,
                     encounteredSpaces);
             if (success) {
                 return true;
@@ -1535,7 +1541,8 @@ public class Leetcode50 {
     }
 
     private static boolean isRelated(MatrixIndex a, MatrixIndex b) {
-        return a.row == b.row || a.col == b.col || getGroupIndex(a.row, a.col) == getGroupIndex(b.row, b.col);
+        return a.row == b.row || a.col == b.col
+                || getGroupIndex(a.row, a.col) == getGroupIndex(b.row, b.col);
     }
 
     private static class MatrixIndex {
@@ -1553,8 +1560,7 @@ public class Leetcode50 {
         public boolean equals(Object other) {
             if (other instanceof MatrixIndex t) {
                 return t.row == row && t.col == col;
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -1567,8 +1573,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #38
-     * <br/>外观数列
+     * #38 <br/>
+     * 外观数列
+     * 
      * <pre>
      * 1.     1
      * 2.     11
@@ -1576,6 +1583,7 @@ public class Leetcode50 {
      * 4.     1211
      * 5.     111221
      * </pre>
+     * 
      * 第一项是数字 1<BR>
      * 描述前一项，这个数是 1 即 “一个 1 ”，记作 11<BR>
      * 描述前一项，这个数是 11 即 “两个 1 ” ，记作 21<BR>
@@ -1613,9 +1621,10 @@ public class Leetcode50 {
     }
 
     /**
-     * #39
-     * <br/>组合总和
-     * <br/>candidates不重复,可重选
+     * #39 <br/>
+     * 组合总和 <br/>
+     * candidates不重复,可重选
+     * 
      * <pre>
      * 输入：candidates = [2,3,6,7], target = 7,
      * 所求解集为：
@@ -1637,41 +1646,41 @@ public class Leetcode50 {
      * @return result
      */
 
-    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+    public static List<List<Integer>> combinationSum(int[] candidates,
+            int target) {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
         recursiveCombinationSum(candidates, target, new ArrayList<>(), res);
         return res;
     }
 
-    private static void recursiveCombinationSum(
-            int[] candidates,
-            int targetSum,
-            List<Integer> currentCache,
-            List<List<Integer>> res) {
-        for (int i = 0; i < candidates.length && candidates[i] <= targetSum; i++) {
-            if (currentCache.size() > 0 && candidates[i] < currentCache.get(currentCache.size() - 1)) {
+    private static void recursiveCombinationSum(int[] candidates, int targetSum,
+            List<Integer> currentCache, List<List<Integer>> res) {
+        for (int i = 0; i < candidates.length
+                && candidates[i] <= targetSum; i++) {
+            if (currentCache.size() > 0 && candidates[i] < currentCache
+                    .get(currentCache.size() - 1)) {
                 continue;
-            }
-            else {
+            } else {
                 if (candidates[i] == targetSum) {
                     List<Integer> t = new ArrayList<>(currentCache);
                     t.add(candidates[i]);
                     res.add(t);
-                }
-                else {
+                } else {
                     List<Integer> t = new ArrayList<>(currentCache);
                     t.add(candidates[i]);
-                    recursiveCombinationSum(candidates, targetSum - candidates[i], t, res);
+                    recursiveCombinationSum(candidates,
+                            targetSum - candidates[i], t, res);
                 }
             }
         }
     }
 
     /**
-     * #40
-     * <br/>组合总和2
-     * <br/>candidates可重复,不可重选
+     * #40 <br/>
+     * 组合总和2 <br/>
+     * candidates可重复,不可重选
+     * 
      * <pre>
      * 输入: candidates =[10,1,2,7,6,1,5], target =8,
      * 所求解集为:
@@ -1695,41 +1704,41 @@ public class Leetcode50 {
      * @return result
      */
 
-    public static List<List<Integer>> combinationSum2(int[] candidates, int target) {
+    public static List<List<Integer>> combinationSum2(int[] candidates,
+            int target) {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
-        recursiveCombinationSum2(candidates, target, new ArrayList<>(), new boolean[candidates.length], res);
+        recursiveCombinationSum2(candidates, target, new ArrayList<>(),
+                new boolean[candidates.length], res);
         return res;
     }
 
-    private static void recursiveCombinationSum2(
-            int[] candidates,
-            int targetSum,
-            List<Integer> currentCache,
-            boolean[] currentSelected,
-            List<List<Integer>> res) {
-        for (int i = 0; i < candidates.length && candidates[i] <= targetSum; i++) {
+    private static void recursiveCombinationSum2(int[] candidates,
+            int targetSum, List<Integer> currentCache,
+            boolean[] currentSelected, List<List<Integer>> res) {
+        for (int i = 0; i < candidates.length
+                && candidates[i] <= targetSum; i++) {
             if (currentSelected[i]) {
                 continue;
-            }
-            else if (i < candidates.length - 1 && candidates[i] == candidates[i + 1] && !currentSelected[i + 1]) {
+            } else if (i < candidates.length - 1
+                    && candidates[i] == candidates[i + 1]
+                    && !currentSelected[i + 1]) {
                 continue;
-            }
-            else {
-                if (currentCache.size() > 0 && candidates[i] < currentCache.get(currentCache.size() - 1)) {
+            } else {
+                if (currentCache.size() > 0 && candidates[i] < currentCache
+                        .get(currentCache.size() - 1)) {
                     continue;
-                }
-                else {
+                } else {
                     currentSelected[i] = true;
                     currentCache.add(candidates[i]);
                     if (targetSum == candidates[i]) {
                         res.add(new ArrayList<>(currentCache));
                         currentCache.remove(currentCache.size() - 1);
                         currentSelected[i] = false;
-                    }
-                    else {
-                        recursiveCombinationSum2(candidates, targetSum - candidates[i], currentCache, currentSelected
-                                , res);
+                    } else {
+                        recursiveCombinationSum2(candidates,
+                                targetSum - candidates[i], currentCache,
+                                currentSelected, res);
                         currentSelected[i] = false;
                         currentCache.remove(currentCache.size() - 1);
                     }
@@ -1754,8 +1763,7 @@ public class Leetcode50 {
                 volume += left_max - height[left];
                 left++;
                 left_max = Math.max(left_max, height[left]);
-            }
-            else {
+            } else {
                 volume += right_max - height[right];
                 right--;
                 right_max = Math.max(right_max, height[right]);
@@ -1764,10 +1772,9 @@ public class Leetcode50 {
         return volume;
     }
 
-
     /**
-     * #43
-     * <br/>字符串乘法
+     * #43 <br/>
+     * 字符串乘法
      *
      * @param num1 num1
      * @param num2 num2
@@ -1791,7 +1798,8 @@ public class Leetcode50 {
 
         StringBuilder result = new StringBuilder();
         for (int i = 0; i < res.length; i++) {
-            if (i == 0 && res[i] == 0) continue;
+            if (i == 0 && res[i] == 0)
+                continue;
             result.append(res[i]);
         }
         return result.toString();
@@ -1812,29 +1820,35 @@ public class Leetcode50 {
             var char_p = p.charAt(j - 1);
             for (int i = 0; i <= m; i++) {
                 if (char_p != '*') {
-                    dp[i][j] = charMatchAtWildcard(s, p, i - 1, j - 1) && dp[i - 1][j - 1];
-                }
-                else {
-                    if (i - 1 >= 0) dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
-                    else dp[i][j] = dp[i][j - 1];
+                    dp[i][j] = charMatchAtWildcard(s, p, i - 1, j - 1)
+                            && dp[i - 1][j - 1];
+                } else {
+                    if (i - 1 >= 0)
+                        dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
+                    else
+                        dp[i][j] = dp[i][j - 1];
                 }
             }
         }
         return dp[m][n];
     }
 
-    private static boolean charMatchAtWildcard(String s, String p, int pi, int pj) {
-        if (pi < 0) return false;
+    private static boolean charMatchAtWildcard(String s, String p, int pi,
+            int pj) {
+        if (pi < 0)
+            return false;
         var cs = s.charAt(pi);
         var cp = p.charAt(pj);
-        if (cp == '?') return true;
-        else return cs == cp;
+        if (cp == '?')
+            return true;
+        else
+            return cs == cp;
     }
 
-
     /**
-     * #46
-     * <br/>全排列
+     * #46 <br/>
+     * 全排列
+     * 
      * <pre>
      * 输入: [1,2,3]
      * 输出:
@@ -1854,19 +1868,20 @@ public class Leetcode50 {
 
     public static List<List<Integer>> permute(int[] nums) {
         List<List<Integer>> res = new ArrayList<>();
-        recursivePermute(nums, new boolean[nums.length], new ArrayList<>(), res);
+        recursivePermute(nums, new boolean[nums.length], new ArrayList<>(),
+                res);
         return res;
     }
 
-    public static void recursivePermute(int[] nums, boolean[] selected, List<Integer> cache, List<List<Integer>> res) {
+    public static void recursivePermute(int[] nums, boolean[] selected,
+            List<Integer> cache, List<List<Integer>> res) {
         for (int i = 0; i < nums.length; i++) {
             if (!selected[i]) {
                 selected[i] = true;
                 cache.add(nums[i]);
                 if (cache.size() == nums.length) {
                     res.add(new ArrayList<>(cache));
-                }
-                else {
+                } else {
                     recursivePermute(nums, selected, cache, res);
                 }
                 cache.remove(cache.size() - 1);
@@ -1876,8 +1891,9 @@ public class Leetcode50 {
     }
 
     /**
-     * #47
-     * <br/>全排列
+     * #47 <br/>
+     * 全排列
+     * 
      * <pre>
      * 输入: [1,1,2]
      * 输出:
@@ -1900,20 +1916,17 @@ public class Leetcode50 {
         return finalRes;
     }
 
-    private static void recursivePermuteUnique(
-            int[] nums,
-            boolean[] inCache,
-            List<Integer> currentCache,
-            List<List<Integer>> finalRes) {
+    private static void recursivePermuteUnique(int[] nums, boolean[] inCache,
+            List<Integer> currentCache, List<List<Integer>> finalRes) {
         if (currentCache.size() == nums.length) {
             finalRes.add(new ArrayList<>(currentCache));
             return;
         }
         for (int i = 0; i < nums.length; i++) {
-            if (i + 1 < nums.length && nums[i] == nums[i + 1] && !inCache[i + 1]) {
+            if (i + 1 < nums.length && nums[i] == nums[i + 1]
+                    && !inCache[i + 1]) {
                 continue;
-            }
-            else if (!inCache[i]) {
+            } else if (!inCache[i]) {
                 inCache[i] = true;
                 currentCache.add(nums[i]);
                 recursivePermuteUnique(nums, inCache, currentCache, finalRes);
@@ -1924,8 +1937,8 @@ public class Leetcode50 {
     }
 
     /**
-     * #48
-     * <br/>旋转图像
+     * #48 <br/>
+     * 旋转图像
      *
      * @param matrix image
      */
@@ -1964,12 +1977,12 @@ public class Leetcode50 {
         ln = Math.abs(ln);
         while (ln > 0) {
             long bin = ln % 2;
-            if (bin != 0) ans *= bin * x;
+            if (bin != 0)
+                ans *= bin * x;
             x *= x;
             ln /= 2;
         }
         return isMinus ? 1. / ans : ans;
     }
-
 
 }
