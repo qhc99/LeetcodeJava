@@ -1,6 +1,5 @@
 package Leetcode;
 
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -18,7 +17,8 @@ public class Leetcode100 {
      * @return
      */
     public static List<Integer> spiralOrder(int[][] matrix) {
-        int top = 0, left = 0, bot = matrix.length - 1, right = matrix[0].length - 1;
+        int top = 0, left = 0, bot = matrix.length - 1,
+                right = matrix[0].length - 1;
         List<Integer> ans = new ArrayList<>((bot + 1) * (right + 1));
         while (top <= bot && left <= right) {
             for (int i = left; i <= right; i++) {
@@ -44,9 +44,9 @@ public class Leetcode100 {
     }
 
     /**
-     * #55
-     * <br/>跳跃游戏
-     * <br/>
+     * #55 <br/>
+     * 跳跃游戏 <br/>
+     * 
      * <pre>
      * 输入: [2,3,1,1,4]
      * 输出: true
@@ -86,13 +86,12 @@ public class Leetcode100 {
             if ((l2 <= r1 && l2 >= l1) || (r2 <= r1 && r2 >= l1)) {
                 interval_next[0] = Math.min(l1, l2);
                 interval_next[1] = Math.max(r1, r2);
-            }
-            else {
+            } else {
                 ans.add(interval);
             }
         }
         ans.add(intervals[intervals.length - 1]);
-        return ans.toArray(new int[][]{});
+        return ans.toArray(new int[][] {});
     }
 
     /**
@@ -111,19 +110,17 @@ public class Leetcode100 {
         for (var i : newIntervals) {
             if (ans.size() == 0) {
                 ans.add(i);
-            }
-            else {
+            } else {
                 var last = ans.get(ans.size() - 1);
                 if (intersect(last, i)) {
                     last[0] = Math.min(last[0], i[0]);
                     last[1] = Math.max(last[1], i[1]);
-                }
-                else {
+                } else {
                     ans.add(i);
                 }
             }
         }
-        return ans.toArray(new int[][]{});
+        return ans.toArray(new int[][] {});
     }
 
     private static boolean intersect(int[] a, int[] b) {
@@ -138,12 +135,14 @@ public class Leetcode100 {
      * @return
      */
     public static String getPermutation(int n, int k) {
-        int[] factorial = new int[]{1, 1, 2, 6, 24, 120, 720, 5040, 40320};
-        List<Integer> digits = IntStream.range(1, n + 1).boxed().collect(Collectors.toList());
+        int[] factorial = new int[] { 1, 1, 2, 6, 24, 120, 720, 5040, 40320 };
+        List<Integer> digits = IntStream.range(1, n + 1).boxed()
+                .collect(Collectors.toList());
         StringBuilder ans = new StringBuilder();
         var recurFunc = new Object() {
             void apply(int N, int K) {
-                if (N == 0) return;
+                if (N == 0)
+                    return;
                 int idx = (K - 1) / factorial[N - 1];
                 String s = digits.get((K - 1) / factorial[N - 1]).toString();
                 digits.remove(idx);
@@ -158,17 +157,42 @@ public class Leetcode100 {
     }
 
     /**
-     * #64
-     * 说明：每次只能向下或者向右移动一步。
-     * (上, 左)
-     * 输入:
-     * [
-     * [1,3,1],
-     * [1,5,1],
-     * [4,2,1]
-     * ]
-     * 输出: 7
-     * 解释: 因为路径 1→3→1→1→1 的总和最小。
+     * #61
+     * 
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if (head == null)
+            return head;
+        int count = 0;
+        for (ListNode ptr = head; ptr != null; count++, ptr = ptr.next) {
+
+        }
+        k = k % count;
+        if (k == 0 || count == 1)
+            return head;
+        int rCount = count - k;
+        int currentCount = 1;
+        ListNode rEnd = head;
+        while (currentCount < rCount) {
+            rEnd = rEnd.next;
+            currentCount++;
+        }
+        ListNode newHead = rEnd.next;
+        rEnd.next = null;
+        ListNode ptr = newHead;
+        for (; ptr.next != null; ptr = ptr.next) {
+
+        }
+        ptr.next = head;
+        return newHead;
+    }
+
+    /**
+     * #64 说明：每次只能向下或者向右移动一步。 (上, 左) 输入: [ [1,3,1], [1,5,1], [4,2,1] ] 输出: 7 解释:
+     * 因为路径 1→3→1→1→1 的总和最小。
      *
      * @param grid int graph
      * @return path sum
@@ -195,8 +219,8 @@ public class Leetcode100 {
     }
 
     /**
-     * #74
-     * <br/>搜索二维矩阵
+     * #74 <br/>
+     * 搜索二维矩阵
      *
      * @param matrix matrix
      * @param target integer target
@@ -214,11 +238,9 @@ public class Leetcode100 {
             int v = matrix[r][c];
             if (target > v) {
                 l_idx = mid + 1;
-            }
-            else if (target < v) {
+            } else if (target < v) {
                 r_idx = mid;
-            }
-            else {
+            } else {
                 return true;
             }
         }
@@ -228,34 +250,34 @@ public class Leetcode100 {
 
     public static void sortColors(int[] nums) {
         int zero = 0, one = 0, two = 0;
-        for(var n : nums){
-            switch(n){
-                case 0->{
-                    zero++;
-                }
-                case 1->{
-                    one++;
-                }
-                case 2->{
-                    two++;
-                }
-                default->{
-                    throw new RuntimeException("input is not 0, 1 or 2");
-                }
+        for (var n : nums) {
+            switch (n) {
+            case 0 -> {
+                zero++;
+            }
+            case 1 -> {
+                one++;
+            }
+            case 2 -> {
+                two++;
+            }
+            default -> {
+                throw new RuntimeException("input is not 0, 1 or 2");
+            }
             }
         }
         int i = 0;
-        while(i < nums.length && zero > 0){
+        while (i < nums.length && zero > 0) {
             nums[i] = 0;
             i++;
             zero--;
         }
-        while(i < nums.length && one > 0){
+        while (i < nums.length && one > 0) {
             nums[i] = 1;
             i++;
             one--;
         }
-        while(i < nums.length && two > 0){
+        while (i < nums.length && two > 0) {
             nums[i] = 2;
             i++;
             two--;
@@ -263,8 +285,9 @@ public class Leetcode100 {
     }
 
     /**
-     * #78
-     * <br/>子集
+     * #78 <br/>
+     * 子集
+     * 
      * <pre>
      * 输入: nums = [1,2,3]
      * 输出:
@@ -289,11 +312,11 @@ public class Leetcode100 {
         return res;
     }
 
-    private static void recursiveSubsets(int[] nums, int idx, List<List<Integer>> res) {
+    private static void recursiveSubsets(int[] nums, int idx,
+            List<List<Integer>> res) {
         if (idx == nums.length) {
             res.add(new ArrayList<>());
-        }
-        else {
+        } else {
             recursiveSubsets(nums, idx + 1, res);
             List<List<Integer>> temp = new ArrayList<>();
             for (var list : res) {
@@ -306,13 +329,12 @@ public class Leetcode100 {
     }
 
     /**
-     * #90
-     * <br/>子集 II
+     * #90 <br/>
+     * 子集 II
      *
      * @param nums number array
      * @return subset
      */
-
 
     public static List<List<Integer>> subsetsWithDup(int[] nums) {
         List<Integer> t = new ArrayList<>();
@@ -322,7 +344,8 @@ public class Leetcode100 {
         return ans;
     }
 
-    public static void dfs(boolean choosePre, int cur, int[] nums, List<Integer> t, List<List<Integer>> ans) {
+    public static void dfs(boolean choosePre, int cur, int[] nums,
+            List<Integer> t, List<List<Integer>> ans) {
         if (cur == nums.length) {
             ans.add(new ArrayList<>(t));
             return;
@@ -339,7 +362,9 @@ public class Leetcode100 {
     /**
      * #96
      *
-     * <br>count of all binary search tree given range [1,n]
+     * <br>
+     * count of all binary search tree given range [1,n]
+     * 
      * <pre>
      *  3 -> 5
      *    1         3     3      2      1
