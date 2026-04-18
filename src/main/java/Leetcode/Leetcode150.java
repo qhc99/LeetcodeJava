@@ -2,14 +2,16 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"JavaDoc"})
+@SuppressWarnings({ "JavaDoc" })
 public class Leetcode150 {
     /**
      * #105
      *
-     * <br>前序遍历 preorder = [3,9,20,15,7]
-     * <br>中序遍历 inorder = [9,3,15,20,7]
-     * <br>result:
+     * <br>
+     * 前序遍历 preorder = [3,9,20,15,7] <br>
+     * 中序遍历 inorder = [9,3,15,20,7] <br>
+     * result:
+     * 
      * <pre>
      *    3
      *   / \
@@ -33,27 +35,28 @@ public class Leetcode150 {
         return recursiveBuildTree(preorder, 0, preorder.length, 0, m);
     }
 
-    private static TreeNode recursiveBuildTree(int[] p_order, int p_start, int p_end, int i_start, Map<Integer, Integer> m) {
+    private static TreeNode recursiveBuildTree(int[] p_order, int p_start,
+            int p_end, int i_start, Map<Integer, Integer> m) {
         if (p_end - p_start == 1) {
             return new TreeNode(p_order[p_start]);
-        }
-        else if (p_end - p_start == 0) {
+        } else if (p_end - p_start == 0) {
             return null;
-        }
-        else {
+        } else {
             TreeNode root = new TreeNode(p_order[p_start]);
             int i_mid = m.get(root.val);
             int l_len = i_mid - i_start;
-            root.left = recursiveBuildTree(p_order, p_start + 1, p_start + 1 + l_len, i_start, m);
-            root.right = recursiveBuildTree(p_order, p_start + 1 + l_len, p_end, i_start + l_len + 1, m);
+            root.left = recursiveBuildTree(p_order, p_start + 1,
+                    p_start + 1 + l_len, i_start, m);
+            root.right = recursiveBuildTree(p_order, p_start + 1 + l_len, p_end,
+                    i_start + l_len + 1, m);
             return root;
         }
     }
 
-
     /**
-     * #107
-     * <br>层次遍历<br>
+     * #107 <br>
+     * 层次遍历<br>
+     * 
      * <pre>
      *  input:[3,9,20,null,null,15,7]
      *     3
@@ -62,6 +65,7 @@ public class Leetcode150 {
      *     /  \
      *    15   7
      * </pre>
+     * 
      * <pre>
      * return:
      * [
@@ -101,10 +105,9 @@ public class Leetcode150 {
         return res;
     }
 
-
     /**
-     * #111
-     * <br/>给定一个二叉树，找出其最小深度。
+     * #111 <br/>
+     * 给定一个二叉树，找出其最小深度。
      *
      * @param root 二叉树
      * @return 最小深度
@@ -118,19 +121,16 @@ public class Leetcode150 {
         int depth = 1;
         if (left == 0) {
             depth += right;
-        }
-        else {
+        } else {
             if (right == 0) {
                 depth += left;
-            }
-            else {
+            } else {
                 depth += Math.min(left, right);
             }
         }
 
         return depth;
     }
-
 
     static class Node {
         public int val;
@@ -160,8 +160,9 @@ public class Leetcode150 {
      * @return
      */
     public static Node connect(Node root) {
-        if (root == null) return null;
-        //noinspection FieldMayBeFinal
+        if (root == null)
+            return null;
+        // noinspection FieldMayBeFinal
         class NodeList {
             Node head;
             Node tail;
@@ -173,7 +174,8 @@ public class Leetcode150 {
         }
         var recurConnectFunc = new Object() {
             List<NodeList> apply(Node n) {
-                if (n == null) return new ArrayList<>(0);
+                if (n == null)
+                    return new ArrayList<>(0);
                 var left = apply(n.left);
                 var right = apply(n.right);
                 for (int i = 0; i < left.size(); i++) {
@@ -218,8 +220,8 @@ public class Leetcode150 {
     }
 
     /**
-     * #129
-     * <br/>
+     * #129 <br/>
+     * 
      * <pre>
      *  输入: [1,2,3]
      *     1
@@ -245,18 +247,16 @@ public class Leetcode150 {
         return res.get(0);
     }
 
-    private static void solveSumNumbers(TreeNode node, int num, List<Integer> sum) {
+    private static void solveSumNumbers(TreeNode node, int num,
+            List<Integer> sum) {
         num = num * 10 + node.val;
         if (node.left == null && node.right == null) {
             sum.set(0, sum.get(0) + num);
-        }
-        else if (node.right != null && node.left == null) {
+        } else if (node.right != null && node.left == null) {
             solveSumNumbers(node.right, num, sum);
-        }
-        else if (node.right == null) {
+        } else if (node.right == null) {
             solveSumNumbers(node.left, num, sum);
-        }
-        else {
+        } else {
             solveSumNumbers(node.right, num, sum);
             solveSumNumbers(node.left, num, sum);
         }
@@ -299,7 +299,8 @@ public class Leetcode150 {
         for (int l = 1; l < s.length(); l++) {
             for (int i = 0; i < pLenMinus1_startAt[l].length; i++) {
                 if (pLenMinus1_startAt[l][i]) {
-                    var t = pLenOfPos.computeIfAbsent(i, o -> new ArrayList<>());
+                    var t = pLenOfPos.computeIfAbsent(i,
+                            o -> new ArrayList<>());
                     t.add(l + 1);
                 }
             }
@@ -339,7 +340,8 @@ public class Leetcode150 {
         }
 
         Leetcode.Node graph = getMapped(node);
-        Queue<Leetcode.Node> nodeQueue = new ArrayDeque<>(), newNodeQueue = new ArrayDeque<>();
+        Queue<Leetcode.Node> nodeQueue = new ArrayDeque<>(),
+                newNodeQueue = new ArrayDeque<>();
         nodeQueue.add(node);
         newNodeQueue.add(graph);
         Set<Leetcode.Node> visited = new HashSet<>();
@@ -367,11 +369,12 @@ public class Leetcode150 {
     public Leetcode.Node getMapped(Leetcode.Node n) {
         var ans = map.get(n);
         if (ans == null) {
-            var m = new Leetcode.Node(n.val, new ArrayList<>(n.neighbors.size()));
+            var m = new Leetcode.Node(n.val,
+                    new ArrayList<>(n.neighbors.size()));
             map.put(n, m);
             return m;
-        }
-        else return ans;
+        } else
+            return ans;
     }
 
     /**
@@ -394,7 +397,8 @@ public class Leetcode150 {
         boolean[] dp = new boolean[s.length() + 1];
         dp[0] = true;
         for (int len = minLen; len <= s.length(); len++) {
-            for (int segIdx = len - 1; segIdx >= 0 && (len - segIdx) <= maxLen; segIdx--) {
+            for (int segIdx = len - 1; segIdx >= 0
+                    && (len - segIdx) <= maxLen; segIdx--) {
                 var before = dp[segIdx];
                 var segment = dict.contains(s.substring(segIdx, len));
                 if (before && segment) {
@@ -436,8 +440,7 @@ public class Leetcode150 {
                         if (end == s.length()) {
                             m.add(subS);
                             break;
-                        }
-                        else {
+                        } else {
                             var tailBreak = recursiveSolve(end);
                             if (tailBreak != null) {
                                 for (var t : tailBreak) {
@@ -454,10 +457,32 @@ public class Leetcode150 {
         return func.recursiveSolve(0);
     }
 
+    /**
+     * #143
+     * 
+     * @param head
+     */
+    public void reorderList(ListNode head) {
+        List<ListNode> arr = new ArrayList<>();
+        var ptr = head;
+        while (ptr != null) {
+            arr.add(ptr);
+            ptr = ptr.next;
+        }
+        boolean isEven = (arr.size() % 2) == 0;
+        for (int idx = arr.size() - 1, next = 1; idx >= 0; idx--) {
+            if ((isEven && idx != next) || (!isEven && idx + 1 != next)) {
+                arr.get(idx).next = arr.get(next);
+                next++;
+            } else {
+                arr.get(idx).next = null;
+            }
+        }
+    }
 
     /**
-     * #144
-     * <br/>前序遍历
+     * #144 <br/>
+     * 前序遍历
      *
      * @param root root
      * @return res array
@@ -531,13 +556,11 @@ public class Leetcode150 {
                 search.val = value;
                 removeNodeFromList(search);
                 addNodeToHead(search);
-            }
-            else {
+            } else {
                 var node = new DNode(key, value);
                 if (count < size) {
                     count++;
-                }
-                else {
+                } else {
                     var t_l = tail.left;
                     removeNodeFromList(t_l);
                     map.remove(t_l.key);
@@ -548,7 +571,8 @@ public class Leetcode150 {
         }
     }
 
-    private static void solvePreorderTraversal(TreeNode node, List<Integer> res) {
+    private static void solvePreorderTraversal(TreeNode node,
+            List<Integer> res) {
         if (node != null) {
             res.add(node.val);
             if (node.left != null) {
@@ -558,6 +582,89 @@ public class Leetcode150 {
                 solvePreorderTraversal(node.right, res);
             }
         }
+    }
+
+    /**
+     * #148
+     * 
+     * @param head
+     * @return
+     */
+    public ListNode sortList(ListNode head) {
+        if (head == null)
+            return null;
+        return sortListRange(head, null);
+    }
+
+    ListNode sortListRange(ListNode start, ListNode end) {
+        if (start.next == end) {
+            return start;
+        }
+        if (start.next.next == end) {
+            if (start.val <= start.next.val) {
+                return start;
+            }
+            var nt = start.next;
+            nt.next = start;
+            start.next = end;
+            return nt;
+        }
+        ListNode middle = start;
+        ListNode fast = middle;
+        while (fast != end) {
+            middle = advanceNode(middle, end, 1);
+            fast = advanceNode(fast, end, 2);
+        }
+        var list1 = sortListRange(start, middle);
+        var list2 = sortListRange(middle, end);
+        ListNode mergeHead = null;
+        ListNode mergeEnd = null;
+        while (list1 != middle && list2 != end) {
+            if (list1.val <= list2.val) {
+                if (mergeEnd == null) {
+                    mergeHead = list1;
+                } else {
+                    mergeEnd.next = list1;
+                }
+                mergeEnd = list1;
+                list1 = list1.next;
+            } else {
+                if (mergeEnd == null) {
+                    mergeHead = list2;
+                } else {
+                    mergeEnd.next = list2;
+                }
+                mergeEnd = list2;
+                list2 = list2.next;
+            }
+        }
+        while (list1 != middle) {
+            if (mergeEnd == null) {
+                mergeHead = list1;
+            } else {
+                mergeEnd.next = list1;
+            }
+            mergeEnd = list1;
+            list1 = list1.next;
+        }
+        while (list2 != end) {
+            if (mergeEnd == null) {
+                mergeHead = list2;
+            } else {
+                mergeEnd.next = list2;
+            }
+            mergeEnd = list2;
+            list2 = list2.next;
+        }
+        mergeEnd.next = end;
+        return mergeHead;
+    }
+
+    ListNode advanceNode(ListNode n, ListNode end, int t) {
+        for (; t > 0 && n != null && n != end; t--) {
+            n = n.next;
+        }
+        return n;
     }
 
     /**
