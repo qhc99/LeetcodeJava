@@ -6,7 +6,25 @@ import javax.management.RuntimeErrorException;
 
 @SuppressWarnings({ "unused", "JavaDoc" })
 public class Leetcode800 {
-
+    /**
+     * #739
+     * @param temperatures
+     * @return
+     */
+    public int[] dailyTemperatures(int[] temperatures) {
+        var queue = new ArrayDeque<Integer>(temperatures.length);
+        int[] res = new int[temperatures.length];
+        for(int i = 0; i < temperatures.length; i++){
+            while (!queue.isEmpty() && temperatures[i] > temperatures[queue.getLast()]) {
+                var ii = queue.pollLast();
+                res[ii] = i - ii;
+            }
+            if(queue.isEmpty() || temperatures[queue.getLast()] >= temperatures[i]){
+                queue.add(i);
+            }
+        }
+        return res;
+    }
     /**
      * #753
      * 
