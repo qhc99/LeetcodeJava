@@ -1,10 +1,14 @@
 package Leetcode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 interface Master {
@@ -264,5 +268,54 @@ public class Leetcode900 {
 
     private static long lcm(long a, long b) {
         return a * b / gcd(a, b);
+    }
+}
+
+/**
+ * #895
+ */
+class FreqStack {
+
+    Map<Integer, Deque<Integer>> val2stack = new HashMap<>();
+    TreeMap<Integer, TreeMap<Integer, Integer>> freq2id2val = new TreeMap<>();
+    int idx = 0;
+
+    public FreqStack() {
+
+    }
+
+    public void push(int val) {
+        var id = idx++;
+        var stack = val2stack.computeIfAbsent(val, (k) -> new ArrayDeque<>());
+        if (!stack.isEmpty()) {
+            var id2val = freq2id2val.get(stack.size());
+            if (id2val != null)
+                id2val.remove(stack.getLast());
+        }
+        stack.addLast(id);
+        var id2val = freq2id2val.computeIfAbsent(stack.size(),
+                (k) -> new TreeMap<>());
+        id2val.put(id, val);
+    }
+
+    public int pop() {
+        var val = freq2id2val.lastEntry().getValue().lastEntry().getValue();
+        var stack = val2stack.get(val);
+        var freq = stack.size();
+        var id = stack.getLast();
+        if (stack.size() == 1) {
+            val2stack.remove(val);
+        } else {
+            stack.pollLast();
+            var new_id = stack.getLast();
+            freq2id2val.computeIfAbsent(stack.size(), (k) -> new TreeMap<>())
+                    .put(new_id, val);
+        }
+        var tree = freq2id2val.get(freq);
+        tree.remove(id);
+        if (tree.isEmpty()) {
+            freq2id2val.remove(freq);
+        }
+        return val;
     }
 }
