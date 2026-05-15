@@ -8,23 +8,27 @@ import javax.management.RuntimeErrorException;
 public class Leetcode800 {
     /**
      * #739
+     * 
      * @param temperatures
      * @return
      */
     public int[] dailyTemperatures(int[] temperatures) {
         var queue = new ArrayDeque<Integer>(temperatures.length);
         int[] res = new int[temperatures.length];
-        for(int i = 0; i < temperatures.length; i++){
-            while (!queue.isEmpty() && temperatures[i] > temperatures[queue.getLast()]) {
+        for (int i = 0; i < temperatures.length; i++) {
+            while (!queue.isEmpty()
+                    && temperatures[i] > temperatures[queue.getLast()]) {
                 var ii = queue.pollLast();
                 res[ii] = i - ii;
             }
-            if(queue.isEmpty() || temperatures[queue.getLast()] >= temperatures[i]){
+            if (queue.isEmpty()
+                    || temperatures[queue.getLast()] >= temperatures[i]) {
                 queue.add(i);
             }
         }
         return res;
     }
+
     /**
      * #753
      * 
@@ -100,8 +104,7 @@ public class Leetcode800 {
     }
 
     /**
-     * #763
-     * <br/>
+     * #763 <br/>
      * 划分字母区间
      * 
      * <pre>
@@ -236,7 +239,8 @@ public class Leetcode800 {
 
         int currentHeight = grid[0][0];
 
-        Queue<SwimPoolHeight> surrounding = new PriorityQueue<>(Comparator.comparing(d -> d.height));
+        Queue<SwimPoolHeight> surrounding = new PriorityQueue<>(
+                Comparator.comparing(d -> d.height));
         surrounding.add(new SwimPoolHeight(0, 1, grid[0][1]));
         surrounding.add(new SwimPoolHeight(1, 0, grid[1][0]));
 
@@ -254,19 +258,23 @@ public class Leetcode800 {
                 }
                 if (x - 1 >= 0 && !visited[x - 1][y]) {
                     visited[x - 1][y] = true;
-                    surrounding.add(new SwimPoolHeight(x - 1, y, grid[x - 1][y]));
+                    surrounding
+                            .add(new SwimPoolHeight(x - 1, y, grid[x - 1][y]));
                 }
                 if (y - 1 >= 0 && !visited[x][y - 1]) {
                     visited[x][y - 1] = true;
-                    surrounding.add(new SwimPoolHeight(x, y - 1, grid[x][y - 1]));
+                    surrounding
+                            .add(new SwimPoolHeight(x, y - 1, grid[x][y - 1]));
                 }
                 if (x + 1 < n && !visited[x + 1][y]) {
                     visited[x + 1][y] = true;
-                    surrounding.add(new SwimPoolHeight(x + 1, y, grid[x + 1][y]));
+                    surrounding
+                            .add(new SwimPoolHeight(x + 1, y, grid[x + 1][y]));
                 }
                 if (y + 1 < n && !visited[x][y + 1]) {
                     visited[x][y + 1] = true;
-                    surrounding.add(new SwimPoolHeight(x, y + 1, grid[x][y + 1]));
+                    surrounding
+                            .add(new SwimPoolHeight(x, y + 1, grid[x][y + 1]));
                 }
             }
             currentHeight = surrounding.peek().height;
@@ -322,12 +330,9 @@ public class Leetcode800 {
     }
 
     /**
-     * #781
-     * <br/>
-     * 森林中的兔子
-     * <br/>
-     * 森林中，每个兔子都有颜色。其中一些兔子（可能是全部）告诉你还有多少其他的兔子和自己有相同的颜色。
-     * 我们将这些回答放在answers数组里。
+     * #781 <br/>
+     * 森林中的兔子 <br/>
+     * 森林中，每个兔子都有颜色。其中一些兔子（可能是全部）告诉你还有多少其他的兔子和自己有相同的颜色。 我们将这些回答放在answers数组里。
      * <br/>
      * 要求返回森林中兔子的最少数量。
      *
@@ -381,7 +386,8 @@ public class Leetcode800 {
         int val;
     }
 
-    private static int[] findExchange(int[][] board, boolean find_col, Ref ref) {
+    private static int[] findExchange(int[][] board, boolean find_col,
+            Ref ref) {
         int n = board.length;
         List<Integer> zero_odd = new ArrayList<>(n / 2 + 1);
         List<Integer> zero_even = new ArrayList<>(n / 2 + 1);
@@ -405,7 +411,8 @@ public class Leetcode800 {
                 }
             }
         }
-        int diff = (zero_even.size() + zero_odd.size()) - (one_even.size() + one_odd.size());
+        int diff = (zero_even.size() + zero_odd.size())
+                - (one_even.size() + one_odd.size());
         if (n % 2 == 0) {
             if (diff != 0) {
                 return null;
@@ -449,8 +456,7 @@ public class Leetcode800 {
     }
 
     /**
-     * #785
-     * <br>
+     * #785 <br>
      * bipartite graph: vertex and its neighbors has different color
      *
      * @param graph graph
@@ -478,7 +484,8 @@ public class Leetcode800 {
         GRAY, RED, GREEN
     }
 
-    private static boolean BFS(Integer start, Queue<Integer> queue, Map<Integer, Color> vertex_color, int[][] graph) {
+    private static boolean BFS(Integer start, Queue<Integer> queue,
+            Map<Integer, Color> vertex_color, int[][] graph) {
         queue.add(start);
         vertex_color.put(start, Color.RED);
         while (!queue.isEmpty()) {
@@ -490,7 +497,10 @@ public class Leetcode800 {
                 if (vertex_color.get(neighbor) == vertex_color.get(vertex)) {
                     return false;
                 } else {
-                    vertex_color.put(neighbor, (vertex_color.get(vertex) == Color.RED) ? Color.GREEN : Color.RED);
+                    vertex_color.put(neighbor,
+                            (vertex_color.get(vertex) == Color.RED)
+                                    ? Color.GREEN
+                                    : Color.RED);
                 }
             }
         }
@@ -506,7 +516,8 @@ public class Leetcode800 {
      */
     public static int[] kthSmallestPrimeFraction(int[] arr, int k) {
         int n = arr.length;
-        PriorityQueue<int[]> pq = new PriorityQueue<>((x, y) -> arr[x[0]] * arr[y[1]] - arr[y[0]] * arr[x[1]]);
+        PriorityQueue<int[]> pq = new PriorityQueue<>(
+                (x, y) -> arr[x[0]] * arr[y[1]] - arr[y[0]] * arr[x[1]]);
         for (int j = 1; j < n; ++j) {
             pq.offer(new int[] { 0, j });
         }
@@ -560,8 +571,7 @@ public class Leetcode800 {
         int ans = 0;
         for (int i = 0; i <= (bound == 1 ? digits.get(pos) : 9); i++) {
             if (check[i] != -1) {
-                ans += digitDp(
-                        pos + 1,
+                ans += digitDp(pos + 1,
                         (bound == 1 && i == digits.get(pos)) ? 1 : 0,
                         (diff == 1 || check[i] == 1) ? 1 : 0);
             }
@@ -580,7 +590,8 @@ public class Leetcode800 {
     public static boolean escapeGhosts(int[][] ghosts, int[] target) {
         int dist_player = Math.abs(target[0]) + Math.abs(target[1]);
         for (var g : ghosts) {
-            int dist_ghost = Math.abs(g[0] - target[0]) + Math.abs(g[1] - target[1]);
+            int dist_ghost = Math.abs(g[0] - target[0])
+                    + Math.abs(g[1] - target[1]);
             if (dist_ghost <= dist_player) {
                 return false;
             }
@@ -602,7 +613,8 @@ public class Leetcode800 {
             dp[i][0] = dp[i - 1][3];
             dp[i][1] = (dp[i - 1][0] + dp[i - 1][2]) % mod;
             dp[i][2] = (dp[i - 1][0] + dp[i - 1][1]) % mod;
-            dp[i][3] = (((dp[i - 1][3] + dp[i - 1][2]) % mod + dp[i - 1][1]) % mod + dp[i - 1][0]) % mod;
+            dp[i][3] = (((dp[i - 1][3] + dp[i - 1][2]) % mod + dp[i - 1][1])
+                    % mod + dp[i - 1][0]) % mod;
         }
         return dp[n][3];
     }
@@ -622,7 +634,8 @@ public class Leetcode800 {
         for (int i = chrs.length - 1; i >= 0; i--) {
             char c = s.charAt(i);
             transition[i + 1] = new int[count_alphabet];
-            System.arraycopy(latest_indices, 0, transition[i + 1], 0, count_alphabet);
+            System.arraycopy(latest_indices, 0, transition[i + 1], 0,
+                    count_alphabet);
             latest_indices[c - 'a'] = i + 1;
         }
         transition[0] = latest_indices;
