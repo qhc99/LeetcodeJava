@@ -276,45 +276,32 @@ public class Leetcode900 {
  */
 class FreqStack {
 
-    Map<Integer, Deque<Integer>> val2stack = new HashMap<>();
-    TreeMap<Integer, TreeMap<Integer, Integer>> freq2id2val = new TreeMap<>();
-    int idx = 0;
+    Map<Integer, Integer> val2freq = new HashMap<>();
+    Map<Integer, Deque<Integer>> freq2stack = new HashMap<>();
+    int max_freq = 0;
 
     public FreqStack() {
 
     }
 
     public void push(int val) {
-        var id = idx++;
-        var stack = val2stack.computeIfAbsent(val, (k) -> new ArrayDeque<>());
-        if (!stack.isEmpty()) {
-            var id2val = freq2id2val.get(stack.size());
-            if (id2val != null)
-                id2val.remove(stack.getLast());
-        }
-        stack.addLast(id);
-        var id2val = freq2id2val.computeIfAbsent(stack.size(),
-                (k) -> new TreeMap<>());
-        id2val.put(id, val);
+        var freq = val2freq.getOrDefault(val, 0) + 1;
+        val2freq.put(val, freq);
+        max_freq = Math.max(freq, max_freq);
+        freq2stack.computeIfAbsent(freq, (k) -> new ArrayDeque<>())
+                .addLast(val);
     }
 
     public int pop() {
-        var val = freq2id2val.lastEntry().getValue().lastEntry().getValue();
-        var stack = val2stack.get(val);
-        var freq = stack.size();
-        var id = stack.getLast();
-        if (stack.size() == 1) {
-            val2stack.remove(val);
-        } else {
-            stack.pollLast();
-            var new_id = stack.getLast();
-            freq2id2val.computeIfAbsent(stack.size(), (k) -> new TreeMap<>())
-                    .put(new_id, val);
+        var stack = freq2stack.get(max_freq);
+        var val = stack.pollLast();
+        if (stack.isEmpty()) {
+            freq2stack.remove(max_freq--);
         }
-        var tree = freq2id2val.get(freq);
-        tree.remove(id);
-        if (tree.isEmpty()) {
-            freq2id2val.remove(freq);
+        if (val2freq.get(val) == 1) {
+            val2freq.remove(val);
+        } else {
+            val2freq.put(val, val2freq.get(val) - 1);
         }
         return val;
     }
