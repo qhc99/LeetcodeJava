@@ -350,105 +350,46 @@ public class Leetcode250 {
      * @param s
      * @return
      */
-    public static int calculate2(String s) {
-        var cal = new StackCalculator2();
-        for (int i = 0; i < s.length(); i++) {
-            var c = s.charAt(i);
-            cal.acceptChar(c);
+    public int calculate2(String s) {
+        // NAN: -, +INF *, -INF /
+        Deque<Double> queue = new ArrayDeque<>();
+        StringBuilder num = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (c == '*') {
+                addNum2(num, queue);
+                queue.add(Double.POSITIVE_INFINITY);
+            } else if (c == '/') {
+                addNum2(num, queue);
+                queue.add(Double.NEGATIVE_INFINITY);
+            } else if (c >= '0' && c <= '9') {
+                num.append(c);
+            } else if (c == '-') {
+                addNum2(num, queue);
+                queue.addLast(Double.NaN);
+            } else if (c == '+') {
+                addNum2(num, queue);
+            }
         }
-        return cal.getResult();
+        addNum2(num, queue);
+        return (int) (double) queue.stream().reduce((a, b) -> a + b).get();
     }
 
-    private static class StackCalculator2 {
-        static class Data {
-            int num;
-            char str;
-
-            Data(int n, char ctr) {
-                this.num = n;
-                this.str = ctr;
+    void addNum2(StringBuilder num, Deque<Double> queue) {
+        if (!num.isEmpty()) {
+            int val = Integer.valueOf(num.toString());
+            if (!queue.isEmpty()) {
+                var op = queue.pollLast();
+                if (op.isNaN())
+                    val = -val;
+                else if (op.isInfinite() && op > 0)
+                    val = (int) (double) queue.pollLast() * val;
+                else if (op.isInfinite() && op < 0)
+                    val = (int) (double) queue.pollLast() / val;
+                else
+                    queue.addLast(op);
             }
-        }
-
-        Deque<Data> stack = new ArrayDeque<>();
-        int num = 0;
-        boolean parsingNum = false;
-        boolean hasMulOrDiv = false;
-
-        public void acceptChar(char ctr) {
-            switch (ctr) {
-            case ' ' -> tryStopParsingInt();
-            case '*' -> {
-                tryStopParsingInt();
-                tryEvalMulDiv();
-                hasMulOrDiv = true;
-                stack.addLast(new Data(0, '*'));
-            }
-            case '/' -> {
-                tryStopParsingInt();
-                tryEvalMulDiv();
-                hasMulOrDiv = true;
-                stack.addLast(new Data(0, '/'));
-            }
-            case '+' -> {
-                tryStopParsingInt();
-                tryEvalMulDiv();
-                evalStack();
-                stack.addLast(new Data(0, '+'));
-            }
-            case '-' -> {
-                tryStopParsingInt();
-                tryEvalMulDiv();
-                evalStack();
-                stack.addLast(new Data(0, '-'));
-            }
-            default -> {
-                parsingNum = true;
-                num = num * 10 + Integer.parseInt(String.valueOf(ctr));
-            }
-            }
-        }
-
-        public int getResult() {
-            tryStopParsingInt();
-            tryEvalMulDiv();
-            evalStack();
-            return stack.pollLast().num;
-        }
-
-        private void tryEvalMulDiv() {
-            if (hasMulOrDiv) {
-                hasMulOrDiv = false;
-                var num1 = stack.pollLast();
-                var op = stack.pollLast();
-                var num2 = stack.pollLast();
-                switch (op.str) {
-                case '*' -> stack.addLast(new Data(num2.num * num1.num, 'd'));
-                case '/' -> stack.addLast(new Data(num2.num / num1.num, 'd'));
-                default -> throw new RuntimeException();
-                }
-            }
-        }
-
-        private void tryStopParsingInt() {
-            if (parsingNum) {
-                parsingNum = false;
-                stack.addLast(new Data(num, 'd'));
-                num = 0;
-            }
-        }
-
-        private void evalStack() {
-            while (stack.size() >= 3) {
-                var num1 = stack.pollLast();
-                var op = stack.pollLast();
-                var num2 = stack.pollLast();
-                switch (op.str) {
-                case '-' -> stack.addLast(new Data(num2.num - num1.num, 'd'));
-                case '+' -> stack.addLast(new Data(num2.num + num1.num, 'd'));
-                default -> throw new RuntimeException();
-                }
-            }
+            queue.addLast((double) val);
+            num.delete(0, num.length());
         }
     }
 
