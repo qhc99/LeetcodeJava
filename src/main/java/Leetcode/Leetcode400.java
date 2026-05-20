@@ -34,7 +34,8 @@ public class Leetcode400 {
      * @return
      */
     public static int countNumbersWithUniqueDigits(int n) {
-        int[] ans = new int[] { 0, 10, 91, 739, 5275, 32491, 168571, 712891, 2345851 };
+        int[] ans = new int[] { 0, 10, 91, 739, 5275, 32491, 168571, 712891,
+                2345851 };
         return ans[n];
     }
 
@@ -183,7 +184,8 @@ public class Leetcode400 {
      * @param k
      * @return
      */
-    public static List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2, int k) {
+    public static List<List<Integer>> kSmallestPairs(int[] nums1, int[] nums2,
+            int k) {
         @SuppressWarnings("hiding")
         class Data {
             final int idx;
@@ -199,7 +201,8 @@ public class Leetcode400 {
             }
         }
 
-        PriorityQueue<Data> queue = new PriorityQueue<>(Comparator.comparing(d -> d.sum));
+        PriorityQueue<Data> queue = new PriorityQueue<>(
+                Comparator.comparing(d -> d.sum));
         List<List<Integer>> ans = new ArrayList<>();
         for (int i = 0; i < nums1.length; i++) {
             queue.add(new Data(0, nums1[i], nums2[0], nums1[i] + nums2[0]));
@@ -209,7 +212,8 @@ public class Leetcode400 {
             var d = queue.poll();
             ans.add(List.of(d.first, d.second));
             if (d.idx + 1 < nums2.length) {
-                queue.add(new Data(d.idx + 1, d.first, nums2[d.idx + 1], d.first + nums2[d.idx + 1]));
+                queue.add(new Data(d.idx + 1, d.first, nums2[d.idx + 1],
+                        d.first + nums2[d.idx + 1]));
             }
         }
         return ans;
@@ -355,14 +359,10 @@ public class Leetcode400 {
     }
 
     /**
-     * #381
-     * <br/>
-     * 设计一个支持在平均 时间复杂度 O(1) 下， 执行以下操作的数据结构。
-     * <br/>
-     * insert(val)：向集合中插入元素 val。
-     * <br/>
-     * remove(val)：当 val 存在时，从集合中移除一个 val。
-     * <br/>
+     * #381 <br/>
+     * 设计一个支持在平均 时间复杂度 O(1) 下， 执行以下操作的数据结构。 <br/>
+     * insert(val)：向集合中插入元素 val。 <br/>
+     * remove(val)：当 val 存在时，从集合中移除一个 val。 <br/>
      * getRandom：从现有集合中随机获取一个元素。每个元素被返回的概率应该与其在集合中的数量呈线性相关。
      */
     public static class RandomizedCollection {
@@ -378,8 +378,8 @@ public class Leetcode400 {
         }
 
         /**
-         * Inserts a value to the collection. Returns true if the collection did not
-         * already contain the specified element.
+         * Inserts a value to the collection. Returns true if the collection did
+         * not already contain the specified element.
          */
         public boolean insert(int val) {
             nums.add(val);
@@ -390,8 +390,8 @@ public class Leetcode400 {
         }
 
         /**
-         * Removes a value from the collection. Returns true if the collection contained
-         * the specified element.
+         * Removes a value from the collection. Returns true if the collection
+         * contained the specified element.
          */
         public boolean remove(int val) {
             if (!idx.containsKey(val)) {
@@ -522,7 +522,8 @@ public class Leetcode400 {
         Point right_top = null;
         {
             var first_rect = rectangles[0];
-            int x = first_rect[0], y = first_rect[1], a = first_rect[2], b = first_rect[3];
+            int x = first_rect[0], y = first_rect[1], a = first_rect[2],
+                    b = first_rect[3];
             left_bottom = new Point(x, y);
             right_top = new Point(a, b);
             left_top = new Point(x, b);
@@ -558,8 +559,9 @@ public class Leetcode400 {
             }
         }
 
-        if (left_bottom.X != left_top.X || (right_top.X != right_bottom.X) ||
-                left_bottom.Y != right_bottom.Y || left_top.Y != right_top.Y) {
+        if (left_bottom.X != left_top.X || (right_top.X != right_bottom.X)
+                || left_bottom.Y != right_bottom.Y
+                || left_top.Y != right_top.Y) {
             return false;
         }
 
@@ -568,10 +570,8 @@ public class Leetcode400 {
             var o = p_o.getValue();
             if (!(o == 2 || o == 4)) {
                 if (o == 1) {
-                    if (!(p.equals(left_bottom) ||
-                            p.equals(left_top) ||
-                            p.equals(right_bottom) ||
-                            p.equals(right_top))) {
+                    if (!(p.equals(left_bottom) || p.equals(left_top)
+                            || p.equals(right_bottom) || p.equals(right_top))) {
                         return false;
                     }
                 } else
@@ -579,17 +579,14 @@ public class Leetcode400 {
             }
         }
 
-        whole_area = (right_top.X - left_bottom.X) * (right_top.Y - left_bottom.Y);
+        whole_area = (right_top.X - left_bottom.X)
+                * (right_top.Y - left_bottom.Y);
         return area_sum == whole_area;
     }
 
     /**
-     * #392
-     * s = "abc", t = "ahbgdc"
-     * 返回 true.
-     * 示例 2:
-     * s = "axc", t = "ahbgdc"
-     * 返回 false.
+     * #392 s = "abc", t = "ahbgdc" 返回 true. 示例 2: s = "axc", t = "ahbgdc" 返回
+     * false.
      *
      * @param s sub string
      * @param t whole string
@@ -629,40 +626,40 @@ public class Leetcode400 {
                 return false;
 
             switch (prev_type) {
-                case 1 -> {
-                    if (current_type >= 5)
+            case 1 -> {
+                if (current_type >= 5)
+                    return false;
+                trail_num = current_type - 1;
+            }
+            case 2 -> {
+                if (current_type != 5)
+                    return false;
+                trail_num = 0;
+            }
+            case 3 -> {
+                if (current_type != 5)
+                    return false;
+                trail_num = 1;
+            }
+            case 4 -> {
+                if (current_type != 5)
+                    return false;
+                trail_num = 2;
+            }
+            case 5 -> {
+                if (current_type != 5) {
+                    if (trail_num != 0)
                         return false;
-                    trail_num = current_type - 1;
-                }
-                case 2 -> {
-                    if (current_type != 5)
+                } else {
+                    if (trail_num <= 0)
                         return false;
-                    trail_num = 0;
+                    trail_num--;
                 }
-                case 3 -> {
-                    if (current_type != 5)
-                        return false;
-                    trail_num = 1;
-                }
-                case 4 -> {
-                    if (current_type != 5)
-                        return false;
-                    trail_num = 2;
-                }
-                case 5 -> {
-                    if (current_type != 5) {
-                        if (trail_num != 0)
-                            return false;
-                    } else {
-                        if (trail_num <= 0)
-                            return false;
-                        trail_num--;
-                    }
-                }
-                default -> {
-                    System.out.println(prev_type);
-                    throw new RuntimeException("algo error");
-                }
+            }
+            default -> {
+                System.out.println(prev_type);
+                throw new RuntimeException("algo error");
+            }
             }
             prev_type = current_type;
         }
@@ -696,111 +693,42 @@ public class Leetcode400 {
      * @param s
      * @return
      */
-    public static String decodeString(String s) {
-        StringBuilder ans = null;
-        int idx = 0;
-        while (idx < s.length()) { // link early return
-            var d = recursiveDecode(s, idx);
-            idx = d.end_idx;
-            if (ans == null)
-                ans = d.builder;
-            else
-                ans.append(d.builder);
-            idx++;
-        }
-        return ans.toString();
+    public String decodeString(String s) {
+        return decodeString(s.chars().mapToObj(c -> (char) c).iterator())
+                .toString();
     }
 
-    static class Data {
-        final StringBuilder builder;
-        final int end_idx;
-
-        Data(StringBuilder sb, int e) {
-            builder = sb;
-            end_idx = e;
+    public String decodeString(Iterator<Character> it) {
+        StringBuilder res = new StringBuilder();
+        while (it.hasNext()) {
+            char c = it.next();
+            if (c >= '0' && c <= '9') {
+                StringBuilder num = new StringBuilder();
+                num.append(c);
+                res.append(decodeDuplicated(it, num));
+            } else if (c == ']') {
+                break;
+            } else {
+                res.append(c);
+            }
         }
+        return res.toString();
     }
 
-    private static Data recursiveDecode(String s, int idx) {
-        var sb = new StringBuilder();
-        int num = 0;
-        while (idx < s.length()) {
-            var ctr = s.charAt(idx);
-            switch (ctr) {
-                case '[' -> {
-                    var d = recursiveDecode(s, ++idx);
-                    idx = d.end_idx;
-                    sb.append(d.builder.toString().repeat(num));
-                    num = 0;
-                }
-                case ']' -> {
-                    return new Data(sb, idx);
-                }
-                default -> {
-                    var op_int = tryParseInt(String.valueOf(ctr));
-                    if (op_int.isPresent()) {
-                        num = num * 10 + op_int.get();
-                    } else {
-                        sb.append(ctr);
-                    }
-                }
+    public String decodeDuplicated(Iterator<Character> it, StringBuilder num) {
+        StringBuilder res = new StringBuilder();
+        int n = 1;
+        while (it.hasNext()) {
+            char c = it.next();
+            if (c >= '0' && c <= '9') {
+                num.append(c);
+            } else if (c == '[') {
+                n = Integer.valueOf(num.toString());
+                res.append(decodeString(it).repeat(n));
+                break;
             }
-            idx++;
         }
-        return new Data(sb, idx);
-    }
-
-    private static Optional<Integer> tryParseInt(String s) {
-        int radix = 10;
-        if (s == null) {
-            return Optional.empty();
-        }
-
-        if (radix < Character.MIN_RADIX) {
-            return Optional.empty();
-        }
-
-        if (radix > Character.MAX_RADIX) {
-            return Optional.empty();
-        }
-
-        boolean negative = false;
-        int i = 0, len = s.length();
-        int limit = -Integer.MAX_VALUE;
-
-        if (len > 0) {
-            char firstChar = s.charAt(0);
-            if (firstChar < '0') { // Possible leading "+" or "-"
-                if (firstChar == '-') {
-                    negative = true;
-                    limit = Integer.MIN_VALUE;
-                } else if (firstChar != '+') {
-                    return Optional.empty();
-                }
-
-                if (len == 1) { // Cannot have lone "+" or "-"
-                    return Optional.empty();
-                }
-                i++;
-            }
-            int multmin = limit / radix;
-            int result = 0;
-            while (i < len) {
-                // Accumulating negatively avoids surprises near MAX_VALUE
-                int digit = Character.digit(s.charAt(i++), radix);
-                if (digit < 0 || result < multmin) {
-                    return Optional.empty();
-                }
-                result *= radix;
-                if (result < limit + digit) {
-                    return Optional.empty();
-                }
-                result -= digit;
-            }
-            return Optional.of(negative ? result : -result);
-        } else {
-            return Optional.empty();
-        }
+        return res.toString();
     }
 
     /**
@@ -817,7 +745,8 @@ public class Leetcode400 {
         if (n % 2 == 0) {
             return 1 + integerReplacement(n / 2);
         } else {
-            return 2 + Math.min(integerReplacement(n / 2 + 1), integerReplacement(n / 2));
+            return 2 + Math.min(integerReplacement(n / 2 + 1),
+                    integerReplacement(n / 2));
         }
     }
 
@@ -829,7 +758,8 @@ public class Leetcode400 {
      * @param queries
      * @return
      */
-    public static double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+    public static double[] calcEquation(List<List<String>> equations,
+            double[] values, List<List<String>> queries) {
         Map<String, Integer> symToIdx = new HashMap<>(equations.size() * 2);
         {
             int idx = 0;
@@ -866,7 +796,8 @@ public class Leetcode400 {
             var q = queries.get(i);
             var first_symbol = q.get(0);
             var second_symbol = q.get(1);
-            if ((!symToIdx.containsKey(first_symbol)) || (!symToIdx.containsKey(second_symbol))) {
+            if ((!symToIdx.containsKey(first_symbol))
+                    || (!symToIdx.containsKey(second_symbol))) {
                 ans[i] = -1;
             } else {
                 var start_idx = symToIdx.get(first_symbol);
@@ -877,12 +808,8 @@ public class Leetcode400 {
         return ans;
     }
 
-    private static double DFS(
-            double[][] graph,
-            Integer start_idx,
-            Integer target_idx,
-            BitSet visited,
-            double ans) {
+    private static double DFS(double[][] graph, Integer start_idx,
+            Integer target_idx, BitSet visited, double ans) {
         visited.set(start_idx, true);
 
         if (graph[start_idx][target_idx] != -1) {
@@ -891,7 +818,8 @@ public class Leetcode400 {
         } else {
             for (int i = 0; i < graph.length; i++) {
                 if (!visited.get(i) && graph[start_idx][i] != -1) {
-                    var val = DFS(graph, i, target_idx, visited, ans * graph[start_idx][i]);
+                    var val = DFS(graph, i, target_idx, visited,
+                            ans * graph[start_idx][i]);
                     if (val != -1) {
                         visited.set(start_idx, false);
                         return val;
