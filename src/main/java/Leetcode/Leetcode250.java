@@ -5,7 +5,6 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-
 @SuppressWarnings("JavaDoc")
 public class Leetcode250 {
 
@@ -43,14 +42,11 @@ public class Leetcode250 {
 
             if (current_ctr < ptr.ctr) {
                 ptr.left = put(ptr.left, s, idx);
-            }
-            else if (current_ctr > ptr.ctr) {
+            } else if (current_ctr > ptr.ctr) {
                 ptr.right = put(ptr.right, s, idx);
-            }
-            else if (idx < s.length() - 1) {
+            } else if (idx < s.length() - 1) {
                 ptr.mid = put(ptr.mid, s, idx + 1);
-            }
-            else {
+            } else {
                 ptr.contain = true;
             }
             return ptr;
@@ -61,14 +57,18 @@ public class Leetcode250 {
         }
 
         private boolean search(Node ptr, String s, int idx) {
-            if (ptr == null) return false;
+            if (ptr == null)
+                return false;
             var current_ctr = s.charAt(idx);
             if (ptr.ctr == current_ctr) {
-                if (idx == s.length() - 1) return ptr.contain;
-                else return search(ptr.mid, s, idx + 1);
-            }
-            else if (current_ctr < ptr.ctr) return search(ptr.left, s, idx);
-            else return search(ptr.right, s, idx);
+                if (idx == s.length() - 1)
+                    return ptr.contain;
+                else
+                    return search(ptr.mid, s, idx + 1);
+            } else if (current_ctr < ptr.ctr)
+                return search(ptr.left, s, idx);
+            else
+                return search(ptr.right, s, idx);
         }
 
         public boolean startsWith(String prefix) {
@@ -76,14 +76,18 @@ public class Leetcode250 {
         }
 
         private boolean startsWith(Node ptr, String prefix, int idx) {
-            if (ptr == null) return false;
+            if (ptr == null)
+                return false;
             var current_ctr = prefix.charAt(idx);
             if (ptr.ctr == current_ctr) {
-                if (idx == prefix.length() - 1) return ptr.mid != null || ptr.contain;
-                else return startsWith(ptr.mid, prefix, idx + 1);
-            }
-            else if (current_ctr < ptr.ctr) return startsWith(ptr.left, prefix, idx);
-            else return startsWith(ptr.right, prefix, idx);
+                if (idx == prefix.length() - 1)
+                    return ptr.mid != null || ptr.contain;
+                else
+                    return startsWith(ptr.mid, prefix, idx + 1);
+            } else if (current_ctr < ptr.ctr)
+                return startsWith(ptr.left, prefix, idx);
+            else
+                return startsWith(ptr.right, prefix, idx);
         }
     }
 
@@ -96,7 +100,8 @@ public class Leetcode250 {
      */
     @SuppressWarnings("UseBulkOperation")
     public static List<String> findWords(char[][] board, String[] words) {
-        if (words.length == 0) return new ArrayList<>();
+        if (words.length == 0)
+            return new ArrayList<>();
         Trie trie = new Trie();
         int max_len = 0;
         for (var w : words) {
@@ -141,11 +146,10 @@ public class Leetcode250 {
                         sb.deleteCharAt(sb.length() - 1);
 
                         break;
-                    }
-                    else if (ctr < ptr.ctr) {
+                    } else if (ctr < ptr.ctr) {
                         ptr = ptr.left;
-                    }
-                    else ptr = ptr.right;
+                    } else
+                        ptr = ptr.right;
                 }
             }
         };
@@ -161,7 +165,6 @@ public class Leetcode250 {
 
         return ans_list;
     }
-
 
     /**
      * #214
@@ -183,9 +186,8 @@ public class Leetcode250 {
         int pos = 0, arm_len = 1;
         int target_pos = 0, target_len = 1;
         while (pos < inserted.length) {
-            while ((pos + arm_len) < inserted.length &&
-                    (pos - arm_len) >= 0 &&
-                    inserted[pos + arm_len] == inserted[pos - arm_len]) {
+            while ((pos + arm_len) < inserted.length && (pos - arm_len) >= 0
+                    && inserted[pos + arm_len] == inserted[pos - arm_len]) {
                 arm_len++;
             }
             ArmLen[pos] = arm_len;
@@ -207,12 +209,10 @@ public class Leetcode250 {
                 if (sym_left_bound > mid_left_bound) {
                     ArmLen[pos] = sym_pos_arm_len;
                     pos++;
-                }
-                else if (sym_left_bound < mid_left_bound) {
+                } else if (sym_left_bound < mid_left_bound) {
                     ArmLen[pos] = sym_pos - mid_left_bound + 1;
                     pos++;
-                }
-                else {
+                } else {
                     arm_len = sym_pos_arm_len;
                     break;
                 }
@@ -266,7 +266,8 @@ public class Leetcode250 {
         }
         scan.sort(Comparator.comparing(t -> t.x));
 
-        PriorityQueue<RightHeight> queue = new PriorityQueue<>((a, b) -> b.height - a.height);
+        PriorityQueue<RightHeight> queue = new PriorityQueue<>(
+                (a, b) -> b.height - a.height);
         List<List<Integer>> ans = new ArrayList<>();
         for (var s : scan) {
             int x = s.x;
@@ -281,12 +282,14 @@ public class Leetcode250 {
             int max_height = queue.peek() != null ? queue.peek().height : 0;
             ans.add(List.of(x, max_height));
 
-            if (ans.size() >= 2 && ans.get(ans.size() - 1).get(0).equals(ans.get(ans.size() - 2).get(0))) {
+            if (ans.size() >= 2 && ans.get(ans.size() - 1).get(0)
+                    .equals(ans.get(ans.size() - 2).get(0))) {
                 var last = ans.remove(ans.size() - 1);
                 var t = ans.remove(ans.size() - 1);
                 ans.add(List.of(x, Math.max(t.get(1), last.get(1))));
             }
-            if (ans.size() >= 2 && ans.get(ans.size() - 1).get(1).equals(ans.get(ans.size() - 2).get(1))) {
+            if (ans.size() >= 2 && ans.get(ans.size() - 1).get(1)
+                    .equals(ans.get(ans.size() - 2).get(1))) {
                 ans.remove(ans.size() - 1);
             }
 
@@ -294,103 +297,50 @@ public class Leetcode250 {
         return ans;
     }
 
-
     /**
      * #224
      *
      * @param s
      * @return
      */
-    public static int calculate(String s) {
-        var calculator = new StackCalculator();
-        for (int i = 0; i < s.length(); i++) {
-            char ctr = s.charAt(i);
-            calculator.acceptChar(ctr);
+    public int calculate(String s) {
+        Deque<Double> queue = new ArrayDeque<>();
+        StringBuilder num = new StringBuilder();
+        for (char c : s.toCharArray()) {
+            if (c == '(') {
+                addNum(num, queue);
+                queue.add(Double.NaN);
+            } else if (c >= '0' && c <= '9') {
+                num.append(c);
+            } else if (c == '-') {
+                addNum(num, queue);
+                queue.addLast(Double.NEGATIVE_INFINITY);
+            } else if (c == '+') {
+                addNum(num, queue);
+            } else if (c == ')') {
+                addNum(num, queue);
+                double n = queue.pollLast();
+                while (!queue.getLast().isNaN()) {
+                    n += queue.pollLast();
+                }
+                queue.pollLast();
+                num.append(n);
+                addNum(num, queue);
+            }
         }
-        return calculator.getResult();
+        addNum(num, queue);
+        return (int) (double) queue.stream().reduce((a, b) -> a + b).get();
     }
 
-    private static class StackCalculator {
-        static class Data {
-            int num;
-            char str;
-
-            Data(int n, char ctr) {
-                this.num = n;
-                this.str = ctr;
+    void addNum(StringBuilder num, Deque<Double> queue) {
+        if (!num.isEmpty()) {
+            var val = Double.valueOf(num.toString());
+            if (!queue.isEmpty() && queue.getLast().isInfinite()) {
+                queue.pollLast();
+                val = -val;
             }
-        }
-
-        Deque<Data> stack = new ArrayDeque<>();
-        int num;
-        boolean parsingDigit = false;
-
-        public void acceptChar(char ctr) {
-            switch (ctr) {
-                case ' ' -> tryStopParseDigitAndCompute();
-                case '(' -> {
-                    tryStopParseDigitAndCompute();
-                    stack.addLast(new Data(0, '('));
-                }
-                case ')' -> {
-                    tryStopParseDigitAndCompute();
-                    var num_node = stack.pollLast();
-                    stack.pollLast();
-                    computeAlongStack(num_node.num);
-                }
-                case '+' -> {
-                    tryStopParseDigitAndCompute();
-                    stack.addLast(new Data(0, '+'));
-                }
-                case '-' -> {
-                    tryStopParseDigitAndCompute();
-                    stack.addLast(new Data(0, '-'));
-                }
-                default -> {
-                    parsingDigit = true;
-                    var digit = Integer.parseInt(String.valueOf(ctr));
-                    num = num * 10 + digit;
-                }
-            }
-        }
-
-        public int getResult() {
-            tryStopParseDigitAndCompute();
-            return stack.pollLast().num;
-        }
-
-        private void computeAlongStack(int digits) {
-            while (stack.peekLast() != null && stack.peekLast().str != '(') {
-                switch (stack.peekLast().str) {
-                    case '+' -> {
-                        stack.pollLast();
-                        var numData = stack.pollLast();
-                        digits += numData.num;
-                    }
-                    case '-' -> {
-                        stack.pollLast();
-                        if (stack.peekLast() != null && stack.peekLast().str == 'd') {
-                            var numData = stack.pollLast().num;
-                            digits = numData - digits;
-                        }
-                        else {
-                            stack.pollLast();
-                            digits = -digits;
-                        }
-                    }
-                    case 'd' -> throw new RuntimeException();
-                }
-            }
-            stack.addLast(new Data(digits, 'd'));
-        }
-
-        private void tryStopParseDigitAndCompute() {
-            if (parsingDigit) {
-                parsingDigit = false;
-                int digits = num;
-                num = 0;
-                computeAlongStack(digits);
-            }
+            queue.addLast(val);
+            num.delete(0, num.length());
         }
     }
 
@@ -427,35 +377,35 @@ public class Leetcode250 {
 
         public void acceptChar(char ctr) {
             switch (ctr) {
-                case ' ' -> tryStopParsingInt();
-                case '*' -> {
-                    tryStopParsingInt();
-                    tryEvalMulDiv();
-                    hasMulOrDiv = true;
-                    stack.addLast(new Data(0, '*'));
-                }
-                case '/' -> {
-                    tryStopParsingInt();
-                    tryEvalMulDiv();
-                    hasMulOrDiv = true;
-                    stack.addLast(new Data(0, '/'));
-                }
-                case '+' -> {
-                    tryStopParsingInt();
-                    tryEvalMulDiv();
-                    evalStack();
-                    stack.addLast(new Data(0, '+'));
-                }
-                case '-' -> {
-                    tryStopParsingInt();
-                    tryEvalMulDiv();
-                    evalStack();
-                    stack.addLast(new Data(0, '-'));
-                }
-                default -> {
-                    parsingNum = true;
-                    num = num * 10 + Integer.parseInt(String.valueOf(ctr));
-                }
+            case ' ' -> tryStopParsingInt();
+            case '*' -> {
+                tryStopParsingInt();
+                tryEvalMulDiv();
+                hasMulOrDiv = true;
+                stack.addLast(new Data(0, '*'));
+            }
+            case '/' -> {
+                tryStopParsingInt();
+                tryEvalMulDiv();
+                hasMulOrDiv = true;
+                stack.addLast(new Data(0, '/'));
+            }
+            case '+' -> {
+                tryStopParsingInt();
+                tryEvalMulDiv();
+                evalStack();
+                stack.addLast(new Data(0, '+'));
+            }
+            case '-' -> {
+                tryStopParsingInt();
+                tryEvalMulDiv();
+                evalStack();
+                stack.addLast(new Data(0, '-'));
+            }
+            default -> {
+                parsingNum = true;
+                num = num * 10 + Integer.parseInt(String.valueOf(ctr));
+            }
             }
         }
 
@@ -473,9 +423,9 @@ public class Leetcode250 {
                 var op = stack.pollLast();
                 var num2 = stack.pollLast();
                 switch (op.str) {
-                    case '*' -> stack.addLast(new Data(num2.num * num1.num, 'd'));
-                    case '/' -> stack.addLast(new Data(num2.num / num1.num, 'd'));
-                    default -> throw new RuntimeException();
+                case '*' -> stack.addLast(new Data(num2.num * num1.num, 'd'));
+                case '/' -> stack.addLast(new Data(num2.num / num1.num, 'd'));
+                default -> throw new RuntimeException();
                 }
             }
         }
@@ -494,9 +444,9 @@ public class Leetcode250 {
                 var op = stack.pollLast();
                 var num2 = stack.pollLast();
                 switch (op.str) {
-                    case '-' -> stack.addLast(new Data(num2.num - num1.num, 'd'));
-                    case '+' -> stack.addLast(new Data(num2.num + num1.num, 'd'));
-                    default -> throw new RuntimeException();
+                case '-' -> stack.addLast(new Data(num2.num - num1.num, 'd'));
+                case '+' -> stack.addLast(new Data(num2.num + num1.num, 'd'));
+                default -> throw new RuntimeException();
                 }
             }
         }
@@ -509,7 +459,8 @@ public class Leetcode250 {
      * @return
      */
     public static List<String> summaryRanges(int[] nums) {
-        if (nums.length == 0) return new ArrayList<>();
+        if (nums.length == 0)
+            return new ArrayList<>();
         int left = nums[0];
         List<String> ans = new ArrayList<>();
         for (int i = 1; i < nums.length; i++) {
@@ -517,8 +468,7 @@ public class Leetcode250 {
                 int right = nums[i - 1];
                 if (right == left) {
                     ans.add(String.valueOf(left));
-                }
-                else {
+                } else {
                     ans.add(left + "->" + right);
                 }
                 left = nums[i];
@@ -528,8 +478,7 @@ public class Leetcode250 {
             int right = nums[nums.length - 1];
             if (right == left) {
                 ans.add(String.valueOf(left));
-            }
-            else {
+            } else {
                 ans.add(left + "->" + right);
             }
         }
@@ -544,7 +493,8 @@ public class Leetcode250 {
      * @return
      */
     public static int kthSmallest(TreeNode root, int k) {
-        var tree = new OrderStatTree<Integer, Void>(Comparator.comparingInt(Integer::intValue));
+        var tree = new OrderStatTree<Integer, Void>(
+                Comparator.comparingInt(Integer::intValue));
         add(root, tree);
         return tree.getKeyOfRank(k);
     }
@@ -566,18 +516,10 @@ public class Leetcode250 {
         private final RBTreeTemplate<K, Node<K, V>> template;
 
         public OrderStatTree(Comparator<K> comparator) {
-            template = new RBTreeTemplate<>(
-                    sentinel, comparator,
-                    n -> n.key,
-                    () -> this.root,
-                    r -> this.root = r,
-                    n -> n.parent,
-                    (n, p) -> n.parent = p,
-                    n -> n.left,
-                    (n, l) -> n.left = l,
-                    n -> n.right,
-                    (n, r) -> n.right = r,
-                    n -> n.color,
+            template = new RBTreeTemplate<>(sentinel, comparator, n -> n.key,
+                    () -> this.root, r -> this.root = r, n -> n.parent,
+                    (n, p) -> n.parent = p, n -> n.left, (n, l) -> n.left = l,
+                    n -> n.right, (n, r) -> n.right = r, n -> n.color,
                     (n, c) -> n.color = c);
         }
 
@@ -597,11 +539,9 @@ public class Leetcode250 {
             int rank = current.left.size + 1;
             if (rank == ith) {
                 return current;
-            }
-            else if (ith < rank) {
+            } else if (ith < rank) {
                 return getNodeOfRank(current.left, ith);
-            }
-            else {
+            } else {
                 return getNodeOfRank(current.right, ith - rank);
             }
         }
@@ -614,7 +554,6 @@ public class Leetcode250 {
             var n = new Node<>(key, val);
             template.insert(n);
         }
-
 
         static final class Node<key, val> {
             key key;
@@ -637,11 +576,8 @@ public class Leetcode250 {
 
             @Override
             public String toString() {
-                return "Node{" +
-                        "key=" + key +
-                        ", value=" + value +
-                        ", size=" + size +
-                        '}';
+                return "Node{" + "key=" + key + ", value=" + value + ", size="
+                        + size + '}';
             }
         }
     }
@@ -658,16 +594,19 @@ public class Leetcode250 {
      * @return
      */
     public static boolean isPowerOfTwo(int n) {
-        if (n <= 0) return false;
+        if (n <= 0)
+            return false;
         while (n != 1) {
             var rem = n % 2;
-            if (rem == 1) return false;
+            if (rem == 1)
+                return false;
             n /= 2;
         }
         return true;
     }
 
-    @SuppressWarnings({"ClassCanBeRecord", "PatternVariableCanBeUsed", "hiding"})
+    @SuppressWarnings({ "ClassCanBeRecord", "PatternVariableCanBeUsed",
+            "hiding" })
     static class RBTreeTemplate<Key, Node> {
         final Node sentinel;
         final Comparator<Key> comparator;
@@ -685,19 +624,14 @@ public class Leetcode250 {
         final BiConsumer<Node, Boolean> setColor;
         final Function<Node, Key> getKey;
 
-        RBTreeTemplate(Node sentinel,
-                       Comparator<Key> comparator,
-                       Function<Node, Key> getKey,
-                       Gettable<Node> getRoot,
-                       Consumer<Node> setRoot,
-                       Function<Node, Node> getParent,
-                       BiConsumer<Node, Node> setParent,
-                       Function<Node, Node> getLeft,
-                       BiConsumer<Node, Node> setLeft,
-                       Function<Node, Node> getRight,
-                       BiConsumer<Node, Node> setRight,
-                       Function<Node, Boolean> getColor,
-                       BiConsumer<Node, Boolean> setColor) {
+        RBTreeTemplate(Node sentinel, Comparator<Key> comparator,
+                Function<Node, Key> getKey, Gettable<Node> getRoot,
+                Consumer<Node> setRoot, Function<Node, Node> getParent,
+                BiConsumer<Node, Node> setParent, Function<Node, Node> getLeft,
+                BiConsumer<Node, Node> setLeft, Function<Node, Node> getRight,
+                BiConsumer<Node, Node> setRight,
+                Function<Node, Boolean> getColor,
+                BiConsumer<Node, Boolean> setColor) {
             this.sentinel = sentinel;
             this.comparator = comparator;
             this.getRoot = getRoot;
@@ -718,7 +652,7 @@ public class Leetcode250 {
          *
          * @param z node or sentinel
          */
-        @SuppressWarnings({"SuspiciousNameCombination"})
+        @SuppressWarnings({ "SuspiciousNameCombination" })
         void insert(Node z) {
             var y = sentinel;
             var x = getRoot.get();
@@ -732,25 +666,23 @@ public class Leetcode250 {
                 }
                 if (comparator.compare(getKey.apply(z), getKey.apply(x)) < 0) {
                     x = getLeft.apply(x);
-                }
-                else if (comparator.compare(getKey.apply(z), getKey.apply(x)) > 0) {
+                } else if (comparator.compare(getKey.apply(z),
+                        getKey.apply(x)) > 0) {
                     x = getRight.apply(x);
-                }
-                else {
+                } else {
                     throw new IllegalArgumentException("duplicate key.");
                 }
             }
             setParent.accept(z, y);
             if (y == sentinel) {
                 setRoot.accept(z);
-            }
-            else if (comparator.compare(getKey.apply(z), getKey.apply(y)) < 0) {
+            } else if (comparator.compare(getKey.apply(z),
+                    getKey.apply(y)) < 0) {
                 setLeft.accept(y, z);
-            }
-            else if (comparator.compare(getKey.apply(z), getKey.apply(y)) > 0) {
+            } else if (comparator.compare(getKey.apply(z),
+                    getKey.apply(y)) > 0) {
                 setRight.accept(y, z);
-            }
-            else {
+            } else {
                 throw new RuntimeException("impossible error.");
             }
             setLeft.accept(z, sentinel);
@@ -767,39 +699,41 @@ public class Leetcode250 {
 
         private void insertFixUp(Node z) {
             while (getColor.apply(getParent.apply(z)) == RED) {
-                if (getParent.apply(z) == getLeft.apply(getParent.apply(getParent.apply(z)))) {
+                if (getParent.apply(z) == getLeft
+                        .apply(getParent.apply(getParent.apply(z)))) {
                     var y = getRight.apply(getParent.apply(getParent.apply(z)));
                     if (getColor.apply(y) == RED) {
                         setColor.accept(getParent.apply(z), BLACK);
                         setColor.accept(y, BLACK);
-                        setColor.accept(getParent.apply(getParent.apply(z)), RED);
+                        setColor.accept(getParent.apply(getParent.apply(z)),
+                                RED);
                         z = getParent.apply(getParent.apply(z));
-                    }
-                    else {
+                    } else {
                         if (z == getRight.apply(getParent.apply(z))) {
                             z = getParent.apply(z);
                             leftRotate(z);
                         }
                         setColor.accept(getParent.apply(z), BLACK);
-                        setColor.accept(getParent.apply(getParent.apply(z)), RED);
+                        setColor.accept(getParent.apply(getParent.apply(z)),
+                                RED);
                         rightRotate(getParent.apply(getParent.apply(z)));
                     }
-                }
-                else {
+                } else {
                     var y = getLeft.apply(getParent.apply(getParent.apply(z)));
                     if (getColor.apply(y) == RED) {
                         setColor.accept(getParent.apply(z), BLACK);
                         setColor.accept(y, BLACK);
-                        setColor.accept(getParent.apply(getParent.apply(z)), RED);
+                        setColor.accept(getParent.apply(getParent.apply(z)),
+                                RED);
                         z = getParent.apply(getParent.apply(z));
-                    }
-                    else {
+                    } else {
                         if (z == getLeft.apply(getParent.apply(z))) {
                             z = getParent.apply(z);
                             rightRotate(z);
                         }
                         setColor.accept(getParent.apply(z), BLACK);
-                        setColor.accept(getParent.apply(getParent.apply(z)), RED);
+                        setColor.accept(getParent.apply(getParent.apply(z)),
+                                RED);
                         leftRotate(getParent.apply(getParent.apply(z)));
                     }
                 }
@@ -814,19 +748,16 @@ public class Leetcode250 {
             if (getLeft.apply(z) == sentinel) {
                 x = getRight.apply(z);
                 RBTransplant(z, getRight.apply(z));
-            }
-            else if (getRight.apply(z) == sentinel) {
+            } else if (getRight.apply(z) == sentinel) {
                 x = getLeft.apply(z);
                 RBTransplant(z, getLeft.apply(z));
-            }
-            else {
+            } else {
                 y = minimumNodeOf(getRight.apply(z));
                 y_origin_color = getColor.apply(y);
                 x = getRight.apply(y);
                 if (getParent.apply(y) == z) {
                     setParent.accept(x, y);
-                }
-                else {
+                } else {
                     RBTransplant(y, getRight.apply(y));
                     setRight.accept(y, getRight.apply(z));
                     setParent.accept(getRight.apply(y), y);
@@ -842,7 +773,7 @@ public class Leetcode250 {
                     if (getRight.apply(y) != sentinel) {
                         y = minimumNodeOf(getRight.apply(y));
                     }
-                    //noinspection PatternVariableCanBeUsed
+                    // noinspection PatternVariableCanBeUsed
                     var yo = (OrderStatTree.Node<?, ?>) y;
                     while (yo != sentinel) {
                         yo.size = yo.right.size + yo.left.size + 1;
@@ -866,11 +797,11 @@ public class Leetcode250 {
                         leftRotate(getParent.apply(x));
                         w = getRight.apply(getParent.apply(x));
                     }
-                    if (getColor.apply(getLeft.apply(w)) == BLACK && getColor.apply(getRight.apply(w)) == BLACK) {
+                    if (getColor.apply(getLeft.apply(w)) == BLACK
+                            && getColor.apply(getRight.apply(w)) == BLACK) {
                         setColor.accept(w, RED);
                         x = getParent.apply(x);
-                    }
-                    else {
+                    } else {
                         if (getColor.apply(getRight.apply(w)) == BLACK) {
                             setColor.accept(getLeft.apply(w), BLACK);
                             setColor.accept(w, RED);
@@ -883,8 +814,7 @@ public class Leetcode250 {
                         leftRotate(getParent.apply(x));
                         x = getRoot.get();
                     }
-                }
-                else {
+                } else {
                     var w = getLeft.apply(getParent.apply(x));
                     if (getColor.apply(w) == RED) {
                         setColor.accept(w, BLACK);
@@ -892,11 +822,11 @@ public class Leetcode250 {
                         rightRotate(getParent.apply(x));
                         w = getLeft.apply(getParent.apply(x));
                     }
-                    if (getColor.apply(getLeft.apply(w)) == BLACK && getColor.apply(getRight.apply(w)) == BLACK) {
+                    if (getColor.apply(getLeft.apply(w)) == BLACK
+                            && getColor.apply(getRight.apply(w)) == BLACK) {
                         setColor.accept(w, RED);
                         x = getParent.apply(x);
-                    }
-                    else {
+                    } else {
                         if (getColor.apply(getLeft.apply(w)) == BLACK) {
                             setColor.accept(getRight.apply(w), BLACK);
                             setColor.accept(w, RED);
@@ -924,11 +854,9 @@ public class Leetcode250 {
         private void RBTransplant(Node u, Node v) {
             if (getParent.apply(u) == sentinel) {
                 setRoot.accept(v);
-            }
-            else if (u == getLeft.apply(getParent.apply(u))) {
+            } else if (u == getLeft.apply(getParent.apply(u))) {
                 setLeft.accept(getParent.apply(u), v);
-            }
-            else {
+            } else {
                 setRight.accept(getParent.apply(u), v);
             }
             setParent.accept(v, getParent.apply(u));
@@ -945,18 +873,17 @@ public class Leetcode250 {
             setParent.accept(y, getParent.apply(x));
             if (getParent.apply(x) == sentinel) {
                 setRoot.accept(y);
-            }
-            else if (x == getLeft.apply(getParent.apply(x))) {
+            } else if (x == getLeft.apply(getParent.apply(x))) {
                 setLeft.accept(getParent.apply(x), y);
-            }
-            else {
+            } else {
                 setRight.accept(getParent.apply(x), y);
             }
 
             setLeft.accept(y, x);
             setParent.accept(x, y);
             {//
-                if (x instanceof OrderStatTree.Node<?, ?> && y instanceof OrderStatTree.Node<?, ?>) {
+                if (x instanceof OrderStatTree.Node<?, ?>
+                        && y instanceof OrderStatTree.Node<?, ?>) {
                     OrderStatTree.Node<?, ?> xo = (OrderStatTree.Node<?, ?>) x;
                     OrderStatTree.Node<?, ?> yo = (OrderStatTree.Node<?, ?>) y;
                     yo.size = xo.size;
@@ -976,18 +903,17 @@ public class Leetcode250 {
             setParent.accept(y, getParent.apply(x));
             if (getParent.apply(x) == sentinel) {
                 setRoot.accept(y);
-            }
-            else if (x == getRight.apply(getParent.apply(x))) {
+            } else if (x == getRight.apply(getParent.apply(x))) {
                 setRight.accept(getParent.apply(x), y);
-            }
-            else {
+            } else {
                 setLeft.accept(getParent.apply(x), y);
             }
 
             setRight.accept(y, x);
             setParent.accept(x, y);
             {//
-                if (x instanceof OrderStatTree.Node<?, ?> && y instanceof OrderStatTree.Node<?, ?>) {
+                if (x instanceof OrderStatTree.Node<?, ?>
+                        && y instanceof OrderStatTree.Node<?, ?>) {
                     OrderStatTree.Node<?, ?> yo = (OrderStatTree.Node<?, ?>) y;
                     OrderStatTree.Node<?, ?> xo = (OrderStatTree.Node<?, ?>) x;
                     yo.size = xo.size;
@@ -997,10 +923,9 @@ public class Leetcode250 {
         }
     }
 
-
     /**
-     * #234
-     * <br/>回文链表
+     * #234 <br/>
+     * 回文链表
      *
      * @param head node
      * @return res
@@ -1028,22 +953,21 @@ public class Leetcode250 {
     }
 
     /**
-     * #235
-     * <br/>二叉搜索树的最近公共祖先
+     * #235 <br/>
+     * 二叉搜索树的最近公共祖先
      *
      * @param root tree
      * @param p    node 1
      * @param q    node 2
      * @return closest ancestor
      */
-    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+    public static TreeNode lowestCommonAncestor(TreeNode root, TreeNode p,
+            TreeNode q) {
         if (root.val > p.val && root.val > q.val) {
             return lowestCommonAncestor(root.left, p, q);
-        }
-        else if (root.val < p.val && root.val < q.val) {
+        } else if (root.val < p.val && root.val < q.val) {
             return lowestCommonAncestor(root.right, p, q);
-        }
-        else {
+        } else {
             return root;
         }
     }
@@ -1056,7 +980,8 @@ public class Leetcode250 {
      * @return
      */
     public static int[] maxSlidingWindow(int[] nums, int k) {
-        if (k == 1) return nums;
+        if (k == 1)
+            return nums;
         var reverse_bin_str = toReversedBinaryString(k);
         int[][] dp = new int[reverse_bin_str.length()][];
         dp[0] = nums;
@@ -1096,22 +1021,27 @@ public class Leetcode250 {
     }
 
     public static int[] maxSlidingWindow2(int[] nums, int k) {
-        if (k == 1) return nums;
+        if (k == 1)
+            return nums;
         PriorityQueue<Integer> queue = new PriorityQueue<>((a, b) -> b - a);
         int[] ans = new int[nums.length + 1 - k];
         for (int i = 0; i < k; i++) {
             queue.add(nums[i]);
         }
         Map<Integer, Integer> waitToDelete = new HashMap<>();
-        for (int i = 0, tail = 0, head = k; i < ans.length; i++, tail++, head++) {
+        for (int i = 0, tail = 0,
+                head = k; i < ans.length; i++, tail++, head++) {
             while (waitToDelete.containsKey(queue.peek())) {
                 var peek = queue.poll();
                 var count = waitToDelete.get(peek);
-                if (count == 1) waitToDelete.remove(peek);
-                else waitToDelete.put(peek, count - 1);
+                if (count == 1)
+                    waitToDelete.remove(peek);
+                else
+                    waitToDelete.put(peek, count - 1);
             }
             ans[i] = queue.peek();
-            waitToDelete.put(nums[tail], waitToDelete.getOrDefault(nums[tail], 0) + 1);
+            waitToDelete.put(nums[tail],
+                    waitToDelete.getOrDefault(nums[tail], 0) + 1);
             if (head < nums.length) {
                 queue.add(nums[head]);
             }
@@ -1120,7 +1050,8 @@ public class Leetcode250 {
     }
 
     public static int[] maxSlidingWindow3(int[] nums, int k) {
-        if (k == 1) return nums;
+        if (k == 1)
+            return nums;
         int[] ans = new int[nums.length + 1 - k];
         class IndexValue {
             final int idx;
@@ -1137,12 +1068,11 @@ public class Leetcode250 {
             void apply(int i, int current_val) {
                 if (deque.size() == 0) {
                     deque.addLast(new IndexValue(i, current_val));
-                }
-                else if (deque.peekLast().val > current_val) {
+                } else if (deque.peekLast().val > current_val) {
                     deque.addLast(new IndexValue(i, current_val));
-                }
-                else {
-                    while (deque.size() > 0 && deque.peekLast().val <= current_val) {
+                } else {
+                    while (deque.size() > 0
+                            && deque.peekLast().val <= current_val) {
                         deque.pollLast();
                     }
                     deque.addLast(new IndexValue(i, current_val));
@@ -1196,53 +1126,63 @@ public class Leetcode250 {
                 int cLen = mr.ColEnd - mr.ColStart;
                 if (rLen < 1 || cLen < 1) {
                     return false;
-                }
-                else if (rLen == 1) {
+                } else if (rLen == 1) {
                     int s = mr.ColStart, e = mr.ColEnd;
                     while (e - s > 1) {
                         var mid = (s + e) / 2;
-                        if (matrix[mr.RowStart][mid] <= target) s = mid;
-                        else e = mid;
+                        if (matrix[mr.RowStart][mid] <= target)
+                            s = mid;
+                        else
+                            e = mid;
                     }
                     return matrix[mr.RowStart][s] == target;
-                }
-                else if (cLen == 1) {
+                } else if (cLen == 1) {
                     int s = mr.RowStart, e = mr.RowEnd;
                     while (e - s > 1) {
                         var mid = (s + e) / 2;
-                        if (matrix[mid][mr.ColStart] <= target) s = mid;
-                        else e = mid;
+                        if (matrix[mid][mr.ColStart] <= target)
+                            s = mid;
+                        else
+                            e = mid;
                     }
                     return matrix[s][mr.ColStart] == target;
-                }
-                else {
+                } else {
                     int s = 0, e = Math.min(rLen, cLen);
                     while (e - s > 1) {
                         var mid = (s + e) / 2;
-                        if (matrix[mr.RowStart + mid][mr.ColStart + mid] <= target) s = mid;
-                        else e = mid;
+                        if (matrix[mr.RowStart + mid][mr.ColStart
+                                + mid] <= target)
+                            s = mid;
+                        else
+                            e = mid;
                     }
                     if (matrix[mr.RowStart + s][mr.ColStart + s] == target) {
                         return true;
-                    }
-                    else {
-                        var res1 = apply(new MatrixRange(mr.RowStart + s + 1, mr.RowEnd, mr.ColStart, mr.ColStart + s + 1));
-                        var res2 = apply(new MatrixRange(mr.RowStart, mr.RowStart + s + 1, mr.ColStart + s + 1, mr.ColEnd));
+                    } else {
+                        var res1 = apply(new MatrixRange(mr.RowStart + s + 1,
+                                mr.RowEnd, mr.ColStart, mr.ColStart + s + 1));
+                        var res2 = apply(new MatrixRange(mr.RowStart,
+                                mr.RowStart + s + 1, mr.ColStart + s + 1,
+                                mr.ColEnd));
                         return res1 || res2;
                     }
                 }
             }
         };
-        return funcMatrixBinarySearch.apply(new MatrixRange(0, matrix.length, 0, matrix[0].length));
+        return funcMatrixBinarySearch
+                .apply(new MatrixRange(0, matrix.length, 0, matrix[0].length));
     }
 
     public static boolean searchMatrix2(int[][] matrix, int target) {
         int x = 0, y = matrix[0].length - 1;
         while (x < matrix.length && y >= 0) {
             var val = matrix[x][y];
-            if (val == target) return true;
-            else if (val > target) y--;
-            else x++;
+            if (val == target)
+                return true;
+            else if (val > target)
+                y--;
+            else
+                x++;
         }
         return false;
     }

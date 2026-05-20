@@ -1,8 +1,10 @@
 package Leetcode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.Deque;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -326,6 +328,38 @@ public class Leetcode100 {
             }
             res.addAll(temp);
         }
+    }
+
+    /**
+     * #84
+     * 
+     * @param heights
+     * @return
+     */
+    public int largestRectangleArea(int[] heights) {
+        Deque<Integer> idxDeque = new ArrayDeque<>();
+        idxDeque.addLast(-1);
+        int[] l = new int[heights.length];
+        int[] r = new int[heights.length];
+        for (int i = 0; i <= heights.length; i++) {
+            var current_height = i < heights.length ? heights[i] : 0;
+            while (!idxDeque.isEmpty()
+                    && (idxDeque.getLast() >= 0 ? heights[idxDeque.getLast()]
+                            : 0) >= current_height) {
+                var popped_idx = idxDeque.pollLast();
+                if (popped_idx >= 0)
+                    r[popped_idx] = i;
+            }
+            if (i < heights.length && !idxDeque.isEmpty()) {
+                l[i] = idxDeque.getLast();
+            }
+            idxDeque.addLast(i);
+        }
+        int ans = 0;
+        for (int i = 0; i < heights.length; i++) {
+            ans = Math.max(ans, heights[i] * (r[i] - l[i] - 1));
+        }
+        return ans;
     }
 
     /**
