@@ -1,6 +1,8 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({ "JavaDoc" })
 public class Leetcode750 {
@@ -327,6 +329,35 @@ public class Leetcode750 {
             Node rc = arr.get(cur.right);
             cur.agg = Math.max(lc.agg, rc.agg);
         }
+    }
+
+    /**
+     * #735
+     * 
+     * @param asteroids
+     * @return
+     */
+    public int[] asteroidCollision(int[] asteroids) {
+        Deque<Integer> queue = new ArrayDeque<>(asteroids.length);
+        for (var n : asteroids) {
+            if (queue.isEmpty()) {
+                queue.add(n);
+                continue;
+            }
+            if (n < 0) {
+                while (!queue.isEmpty() && queue.getLast() > 0
+                        && -n > queue.getLast()) {
+                    queue.pollLast();
+                }
+                if (!queue.isEmpty() && queue.getLast() == -n)
+                    queue.pollLast();
+                else if (queue.isEmpty() || queue.getLast() < 0)
+                    queue.add(n);
+            } else {
+                queue.add(n);
+            }
+        }
+        return queue.stream().mapToInt(a -> a).toArray();
     }
 
     /**

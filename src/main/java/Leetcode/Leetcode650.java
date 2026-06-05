@@ -1,11 +1,70 @@
 package Leetcode;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 public class Leetcode650 {
+
+    /**
+     * #621
+     * 
+     * @param tasks
+     * @param n
+     * @return
+     */
+    public int leastInterval(char[] tasks, int n) {
+        Map<Character, Integer> latestPlaces = new HashMap<>();
+        Map<Character, Integer> count = new HashMap<>();
+        PriorityQueue<Character> queue = new PriorityQueue<>((a, b) -> {
+            var c1 = count.get(a);
+            var c2 = count.get(b);
+            var diff = c2 - c1;
+            if (diff != 0)
+                return diff; // Larger count
+            return a - b; // lex
+        });
+
+        for (var c : tasks) {
+            count.put(c, count.getOrDefault(c, 0) + 1);
+        }
+
+        for (var k : count.keySet()) {
+            queue.add(k);
+        }
+        int i = 1;
+        Deque<Character> stack = new ArrayDeque<>();
+        while (!count.isEmpty()) {
+            stack.clear();
+            while (!queue.isEmpty()) {
+                var t = queue.poll();
+                var idx = latestPlaces.getOrDefault(t, -n);
+                var dist = i - idx;
+                if (dist <= n) {
+                    stack.add(t);
+                    continue;
+                }
+                int c = count.get(t);
+                if (c == 1) {
+                    count.remove(t);
+                } else {
+                    count.put(t, c - 1);
+                }
+                if (c != 1)
+                    queue.add(t);
+                latestPlaces.put(t, i);
+                break;
+            }
+            queue.addAll(stack);
+            i++;
+        }
+
+        return i - 1;
+    }
 
     /**
      * #638
@@ -15,10 +74,12 @@ public class Leetcode650 {
      * @param needs
      * @return
      */
-    public static int shoppingOffers(List<Integer> price, List<List<Integer>> special, List<Integer> needs) {
+    public static int shoppingOffers(List<Integer> price,
+            List<List<Integer>> special, List<Integer> needs) {
         List<List<Integer>> valid_special = new ArrayList<>(special.size());
         for (var spec : special) {
-            if (spec.get(spec.size() - 1) < non_special_price_of(spec.subList(0, spec.size() - 1), price)) {
+            if (spec.get(spec.size() - 1) < non_special_price_of(
+                    spec.subList(0, spec.size() - 1), price)) {
                 valid_special.add(spec);
             }
         }
@@ -26,22 +87,21 @@ public class Leetcode650 {
         return min_offer_of(needs, price, valid_special, cache);
     }
 
-    private static int min_offer_of(
-            List<Integer> current_needs,
-            List<Integer> price,
-            List<List<Integer>> special,
+    private static int min_offer_of(List<Integer> current_needs,
+            List<Integer> price, List<List<Integer>> special,
             Map<String, Integer> cache) {
         var str_current_needs = current_needs.toString();
         if (cache.containsKey(str_current_needs)) {
             return cache.get(str_current_needs);
-        }
-        else {
+        } else {
             int non_spec_price = non_special_price_of(current_needs, price);
             int min_spec_price = Integer.MAX_VALUE;
             for (var spec : special) {
                 var new_need = new_needs(current_needs, spec);
                 if (new_need != null) {
-                    min_spec_price = Math.min(min_spec_price, min_offer_of(new_need, price, special, cache) + spec.get(spec.size()-1));
+                    min_spec_price = Math.min(min_spec_price,
+                            min_offer_of(new_need, price, special, cache)
+                                    + spec.get(spec.size() - 1));
                 }
             }
             var ans = Math.min(non_spec_price, min_spec_price);
@@ -50,17 +110,21 @@ public class Leetcode650 {
         }
     }
 
-    private static List<Integer> new_needs(List<Integer> current_needs, List<Integer> spec) {
+    private static List<Integer> new_needs(List<Integer> current_needs,
+            List<Integer> spec) {
         List<Integer> n = new ArrayList<>(current_needs.size());
         for (int i = 0; i < current_needs.size(); i++) {
             var n_i = current_needs.get(i) - spec.get(i);
-            if (n_i >= 0) n.add(n_i);
-            else return null;
+            if (n_i >= 0)
+                n.add(n_i);
+            else
+                return null;
         }
         return n;
     }
 
-    private static int non_special_price_of(List<Integer> needs, List<Integer> price) {
+    private static int non_special_price_of(List<Integer> needs,
+            List<Integer> price) {
         int ans = 0;
         for (int i = 0; i < needs.size(); i++) {
             ans += needs.get(i) * price.get(i);
