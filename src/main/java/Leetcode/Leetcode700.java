@@ -1,6 +1,5 @@
 package Leetcode;
 
-
 import java.util.*;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
@@ -28,15 +27,11 @@ public class Leetcode700 {
 
         var l = scanTree(n.left, str2node);
         var r = scanTree(n.right, str2node);
-        var s = "(" +
-                l +
-                "," +
-                n.val +
-                "," +
-                r +
-                ")";
-        if (!str2node.containsKey(s)) str2node.put(s, null);
-        else str2node.put(s, n);
+        var s = "(" + l + "," + n.val + "," + r + ")";
+        if (!str2node.containsKey(s))
+            str2node.put(s, null);
+        else
+            str2node.put(s, n);
         return s;
     }
 
@@ -52,11 +47,14 @@ public class Leetcode700 {
         int start = 0, end = arr.length;
         while (end - start > 1) {
             int mid = (start + end) / 2;
-            if (arr[mid] > x) end = mid;
-            else start = end;
+            if (arr[mid] > x)
+                end = mid;
+            else
+                start = end;
         }
         int start_ans;
-        if (arr[start] == x || start + 1 >= arr.length) start_ans = start;
+        if (arr[start] == x || start + 1 >= arr.length)
+            start_ans = start;
         else {
             int d1 = Math.abs(arr[start] - x);
             int d2 = Math.abs(arr[start + 1] - x);
@@ -66,15 +64,15 @@ public class Leetcode700 {
         while (end_ans_inclusive + 1 - start_ans < k) {
             if (start_ans - 1 < 0) {
                 end_ans_inclusive++;
-            }
-            else if (end_ans_inclusive + 1 >= arr.length) {
+            } else if (end_ans_inclusive + 1 >= arr.length) {
                 start_ans--;
-            }
-            else {
+            } else {
                 int d1 = Math.abs(arr[start_ans - 1] - x);
                 int d2 = Math.abs(arr[end_ans_inclusive + 1] - x);
-                if (d1 <= d2) start_ans--;
-                else end_ans_inclusive++;
+                if (d1 <= d2)
+                    start_ans--;
+                else
+                    end_ans_inclusive++;
             }
         }
         List<Integer> ans = new ArrayList<>(end_ans_inclusive + 1 - start_ans);
@@ -91,15 +89,18 @@ public class Leetcode700 {
      * @return
      */
     public static boolean isPossible(int[] nums) {
-        Map<Integer, PriorityQueue<Integer>> last_elem_2_len = new HashMap<>(nums.length);
+        Map<Integer, PriorityQueue<Integer>> last_elem_2_len = new HashMap<>(
+                nums.length);
         for (var n : nums) {
             if (!last_elem_2_len.containsKey(n - 1)) {
-                last_elem_2_len.computeIfAbsent(n, k -> new PriorityQueue<>(16)).add(1);
-            }
-            else {
+                last_elem_2_len.computeIfAbsent(n, k -> new PriorityQueue<>(16))
+                        .add(1);
+            } else {
                 var queue_n_minus_1 = last_elem_2_len.get(n - 1);
-                last_elem_2_len.computeIfAbsent(n, k -> new PriorityQueue<>(16)).add(queue_n_minus_1.poll() + 1);
-                if (queue_n_minus_1.isEmpty()) last_elem_2_len.remove(n - 1);
+                last_elem_2_len.computeIfAbsent(n, k -> new PriorityQueue<>(16))
+                        .add(queue_n_minus_1.poll() + 1);
+                if (queue_n_minus_1.isEmpty())
+                    last_elem_2_len.remove(n - 1);
             }
         }
         return last_elem_2_len.values().stream().allMatch(q -> q.peek() >= 3);
@@ -119,7 +120,8 @@ public class Leetcode700 {
                     return false;
                 }
 
-                if (i > 1 && i < nums.length - 1 && (!(nums[i] >= nums[i - 2] || nums[i + 1] >= nums[i - 1]))) {
+                if (i > 1 && i < nums.length - 1 && (!(nums[i] >= nums[i - 2]
+                        || nums[i + 1] >= nums[i - 1]))) {
                     return false;
                 }
 
@@ -129,13 +131,8 @@ public class Leetcode700 {
         return true;
     }
 
-
     /**
-     * #674
-     * 回文子串个数
-     * 输入："aaa"
-     * 输出：6
-     * 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
+     * #674 回文子串个数 输入："aaa" 输出：6 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
      *
      * @param s String
      * @return count of sub string
@@ -151,7 +148,7 @@ public class Leetcode700 {
             }
         }
 
-        //three
+        // three
         for (int i = 0; i + 3 - 1 < s.length(); i++) {
             if (s.charAt(i) == s.charAt(i + 2)) {
                 store.setAt(true, i, i + 1);
@@ -174,7 +171,6 @@ public class Leetcode700 {
         return res;
     }
 
-
     /**
      * #679
      *
@@ -188,31 +184,36 @@ public class Leetcode700 {
     private static boolean judge24(double[] nums) {
         if (nums.length == 2) {
             return can_be_24(nums[0], nums[1]);
-        }
-        else {
+        } else {
             for (int i = 0; i < nums.length; i++) {
                 for (int j = i + 1; j < nums.length; j++) {
                     double[] arr = new double[nums.length - 1];
                     merge(i, j, nums, arr, Double::sum);
-                    if (judge24(arr)) return true;
+                    if (judge24(arr))
+                        return true;
 
                     merge(i, j, nums, arr, (a, b) -> a * b);
-                    if (judge24(arr)) return true;
+                    if (judge24(arr))
+                        return true;
 
                     merge(i, j, nums, arr, (a, b) -> a - b);
-                    if (judge24(arr)) return true;
+                    if (judge24(arr))
+                        return true;
 
                     merge(i, j, nums, arr, (a, b) -> b - a);
-                    if (judge24(arr)) return true;
+                    if (judge24(arr))
+                        return true;
 
                     double a = nums[i], b = nums[j];
                     if (Math.abs(b) > tol) {
                         merge(i, j, nums, arr, (a1, a2) -> a1 / a2);
-                        if (judge24(arr)) return true;
+                        if (judge24(arr))
+                            return true;
                     }
                     if (Math.abs(a) > tol) {
                         merge(i, j, nums, arr, (a1, a2) -> a2 / a1);
-                        if (judge24(arr)) return true;
+                        if (judge24(arr))
+                            return true;
                     }
                 }
             }
@@ -220,7 +221,8 @@ public class Leetcode700 {
         }
     }
 
-    private static void merge(int i, int j, double[] nums, double[] res, BiFunction<Double, Double, Double> op) {
+    private static void merge(int i, int j, double[] nums, double[] res,
+            BiFunction<Double, Double, Double> op) {
         for (int k = 0, idx = 0; k < nums.length; k++) {
             if (k != i && k != j) {
                 res[idx++] = nums[k];
@@ -229,14 +231,11 @@ public class Leetcode700 {
         res[res.length - 1] = op.apply(nums[i], nums[j]);
     }
 
-
     private static boolean can_be_24(double a, double b) {
-        return approximate_24(a + b) ||
-                approximate_24(a - b) ||
-                approximate_24(b - a) ||
-                approximate_24(a * b) ||
-                (Math.abs(b) > tol && approximate_24(a / b)) ||
-                (Math.abs(a) > tol && approximate_24(b / a));
+        return approximate_24(a + b) || approximate_24(a - b)
+                || approximate_24(b - a) || approximate_24(a * b)
+                || (Math.abs(b) > tol && approximate_24(a / b))
+                || (Math.abs(a) > tol && approximate_24(b / a));
     }
 
     static final double tol = 10e-6;
@@ -244,7 +243,6 @@ public class Leetcode700 {
     private static boolean approximate_24(double d) {
         return Math.abs(d - 24) <= tol;
     }
-
 
     /**
      * #668
@@ -262,8 +260,7 @@ public class Leetcode700 {
             int order = count_of_less_than(mid, m, n);
             if (order >= k) {
                 end = mid;
-            }
-            else {
+            } else {
                 start = mid + 1;
             }
         }
@@ -293,14 +290,12 @@ public class Leetcode700 {
         Matcher matcher = pattern.matcher(rep);
         if (matcher.find()) {
             return n;
-        }
-        else {
+        } else {
             var rep1 = rep + a;
             matcher = pattern.matcher(rep1);
             if (matcher.find()) {
                 return n + 1;
-            }
-            else {
+            } else {
                 return -1;
             }
         }
@@ -323,8 +318,8 @@ public class Leetcode700 {
         }
         int max_1 = w_sum_1, max_2 = max_1 + w_sum_2, max_3 = max_2 + w_sum_3;
         int max_pos_1 = 0;
-        int[] max_pos_2 = new int[]{0,k};
-        int[] max_pos_3 = new int[]{0, k,2*k};
+        int[] max_pos_2 = new int[] { 0, k };
+        int[] max_pos_3 = new int[] { 0, k, 2 * k };
         for (int i = 0; i + 3 * k < nums.length; i++) {
             w_sum_1 -= nums[i];
             w_sum_1 += nums[i + k];
@@ -346,10 +341,40 @@ public class Leetcode700 {
 
                 max_pos_3[0] = max_pos_2[0];
                 max_pos_3[1] = max_pos_2[1];
-                max_pos_3[2] = i + 2 * k+1;
+                max_pos_3[2] = i + 2 * k + 1;
             }
         }
         return max_pos_3;
+
+    }
+
+    /**
+     * #692
+     * 
+     * @param words
+     * @param k
+     * @return
+     */
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String, Integer> freq = new HashMap<>();
+        for(var w : words){
+            freq.put(w, freq.getOrDefault(w, 0)+1);
+        }
+        PriorityQueue<String> queue = new PriorityQueue<>((a,b)->{
+            var d = freq.get(b) - freq.get(a);
+            return d != 0 ? d : (a.compareTo(b));
+        });
+
+        for(var key : freq.keySet()){
+            queue.add(key);
+        }
+
+        List<String> res = new ArrayList<>(k);
+        while (k > 0) {
+            res.add(queue.poll());
+            k--;
+        }
+        return res;
 
     }
 
