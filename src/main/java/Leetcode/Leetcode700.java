@@ -357,15 +357,15 @@ public class Leetcode700 {
      */
     public List<String> topKFrequent(String[] words, int k) {
         Map<String, Integer> freq = new HashMap<>();
-        for(var w : words){
-            freq.put(w, freq.getOrDefault(w, 0)+1);
+        for (var w : words) {
+            freq.put(w, freq.getOrDefault(w, 0) + 1);
         }
-        PriorityQueue<String> queue = new PriorityQueue<>((a,b)->{
+        PriorityQueue<String> queue = new PriorityQueue<>((a, b) -> {
             var d = freq.get(b) - freq.get(a);
             return d != 0 ? d : (a.compareTo(b));
         });
 
-        for(var key : freq.keySet()){
+        for (var key : freq.keySet()) {
             queue.add(key);
         }
 
