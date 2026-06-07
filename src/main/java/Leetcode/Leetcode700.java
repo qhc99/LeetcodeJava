@@ -44,42 +44,28 @@ public class Leetcode700 {
      * @return
      */
     public static List<Integer> findClosestElements(int[] arr, int k, int x) {
-        int start = 0, end = arr.length;
-        while (end - start > 1) {
-            int mid = (start + end) / 2;
-            if (arr[mid] > x)
-                end = mid;
-            else
-                start = end;
+        Deque<Integer> res = new ArrayDeque<>();
+        var findIdx = Arrays.binarySearch(arr, x);
+        if (findIdx < 0) {
+            findIdx = -(findIdx + 1);
         }
-        int start_ans;
-        if (arr[start] == x || start + 1 >= arr.length)
-            start_ans = start;
-        else {
-            int d1 = Math.abs(arr[start] - x);
-            int d2 = Math.abs(arr[start + 1] - x);
-            start_ans = d1 <= d2 ? start : start + 1;
-        }
-        int end_ans_inclusive = start_ans;
-        while (end_ans_inclusive + 1 - start_ans < k) {
-            if (start_ans - 1 < 0) {
-                end_ans_inclusive++;
-            } else if (end_ans_inclusive + 1 >= arr.length) {
-                start_ans--;
+        int l = findIdx - 1, r = findIdx;
+
+        while (k > 0) {
+            if (l >= 0 && r < arr.length) {
+                if (Math.abs(x - arr[l]) <= Math.abs(x - arr[r])) {
+                    res.addFirst(arr[l--]);
+                } else {
+                    res.addLast(arr[r++]);
+                }
+            } else if (l < 0) {
+                res.addLast(arr[r++]);
             } else {
-                int d1 = Math.abs(arr[start_ans - 1] - x);
-                int d2 = Math.abs(arr[end_ans_inclusive + 1] - x);
-                if (d1 <= d2)
-                    start_ans--;
-                else
-                    end_ans_inclusive++;
+                res.addFirst(arr[l--]);
             }
+            k--;
         }
-        List<Integer> ans = new ArrayList<>(end_ans_inclusive + 1 - start_ans);
-        for (int i = start_ans; i <= end_ans_inclusive; i++) {
-            ans.add(arr[i]);
-        }
-        return ans;
+        return new ArrayList<>(res);
     }
 
     /**
