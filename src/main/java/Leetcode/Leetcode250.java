@@ -227,6 +227,48 @@ public class Leetcode250 {
         return ans.toString();
     }
 
+    public int findKthLargest(int[] nums, int k) {
+        if (nums.length == 1)
+            return nums[0];
+        return partition(nums, 0, nums.length, nums.length - k);
+    }
+
+    int partition(int[] nums, int s, int e, int k) {
+        if (nums[e - 1] < nums[s]) {
+            var t = nums[e - 1];
+            nums[e - 1] = nums[s];
+            nums[s] = t;
+        }
+        int i = s, j = s, t = e - 2;
+        while (j + 1 <= t) {
+            if (nums[j] == nums[j + 1]) {
+                j++;
+            } else if (nums[j + 1] < nums[j]) {
+                var tt = nums[i];
+                nums[i] = nums[j + 1];
+                nums[j + 1] = tt;
+                i++;
+                j++;
+            } else {
+                if (j + 1 == t) {
+                    t--;
+                } else {
+                    var tt = nums[j + 1];
+                    nums[j + 1] = nums[t];
+                    nums[t] = tt;
+                    t--;
+                }
+            }
+        }
+        if (i - s <= k && j - s >= k) {
+            return nums[i];
+        } else if (i - s > k) {
+            return this.partition(nums, s, i, k);
+        } else {
+            return this.partition(nums, j + 1, e, k - (j + 1 - s));
+        }
+    }
+
     /**
      * #218
      *
