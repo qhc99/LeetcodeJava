@@ -67,6 +67,46 @@ public class Leetcode650 {
     }
 
     /**
+     * 
+     * @param nums
+     * @return
+     */
+    public int[] smallestRange(List<List<Integer>> nums) {
+        int[] res = new int[2];
+        res[0] = 0;
+        res[1] = Integer.MAX_VALUE;
+        List<Integer> idx = new ArrayList<>();
+        int max = Integer.MIN_VALUE;
+        for (var arr : nums) {
+            max = Math.max(max, arr.get(0));
+            idx.add(0);
+        }
+        PriorityQueue<Integer> queue = new PriorityQueue<Integer>(
+                (i, j) -> nums.get(i).get(idx.get(i))
+                        - nums.get(j).get(idx.get(j)));
+        for (int i = 0; i < nums.size(); i++) {
+            queue.add(i);
+        }
+        while (true) {
+            var row = queue.poll();
+            var i = idx.get(row);
+            var val = nums.get(row).get(i);
+            if (((max - val) < (res[1] - res[0]))
+                    || (val < res[0] && (max - val) == (res[1] - res[0]))) {
+                res[0] = val;
+                res[1] = max;
+            }
+            i++;
+            if (i >= nums.get(row).size())
+                break;
+            idx.set(row, i);
+            max = Math.max(max, nums.get(row).get(i));
+            queue.add(row);
+        }
+        return res;
+    }
+
+    /**
      * #638
      *
      * @param price
