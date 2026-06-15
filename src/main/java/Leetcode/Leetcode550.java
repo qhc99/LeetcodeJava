@@ -7,8 +7,7 @@ import java.util.stream.IntStream;
 public class Leetcode550 {
 
     /**
-     * #501
-     * <br/>
+     * #501 <br/>
      * 二叉搜索树中的众数
      *
      * @param root tree
@@ -41,8 +40,7 @@ public class Leetcode550 {
         public void update(int x) {
             if (x == base) {
                 ++count;
-            }
-            else {
+            } else {
                 count = 1;
                 base = x;
             }
@@ -73,12 +71,11 @@ public class Leetcode550 {
             }
         }
         for (int i = nums.length - 2; i >= 0; i--) {
-            for (int ptr = i + 1; ptr != i; ) {
+            for (int ptr = i + 1; ptr != i;) {
                 if (nums[ptr] > nums[i]) {
                     next[i] = nums[ptr];
                     break;
-                }
-                else if (next[ptr] > nums[i]) {
+                } else if (next[ptr] > nums[i]) {
                     next[i] = next[ptr];
                     break;
                 }
@@ -100,10 +97,8 @@ public class Leetcode550 {
     }
 
     /**
-     * #525
-     * <br>
-     * 连续数组
-     * <br>
+     * #525 <br>
+     * 连续数组 <br>
      * 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
      *
      * @param nums nums
@@ -119,8 +114,7 @@ public class Leetcode550 {
             }
             if (!map.containsKey(nums[i])) {
                 map.put(nums[i], i);
-            }
-            else {
+            } else {
                 max = Math.max(i - map.get(nums[i]), max);
             }
         }
@@ -134,8 +128,7 @@ public class Leetcode550 {
             }
             if (!map.containsKey(nums[i])) {
                 map.put(nums[i], i);
-            }
-            else {
+            } else {
                 max = Math.max(i - map.get(nums[i]), max);
             }
         }
@@ -153,14 +146,11 @@ public class Leetcode550 {
         for (int i = score.length - 1; i >= 0; i--) {
             if (score.length - i == 1) {
                 ans[idx[i]] = "Gold Medal";
-            }
-            else if (score.length - i == 2) {
+            } else if (score.length - i == 2) {
                 ans[idx[i]] = "Silver Medal";
-            }
-            else if (score.length - i == 3) {
+            } else if (score.length - i == 3) {
                 ans[idx[i]] = "Bronze Medal";
-            }
-            else {
+            } else {
                 ans[idx[i]] = String.valueOf(score.length - i);
             }
         }
@@ -168,33 +158,38 @@ public class Leetcode550 {
         return ans;
     }
 
-    private static void merge(int[] array, int[] idx, int start, int[] cache1, int[] cache2, int[] ci1, int[] ci2) {
+    private static void merge(int[] array, int[] idx, int start, int[] cache1,
+            int[] cache2, int[] ci1, int[] ci2) {
         int right_idx = 0;
         int left_idx = 0;
         System.arraycopy(array, start, cache1, 0, cache1.length);
-        System.arraycopy(array, start + cache1.length, cache2, 0, cache2.length);
+        System.arraycopy(array, start + cache1.length, cache2, 0,
+                cache2.length);
 
         System.arraycopy(idx, start, ci1, 0, cache1.length);
         System.arraycopy(idx, start + cache1.length, ci2, 0, cache2.length);
 
-        for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length)
+        for (int i = start; (i < start + cache1.length + cache2.length)
+                && (right_idx < cache2.length)
                 && (left_idx < cache1.length); i++) {
             if (cache1[left_idx] <= cache2[right_idx]) {
                 array[i] = cache1[left_idx];
                 idx[i] = ci1[left_idx++];
-            }
-            else {
+            } else {
                 array[i] = cache2[right_idx];
                 idx[i] = ci2[right_idx++];
             }
         }
         if (left_idx < cache1.length) {
-            System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
-            System.arraycopy(ci1, left_idx, idx, start + left_idx + right_idx, cache1.length - left_idx);
-        }
-        else if (right_idx < cache2.length) {
-            System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
-            System.arraycopy(ci2, right_idx, idx, start + left_idx + right_idx, cache2.length - right_idx);
+            System.arraycopy(cache1, left_idx, array,
+                    start + left_idx + right_idx, cache1.length - left_idx);
+            System.arraycopy(ci1, left_idx, idx, start + left_idx + right_idx,
+                    cache1.length - left_idx);
+        } else if (right_idx < cache2.length) {
+            System.arraycopy(cache2, right_idx, array,
+                    start + left_idx + right_idx, cache2.length - right_idx);
+            System.arraycopy(ci2, right_idx, idx, start + left_idx + right_idx,
+                    cache2.length - right_idx);
         }
     }
 
@@ -202,7 +197,8 @@ public class Leetcode550 {
         recursiveMergeSortWithIndex(array, idx, 0, array.length);
     }
 
-    private static void recursiveMergeSortWithIndex(int[] array, int[] idx, int start, int end) {
+    private static void recursiveMergeSortWithIndex(int[] array, int[] idx,
+            int start, int end) {
         if ((end - start) > 1) {
             int middle = (start + end) / 2;
             recursiveMergeSortWithIndex(array, idx, start, middle);
@@ -213,7 +209,8 @@ public class Leetcode550 {
             var right_cache = new int[right_len];
             var left_cache_i = new int[left_len];
             var right_cache_i = new int[right_len];
-            merge(array, idx, start, left_cache, right_cache, left_cache_i, right_cache_i);
+            merge(array, idx, start, left_cache, right_cache, left_cache_i,
+                    right_cache_i);
         }
     }
 
@@ -221,7 +218,8 @@ public class Leetcode550 {
      * #514
      */
     public static int findRotateSteps(String ring, String key) {
-        Map<Character, List<Integer>> chrToRingIdx = new HashMap<>(ring.length());
+        Map<Character, List<Integer>> chrToRingIdx = new HashMap<>(
+                ring.length());
         Set<Character> chrOfKey = new HashSet<>(key.length());
         for (int i = 0; i < key.length(); i++) {
             chrOfKey.add(key.charAt(i));
@@ -229,7 +227,8 @@ public class Leetcode550 {
         for (int i = 0; i < ring.length(); i++) {
             var c = ring.charAt(i);
             if (chrOfKey.contains(c)) {
-                chrToRingIdx.computeIfAbsent(c, (arg) -> new ArrayList<>(ring.length())).add(i);
+                chrToRingIdx.computeIfAbsent(c,
+                        (arg) -> new ArrayList<>(ring.length())).add(i);
             }
         }
 
@@ -254,7 +253,8 @@ public class Leetcode550 {
                     int idx_max = Math.max(idx1, idx2);
                     int idx_min = Math.min(idx1, idx2);
                     cur.rotates = Math.min(cur.rotates,
-                            n.rotates + Math.min(idx_max - idx_min, idx_min + ring.length() - idx_max));
+                            n.rotates + Math.min(idx_max - idx_min,
+                                    idx_min + ring.length() - idx_max));
                     if (j == indices.size() - 1) {
                         prev[k] = null;
                     }
@@ -285,6 +285,24 @@ public class Leetcode550 {
             idx_ring = i_r;
             rotates = r;
         }
+    }
+
+    /**
+     * #518
+     * 
+     * @param amount
+     * @param coins
+     * @return
+     */
+    public int change(int amount, int[] coins) {
+        int[] dp = new int[amount + 1];
+        dp[0] = 1;
+        for (var c : coins) {
+            for (int i = 0; c + i < dp.length; i++) {
+                dp[c + i] += dp[i];
+            }
+        }
+        return dp[amount];
     }
 
     /**
@@ -351,11 +369,9 @@ public class Leetcode550 {
         dictionary.sort((a, b) -> {
             if (a.length() > b.length()) {
                 return -1;
-            }
-            else if (a.length() < b.length()) {
+            } else if (a.length() < b.length()) {
                 return 1;
-            }
-            else {
+            } else {
                 return a.compareTo(b);
             }
         });
@@ -377,13 +393,11 @@ public class Leetcode550 {
             if (c == dc) {
                 i++;
                 j++;
-            }
-            else {
+            } else {
                 var next = jump[i][dc - 'a'];
                 if (next != -1) {
                     i = next;
-                }
-                else {
+                } else {
                     return false;
                 }
             }
@@ -421,17 +435,18 @@ public class Leetcode550 {
         return F[F.length - 1];
     }
 
-    private static void recursiveSet(int size, int select_size, int i, int layer, BitSet b, int[] F) {
+    private static void recursiveSet(int size, int select_size, int i,
+            int layer, BitSet b, int[] F) {
         if (layer == 1) {
             for (int j = i; j < size; j++) {
                 b.set(j, true);
                 int current = bitsetToInt(b);
                 if (select_size == 1) {
                     F[current] += 1;
-                }
-                else {
+                } else {
                     for (int t = 0; t < size; t++) {
-                        if (b.get(t) && ((t + 1) % select_size == 0 || select_size % (t + 1) == 0)) {
+                        if (b.get(t) && ((t + 1) % select_size == 0
+                                || select_size % (t + 1) == 0)) {
                             int child = (int) (current - Math.pow(2, t));
                             F[current] += F[child];
                         }
@@ -439,8 +454,7 @@ public class Leetcode550 {
                 }
                 b.clear(j);
             }
-        }
-        else {
+        } else {
             for (int j = i; j < size; j++) {
                 b.set(j, true);
                 recursiveSet(size, select_size, j + 1, layer - 1, b, F);
@@ -506,16 +520,17 @@ public class Leetcode550 {
                 end = s.length() - 1;
                 reverseAppend(start, end, s, sb);
                 break;
-            }
-            else {
+            } else {
                 reverseAppend(start, end, s, sb);
-                append(start + k, end + k < s.length() ? end + k : s.length() - 1, s, sb);
+                append(start + k,
+                        end + k < s.length() ? end + k : s.length() - 1, s, sb);
             }
         }
         return sb.toString();
     }
 
-    private static void reverseAppend(int start, int end, String s, StringBuilder sb) {
+    private static void reverseAppend(int start, int end, String s,
+            StringBuilder sb) {
         for (int i = end; i >= start; i--) {
             sb.append(s.charAt(i));
         }
@@ -526,7 +541,6 @@ public class Leetcode550 {
             sb.append(s.charAt(i));
         }
     }
-
 
     /**
      * #542
@@ -553,7 +567,8 @@ public class Leetcode550 {
         return mat;
     }
 
-    private static void searchAround(Axis a, int[][] mat, Set<Axis> seen, Deque<Axis> deque) {
+    private static void searchAround(Axis a, int[][] mat, Set<Axis> seen,
+            Deque<Axis> deque) {
         int x = a.x;
         int y = a.y;
         int l = a.layer;
@@ -632,12 +647,15 @@ public class Leetcode550 {
     }
 
     public static TreeDiamInfo recursivediameterOfBinaryTree(TreeNode node) {
-        var left = node.left == null ? new TreeDiamInfo(-1, 0) : recursivediameterOfBinaryTree(node);
-        var right = node.right == null ? new TreeDiamInfo(-1, 0) : recursivediameterOfBinaryTree(node);
+        var left = node.left == null ? new TreeDiamInfo(-1, 0)
+                : recursivediameterOfBinaryTree(node);
+        var right = node.right == null ? new TreeDiamInfo(-1, 0)
+                : recursivediameterOfBinaryTree(node);
         var diam = left.max_depth + right.max_depth + 2;
         var child_max_diam = Math.max(left.max_diam, right.max_diam);
         return new TreeDiamInfo(
-                left.max_depth > right.max_depth ? left.max_depth + 1 : right.max_depth + 1,
+                left.max_depth > right.max_depth ? left.max_depth + 1
+                        : right.max_depth + 1,
                 Math.max(child_max_diam, diam));
     }
 
