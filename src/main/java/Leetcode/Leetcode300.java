@@ -19,21 +19,26 @@ public class Leetcode300 {
             void apply(TreeNode node) {
                 var idx = stringStack.length();
                 if (node.left == null && node.right == null) {
-                    if (stringStack.length() == 0) stringStack.append(node.val);
-                    else stringStack.append("->").append(node.val);
+                    if (stringStack.length() == 0)
+                        stringStack.append(node.val);
+                    else
+                        stringStack.append("->").append(node.val);
                     ans.add(stringStack.toString());
                     stringStack.delete(idx, stringStack.length());
-                }
-                else {
+                } else {
                     if (node.left != null) {
-                        if (stringStack.length() == 0) stringStack.append(node.val);
-                        else stringStack.append("->").append(node.val);
+                        if (stringStack.length() == 0)
+                            stringStack.append(node.val);
+                        else
+                            stringStack.append("->").append(node.val);
                         apply(node.left);
                         stringStack.delete(idx, stringStack.length());
                     }
                     if (node.right != null) {
-                        if (stringStack.length() == 0) stringStack.append(node.val);
-                        else stringStack.append("->").append(node.val);
+                        if (stringStack.length() == 0)
+                            stringStack.append(node.val);
+                        else
+                            stringStack.append("->").append(node.val);
                         apply(node.right);
                         stringStack.delete(idx, stringStack.length());
                     }
@@ -58,12 +63,15 @@ public class Leetcode300 {
         while (e - s > 1) {
             int mid = (s + e) / 2;
             if (mid == 0) {
-                if (citations[citations.length - 1] <= mid) s = mid;
-                else e = mid;
-            }
-            else {
-                if (citations[n - mid] >= mid) s = mid;
-                else e = mid;
+                if (citations[citations.length - 1] <= mid)
+                    s = mid;
+                else
+                    e = mid;
+            } else {
+                if (citations[n - mid] >= mid)
+                    s = mid;
+                else
+                    e = mid;
             }
         }
         return s;
@@ -85,15 +93,16 @@ public class Leetcode300 {
         for (var s : squares) {
             dp[s] = 1;
         }
-        if (dp[n] == 1) return 1;
-
+        if (dp[n] == 1)
+            return 1;
 
         while (true) {
             for (int i = n; i > 0; i--) {
                 for (var s : squares) {
                     if (i - s >= 0 && dp[i - s] != 0 && dp[i] == 0) {
                         dp[i] = dp[i - s] + 1;
-                        if (i == n) return dp[i];
+                        if (i == n)
+                            return dp[i];
                     }
                 }
             }
@@ -136,23 +145,21 @@ public class Leetcode300 {
         }
     }
 
-    public static void traceBackAddOperators(
-            int idx,
-            SharedStack stack,
-            SharedString expr,
-            char[] digits_ctr,
-            int target,
+    public static void traceBackAddOperators(int idx, SharedStack stack,
+            SharedString expr, char[] digits_ctr, int target,
             List<String> ans) {
         long current_digit = digits_ctr[idx] - '0';
         if (stack != null && stack.ctr == 'p')
-            stack = new SharedStack(stack.prev.num * 10 + current_digit, 'd', stack.prev.prev);
+            stack = new SharedStack(stack.prev.num * 10 + current_digit, 'd',
+                    stack.prev.prev);
         else
             stack = new SharedStack(current_digit, 'd', stack);
         expr = new SharedString(digits_ctr[idx], expr);
 
         if (idx == digits_ctr.length - 1) {
             var res = computeRightToLeft(stack);
-            if (res == null) return;
+            if (res == null)
+                return;
             if (res.num == target) {
                 StringBuilder sb = new StringBuilder();
                 var ptr = expr;
@@ -162,19 +169,25 @@ public class Leetcode300 {
                 }
                 ans.add(sb.toString());
             }
-        }
-        else {
+        } else {
             var mulDivMergedStack = mergeMulDiv(stack);
             if (mulDivMergedStack != null) {
-                traceBackAddOperators(idx + 1, new SharedStack(0, '*', mulDivMergedStack), new SharedString('*', expr), digits_ctr, target, ans);
+                traceBackAddOperators(idx + 1,
+                        new SharedStack(0, '*', mulDivMergedStack),
+                        new SharedString('*', expr), digits_ctr, target, ans);
             }
             var computedStack = computeRightToLeft(stack);
             if (computedStack != null) {
-                traceBackAddOperators(idx + 1, new SharedStack(0, '+', computedStack), new SharedString('+', expr), digits_ctr, target, ans);
-                traceBackAddOperators(idx + 1, new SharedStack(0, '-', computedStack), new SharedString('-', expr), digits_ctr, target, ans);
+                traceBackAddOperators(idx + 1,
+                        new SharedStack(0, '+', computedStack),
+                        new SharedString('+', expr), digits_ctr, target, ans);
+                traceBackAddOperators(idx + 1,
+                        new SharedStack(0, '-', computedStack),
+                        new SharedString('-', expr), digits_ctr, target, ans);
             }
             if (stack.num != 0) {
-                traceBackAddOperators(idx + 1, new SharedStack(0, 'p', stack), expr, digits_ctr, target, ans);
+                traceBackAddOperators(idx + 1, new SharedStack(0, 'p', stack),
+                        expr, digits_ctr, target, ans);
             }
         }
     }
@@ -188,14 +201,16 @@ public class Leetcode300 {
             var numL = stack.num;
             stack = stack.prev;
             switch (op) {
-                case '*' -> numR *= numL;
-                case '/' -> {
-                    if (numR == 0) return null;
-                    else numR = numL / numR;
-                }
-                case '+' -> numR += numL;
-                case '-' -> numR = numL - numR;
-                default -> throw new RuntimeException(String.valueOf(op));
+            case '*' -> numR *= numL;
+            case '/' -> {
+                if (numR == 0)
+                    return null;
+                else
+                    numR = numL / numR;
+            }
+            case '+' -> numR += numL;
+            case '-' -> numR = numL - numR;
+            default -> throw new RuntimeException(String.valueOf(op));
             }
         }
         return new SharedStack(numR, 'd', null);
@@ -211,12 +226,13 @@ public class Leetcode300 {
             stack = stack.prev;
 
             switch (op) {
-                case '*' -> numR *= numL;
-                case '/' -> {
-                    if (numR == 0) return null;
-                    numR = numL / numR;
-                }
-                default -> throw new RuntimeException();
+            case '*' -> numR *= numL;
+            case '/' -> {
+                if (numR == 0)
+                    return null;
+                numR = numL / numR;
+            }
+            default -> throw new RuntimeException();
             }
         }
         return new SharedStack(numR, 'd', stack);
@@ -239,26 +255,29 @@ public class Leetcode300 {
         var recurFunc = new Object() {
 
             void apply(int idx, List<StackData> stack) {
-                if (stack.size() >= 1 && stack.get(stack.size() - 1).ctr == 'd') {
+                if (stack.size() >= 1
+                        && stack.get(stack.size() - 1).ctr == 'd') {
                     throw new RuntimeException();
                 }
                 int current_digit = digits_ctr[idx] - '0';
                 boolean parsed = false;
                 double before_parse_num = 0;
-                if (stack.size() != 0 && stack.get(stack.size() - 1).ctr == 'p') {
+                if (stack.size() != 0
+                        && stack.get(stack.size() - 1).ctr == 'p') {
                     stack.remove(stack.size() - 1);
                     before_parse_num = stack.remove(stack.size() - 1).num;
-                    stack.add(new StackData(before_parse_num * 10 + current_digit, 'd'));
+                    stack.add(new StackData(
+                            before_parse_num * 10 + current_digit, 'd'));
                     parsed = true;
-                }
-                else
+                } else
                     stack.add(new StackData(current_digit, 'd'));
 
                 expr.add(digits_ctr[idx]);
 
                 if (idx == digits_ctr.length - 1) {
                     var res = computeRightToLeft(stack);
-                    if (res.size() == 0) return;
+                    if (res.size() == 0)
+                        return;
                     if (res.get(0).num == target) {
                         var sb = new StringBuilder();
                         for (var c : expr) {
@@ -266,21 +285,18 @@ public class Leetcode300 {
                         }
                         ans.add(sb.toString());
                     }
-                }
-                else {
+                } else {
                     var mulDivMergedStack = mergeMulDiv(stack);
                     expr.add('*');
                     if (mulDivMergedStack == stack) {
                         stack.add(new StackData(0, '*'));
                         apply(idx + 1, stack);
                         stack.remove(stack.size() - 1);
-                    }
-                    else {
+                    } else {
                         mulDivMergedStack.add(new StackData(0, '*'));
                         apply(idx + 1, mulDivMergedStack);
                     }
                     expr.remove(expr.size() - 1);
-
 
                     var computedStack = computeRightToLeft(stack);
                     expr.add('+');
@@ -288,8 +304,7 @@ public class Leetcode300 {
                         stack.add(new StackData(0, '+'));
                         apply(idx + 1, stack);
                         stack.remove(stack.size() - 1);
-                    }
-                    else {
+                    } else {
                         computedStack.add(new StackData(0, '+'));
                         apply(idx + 1, computedStack);
                         computedStack.remove(computedStack.size() - 1);
@@ -301,8 +316,7 @@ public class Leetcode300 {
                         stack.add(new StackData(0, '-'));
                         apply(idx + 1, stack);
                         stack.remove(stack.size() - 1);
-                    }
-                    else {
+                    } else {
                         computedStack.add(new StackData(0, '-'));
                         apply(idx + 1, computedStack);
                     }
@@ -323,7 +337,6 @@ public class Leetcode300 {
                 expr.remove(expr.size() - 1);
             }
 
-
             List<StackData> computeRightToLeft(List<StackData> stack) {
                 if (stack.size() == 0) {
                     return stack;
@@ -337,17 +350,18 @@ public class Leetcode300 {
                     idx--;
 
                     switch (op) {
-                        case '*' -> numR *= numL;
-                        case '+' -> numR += numL;
-                        case '-' -> numR = numL - numR;
-                        default -> throw new RuntimeException(String.valueOf(op));
+                    case '*' -> numR *= numL;
+                    case '+' -> numR += numL;
+                    case '-' -> numR = numL - numR;
+                    default -> throw new RuntimeException(String.valueOf(op));
                     }
                 }
                 return new ArrayList<>(List.of(new StackData(numR, 'd')));
             }
 
             List<StackData> mergeMulDiv(List<StackData> stack) {
-                if (stack.size() < 3 || stack.get(stack.size() - 2).ctr != '*') {
+                if (stack.size() < 3
+                        || stack.get(stack.size() - 2).ctr != '*') {
                     return stack;
                 }
                 var numR = stack.get(stack.size() - 1).num;
@@ -370,7 +384,6 @@ public class Leetcode300 {
         return ans;
     }
 
-
     /**
      * #284
      */
@@ -386,20 +399,21 @@ public class Leetcode300 {
             }
         }
 
-        // Returns the next element in the iteration without advancing the iterator.
+        // Returns the next element in the iteration without advancing the
+        // iterator.
         public Integer peek() {
             return peek;
         }
 
-        // hasNext() and next() should behave the same as in the Iterator interface.
+        // hasNext() and next() should behave the same as in the Iterator
+        // interface.
         // Override them if needed.
         @Override
         public Integer next() {
             var t = peek;
             if (iterator.hasNext()) {
                 peek = iterator.next();
-            }
-            else {
+            } else {
                 peek = null;
             }
             return t;
@@ -409,6 +423,22 @@ public class Leetcode300 {
         public boolean hasNext() {
             return peek != null;
         }
+    }
+
+    public int findDuplicate(int[] nums) {
+        int s = 1, e = nums.length - 1;
+        while (e != s) {
+            int mid = s + (e - s) / 2;
+            int c = 0;
+            for (var n : nums) {
+                c += ((n <= mid) ? 1 : 0);
+            }
+            if (c <= mid)
+                s = mid + 1;
+            else
+                e = mid;
+        }
+        return s;
     }
 
     /**
@@ -443,21 +473,19 @@ public class Leetcode300 {
                     if (n < 2 || n > 3) {
                         board[i][j] = 2;
                     }
-                }
-                else if (board[i][j] == 0) {
+                } else if (board[i][j] == 0) {
                     if (n == 3) {
                         board[i][j] = -1;
                     }
-                }
-                else throw new RuntimeException();
+                } else
+                    throw new RuntimeException();
             }
         }
         for (int i = 0; i < board.length; i++) {
             for (int j = 0; j < board[0].length; j++) {
                 if (board[i][j] == -1) {
                     board[i][j] = 1;
-                }
-                else if (board[i][j] == 2) {
+                } else if (board[i][j] == 2) {
                     board[i][j] = 0;
                 }
             }
@@ -468,8 +496,10 @@ public class Leetcode300 {
      * #295
      */
     static class MedianFinder {
-        PriorityQueue<Integer> lessMaxQueue = new PriorityQueue<>((a, b) -> b - a);
-        PriorityQueue<Integer> gEqMinQueue = new PriorityQueue<>(Comparator.comparingInt(a -> a));
+        PriorityQueue<Integer> lessMaxQueue = new PriorityQueue<>(
+                (a, b) -> b - a);
+        PriorityQueue<Integer> gEqMinQueue = new PriorityQueue<>(
+                Comparator.comparingInt(a -> a));
 
         public void addNum(int num) {
             if (lessMaxQueue.size() == 0 && gEqMinQueue.size() == 0) {
@@ -478,8 +508,10 @@ public class Leetcode300 {
             }
 
             var median = findMedian();
-            if (num < median) lessMaxQueue.add(num);
-            else gEqMinQueue.add(num);
+            if (num < median)
+                lessMaxQueue.add(num);
+            else
+                gEqMinQueue.add(num);
             while (lessMaxQueue.size() > gEqMinQueue.size() + 1) {
                 gEqMinQueue.add(lessMaxQueue.poll());
             }
@@ -491,11 +523,10 @@ public class Leetcode300 {
         public double findMedian() {
             if (lessMaxQueue.size() == gEqMinQueue.size()) {
                 return (lessMaxQueue.peek() + gEqMinQueue.peek()) / 2.;
-            }
-            else if (lessMaxQueue.size() == gEqMinQueue.size() + 1) {
+            } else if (lessMaxQueue.size() == gEqMinQueue.size() + 1) {
                 return lessMaxQueue.peek();
-            }
-            else throw new RuntimeException();
+            } else
+                throw new RuntimeException();
         }
     }
 
@@ -523,11 +554,18 @@ public class Leetcode300 {
                     count++;
                     var n = deque.poll();
                     var id_n = idOfNode.computeIfAbsent(n, a -> ++id.data);
-                    var id_l = n.left != null ? idOfNode.computeIfAbsent(n.left, a -> ++id.data) : 0;
-                    var id_r = n.right != null ? idOfNode.computeIfAbsent(n.right, a -> ++id.data) : 0;
-                    strB.append(";").append(id_n).append(",").append(n.val).append(",").append(id_l).append(",").append(id_r);
-                    if (id_l != 0) deque.add(n.left);
-                    if (id_r != 0) deque.add(n.right);
+                    var id_l = n.left != null
+                            ? idOfNode.computeIfAbsent(n.left, a -> ++id.data)
+                            : 0;
+                    var id_r = n.right != null
+                            ? idOfNode.computeIfAbsent(n.right, a -> ++id.data)
+                            : 0;
+                    strB.append(";").append(id_n).append(",").append(n.val)
+                            .append(",").append(id_l).append(",").append(id_r);
+                    if (id_l != 0)
+                        deque.add(n.left);
+                    if (id_r != 0)
+                        deque.add(n.right);
                 }
             }
             strB.insert(0, count);
