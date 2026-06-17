@@ -518,37 +518,36 @@ public class Leetcode50 {
      */
 
     public static List<List<Integer>> threeSum(int[] nums) {
-        Arrays.sort(nums);
         List<List<Integer>> res = new ArrayList<>();
-        for (int i = 0; i < nums.length; i++) {
-            if (!(i > 0 && nums[i] == nums[i - 1])) {
-                int left = i + 1;
-                int right = nums.length - 1;
-                while (left < right) {
-                    if (nums[i] + nums[left] + nums[right] > 0) {
-                        right--;
-                    } else if (nums[i] + nums[left] + nums[right] < 0) {
-                        left++;
-                    } else {
-                        List<Integer> l = new ArrayList<>();
-                        l.add(nums[i]);
-                        l.add(nums[left]);
-                        l.add(nums[right]);
-                        res.add(l);
-                        while (right > left && nums[right] == nums[right - 1]) {
-                            right--;
-                        }
-                        while (right > left && nums[left] == nums[left + 1]) {
-                            left++;
-                        }
-
-                        left++;
-                        right--;
-                    }
+        Arrays.sort(nums);
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i - 1 >= 0 && nums[i] == nums[i - 1])
+                continue;
+            if (nums[i] > 0)
+                break;
+            int j = i + 1, k = nums.length - 1;
+            int target = -nums[i];
+            while (j < k) {
+                int sum = nums[j] + nums[k];
+                if (sum == target) {
+                    res.add(List.of(nums[i], nums[j], nums[k]));
+                    do {
+                        j++;
+                    } while (j < nums.length && nums[j] == nums[j - 1]);
+                    do {
+                        k--;
+                    } while (k >= 0 && nums[k] == nums[k + 1]);
+                } else if (sum < target) {
+                    do {
+                        j++;
+                    } while (j < nums.length && nums[j] == nums[j - 1]);
+                } else {
+                    do {
+                        k--;
+                    } while (k >= 0 && nums[k] == nums[k + 1]);
                 }
             }
         }
-
         return res;
     }
 
