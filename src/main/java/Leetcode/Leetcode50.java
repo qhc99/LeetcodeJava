@@ -1703,47 +1703,40 @@ public class Leetcode50 {
      * @return result
      */
 
-    public static List<List<Integer>> combinationSum2(int[] candidates,
-            int target) {
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         List<List<Integer>> res = new ArrayList<>();
         Arrays.sort(candidates);
-        recursiveCombinationSum2(candidates, target, new ArrayList<>(),
-                new boolean[candidates.length], res);
+        boolean[] selected = new boolean[candidates.length];
+        combinationSum2(candidates, 0, 0, target, res, selected);
         return res;
     }
 
-    private static void recursiveCombinationSum2(int[] candidates,
-            int targetSum, List<Integer> currentCache,
-            boolean[] currentSelected, List<List<Integer>> res) {
-        for (int i = 0; i < candidates.length
-                && candidates[i] <= targetSum; i++) {
-            if (currentSelected[i]) {
-                continue;
-            } else if (i < candidates.length - 1
-                    && candidates[i] == candidates[i + 1]
-                    && !currentSelected[i + 1]) {
-                continue;
-            } else {
-                if (currentCache.size() > 0 && candidates[i] < currentCache
-                        .get(currentCache.size() - 1)) {
-                    continue;
-                } else {
-                    currentSelected[i] = true;
-                    currentCache.add(candidates[i]);
-                    if (targetSum == candidates[i]) {
-                        res.add(new ArrayList<>(currentCache));
-                        currentCache.remove(currentCache.size() - 1);
-                        currentSelected[i] = false;
-                    } else {
-                        recursiveCombinationSum2(candidates,
-                                targetSum - candidates[i], currentCache,
-                                currentSelected, res);
-                        currentSelected[i] = false;
-                        currentCache.remove(currentCache.size() - 1);
-                    }
+    void combinationSum2(int[] candidates, int i, int sum, int target,
+            List<List<Integer>> res, boolean[] selected) {
+        if (i >= candidates.length)
+            return;
+        if (i == 0 || (candidates[i - 1] != candidates[i] || selected[i - 1])) {
+            selected[i] = true;
+        }
+        var s = sum + (selected[i] ? candidates[i] : 0);
+
+        if (s == target) {
+            List<Integer> arr = new ArrayList<>();
+            for (int j = 0; j < candidates.length; j++) {
+                if (selected[j]) {
+                    arr.add(candidates[j]);
                 }
             }
+            res.add(arr);
+
+        } else if (s < target) {
+            combinationSum2(candidates, i + 1, s, target, res, selected);
+            if (selected[i]) {
+                selected[i] = false;
+                combinationSum2(candidates, i + 1, sum, target, res, selected);
+            }
         }
+        selected[i] = false;
     }
 
     /**
