@@ -1773,28 +1773,79 @@ public class Leetcode50 {
      * @return multiply
      */
 
-    public static String multiply(String num1, String num2) {
-        if (num1.equals("0") || num2.equals("0")) {
-            return "0";
-        }
-        int[] res = new int[num1.length() + num2.length()];
-        for (int i = num1.length() - 1; i >= 0; i--) {
-            int n1 = num1.charAt(i) - '0';
-            for (int j = num2.length() - 1; j >= 0; j--) {
-                int n2 = num2.charAt(j) - '0';
-                int sum = (res[i + j + 1] + n1 * n2);
-                res[i + j + 1] = sum % 10;
-                res[i + j] += sum / 10;
-            }
+    public String multiply(String num1, String num2) {
+        if (num1.length() < num2.length()) {
+            var t = num1;
+            num1 = num2;
+            num2 = t;
         }
 
-        StringBuilder result = new StringBuilder();
-        for (int i = 0; i < res.length; i++) {
-            if (i == 0 && res[i] == 0)
-                continue;
-            result.append(res[i]);
+        String res = "0";
+        for (int i = num2.length() - 1; i >= 0; i--) {
+            var m = multiply(num1, num2.charAt(i));
+            if (!m.equals("0"))
+                m += "0".repeat(num2.length() - 1 - i);
+            res = add(res, m);
         }
-        return result.toString();
+
+        return res;
+    }
+
+    String multiply(String num1, char num2) {
+
+        int t = 0;
+        int n = num2 - '0';
+        if (n == 0) {
+            return "0";
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = num1.length() - 1; i >= 0; i--) {
+            int v = (num1.charAt(i) - '0') * n + t;
+            t = 0;
+            if (v >= 10) {
+                t = v / 10;
+                v = v % 10;
+            }
+            sb.append(String.valueOf(v));
+        }
+        if (t != 0)
+            sb.append(String.valueOf(t));
+        return sb.reverse().toString();
+    }
+
+    String add(String num1, String num2) {
+        if (num1.length() < num2.length()) {
+            var t = num1;
+            num1 = num2;
+            num2 = t;
+        }
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+        int t = 0;
+        StringBuilder sb = new StringBuilder();
+        for (; i >= 0 && j >= 0; i--, j--) {
+            int v = num1.charAt(i) - '0' + num2.charAt(j) - '0' + t;
+            t = 0;
+            if (v >= 10) {
+                v -= 10;
+                t = 1;
+            }
+            sb.append(String.valueOf(v));
+        }
+
+        for (; i >= 0; i--) {
+            int v = num1.charAt(i) - '0' + t;
+            t = 0;
+            if (v >= 10) {
+                v -= 10;
+                t = 1;
+            }
+            sb.append(String.valueOf(v));
+        }
+        if (t == 1)
+            sb.append("1");
+
+        return sb.reverse().toString();
     }
 
     /**
