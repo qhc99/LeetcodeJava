@@ -1889,6 +1889,36 @@ public class Leetcode50 {
     }
 
     /**
+     * #45
+     * 
+     * @param nums
+     * @return
+     */
+    public int jump(int[] nums) {
+        int i = 0;
+        int res = 0;
+        while (i < nums.length - 1) {
+            int v = nums[i];
+            int max = 0;
+            int next = i;
+            if (i + v >= nums.length - 1) {
+                res++;
+                break;
+            }
+            for (int offset = 1; offset <= v; offset++) {
+                int t = nums[i + offset] + offset;
+                if (t > max) {
+                    max = t;
+                    next = i + offset;
+                }
+            }
+            i = next;
+            res++;
+        }
+        return res;
+    }
+
+    /**
      * #46 <br/>
      * 全排列
      * 
