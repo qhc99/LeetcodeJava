@@ -221,6 +221,32 @@ public class Leetcode100 {
     }
 
     /**
+     * 
+     * 66
+     * 
+     * @param digits
+     * @return
+     */
+    public int[] plusOne(int[] digits) {
+        int t = 0;
+        Deque<Integer> deque = new ArrayDeque<>(digits.length);
+        for (int i = digits.length - 1; i >= 0; i--) {
+            int v = digits[i] + t;
+            if (i == digits.length - 1)
+                v++;
+            t = 0;
+            if (v >= 10) {
+                t = 1;
+                v -= 10;
+            }
+            deque.addFirst(v);
+        }
+        if (t == 1)
+            deque.addFirst(1);
+        return deque.stream().mapToInt(i -> i).toArray();
+    }
+
+    /**
      * #74 <br/>
      * 搜索二维矩阵
      *
