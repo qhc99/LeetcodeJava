@@ -3,8 +3,7 @@ package Leetcode;
 import java.util.*;
 import java.util.function.ToDoubleFunction;
 
-
-@SuppressWarnings({"JavadocDeclaration"})
+@SuppressWarnings({ "JavadocDeclaration" })
 public class Leetcode600 {
 
     /**
@@ -20,13 +19,14 @@ public class Leetcode600 {
             if (c == 'A') {
                 a++;
                 l++;
-                if (a == 2) return false;
-            }
-            else if (c == 'L') {
+                if (a == 2)
+                    return false;
+            } else if (c == 'L') {
                 l++;
-                if (l == 3) return false;
-            }
-            else l = 0;
+                if (l == 3)
+                    return false;
+            } else
+                l = 0;
         }
         return true;
     }
@@ -68,9 +68,9 @@ public class Leetcode600 {
     }
 
     /**
-     * #560
-     * <br>find the count of continue sub-arrays which sum is k<br>
-     * [1, 2, 3, 4], 3 ---> 2    (answer: [1, 2] and [3])
+     * #560 <br>
+     * find the count of continue sub-arrays which sum is k<br>
+     * [1, 2, 3, 4], 3 ---> 2 (answer: [1, 2] and [3])
      *
      * @param nums array
      * @param k    sum target
@@ -91,6 +91,48 @@ public class Leetcode600 {
     }
 
     /**
+     * #567
+     * 
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public boolean checkInclusion(String s1, String s2) {
+        Map<Character, Integer> target = new HashMap<>(s1.length());
+        for (var c : s1.toCharArray()) {
+            target.put(c, target.getOrDefault(c, 0) + 1);
+        }
+        Map<Character, Integer> window = new HashMap<>(s1.length());
+        int l = -1;
+        for (int r = 0; r < s2.length(); r++) {
+            var c = s2.charAt(r);
+            if (target.containsKey(c)
+                    && window.getOrDefault(c, 0) + 1 <= target.get(c)) {
+                if (l == -1) {
+                    l = r;
+                }
+                window.put(c, window.getOrDefault(c, 0) + 1);
+                if (r - l + 1 == s1.length())
+                    return true;
+            } else if (l != -1) {
+                if (!target.containsKey(c)) {
+                    l = -1;
+                    window.clear();
+                } else {
+                    while (l < r
+                            && window.getOrDefault(c, 0) + 1 > target.get(c)) {
+                        window.put(s2.charAt(l), window.get(s2.charAt(l)) - 1);
+                        l++;
+                    }
+                    window.put(c, window.getOrDefault(c, 0) + 1);
+                }
+            }
+
+        }
+        return false;
+    }
+
+    /**
      * #583
      *
      * @param word1
@@ -107,8 +149,10 @@ public class Leetcode600 {
             var ac = a.charAt(i - 1);
             for (int j = 1; j < b.length() + 1; j++) {
                 var bc = b.charAt(j - 1);
-                if (ac == bc) dp[i][j] = dp[i - 1][j - 1] + 1;
-                else dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                if (ac == bc)
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                else
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
             }
         }
         return dp[a.length()][b.length()];
@@ -126,7 +170,7 @@ public class Leetcode600 {
             return trees;
         }
         int bottom = 0;
-        /* 找到 y 最小的点 bottom*/
+        /* 找到 y 最小的点 bottom */
         for (int i = 0; i < n; i++) {
             if (trees[i][1] < trees[bottom][1]) {
                 bottom = i;
@@ -138,8 +182,7 @@ public class Leetcode600 {
             int diff = ccw(trees[0], a, b);
             if (diff == 0) {
                 return distance(trees[0], a) - distance(trees[0], b);
-            }
-            else {
+            } else {
                 return -diff;
             }
         });
@@ -157,7 +200,8 @@ public class Leetcode600 {
         for (int i = 2; i < n; i++) {
             int top = stack.pop();
             /* 如果当前元素与栈顶的两个元素构成的向量顺时针旋转，则弹出栈顶元素 */
-            while (!stack.isEmpty() && ccw(trees[stack.peek()], trees[top], trees[i]) < 0) {
+            while (!stack.isEmpty()
+                    && ccw(trees[stack.peek()], trees[top], trees[i]) < 0) {
                 top = stack.pop();
             }
             stack.push(top);
@@ -201,10 +245,8 @@ public class Leetcode600 {
     }
 
     public static class ConvexHull {
-        public static <E> List<E> GrahamScan(
-                List<E> points,
-                ToDoubleFunction<E> getX,
-                ToDoubleFunction<E> getY) {
+        public static <E> List<E> GrahamScan(List<E> points,
+                ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
             if (points.size() <= 3) {
                 return points;
             }
@@ -224,17 +266,19 @@ public class Leetcode600 {
             points.sort((a, b) -> {
                 var comp_a = ccw(final_start, a, b, getX, getY);
                 if (comp_a == 0) {
-                    var comp_d = distance(a, final_start, getX, getY) - distance(b, final_start, getX, getY);
+                    var comp_d = distance(a, final_start, getX, getY)
+                            - distance(b, final_start, getX, getY);
                     return comp_d < 0 ? -1 : comp_d > 0 ? 1 : 0;
-                }
-                else return -comp_a < 0 ? -1 : -comp_a > 0 ? 1 : 0;
+                } else
+                    return -comp_a < 0 ? -1 : -comp_a > 0 ? 1 : 0;
             });
             List<E> temp = new ArrayList<>(points.size() + 1);
             temp.add(start);
             temp.addAll(points);
             points = temp;
             int s = points.size() - 1;
-            while (s >= 0 && ccw(start, points.get(s), points.get(points.size() - 1), getX, getY) == 0) {
+            while (s >= 0 && ccw(start, points.get(s),
+                    points.get(points.size() - 1), getX, getY) == 0) {
                 s--;
             }
             s++;
@@ -248,11 +292,11 @@ public class Leetcode600 {
             points_stack.addLast(points.get(0));
             points_stack.addLast(points.get(1));
 
-
             for (int i = 2; i < points.size(); i++) {
                 var p = points.get(i);
                 var last = points_stack.removeLast();
-                while (!points_stack.isEmpty() && ccw(points_stack.getLast(), last, p, getX, getY) < 0) {
+                while (!points_stack.isEmpty() && ccw(points_stack.getLast(),
+                        last, p, getX, getY) < 0) {
                     last = points_stack.removeLast();
                 }
                 points_stack.addLast(last);
@@ -270,7 +314,8 @@ public class Leetcode600 {
             points.set(j, t);
         }
 
-        private static <E> double distance(E a, E b, ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
+        private static <E> double distance(E a, E b, ToDoubleFunction<E> getX,
+                ToDoubleFunction<E> getY) {
             double ax = getX.applyAsDouble(a);
             double ay = getY.applyAsDouble(a);
 
@@ -279,7 +324,8 @@ public class Leetcode600 {
             return Math.pow(ax - bx, 2) + Math.pow(ay - by, 2);
         }
 
-        private static <E> double ccw(E a, E b, E c, ToDoubleFunction<E> getX, ToDoubleFunction<E> getY) {
+        private static <E> double ccw(E a, E b, E c, ToDoubleFunction<E> getX,
+                ToDoubleFunction<E> getY) {
             double ax = getX.applyAsDouble(a);
             double ay = getY.applyAsDouble(a);
 
