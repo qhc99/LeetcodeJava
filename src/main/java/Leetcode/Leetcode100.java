@@ -396,27 +396,36 @@ public class Leetcode100 {
      * @return subset
      */
 
-    public static List<List<Integer>> subsetsWithDup(int[] nums) {
-        List<Integer> t = new ArrayList<>();
-        List<List<Integer>> ans = new ArrayList<>();
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
         Arrays.sort(nums);
-        dfs(false, 0, nums, t, ans);
-        return ans;
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(new ArrayList<>());
+        List<Integer> cache = new ArrayList<>();
+        boolean[] selected = new boolean[nums.length];
+        for (int l = 1; l <= nums.length; l++) {
+            subsetsWithDup(nums, 0, selected, cache, l, res);
+        }
+        return res;
     }
 
-    public static void dfs(boolean choosePre, int cur, int[] nums,
-            List<Integer> t, List<List<Integer>> ans) {
-        if (cur == nums.length) {
-            ans.add(new ArrayList<>(t));
+    void subsetsWithDup(int[] nums, int idx, boolean[] selected,
+            List<Integer> cache, int length, List<List<Integer>> res) {
+        if (cache.size() == length) {
+            res.add(new ArrayList<>(cache));
             return;
         }
-        dfs(false, cur + 1, nums, t, ans);
-        if (!choosePre && cur > 0 && nums[cur - 1] == nums[cur]) {
+        if (nums.length - idx + cache.size() < length) {
             return;
         }
-        t.add(nums[cur]);
-        dfs(true, cur + 1, nums, t, ans);
-        t.remove(t.size() - 1);
+        if (!(idx - 1 >= 0 && nums[idx - 1] == nums[idx]
+                && !selected[idx - 1])) {
+            cache.add(nums[idx]);
+            selected[idx] = true;
+            subsetsWithDup(nums, idx + 1, selected, cache, length, res);
+            cache.removeLast();
+            selected[idx] = false;
+        }
+        subsetsWithDup(nums, idx + 1, selected, cache, length, res);
     }
 
     /**
