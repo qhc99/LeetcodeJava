@@ -288,6 +288,60 @@ public class Leetcode150 {
     }
 
     /**
+     * #130
+     * 
+     * @param board
+     */
+    public void solve(char[][] board) {
+        int m = board.length, n = board[0].length;
+        Queue<Point> queue = new ArrayDeque<>();
+
+        for (int j = 0; j < n; j++) {
+            if (board[0][j] == 'O') {
+                queue.add(new Point(0, j));
+            }
+            if (board[m - 1][j] == 'O') {
+                queue.add(new Point(m - 1, j));
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            if (board[i][0] == 'O') {
+                queue.add(new Point(i, 0));
+            }
+            if (board[i][n - 1] == 'O') {
+                queue.add(new Point(i, n - 1));
+            }
+        }
+        int[] dx = { 0, 0, 1, -1 };
+        int[] dy = { 1, -1, 0, 0 };
+        while (!queue.isEmpty()) {
+            var point = queue.poll();
+            var p = point.x;
+            var q = point.y;
+            board[p][q] = 'A';
+            for (int i = 0; i < 4; i++) {
+                int px = p + dx[i], py = q + dy[i];
+                if (px < 0 || px >= m || py < 0 || py >= n
+                        || board[px][py] != 'O')
+                    continue;
+                queue.add(new Point(px, py));
+            }
+        }
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'A')
+                    board[i][j] = 'O';
+                else if (board[i][j] == 'O')
+                    board[i][j] = 'X';
+            }
+        }
+    }
+
+    static record Point(int x, int y) {
+
+    }
+
+    /**
      * #131
      *
      * @param s
