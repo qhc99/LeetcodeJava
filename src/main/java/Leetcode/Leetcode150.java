@@ -162,46 +162,20 @@ public class Leetcode150 {
      * @return
      */
     public int numDistinct(String s, String t) {
-        Map<Character, List<Integer>> char2Pos = new HashMap<>();
-        Set<Character> chrs = new HashSet<>(
-                t.chars().mapToObj(i -> (char) i).toList());
-        for (int i = 0; i < s.length(); i++) {
-            var c = s.charAt(i);
-            if (chrs.contains(c)) {
-                char2Pos.computeIfAbsent(c, k -> new ArrayList<>()).add(i);
-            }
-        }
-
-        if (t.length() == 1) {
-            return char2Pos.getOrDefault(t.charAt(0), List.of()).size();
-        }
-        int[][] posLinksCount = new int[2][];
-        posLinksCount[0] = new int[char2Pos.getOrDefault(t.charAt(0), List.of())
-                .size()];
-        Arrays.fill(posLinksCount[0], 1);
-        for (int i = 1; i < t.length(); i++) {
-            var prevPos = char2Pos.getOrDefault(t.charAt(i - 1), List.of());
-            var pos = char2Pos.getOrDefault(t.charAt(i), List.of());
-            posLinksCount[1] = new int[pos.size()];
-            int prefixSum = 0;
-            int k = 0;
-            for (int j = 0; j < prevPos.size() && k < pos.size(); j++) {
-                prefixSum += posLinksCount[0][j];
-                while (k < pos.size() && prevPos.get(j) >= pos.get(k)) {
-                    k++;
-                    if (k < pos.size())
-                        posLinksCount[1][k] = posLinksCount[1][k - 1];
+        if (s.length() < t.length())
+            return 0;
+        int[] dp = new int[t.length() + 1];
+        dp[0] = 1;
+        for (int i = 1; i < s.length() + 1; i++) {
+            for (int j = t.length(); j >= 1; j--) {
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+                    dp[j] += dp[j - 1];
+                } else {
+                    dp[j] = dp[j];
                 }
-                if (k < pos.size())
-                    posLinksCount[1][k] = prefixSum;
             }
-            while (k + 1 < pos.size()) {
-                posLinksCount[1][k + 1] = posLinksCount[1][k];
-                k++;
-            }
-            posLinksCount[0] = posLinksCount[1];
         }
-        return Arrays.stream(posLinksCount[1]).sum();
+        return dp[t.length()];
     }
 
     /**
