@@ -1,6 +1,16 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 @SuppressWarnings({ "JavaDoc" })
 public class Leetcode150 {
@@ -454,6 +464,45 @@ public class Leetcode150 {
             return m;
         } else
             return ans;
+    }
+
+    static class Nest {
+        static class Node {
+            int val;
+            Node next;
+            Node random;
+
+            public Node(int val) {
+                this.val = val;
+                this.next = null;
+                this.random = null;
+            }
+        }
+
+        /**
+         * #138
+         * 
+         * @param head
+         * @return
+         */
+        public Node copyRandomList(Node head) {
+            Map<Node, Node> map = new HashMap<>();
+            copyNode(head, map);
+            return map.get(head);
+        }
+
+        public Node copyNode(Node node, Map<Node, Node> map) {
+            if (node == null)
+                return null;
+            var newNode = map.computeIfAbsent(node, n -> new Node(n.val));
+            if (node.random != null) {
+                var rand = map.computeIfAbsent(node.random,
+                        n -> new Node(n.val));
+                newNode.random = rand;
+            }
+            newNode.next = copyNode(node.next, map);
+            return newNode;
+        }
     }
 
     /**
