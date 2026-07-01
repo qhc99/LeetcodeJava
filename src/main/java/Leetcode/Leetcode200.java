@@ -1,13 +1,17 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.BitSet;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 @SuppressWarnings({ "JavaDoc" })
 public class Leetcode200 {
 
     /**
-     * #152
-     * <br/>
+     * #152 <br/>
      * 乘积最大子数组
      *
      * @param nums numbers
@@ -151,6 +155,37 @@ public class Leetcode200 {
     }
 
     /**
+     * #167
+     * 
+     * @param numbers
+     * @param target
+     * @return
+     */
+    public int[] twoSum(int[] numbers, int target) {
+        int[] res = new int[2];
+        int i = 0, j = numbers.length - 1;
+        while (i < j) {
+            var sum = numbers[i] + numbers[j];
+            if (sum == target) {
+                res[0] = i + 1;
+                res[1] = j + 1;
+                break;
+            } else if (sum < target) {
+                i++;
+                while (i - 1 >= 0 && numbers[i] == numbers[i - 1]) {
+                    i++;
+                }
+            } else {
+                j--;
+                while (j + 1 < numbers.length && numbers[j] == numbers[j + 1]) {
+                    j--;
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      * #173
      */
     public static class BSTIterator {
@@ -169,7 +204,8 @@ public class Leetcode200 {
             }
 
             while (ptr != null) {
-                if (ptr.left != null && !poppedBefore) // if popped before, walk to right
+                if (ptr.left != null && !poppedBefore) // if popped before, walk
+                                                       // to right
                 {
                     stack.push(ptr);
                     ptr = ptr.left;
