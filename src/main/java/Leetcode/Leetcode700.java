@@ -23,8 +23,6 @@ public class Leetcode700 {
      * @return
      */
     public int countSubstrings2(String s) {
-        // b&a$b$b$a$b
-        // c$a$a$a$b
         char[] str = new char[2 * s.length() - 1];
         for (int i = 0; i < str.length; i++) {
             if (i % 2 == 0) {
