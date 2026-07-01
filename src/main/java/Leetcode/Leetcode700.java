@@ -213,6 +213,28 @@ public class Leetcode700 {
     }
 
     /**
+     * #678
+     * 
+     * @param s
+     * @return
+     */
+    public boolean checkValidString(String s) {
+        Deque<Character> deque = new ArrayDeque<>();
+        for (var c : s.toCharArray()) {
+            if (c == '(') {
+                deque.addLast(c);
+            } else if (c == '*') {
+                deque.addFirst(c);
+            } else if (!deque.isEmpty()) {
+                deque.pollLast();
+            } else {
+                return false;
+            }
+        }
+        return deque.isEmpty();
+    }
+
+    /**
      * #679
      *
      * @param cards
