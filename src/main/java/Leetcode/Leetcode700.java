@@ -212,6 +212,10 @@ public class Leetcode700 {
         return res;
     }
 
+    static record CharPos(char c, int pos) {
+
+    }
+
     /**
      * #678
      * 
@@ -219,17 +223,31 @@ public class Leetcode700 {
      * @return
      */
     public boolean checkValidString(String s) {
-        Deque<Character> deque = new ArrayDeque<>();
-        for (var c : s.toCharArray()) {
+        Deque<CharPos> deque = new ArrayDeque<>();
+        var arr = s.toCharArray();
+        for (int i = 0; i < arr.length; i++) {
+            var c = arr[i];
             if (c == '(') {
-                deque.addLast(c);
+                deque.addLast(new CharPos(c, i));
             } else if (c == '*') {
-                deque.addFirst(c);
+                deque.addFirst(new CharPos(c, i));
             } else if (!deque.isEmpty()) {
                 deque.pollLast();
             } else {
                 return false;
             }
+        }
+        while (deque.size() >= 2) {
+            var left = deque.pollLast();
+            var star = deque.pollFirst();
+            if (left.c == '*') {
+            } else if ((star.c == '(') || (left.c == '(' && star.c == '*'
+                    && star.pos < left.pos)) {
+                return false;
+            }
+        }
+        while (!deque.isEmpty() && deque.peekFirst().c == '*') {
+            deque.pollFirst();
         }
         return deque.isEmpty();
     }
