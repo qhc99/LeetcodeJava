@@ -1,12 +1,69 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 public class Leetcode700 {
+
+    /**
+     * #647
+     * 
+     * @param s
+     * @return
+     */
+    public int countSubstrings2(String s) {
+        // b&a$b$b$a$b
+        // c$a$a$a$b
+        char[] str = new char[2 * s.length() - 1];
+        for (int i = 0; i < str.length; i++) {
+            if (i % 2 == 0) {
+                str[i] = s.charAt(i / 2);
+            } else {
+                str[i] = '$';
+            }
+        }
+        int[] manacher = new int[str.length];
+        int mid = 0, r = 0;
+        Arrays.fill(manacher, 1);
+        for (int i = 0; i < str.length; i++) {
+            if (i < r) {
+                var mi = 2 * mid - i;
+                var l = 2 * mid - r;
+                manacher[i] = Math.min(manacher[mi], mi - l);
+            }
+            var len = manacher[i];
+            while (i + len < str.length && i - len >= 0
+                    && str[i + len] == str[i - len]) {
+                len++;
+            }
+            manacher[i] = len;
+            if (i + len > r) {
+                mid = i;
+                r = len;
+            }
+        }
+        int res = 0;
+        for (int i = 0; i < str.length; i++) {
+            var len = manacher[i];
+            if (str[i] == '$')
+                len--;
+            if (str[i + manacher[i] - 1] == '$')
+                len--;
+            res += (len + 1) / 2;
+        }
+        return res;
+    }
 
     /**
      * #652
