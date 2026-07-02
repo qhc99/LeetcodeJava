@@ -357,6 +357,23 @@ public class Leetcode700 {
     }
 
     /**
+     * #684
+     * 
+     * @param edges
+     * @return
+     */
+    public int[] findRedundantConnection(int[][] edges) {
+        DisjointSet set = new DisjointSet(edges.length + 1);
+        for (var e : edges) {
+            if (set.isLinked(e[0], e[1])) {
+                return e;
+            }
+            set.union(e[0], e[1]);
+        }
+        return null;
+    }
+
+    /**
      * #686
      *
      * @param a
@@ -457,6 +474,42 @@ public class Leetcode700 {
         }
         return res;
 
+    }
+
+    /**
+     * #695
+     * 
+     * @param grid
+     * @return
+     */
+    public int maxAreaOfIsland(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        DisjointSet set = new DisjointSet(m * n);
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0)
+                    set.parent[i * n + j] = -1;
+                else {
+                    if (j + 1 < n && grid[i][j + 1] == 1) {
+                        set.union(i * n + j, i * n + j + 1);
+                    }
+                    if (i + 1 < m && grid[i + 1][j] == 1) {
+                        set.union(i * n + j, (i + 1) * n + j);
+                    }
+                }
+            }
+        }
+        Map<Integer, Integer> count = new HashMap<>();
+        int res = 0;
+        for (int i = 0; i < m * n; i++) {
+            if (set.parent[i] != -1) {
+                var p = set.parent(i);
+                var v = count.getOrDefault(p, 0) + 1;
+                count.put(p, v);
+                res = Math.max(v, res);
+            }
+        }
+        return res;
     }
 
 }
