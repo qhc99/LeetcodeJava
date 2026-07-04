@@ -9,6 +9,34 @@ import java.util.function.Function;
 public class Leetcode250 {
 
     /**
+     * #202
+     * 
+     * @param n
+     * @return
+     */
+    public boolean isHappy(int n) {
+        var num = n;
+        Set<Integer> seen = new HashSet<>();
+        do {
+            seen.add(num);
+            num = next(num);
+            if (num == 1)
+                return true;
+        } while (!seen.contains(num));
+        return false;
+    }
+
+    int next(int n) {
+        int res = 0;
+        while (n != 0) {
+            var a = n % 10;
+            res += a * a;
+            n = n / 10;
+        }
+        return res;
+    }
+
+    /**
      * #208
      */
     public static class Trie {

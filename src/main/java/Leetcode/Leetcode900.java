@@ -6,8 +6,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -25,63 +29,55 @@ public class Leetcode900 {
      * @return
      */
     public int kSimilarity(String s1, String s2) {
-        var a = s1.toCharArray();
-        var b = s2.toCharArray();
-        int[] map = new int['z' - 'a' + 1];
-        Arrays.fill(map, -1);
-        int m = 0;
-        for (var c : a) {
-            if (map[c - 'a'] == -1) {
-                map[c - 'a'] = m++;
+        Set<Anagram> seen = new HashSet<>();
+        Queue<Anagram> queue = new ArrayDeque<>();
+        var target = s2.toCharArray();
+        {
+            var ag = new Anagram(s1.toCharArray(), 0, 0);
+            queue.add(ag);
+            seen.add(ag);
+        }
+        while (!queue.isEmpty()) {
+            var ag = queue.poll();
+
+            int head = ag.idx;
+            while (head < ag.state.length && ag.state[head] == target[head]) {
+                head++;
+            }
+            if (head == target.length)
+                return ag.count;
+
+            for (int i = head + 1; i < target.length; i++) {
+                if (target[head] == ag.state[i]) {
+                    var next_state = new char[s1.length()];
+                    System.arraycopy(ag.state, 0, next_state, 0, target.length);
+                    var t = next_state[head];
+                    next_state[head] = next_state[i];
+                    next_state[i] = t;
+                    var a = new Anagram(next_state, head + 1, ag.count + 1);
+                    if (!seen.contains(a)) {
+                        queue.add(a);
+                        seen.add(a);
+                    }
+                }
             }
         }
-        int[] mapped_b = new int[b.length];
-        for (int i = 0; i < b.length; i++) {
-            mapped_b[i] = map[b[i] - 'a'];
-        }
-
-        int[] ans = new int[1];
-        count(mapped_b, 0, mapped_b.length, ans);
-        return ans[0];
+        return 0;
     }
 
-    private static void count(int[] a, int s, int e, int[] ans) {
-        if (e - s <= 1) {
-            return;
+    static record Anagram(char[] state, int idx, int count) {
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(Arrays.hashCode(state));
         }
-        if (e - s == 2) {
-            if (a[e - 1] < a[s]) {
-                var t = a[s];
-                a[s] = a[e - 1];
-                a[e - 1] = t;
-                ans[0]++;
+
+        @Override
+        public final boolean equals(Object arg0) {
+            if (arg0 instanceof Anagram other) {
+                return Arrays.equals(state, other.state);
             }
-            return;
-        }
-        // divide
-        int mid = (s + e) / 2;
-        count(a, s, mid, ans);
-        count(a, mid, e, ans);
-        // conquer
-        int[] l = new int[mid - s];
-        int[] r = new int[e - mid];
-        System.arraycopy(a, s, l, 0, mid - s);
-        System.arraycopy(a, mid, r, 0, e - mid);
-        int l_ptr = 0, r_ptr = 0;
-        int a_ptr = 0;
-        while (l_ptr < l.length && r_ptr < r.length) {
-            if (r[r_ptr] < l[l_ptr]) {
-                ans[0]++;
-                a[s + a_ptr++] = r[r_ptr++];
-            } else {
-                a[s + a_ptr++] = l[l_ptr++];
-            }
-        }
-        while (l_ptr < l.length) {
-            a[s + a_ptr++] = l[l_ptr++];
-        }
-        while (r_ptr < r.length) {
-            a[s + a_ptr++] = r[r_ptr++];
+            return false;
         }
     }
 
