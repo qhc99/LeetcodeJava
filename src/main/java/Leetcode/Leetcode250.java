@@ -1242,4 +1242,25 @@ public class Leetcode250 {
         }
         return false;
     }
+
+    /**
+     * #242
+     * 
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isAnagram(String s, String t) {
+        Map<Character, Integer> statS = new HashMap<>();
+        Map<Character, Integer> statT = new HashMap<>();
+        if (s.length() != t.length())
+            return false;
+        for (var c : s.toCharArray()) {
+            statS.put(c, statS.getOrDefault(c, 0) + 1);
+        }
+        for (var c : t.toCharArray()) {
+            statT.put(c, statT.getOrDefault(c, 0) + 1);
+        }
+        return statS.equals(statT);
+    }
 }
