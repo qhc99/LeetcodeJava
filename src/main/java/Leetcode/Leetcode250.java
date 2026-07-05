@@ -195,6 +195,34 @@ public class Leetcode250 {
     }
 
     /**
+     * #213
+     * 
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        int[] dp_first = new int[2];
+        int[] dp_no_first = new int[2];
+        dp_first[0] = nums[0];
+        dp_first[1] = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            if (i > 1 && i < nums.length - 1) {
+                var no = Math.max(dp_first[0], dp_first[1]);
+                var yes = dp_first[0] + nums[i];
+                dp_first[0] = no;
+                dp_first[1] = yes;
+            }
+
+            var no = Math.max(dp_no_first[0], dp_no_first[1]);
+            var yes = dp_no_first[0] + nums[i];
+            dp_no_first[0] = no;
+            dp_no_first[1] = yes;
+        }
+        return Math.max(Math.max(dp_first[0], dp_first[1]),
+                Math.max(dp_no_first[0], dp_no_first[1]));
+    }
+
+    /**
      * #214
      *
      * @param s
@@ -295,6 +323,23 @@ public class Leetcode250 {
         } else {
             return this.partition(nums, j + 1, e, k - (j + 1 - s));
         }
+    }
+
+    /**
+     * #217
+     * 
+     * @param nums
+     * @return
+     */
+    public boolean containsDuplicate(int[] nums) {
+        Set<Integer> set = new HashSet<>();
+        for (var n : nums) {
+            if (set.contains(n)) {
+                return true;
+            }
+            set.add(n);
+        }
+        return false;
     }
 
     /**
