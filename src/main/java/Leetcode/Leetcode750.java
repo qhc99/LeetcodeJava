@@ -421,4 +421,18 @@ public class Leetcode750 {
 
     static record Edge(int node, int time) {
     }
+
+    /**
+     * #746
+     * 
+     * @param cost
+     * @return
+     */
+    public int minCostClimbingStairs(int[] cost) {
+        int[] dp = new int[cost.length + 1];
+        for (int i = 2; i < dp.length; i++) {
+            dp[i] = Math.min(dp[i - 2] + cost[i - 2], dp[i - 1] + cost[i - 1]);
+        }
+        return dp[cost.length];
+    }
 }
