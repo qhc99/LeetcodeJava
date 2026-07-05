@@ -384,4 +384,41 @@ public class Leetcode750 {
         return ans;
     }
 
+    /**
+     * #743
+     * 
+     * @param times
+     * @param n
+     * @param k
+     * @return
+     */
+    public int networkDelayTime(int[][] times, int n, int k) {
+        int time = 0;
+        BitSet visited = new BitSet(n + 1);
+        Map<Integer, List<Edge>> graph = new HashMap<>();
+        for (var e : times) {
+            graph.computeIfAbsent(e[0], key -> new ArrayList<>())
+                    .add(new Edge(e[1], e[2]));
+        }
+        Queue<Edge> queue = new PriorityQueue<>((a, b) -> a.time - b.time);
+        queue.addAll(graph.getOrDefault(k, List.of()));
+        visited.set(k);
+        while (visited.cardinality() < n && !queue.isEmpty()) {
+            var e = queue.poll();
+            if (visited.get(e.node)) {
+                continue;
+            }
+            visited.set(e.node);
+            time = Math.max(time, e.time);
+            for (var nextEdge : graph.getOrDefault(e.node, List.of())) {
+                if (!visited.get(nextEdge.node)) {
+                    queue.add(new Edge(nextEdge.node, time + nextEdge.time));
+                }
+            }
+        }
+        return visited.cardinality() == n ? time : -1;
+    }
+
+    static record Edge(int node, int time) {
+    }
 }
