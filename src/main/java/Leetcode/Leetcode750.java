@@ -39,6 +39,32 @@ public class Leetcode750 {
         return root;
     }
 
+    class KthLargest {
+        Queue<Integer> geq = new PriorityQueue<>();
+        int k;
+
+        public KthLargest(int k, int[] nums) {
+            this.k = k;
+            Arrays.sort(nums);
+            for (int i = nums.length - 1; i >= 0; i--) {
+                if (nums.length - i <= k) {
+                    geq.add(nums[i]);
+                } else {
+                    break;
+                }
+            }
+        }
+
+        public int add(int val) {
+            if (geq.size() < k || val > geq.peek())
+                geq.add(val);
+            if (geq.size() > k) {
+                geq.poll();
+            }
+            return geq.peek();
+        }
+    }
+
     /**
      * #726
      *
