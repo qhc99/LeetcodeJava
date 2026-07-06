@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.function.ToDoubleFunction;
 
 public class Leetcode850 {
@@ -485,4 +486,36 @@ public class Leetcode850 {
         return res;
     }
 
+    /**
+     * #846
+     * 
+     * @param hand
+     * @param groupSize
+     * @return
+     */
+    public boolean isNStraightHand(int[] hand, int groupSize) {
+        TreeMap<Integer, Integer> cardCount = new TreeMap<>();
+        for (var c : hand) {
+            cardCount.put(c, cardCount.getOrDefault(c, 0) + 1);
+        }
+        while (!cardCount.isEmpty()) {
+            var first = cardCount.firstKey();
+            if (cardCount.get(first) == 1)
+                cardCount.remove(first);
+            else
+                cardCount.put(first, cardCount.get(first) - 1);
+            for (int i = 1; i < groupSize; i++) {
+                var next = first + i;
+                if (!cardCount.containsKey(next)) {
+                    return false;
+                }
+                var nextCount = cardCount.get(next) - 1;
+                if (nextCount == 0)
+                    cardCount.remove(next);
+                else
+                    cardCount.put(next, nextCount);
+            }
+        }
+        return true;
+    }
 }
