@@ -1079,4 +1079,34 @@ public class Leetcode350 {
         }
     }
 
+    /**
+     * #347
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer, Integer> freq = new HashMap<>();
+        for (var n : nums) {
+            freq.put(n, freq.getOrDefault(n, 0) + 1);
+        }
+        Map<Integer, List<Integer>> freq2num = new HashMap<>(freq.size());
+        for (var e : freq.entrySet()) {
+            freq2num.computeIfAbsent(e.getValue(), key -> new ArrayList<>())
+                    .add(e.getKey());
+        }
+        Queue<Integer> freqQueue = new PriorityQueue<>((a, b) -> b - a);
+        freqQueue.addAll(freq2num.keySet());
+        int[] res = new int[k];
+        for (int i = 0; i < k;) {
+            var f = freqQueue.poll();
+            var ns = freq2num.get(f);
+            int ii = 0;
+            while (i < k && ii < ns.size()) {
+                res[i++] = ns.get(ii++);
+            }
+        }
+        return res;
+    }
 }
