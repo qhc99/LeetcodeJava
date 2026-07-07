@@ -28,6 +28,73 @@ public class Leetcode400 {
     }
 
     /**
+     * #355
+     */
+    class Twitter {
+        static record Tweet(int id, int time) {
+        }
+
+        Map<Integer, Set<Integer>> follow = new HashMap<>();
+        Map<Integer, Deque<Tweet>> tweets = new HashMap<>();
+        int time = 0;
+
+        public Twitter() {
+
+        }
+
+        public void postTweet(int userId, int tweetId) {
+            var queue = tweets.computeIfAbsent(userId, k -> new ArrayDeque<>());
+            if (queue.size() >= 10) {
+                queue.pollFirst();
+            }
+            queue.addLast(new Tweet(tweetId, time++));
+        }
+
+        public List<Integer> getNewsFeed(int userId) {
+            Queue<Deque<Tweet>> feed = new PriorityQueue<>((q1, q2) -> {
+                if (q1.isEmpty() && !q2.isEmpty()) {
+                    return 1;
+                } else if (!q1.isEmpty() && q2.isEmpty()) {
+                    return -1;
+                } else if (q1.isEmpty() && q2.isEmpty()) {
+                    return 0;
+                }
+                return q2.peekLast().time - q1.peekLast().time;
+            });
+            feed.addAll(follow.getOrDefault(userId, Set.of(userId)).stream()
+                    .map(u -> new ArrayDeque<>(
+                            tweets.getOrDefault(u, new ArrayDeque<>())))
+                    .toList());
+            List<Integer> res = new ArrayList<>(10);
+            for (int i = 0; i < 10 && !feed.isEmpty(); i++) {
+                var queue = feed.poll();
+                if (queue.isEmpty())
+                    break;
+                res.add(queue.pollLast().id);
+                if (!queue.isEmpty())
+                    feed.add(queue);
+            }
+            return res;
+        }
+
+        public void follow(int followerId, int followeeId) {
+            follow.computeIfAbsent(followerId, k -> {
+                Set<Integer> s = new HashSet<>();
+                s.add(followerId);
+                return s;
+            }).add(followeeId);
+        }
+
+        public void unfollow(int followerId, int followeeId) {
+            follow.computeIfAbsent(followerId, k -> {
+                Set<Integer> s = new HashSet<>();
+                s.add(followerId);
+                return s;
+            }).remove(followeeId);
+        }
+    }
+
+    /**
      * #357
      *
      * @param n
