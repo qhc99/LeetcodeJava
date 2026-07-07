@@ -220,6 +220,31 @@ public class Leetcode900 {
     }
 
     /**
+     * #875
+     * 
+     * @param piles
+     * @param h
+     * @return
+     */
+    public int minEatingSpeed(int[] piles, int h) {
+        int l = 1, r = Arrays.stream(piles).max().getAsInt();
+        if (piles.length == h) {
+            return r;
+        }
+        while (r - l >= 1) {
+            int mid = l + (r - l) / 2;
+            int time = Arrays.stream(piles).map(p -> Math.ceilDiv(p, mid))
+                    .sum();
+            if (time > h) {
+                l = mid + 1;
+            } else {
+                r = mid;
+            }
+        }
+        return l;
+    }
+
+    /**
      * #876
      *
      * @param head

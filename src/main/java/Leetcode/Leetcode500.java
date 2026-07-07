@@ -217,7 +217,8 @@ public class Leetcode500 {
             DLinkMatrix.DMNode nodeM;
             DLinkMatrix.DLinkList.DLNode nodeL;
 
-            Info(int val, DLinkMatrix.DMNode nodeM, DLinkMatrix.DLinkList.DLNode nodeL) {
+            Info(int val, DLinkMatrix.DMNode nodeM,
+                    DLinkMatrix.DLinkList.DLNode nodeL) {
                 this.val = val;
                 this.nodeL = nodeL;
                 this.nodeM = nodeM;
@@ -308,9 +309,8 @@ public class Leetcode500 {
     }
 
     /**
-     * Your LFUCache object will be instantiated and called as such:
-     * LFUCache obj = new LFUCache(capacity);
-     * int param_1 = obj.get(key);
+     * Your LFUCache object will be instantiated and called as such: LFUCache
+     * obj = new LFUCache(capacity); int param_1 = obj.get(key);
      * obj.put(key,value);
      */
     /**
@@ -341,7 +341,8 @@ public class Leetcode500 {
                     for (int k = 0; k < 4; ++k) {
                         int tx = i + dx[k];
                         int ty = j + dy[k];
-                        if (tx < 0 || tx >= n || ty < 0 || ty >= m || grid[tx][ty] == 0) {
+                        if (tx < 0 || tx >= n || ty < 0 || ty >= m
+                                || grid[tx][ty] == 0) {
                             cnt += 1;
                         }
                     }
@@ -367,7 +368,8 @@ public class Leetcode500 {
             for (int i = m; i >= 0; i--) {
                 for (int j = n; j >= 0; j--) {
                     if (i >= count[0] && j >= count[1]) {
-                        dp[i][j] = Math.max(dp[i][j], dp[i - count[0]][j - count[1]] + 1);
+                        dp[i][j] = Math.max(dp[i][j],
+                                dp[i - count[0]][j - count[1]] + 1);
                     }
                 }
             }
@@ -471,7 +473,8 @@ public class Leetcode500 {
 
         MedianDualHeap(int cap) {
             minHeap = new PriorityQueue<>((cap + 1) / 2);
-            maxHeap = new PriorityQueue<>((cap + 1) / 2, Comparator.reverseOrder());
+            maxHeap = new PriorityQueue<>((cap + 1) / 2,
+                    Comparator.reverseOrder());
             queue = new ArrayDeque<>(cap + 1);
             capacity = cap;
         }
@@ -646,9 +649,11 @@ public class Leetcode500 {
             int right_idx = 0;
             int left_idx = 0;
             System.arraycopy(array, start, cache1, 0, cache1.length);
-            System.arraycopy(array, start + cache1.length, cache2, 0, cache2.length);
+            System.arraycopy(array, start + cache1.length, cache2, 0,
+                    cache2.length);
             count(cache1, cache2);
-            for (int i = start; (i < start + cache1.length + cache2.length) && (right_idx < cache2.length)
+            for (int i = start; (i < start + cache1.length + cache2.length)
+                    && (right_idx < cache2.length)
                     && (left_idx < cache1.length); i++) {
                 if (cache1[left_idx] <= cache2[right_idx]) {
                     array[i] = cache1[left_idx++];
@@ -657,9 +662,12 @@ public class Leetcode500 {
                 }
             }
             if (left_idx < cache1.length) {
-                System.arraycopy(cache1, left_idx, array, start + left_idx + right_idx, cache1.length - left_idx);
+                System.arraycopy(cache1, left_idx, array,
+                        start + left_idx + right_idx, cache1.length - left_idx);
             } else if (right_idx < cache2.length) {
-                System.arraycopy(cache2, right_idx, array, start + left_idx + right_idx, cache2.length - right_idx);
+                System.arraycopy(cache2, right_idx, array,
+                        start + left_idx + right_idx,
+                        cache2.length - right_idx);
             }
         }
 
@@ -693,6 +701,34 @@ public class Leetcode500 {
                 merge(array, start, left_cache, right_cache);
             }
         }
+    }
+
+    /**
+     * #494
+     * 
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int findTargetSumWays(int[] nums, int target) {
+        Arrays.sort(nums);
+        Map<Integer, Integer> sumCount = new HashMap<>(8);
+        for (var n : nums) {
+            if (sumCount.isEmpty()) {
+                sumCount.put(n, 1);
+                sumCount.put(-n, n == 0 ? 2 : 1);
+            } else {
+                Map<Integer, Integer> next = new HashMap<>(sumCount.size());
+                for (var entry : sumCount.entrySet()) {
+                    var v = entry.getKey() + n;
+                    next.put(v, entry.getValue() + next.getOrDefault(v, 0));
+                    v = entry.getKey() - n;
+                    next.put(v, entry.getValue() + next.getOrDefault(v, 0));
+                }
+                sumCount = next;
+            }
+        }
+        return sumCount.getOrDefault(target, 0);
     }
 
     /**
