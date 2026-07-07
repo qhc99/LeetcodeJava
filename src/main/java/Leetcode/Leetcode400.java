@@ -177,6 +177,22 @@ public class Leetcode400 {
     }
 
     /**
+     * #371
+     * 
+     * @param a
+     * @param b
+     * @return
+     */
+    public int getSum(int a, int b) {
+        do {
+            var c = (a & b) << 1;
+            a ^= b;
+            b = c;
+        } while (b != 0);
+        return a;
+    }
+
+    /**
      * #373
      *
      * @param nums1
