@@ -22,6 +22,34 @@ interface Master {
 @SuppressWarnings("JavaDoc")
 public class Leetcode900 {
     /**
+     * #853
+     * 
+     * @param target
+     * @param position
+     * @param speed
+     * @return
+     */
+    public int carFleet(int target, int[] position, int[] speed) {
+        var pos2speed = new TreeMap<Integer, Integer>();
+        for (int i = 0; i < position.length; i++) {
+            pos2speed.put(position[i], speed[i]);
+        }
+        int res = 0;
+        double fleetTime = 0;
+        while (!pos2speed.isEmpty()) {
+            var car = pos2speed.pollLastEntry();
+            double time = (target - car.getKey()) / (double) car.getValue();
+            if (res != 0 && time < fleetTime) {
+            } else {
+                fleetTime = (target - car.getKey()) / (double) car.getValue();
+                res++;
+            }
+
+        }
+        return res;
+    }
+
+    /**
      * #854
      * 
      * @param s1
