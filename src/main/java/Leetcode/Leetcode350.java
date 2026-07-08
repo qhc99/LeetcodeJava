@@ -593,6 +593,24 @@ public class Leetcode350 {
     }
 
     /**
+     * #323
+     * 
+     * @param n
+     * @param edges
+     * @return
+     */
+    public int countComponents(int n, int[][] edges) {
+        DisjointSet set = new DisjointSet(n);
+        for (var e : edges) {
+            set.union(e[0], e[1]);
+        }
+        for (int i = 0; i < n; i++) {
+            set.parent(i);
+        }
+        return (int) Arrays.stream(set.parent).distinct().count();
+    }
+
+    /**
      * #324
      *
      * @param nums
