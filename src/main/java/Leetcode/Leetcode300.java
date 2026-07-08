@@ -124,6 +124,25 @@ public class Leetcode300 {
     }
 
     /**
+     * #271 Codec
+     */
+    public class Codec {
+
+        // Encodes a list of strings to a single string.
+        public String encode(List<String> strs) {
+            StringBuilder sb = new StringBuilder();
+            for(var s : strs){
+                
+            }
+        }
+
+        // Decodes a single string to a list of strings.
+        public List<String> decode(String s) {
+
+        }
+    }
+
+    /**
      * #274
      *
      * @param citations
