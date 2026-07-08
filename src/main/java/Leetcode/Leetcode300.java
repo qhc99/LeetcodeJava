@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Stream;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode300 {
@@ -98,6 +99,28 @@ public class Leetcode300 {
         };
         recurFunc.apply(root);
         return ans;
+    }
+
+    /**
+     * #261
+     * 
+     * @param n
+     * @param edges
+     * @return
+     */
+    public boolean validTree(int n, int[][] edges) {
+        DisjointSet set = new DisjointSet(n);
+        for (var e : edges) {
+            if (set.isLinked(e[0], e[1]))
+                return false;
+            set.union(e[0], e[1]);
+        }
+        int p = set.parent(0);
+        for (int i = 1; i < n; i++) {
+            if (set.parent(i) != p)
+                return false;
+        }
+        return true;
     }
 
     /**
