@@ -566,6 +566,60 @@ public class Leetcode300 {
     }
 
     /**
+     * #286
+     * 
+     * @param rooms
+     */
+    public void wallsAndGates(int[][] rooms) {
+        Set<Pos> inQueue = new HashSet<>();
+        Queue<Pos> queue = new ArrayDeque<>();
+        int m = rooms.length;
+        int n = rooms[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (rooms[i][j] == 0) {
+                    var p = new Pos(i, j, 0);
+                    queue.add(p);
+                    inQueue.add(p);
+                }
+            }
+        }
+        int[] dx = new int[] { 0, 0, 1, -1 };
+        int[] dy = new int[] { 1, -1, 0, 0 };
+        while (!queue.isEmpty()) {
+            var p = queue.poll();
+            rooms[p.x][p.y] = p.dist;
+            for (int i = 0; i < 4; i++) {
+                int x = p.x + dx[i];
+                int y = p.y + dy[i];
+                if (x >= 0 && x < m && y >= 0 && y < n && rooms[x][y] != 0
+                        && rooms[x][y] != -1) {
+                    Pos next = new Pos(x, y, p.dist + 1);
+                    if (!inQueue.contains(next)) {
+                        inQueue.add(next);
+                        queue.add(next);
+                    }
+                }
+            }
+        }
+    }
+
+    static record Pos(int x, int y, int dist) {
+        @Override
+        public final int hashCode() {
+            return Objects.hash(x, y);
+        }
+
+        @Override
+        public final boolean equals(Object arg0) {
+            if (arg0 instanceof Pos other) {
+                return x == other.x && y == other.y;
+            }
+            return false;
+        }
+    }
+
+    /**
      * #289
      *
      * @param board
