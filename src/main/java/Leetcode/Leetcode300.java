@@ -5,6 +5,56 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode300 {
+    /**
+     * #2 2
+     * 
+     * @param intervals
+     * @return
+     */
+    public boolean canAttendMeetings(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        int t = 0;
+        for (var it : intervals) {
+            if (t <= it[0]) {
+                t = it[1];
+            } else {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * #253
+     * 
+     * @param intervals
+     * @return
+     */
+    public int minMeetingRooms(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> a[0] - b[0]);
+        Queue<Integer> rooms = new PriorityQueue<>();
+        rooms.add(0);
+        for (var it : intervals) {
+            var t = rooms.peek();
+            if (t <= it[0]) {
+                rooms.poll();
+                rooms.add(it[1]);
+            } else {
+                List<Integer> stack = new ArrayList<>();
+                do {
+                    t = rooms.poll();
+                    stack.add(t);
+                } while (!rooms.isEmpty() && rooms.peek() > it[0]);
+                if (!rooms.isEmpty())
+                    rooms.poll();
+                rooms.add(it[1]);
+                rooms.addAll(stack);
+            }
+
+        }
+        return rooms.size();
+
+    }
 
     /**
      * #257
