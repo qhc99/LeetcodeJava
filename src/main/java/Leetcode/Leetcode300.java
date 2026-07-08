@@ -126,19 +126,51 @@ public class Leetcode300 {
     /**
      * #271 Codec
      */
-    public class Codec {
+    static class Nest {
+        public class Codec {
 
-        // Encodes a list of strings to a single string.
-        public String encode(List<String> strs) {
-            StringBuilder sb = new StringBuilder();
-            for(var s : strs){
-                
+            // Encodes a list of strings to a single string.
+            public String encode(List<String> strs) {
+                StringBuilder sb = new StringBuilder();
+                for (var s : strs) {
+                    sb.append(String.valueOf(s.length()));
+                    sb.append(":");
+                    sb.append(s);
+                }
+                return sb.toString();
             }
-        }
 
-        // Decodes a single string to a list of strings.
-        public List<String> decode(String s) {
-
+            // Decodes a single string to a list of strings.
+            public List<String> decode(String s) {
+                var arr = s.toCharArray();
+                int len = 0;
+                StringBuilder num = new StringBuilder();
+                StringBuilder str = null;
+                List<String> res = new ArrayList<>();
+                for (int i = 0; i < s.length(); i++) {
+                    var c = arr[i];
+                    if (len == 0) {
+                        if (str != null) {
+                            res.add(str.toString());
+                            str = null;
+                        }
+                        if (c != ':')
+                            num.append(c);
+                        else {
+                            len = Integer.valueOf(num.toString());
+                            num.delete(0, num.length());
+                            str = new StringBuilder();
+                        }
+                    } else {
+                        len--;
+                        str.append(c);
+                    }
+                }
+                if (str != null) {
+                    res.add(str.toString());
+                }
+                return res;
+            }
         }
     }
 
