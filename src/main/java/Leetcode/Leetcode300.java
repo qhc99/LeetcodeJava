@@ -124,6 +124,71 @@ public class Leetcode300 {
     }
 
     /**
+     * #269
+     * 
+     * @param words
+     * @return
+     */
+    public String alienOrder(String[] words) {
+        if (words.length == 1) {
+            words = new String[] { words[0], words[0] };
+        }
+        Map<Character, List<Character>> graph = new HashMap<>();
+        for (int i = 0; i < words.length - 1; i++) {
+            var a1 = words[i].toCharArray();
+            var a2 = words[i + 1].toCharArray();
+            int j = 0;
+            boolean eq = true;
+            for (; j < a1.length && j < a2.length; j++) {
+                if (a1[j] != a2[j] && eq) {
+                    eq = false;
+                    graph.computeIfAbsent(a1[j], k -> new ArrayList<>())
+                            .add(a2[j]);
+                } else {
+                    graph.computeIfAbsent(a1[j], k -> new ArrayList<>());
+                    graph.computeIfAbsent(a2[j], k -> new ArrayList<>());
+                }
+            }
+            if (j < a1.length) {
+                if (eq)
+                    return "";
+                for (; j < a1.length; j++)
+                    graph.computeIfAbsent(a1[j], k -> new ArrayList<>());
+            } else {
+                for (; j < a2.length; j++)
+                    graph.computeIfAbsent(a2[j], k -> new ArrayList<>());
+            }
+        }
+        // not visited, visiting, visited
+        int[] visitState = new int['z' - 'a' + 1];
+        StringBuilder res = new StringBuilder();
+        for (var e : graph.keySet()) {
+            if (visitState[e - 'a'] == 0
+                    && !topoSort(e, graph, visitState, res)) {
+                return "";
+            }
+        }
+        return res.reverse().toString();
+    }
+
+    boolean topoSort(char node, Map<Character, List<Character>> graph,
+            int[] visitState, StringBuilder res) {
+        if (visitState[node - 'a'] == 1)
+            return false;
+        if (visitState[node - 'a'] == 2)
+            return true;
+        visitState[node - 'a'] = 1;
+        var children = graph.getOrDefault(node, List.of());
+        for (var c : children) {
+            if (!topoSort(c, graph, visitState, res))
+                return false;
+        }
+        visitState[node - 'a'] = 2;
+        res.append(node);
+        return true;
+    }
+
+    /**
      * #271 Codec
      */
     static class Nest {
