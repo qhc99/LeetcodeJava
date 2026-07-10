@@ -2,6 +2,24 @@ package Leetcode;
 
 public class Leetcode3050 {
     /**
+     * #3019
+     * 
+     * @param s
+     * @return
+     */
+    public int countKeyChanges(String s) {
+        s = s.toLowerCase();
+        int res = 0;
+        var arr = s.toCharArray();
+        for (int i = 0; i < s.length() - 1; i++) {
+            if (arr[i] != arr[i + 1]) {
+                res++;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #3034,#3036
      * 
      * @param nums
