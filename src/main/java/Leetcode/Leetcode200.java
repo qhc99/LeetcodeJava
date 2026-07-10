@@ -186,6 +186,27 @@ public class Leetcode200 {
     }
 
     /**
+     * #169
+     * 
+     * @param nums
+     * @return
+     */
+    public int majorityElement(int[] nums) {
+        Map<Integer, Integer> count = new HashMap<>();
+        int max = 0;
+        int res = 0;
+        for (var n : nums) {
+            var c = count.getOrDefault(n, 0) + 1;
+            count.put(n, c);
+            if (c > max) {
+                max = c;
+                res = n;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #173
      */
     public static class BSTIterator {
