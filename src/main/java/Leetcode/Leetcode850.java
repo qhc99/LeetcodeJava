@@ -3,9 +3,13 @@ package Leetcode;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Deque;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.Queue;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.ToDoubleFunction;
 
@@ -517,5 +521,57 @@ public class Leetcode850 {
             }
         }
         return true;
+    }
+
+    /**
+     * #847
+     * 
+     * @param graph
+     * @return
+     */
+    public int shortestPathLength(int[][] graph) {
+        if (graph.length == 1)
+            return 0;
+        Queue<NodePath> queue = new ArrayDeque<>();
+        Set<NodePath> seen = new HashSet<>();
+
+        for (int i = 0; i < graph.length; i++) {
+            var visited = new BitSet(graph.length);
+            visited.set(i);
+            var np = new NodePath(i, visited, 0);
+            seen.add(np);
+            queue.add(np);
+        }
+        while (!queue.isEmpty()) {
+            var np = queue.poll();
+            for (var nb : graph[np.node]) {
+                var visited = new BitSet(graph.length);
+                visited.or(np.visited);
+                visited.set(nb);
+                var nextNp = new NodePath(nb, visited, np.len + 1);
+                if (visited.cardinality() == graph.length)
+                    return nextNp.len;
+                if (!seen.contains(nextNp)) {
+                    seen.add(nextNp);
+                    queue.add(nextNp);
+                }
+            }
+        }
+        return -1;
+    }
+
+    static record NodePath(int node, BitSet visited, int len) {
+        @Override
+        public final int hashCode() {
+            return Objects.hash(node, visited);
+        }
+
+        @Override
+        public final boolean equals(Object arg0) {
+            if (arg0 instanceof NodePath o) {
+                return node == o.node && visited.equals(o.visited);
+            }
+            return false;
+        }
     }
 }

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Deque;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -244,6 +245,32 @@ public class Leetcode100 {
         if (t == 1)
             deque.addFirst(1);
         return deque.stream().mapToInt(i -> i).toArray();
+    }
+
+    /**
+     * #71
+     * 
+     * @param path
+     * @return
+     */
+    public String simplifyPath(String path) {
+        var arr = path.split("/");
+        Stack<String> p = new Stack<>();
+        p.add("");
+        for (var f : arr) {
+            if (f.isEmpty() || f.equals("."))
+                continue;
+            if (f.equals("..")) {
+                if (p.size() > 1)
+                    p.pop();
+            } else {
+                p.add(f);
+            }
+        }
+        if (p.size() == 1)
+            p.add("");
+
+        return String.join("/", p);
     }
 
     /**
