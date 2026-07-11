@@ -248,6 +248,80 @@ public class Leetcode100 {
     }
 
     /**
+     * #68
+     * 
+     * @param words
+     * @param maxWidth
+     * @return
+     */
+    public List<String> fullJustify(String[] words, int maxWidth) {
+        List<String> res = new ArrayList<>();
+        var line = new Line(maxWidth);
+        for (var w : words) {
+            if (!line.tryAdd(w)) {
+                res.add(line.refresh(false));
+                if (!line.tryAdd(w))
+                    throw new RuntimeException();
+            }
+        }
+        var l = line.refresh(true);
+        if (l != null)
+            res.add(l);
+
+        return res;
+    }
+
+    static class Line {
+        int maxWidth;
+        int wordLength = 0;
+        List<String> words = new ArrayList<>();
+
+        Line(int maxWidth) {
+            this.maxWidth = maxWidth;
+        }
+
+        boolean tryAdd(String s) {
+            wordLength += s.length();
+            words.add(s);
+            int len = words.size() - 1 + wordLength;
+            if (len > maxWidth) {
+                wordLength -= s.length();
+                words.removeLast();
+                return false;
+            }
+            return true;
+        }
+
+        String refresh(boolean last) {
+            if (words.isEmpty())
+                return null;
+            int spaceCount = words.size() - 1;
+            int spaceSize = maxWidth - wordLength;
+            int spaceSizeBase = spaceCount > 0 && !last ? spaceSize / spaceCount
+                    : 1;
+            int spaceSizeReminder = !last
+                    ? spaceSize - spaceSizeBase * spaceCount
+                    : 0;
+            StringBuilder res = new StringBuilder();
+            for (int i = 0; i < words.size(); i++) {
+                var w = words.get(i);
+                res.append(w);
+                if (i < spaceCount && i < spaceSizeReminder) {
+                    res.append(" ".repeat(1 + spaceSizeBase));
+                } else if (i < spaceCount) {
+                    res.append(" ".repeat(spaceSizeBase));
+                }
+            }
+            if (res.length() != maxWidth) {
+                res.append(" ".repeat(maxWidth - res.length()));
+            }
+            wordLength = 0;
+            words.clear();
+            return res.toString();
+        }
+    }
+
+    /**
      * #71
      * 
      * @param path

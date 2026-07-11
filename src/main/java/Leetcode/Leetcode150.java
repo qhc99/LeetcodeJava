@@ -586,6 +586,29 @@ public class Leetcode150 {
     }
 
     /**
+     * #142
+     * 
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        Map<ListNode, Integer> visitState = new HashMap<>(); // -1 not, 0
+                                                             // visiting, 1 done
+        return visitCycle(head, visitState);
+    }
+
+    ListNode visitCycle(ListNode n, Map<ListNode, Integer> visitState) {
+        if (n == null)
+            return null;
+        if (visitState.getOrDefault(n, -1) == 0)
+            return n;
+        visitState.computeIfAbsent(n, k -> 0);
+        if (n.next != null)
+            return visitCycle(n.next, visitState);
+        return null;
+    }
+
+    /**
      * #143
      * 
      * @param head

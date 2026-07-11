@@ -1,5 +1,9 @@
 package Leetcode;
 
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 public class Leetcode3050 {
     /**
      * #3019
@@ -63,5 +67,47 @@ public class Leetcode3050 {
             next[i] = p;
         }
         return next;
+    }
+
+    /**
+     * #3042,#3045
+     * 
+     * @param words
+     * @return
+     */
+    public long countPrefixSuffixPairs(String[] words) {
+        Trie root = new Trie();
+        long res = 0;
+
+        for (var w : words) {
+            var ptr = root;
+            for (int i = 0; i < w.length(); i++) {
+                var p = new Pair(w.charAt(i), w.charAt(w.length() - 1 - i));
+                ptr = ptr.child.computeIfAbsent(p, k -> new Trie());
+                res += ptr.count;
+            }
+            ptr.count++;
+        }
+        return res;
+
+    }
+
+    static record Pair(char s, char e) {
+        @Override
+        public final int hashCode() {
+            return Objects.hash(s, e);
+        }
+
+        @Override
+        public final boolean equals(Object arg0) {
+            if (arg0 instanceof Pair o)
+                return o.s == s && o.e == e;
+            return false;
+        }
+    }
+
+    static class Trie {
+        public int count;
+        public Map<Pair, Trie> child = new HashMap<>();
     }
 }
