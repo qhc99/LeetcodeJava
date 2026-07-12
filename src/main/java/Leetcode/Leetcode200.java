@@ -84,6 +84,47 @@ public class Leetcode200 {
     }
 
     /**
+     * #161
+     * 
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isOneEditDistance(String s, String t) {
+        if (s.length() > t.length()) {
+            var tt = s;
+            s = t;
+            t = tt;
+        }
+        if (t.length() - s.length() > 1 || s.equals(t))
+            return false;
+        int i = 0, j = s.length() - 1;
+        int m = 0, n = t.length() - 1;
+        int l = 0, r = 0;
+        while (i < s.length() && j >= 0 && m < t.length() && n >= 0) {
+            var a = s.charAt(i);
+            var b = s.charAt(j);
+            var c = t.charAt(m);
+            var d = t.charAt(n);
+            if (a == c) {
+                i++;
+                m++;
+                l++;
+            }
+            if (b == d) {
+                j--;
+                n--;
+                r++;
+            }
+            if (a != c && b != d)
+                break;
+        }
+        return (s.length() == t.length() && (l + r) >= s.length() - 1
+                && (l + r) >= t.length() - 1)
+                || ((l + r) >= s.length() && (l + r) >= t.length() - 1);
+    }
+
+    /**
      * #162
      *
      * @param nums
