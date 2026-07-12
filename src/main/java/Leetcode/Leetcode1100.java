@@ -1,11 +1,64 @@
 package Leetcode;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode1100 {
+
+    /**
+     * #1087
+     * 
+     * @param s
+     * @return
+     */
+    public String[] expand(String s) {
+        List<StringBuilder> res = new ArrayList<>();
+        res.add(new StringBuilder());
+        Iter iter = new Iter(s);
+        while (!iter.end()) {
+            var chars = iter.next();
+            int size = res.size() * chars.size();
+            int initLength = res.size();
+            for (int i = res.size(); i < size; i++) {
+                res.add(new StringBuilder(res.get(i % initLength)));
+            }
+            for (int i = 0; i < res.size(); i++) {
+                res.get(i).append(chars.get(i / initLength));
+            }
+        }
+
+        return res.stream().map(sb -> sb.toString()).sorted().toList()
+                .toArray(new String[0]);
+    }
+
+    static class Iter {
+        String s;
+        int i = 0;
+
+        Iter(String s) {
+            this.s = s;
+        }
+
+        boolean end() {
+            return i >= s.length();
+        }
+
+        List<Character> next() {
+            if (s.charAt(i) != '{') {
+                return List.of(s.charAt(i++));
+            } else {
+                List<Character> res = new ArrayList<>();
+                i++;
+                do {
+                    if (s.charAt(i) != ',')
+                        res.add(s.charAt(i));
+                } while (s.charAt(++i) != '}');
+                i++;
+                return res;
+            }
+        }
+
+    }
 
     /**
      * #1094
@@ -25,7 +78,8 @@ public class Leetcode1100 {
             }
         }
         Arrays.sort(trips, Comparator.comparing(i -> i[1]));
-        PriorityQueue<DestCap> queue = new PriorityQueue<>(Comparator.comparing(d -> d.dest));
+        PriorityQueue<DestCap> queue = new PriorityQueue<>(
+                Comparator.comparing(d -> d.dest));
         for (var trip : trips) {
             var c = trip[0];
             var start = trip[1];
@@ -36,8 +90,7 @@ public class Leetcode1100 {
             capacity -= c;
             if (capacity < 0) {
                 return false;
-            }
-            else {
+            } else {
                 queue.add(new DestCap(dest, c));
             }
         }
