@@ -588,6 +588,22 @@ public class Leetcode400 {
         return max_len;
     }
 
+    public int lastRemaining(int n) {
+        int step = 1;
+        int s = 1;
+        int len = n;
+        boolean left = true;
+        while (len > 1) {
+            if (left || (!left && len % 2 == 1)) {
+                s += step;
+            }
+            len /= 2;
+            step *= 2;
+            left = !left;
+        }
+        return s;
+    }
+
     /**
      * #391
      *
