@@ -1,12 +1,6 @@
 package Leetcode;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.PriorityQueue;
+import java.util.*;
 
 public class Leetcode650 {
 
@@ -67,6 +61,99 @@ public class Leetcode650 {
     }
 
     /**
+     * #631
+     */
+    class Excel {
+
+        static record Cell(int row, int column) {
+            @Override
+            public final int hashCode() {
+                return Objects.hash(row, column);
+            }
+
+            @Override
+            public final boolean equals(Object arg0) {
+                if (arg0 instanceof Cell o)
+                    return o.row == row && o.column == column;
+                return false;
+            }
+        }
+
+        static record Range(int x1, int y1, int x2, int y2) {
+        }
+
+        int[][] mat;
+        Map<Cell, List<Range>> formulas = new HashMap<>();
+
+        public Excel(int height, char width) {
+            mat = new int[height][width];
+        }
+
+        public void set(int row, char column, int val) {
+            row--;
+            int col = column - 'A';
+            var cell = new Cell(row, col);
+            if (formulas.containsKey(cell))
+                formulas.remove(cell);
+            updateCells(row, col, val - mat[row][col]);
+        }
+
+        void updateCells(int row, int column, int diff) {
+            mat[row][column] += diff;
+            for (var e : formulas.entrySet()) {
+                var c = e.getKey();
+                var rs = e.getValue();
+                for (var r : rs) {
+                    if (row >= r.x1 && row <= r.x2 && column >= r.y1
+                            && column <= r.y2) {
+                        updateCells(c.row, c.column, diff);
+                    }
+                }
+            }
+        }
+
+        public int get(int row, char column) {
+            row--;
+            int col = column - 'A';
+            return mat[row][col];
+        }
+
+        public int sum(int row, char column, String[] numbers) {
+            row--;
+            int col = column - 'A';
+
+            var cell = new Cell(row, col);
+            List<Range> ranges = new ArrayList<>();
+            int new_val = 0;
+            for (var n : numbers) {
+                if (!n.contains(":")) {
+                    var y = (int) (n.charAt(0) - 'A');
+                    var x = Integer.valueOf(n.substring(1)) - 1;
+                    ranges.add(new Range(x, y, x, y));
+                    new_val += mat[x][y];
+                } else {
+                    var cs = n.split(":");
+                    var y1 = (int) (cs[0].charAt(0) - 'A');
+                    var x1 = Integer.valueOf(cs[0].substring(1)) - 1;
+                    var y2 = (int) (cs[1].charAt(0) - 'A');
+                    var x2 = Integer.valueOf(cs[1].substring(1)) - 1;
+                    ranges.add(new Range(x1, y1, x2, y2));
+                    for (int i = x1; i <= x2; i++) {
+                        for (int j = y1; j <= y2; j++) {
+                            new_val += mat[i][j];
+                        }
+                    }
+                }
+            }
+            formulas.put(cell, ranges);
+            updateCells(row, col, new_val - mat[row][col]);
+            return mat[row][col];
+        }
+
+    }
+
+    /**
+     * #632
      * 
      * @param nums
      * @return
