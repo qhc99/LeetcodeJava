@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,8 +10,8 @@ import java.util.Set;
 public class Leetcode1250 {
 
     /**
-     * #1207
-     * <br/>
+     * #1207 <br/>
+     * 
      * <pre>
      * 输入：arr = [1,2,2,1,1,3]
      * 输出：true
@@ -30,8 +31,7 @@ public class Leetcode1250 {
     }
 
     /**
-     * arr = [1,5,7,8,5,3,4,2,1], difference = -2
-     * answer: 4 ([7,5,3,1])
+     * arr = [1,5,7,8,5,3,4,2,1], difference = -2 answer: 4 ([7,5,3,1])
      *
      * @param difference d
      * @return length
@@ -56,9 +56,26 @@ public class Leetcode1250 {
     public static int minCostToMoveChips(int[] position) {
         int odd = 0, even = 0;
         for (var p : position) {
-            if (p % 2 == 0) even++;
-            else odd++;
+            if (p % 2 == 0)
+                even++;
+            else
+                odd++;
         }
         return Math.min(odd, even);
+    }
+
+    interface HtmlParser {
+        public List<String> getUrls(String url);
+    }
+
+    /**
+     * #1242
+     * 
+     * @param startUrl
+     * @param htmlParser
+     * @return
+     */
+    public List<String> crawl(String startUrl, HtmlParser htmlParser) {
+        return null;
     }
 }

@@ -1,5 +1,7 @@
 package Leetcode;
 
+import java.util.*;
+
 public class Leetcode1150 {
     /**
      * #1143
@@ -22,4 +24,60 @@ public class Leetcode1150 {
         }
         return dp[1][text2.length()];
     }
+
+    /**
+     * #1146 SnapshotArray
+     */
+    class SnapshotArray {
+        static class Node {
+            int snap_id;
+            int val;
+        }
+
+        List<List<Node>> list = null;
+        int snapId;
+
+        public SnapshotArray(int length) {
+            list = new ArrayList<>();
+            for (int i = 0; i < length; i++) {
+                List<Node> l = new ArrayList<>();
+                l.add(new Node());
+                list.add(l);
+            }
+        }
+
+        public void set(int index, int val) {
+            var n = list.get(index).getLast();
+            if (n.snap_id == snapId) {
+                n.val = val;
+            } else {
+                n = new Node();
+                n.snap_id = snapId;
+                n.val = val;
+                list.get(index).add(n);
+            }
+        }
+
+        public int snap() {
+            return snapId++;
+        }
+
+        public int get(int index, int snap_id) {
+            var l = list.get(index);
+            int i = 0, j = l.size();
+            while (j - i > 1) {
+                int mid = i + (j - i) / 2;
+                var n = l.get(mid);
+                if (n.snap_id > snap_id) {
+                    j = mid;
+                } else if (n.snap_id < snap_id) {
+                    i = mid;
+                } else {
+                    return l.get(mid).val;
+                }
+            }
+            return l.get(i).val;
+        }
+    }
+
 }
