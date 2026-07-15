@@ -1,10 +1,18 @@
 package Leetcode;
 
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode1250 {
@@ -76,6 +84,70 @@ public class Leetcode1250 {
      * @return
      */
     public List<String> crawl(String startUrl, HtmlParser htmlParser) {
-        return null;
+        int count = 16;
+        Thread[] threads = new Thread[count];
+        var workQueue = new WorkQueue();
+        List<String> result = Collections.synchronizedList(new ArrayList<>());
+        workQueue.add(startUrl);
+        var targetDomain = startUrl.split("/")[2];
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(() -> {
+                while (!workQueue.isEnd()) {
+                    var url = workQueue.poll();
+                    if (url != null) {
+                        if (url.split("/")[2].equals(targetDomain)) {
+                            result.add(url);
+                            var ret = htmlParser.getUrls(url);
+                            for (var u : ret) {
+                                if (u.split("/")[2].equals(targetDomain)) {
+                                    workQueue.add(u);
+                                }
+                            }
+                        }
+                        workQueue.finishTask();
+                    }
+                }
+            });
+
+            threads[i].start();
+        }
+        for (var t : threads) {
+            try {
+                t.join();
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return result;
+    }
+
+}
+
+class WorkQueue {
+    private int activeTasks = 0;
+    private Set<String> visited = new HashSet<>();
+    private Queue<String> workQueue = new ArrayDeque<>();
+
+    synchronized String poll() {
+        var res = workQueue.poll();
+        if (res != null) {
+            activeTasks++;
+        }
+        return res;
+    }
+
+    synchronized void add(String url) {
+        if (!visited.contains(url)) {
+            workQueue.add(url);
+            visited.add(url);
+        }
+    }
+
+    synchronized void finishTask() {
+        activeTasks--;
+    }
+
+    synchronized boolean isEnd() {
+        return activeTasks == 0 && workQueue.isEmpty();
     }
 }
