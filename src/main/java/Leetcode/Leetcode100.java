@@ -2624,7 +2624,22 @@ public class Leetcode100 {
      * @return
      */
     public ListNode reverseBetween(ListNode head, int left, int right) {
-        return null;
+        var handle = new ListNode();
+        handle.next = head;
+        var ptr = handle;
+        int idx = 0;
+        for (; ptr.next != null && idx + 1 != left; ptr = ptr.next, idx++) {
+        }
+        var left_tail = ptr;
+        var middle_tail = ptr.next;
+        idx++;
+        for (; idx + 1 <= right; idx++) {
+            var right_node = middle_tail.next;
+            middle_tail.next = right_node.next;
+            right_node.next = left_tail.next;
+            left_tail.next = right_node;
+        }
+        return handle.next;
     }
 
     /**
