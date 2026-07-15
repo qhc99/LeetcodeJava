@@ -30,6 +30,73 @@ public class Leetcode800 {
     }
 
     /**
+     * #751
+     * 
+     * @param ip
+     * @param n
+     * @return
+     */
+    public List<String> ipToCIDR(String ip, int n) {
+        List<String> res = new ArrayList<>();
+        ipToCIDR(ipToInt(ip), n, res);
+        return res;
+    }
+
+    void ipToCIDR(long ip, int n, List<String> res) {
+        if (n <= 0)
+            return;
+        if (n == 1) {
+            res.add(CIDR2Ip(new CIDR(ip, 32)));
+            return;
+        }
+        int digitsCount = 9;
+        long l = ip;
+        long r = l + n - 1;
+        long s = 0, e = 0;
+        for (; digitsCount >= 0; digitsCount--) {
+            s = l & (-1 << (digitsCount));
+            e = l | ((1 << digitsCount) - 1);
+            if (l <= s && e <= r) {
+                res.add(CIDR2Ip(new CIDR(s, 32 - digitsCount)));
+                break;
+            }
+        }
+
+        ipToCIDR(l, (int) (s - l), res);
+        ipToCIDR(e + 1, (int) (r - e), res);
+
+    }
+
+    static record CIDR(long base, int mask) {
+    }
+
+    public String CIDR2Ip(CIDR cidr) {
+        var base = cidr.base;
+        var mask = cidr.mask;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 3; i >= 0; i--) {
+            sb.append((base >> (i * 8)) & ~(-1 << 8));
+            if (i != 0)
+                sb.append(".");
+        }
+        sb.append("/");
+        sb.append(mask);
+
+        return sb.toString();
+    }
+
+    long ipToInt(String ip) {
+        var arr = ip.split("\\.");
+        long res = 0;
+        for (int i = 0; i < 4; i++) {
+            var shift = (3 - i) * 8;
+            res += Long.valueOf(arr[i]) << shift;
+        }
+
+        return res;
+    }
+
+    /**
      * #753
      * 
      * @param n
