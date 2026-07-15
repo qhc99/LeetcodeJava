@@ -557,6 +557,18 @@ public class Leetcode100 {
     }
 
     /**
+     * #92
+     * 
+     * @param head
+     * @param left
+     * @param right
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        return null;
+    }
+
+    /**
      * #96
      *
      * <br>
