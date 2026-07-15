@@ -18,22 +18,27 @@ public class Leetcode2600 {
 
         public Allocator(int n) {
             var b = new Block(0, n);
-            left.put(0, b);
-            right.put(n, b);
+            putBlock(b);
         }
 
+        void putBlock(Block b) {
+            left.put(b.s, b);
+            right.put(b.e, b);
+        }
 
+        void removeBlock(Block b) {
+            left.remove(b.s);
+            right.remove(b.e);
+        }
 
         public int allocate(int size, int mID) {
             for (var e : left.entrySet()) {
                 var b = e.getValue();
                 if (b.e - b.s >= size) {
-                    left.remove(b.s);
-                    right.remove(b.e);
+                    removeBlock(b);
                     var remainder = new Block(b.s + size, b.e);
                     if (remainder.e - remainder.s > 0) {
-                        left.put(remainder.s, remainder);
-                        right.put(remainder.e, remainder);
+                        putBlock(remainder);
                     }
                     alloc.computeIfAbsent(mID, k -> new ArrayList<>())
                             .add(new Block(b.s, b.s + size));
@@ -45,29 +50,24 @@ public class Leetcode2600 {
 
         public int freeMemory(int mID) {
             var bs = alloc.remove(mID);
+            int res = 0;
             if (bs == null)
-                bs = List.of();
+                return res;
             for (var b : bs) {
-                if (right.containsKey(b.s)) {
-                    var l = right.get(b.s);
-                    left.remove(l.s);
-                    right.remove(l.e);
+                res += b.e - b.s;
+                var l = right.get(b.s);
+                if (l != null) {
+                    removeBlock(l);
                     b = new Block(l.s, b.e);
-                    left.put(b.s, b);
-                    right.put(b.e, b);
                 }
-                if (left.containsKey(b.e)) {
-                    var r = left.get(b.e);
-                    left.remove(b.s);
-                    right.remove(b.e);
-                    left.remove(r.s);
-                    right.remove(r.e);
+                var r = left.get(b.e);
+                if (r != null) {
+                    removeBlock(r);
                     b = new Block(b.s, r.e);
-                    left.put(b.s, b);
-                    right.put(b.e, b);
                 }
+                putBlock(b);
             }
-            return bs.size();
+            return res;
         }
     }
 
