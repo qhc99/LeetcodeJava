@@ -1,5 +1,6 @@
 package Leetcode;
 
+import java.math.BigInteger;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,6 +15,7 @@ import java.util.Set;
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @SuppressWarnings({ "JavaDoc" })
 class Leetcode150 {
@@ -822,21 +824,84 @@ class Leetcode150 {
     }
 
     /**
-     * #198
-     *
-     * @param nums
+     * #149
+     * 
+     * @param points
      * @return
      */
-    public static int rob(int[] nums) {
-        int[] dp = new int[3];
-        dp[0] = nums[0];
-        if (nums.length >= 2) {
-            dp[1] = Math.max(nums[0], nums[1]);
+    public int maxPoints(int[][] points) {
+        if (points.length == 1)
+            return 1;
+
+        Arrays.sort(points, (a, b) -> a[0] - b[0]);
+        Map<Line, Integer> count = new HashMap<>();
+        int max = 0;
+        Line res = null;
+        for (int i = 0; i < points.length; i++) {
+            var p1 = points[i];
+            for (int j = i + 1; j < points.length; j++) {
+                var p2 = points[j];
+                var l = Line.through(p1[0], p1[1], p2[0], p2[1]);
+                var v = count.getOrDefault(l, 0);
+                count.put(l, v + 1);
+                if (v + 1 > max) {
+                    max = v + 1;
+                    res = l;
+                }
+            }
         }
-        for (int i = 2; i < nums.length; i++) {
-            dp[i % 3] = Math.max(dp[(i - 2) % 3] + nums[i], dp[(i - 1) % 3]);
+        final var L = res;
+        return (int) Arrays.stream(points)
+                .filter(p -> L.a * p[0] + L.b * p[1] + L.c == 0).count();
+    }
+
+    static record Line(int a, int b, int c) {
+
+        @Override
+        public final int hashCode() {
+            return Objects.hash(a, b, c);
         }
-        return dp[(nums.length - 1) % 3];
+
+        @Override
+        public final boolean equals(Object arg0) {
+            if (arg0 instanceof Line o) {
+                return o.a == a && o.b == b && o.c == c;
+            }
+            return false;
+        }
+
+        public static Line through(int x1, int y1, int x2, int y2) {
+            if (x1 == x2 && y1 == y2) {
+                throw new IllegalArgumentException();
+            }
+
+            int a = y1 - y2;
+            int b = x2 - x1;
+            int c = x1 * y2 - x2 * y1;
+
+            int gcd = gcd(gcd(Math.abs(a), Math.abs(b)), Math.abs(c));
+
+            a /= gcd;
+            b /= gcd;
+            c /= gcd;
+
+            if (a < 0 || (a == 0 && b < 0)) {
+                a = -a;
+                b = -b;
+                c = -c;
+            }
+
+            return new Line(a, b, c);
+        }
+
+        private static int gcd(int a, int b) {
+            while (b != 0) {
+                int remainder = a % b;
+                a = b;
+                b = remainder;
+            }
+            return a;
+        }
     }
 }
 
@@ -1145,6 +1210,24 @@ public class Leetcode200 {
         n = (n >>> 4) & M4 | ((n & M4) << 4);
         n = (n >>> 8) & M8 | ((n & M8) << 8);
         return n >>> 16 | n << 16;
+    }
+
+    /**
+     * #198
+     *
+     * @param nums
+     * @return
+     */
+    public static int rob(int[] nums) {
+        int[] dp = new int[3];
+        dp[0] = nums[0];
+        if (nums.length >= 2) {
+            dp[1] = Math.max(nums[0], nums[1]);
+        }
+        for (int i = 2; i < nums.length; i++) {
+            dp[i % 3] = Math.max(dp[(i - 2) % 3] + nums[i], dp[(i - 1) % 3]);
+        }
+        return dp[(nums.length - 1) % 3];
     }
 
     /**
