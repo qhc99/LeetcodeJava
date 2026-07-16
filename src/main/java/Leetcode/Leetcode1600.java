@@ -1,9 +1,8 @@
 package Leetcode;
 
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
-class Leetcode1550 {
+public class Leetcode1600 {
     /**
      * #1529
      * 
@@ -20,14 +19,37 @@ class Leetcode1550 {
             }
             d = chrs[i];
         }
-        if(chrs[0] == '1'){
+        if (chrs[0] == '1') {
             groups_count++;
         }
         return groups_count;
     }
-}
 
-public class Leetcode1600 {
+    /**
+     * #1570 SparseVector
+     */
+    class SparseVector {
+        Map<Integer, Integer> kv = new HashMap<>();
+
+        SparseVector(int[] nums) {
+            for (int i = 0; i < nums.length; i++) {
+                if (nums[i] != 0)
+                    kv.put(i, nums[i]);
+            }
+        }
+
+        // Return the dotProduct of two sparse vectors
+        public int dotProduct(SparseVector vec) {
+            var ks = new HashSet<>(kv.keySet());
+            ks.retainAll(vec.kv.keySet());
+            int res = 0;
+            for (var k : ks) {
+                res += kv.get(k) * vec.kv.get(k);
+            }
+            return res;
+        }
+    }
+
     /**
      * #1584
      * 

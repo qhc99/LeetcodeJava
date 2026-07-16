@@ -71,4 +71,34 @@ public class Leetcode2600 {
         }
     }
 
+    /**
+     * #2571
+     * 
+     * @param n
+     * @return
+     */
+    public int minOperations(int n) {
+        int res = 0;
+        boolean[] bits = new boolean[32];
+        for (int i = 0; i < 32; i++) {
+            bits[i] = ((n >> i) & 1) == 1;
+        }
+        boolean add = false;
+        for (int i = 0; i < 32; i++) {
+            if (add && !bits[i]) {
+                bits[i] = true;
+                add = false;
+            } else if (add && bits[i]) {
+                bits[i] = false;
+            }
+            if (bits[i] && (i >= 32 || !bits[i + 1])) {
+                res++; // subtract
+            } else if (bits[i] && (i < 32 && bits[i + 1])) {
+                res++; // add
+                add = true;
+            }
+        }
+        // no overflow
+        return res;
+    }
 }
