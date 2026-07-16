@@ -142,4 +142,65 @@ public class Leetcode1200 {
     static record Transaction(int idx, String name, int time, int amount,
             String city) {
     }
+
+    /**
+     * #1197
+     * 
+     * @param x
+     * @param y
+     * @return
+     */
+    public int minKnightMoves(int x, int y) {
+        if (x == 0 && y == 0)
+            return 0;
+        Map<Pos, Integer> visited = new HashMap<>();
+        Map<Pos, Integer> visited2 = new HashMap<>();
+        Queue<Pos> queue = new ArrayDeque<>();
+        Queue<Pos> queue2 = new ArrayDeque<>();
+        queue.add(new Pos(0, 0));
+        queue2.add(new Pos(x, y));
+        visited.put(new Pos(0, 0), 0);
+        visited2.put(new Pos(x, y), 0);
+        int[] dx = new int[] { -1, -2, 1, 2, -1, -2, 1, 2 };
+        int[] dy = new int[] { -2, -1, -2, -1, 2, 1, 2, 1 };
+        while (!queue.isEmpty() || !queue2.isEmpty()) {
+            boolean pollFirst = queue.size() <= queue2.size();
+            var thisQueue = pollFirst ? queue : queue2;
+            var thisVisited = pollFirst ? visited : visited2;
+            var anotherVisited = pollFirst ? visited2 : visited;
+            var current = thisQueue.poll();
+            var dist = thisVisited.get(current);
+
+            for (int i = 0; i < 8; i++) {
+                var a = current.x + dx[i];
+                var b = current.y + dy[i];
+                var next = new Pos(a, b);
+                if (anotherVisited.containsKey(next)) {
+                    return dist + 1 + anotherVisited.get(next);
+                }
+                if (!thisVisited.containsKey(next)) {
+                    thisVisited.put(next, dist + 1);
+                    thisQueue.add(new Pos(a, b));
+                }
+
+            }
+        }
+        return -1;
+    }
+
+    static record Pos(int x, int y) {
+        @Override
+        public final int hashCode() {
+            return Objects.hash(x, y);
+        }
+
+        @Override
+        public final boolean equals(Object arg0) {
+            if (arg0 instanceof Pos o) {
+                return o.x == x && o.y == y;
+            }
+            return false;
+        }
+    }
+
 }
