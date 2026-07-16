@@ -1,6 +1,90 @@
 package Leetcode;
 
+import java.util.*;
+
 public class Leetcode2500 {
+
+    /**
+     * #2408 SQL
+     */
+    class SQL {
+        static class Table {
+            int column;
+            int id = 1;
+            TreeMap<Integer, List<String>> rows = new TreeMap<>();
+
+            Table(int col) {
+                column = col;
+            }
+
+            boolean insert(List<String> row) {
+                if (row.size() != column) {
+                    return false;
+                }
+                rows.put(id++, row);
+                return true;
+            }
+
+            void remove(int rowId) {
+                rows.remove(rowId);
+            }
+
+            String select(int rowId, int columnId) {
+                if (columnId < 1 || columnId > column)
+                    return "<null>";
+                var row = rows.getOrDefault(rowId, List.of());
+                if (columnId - 1 >= row.size())
+                    return "<null>";
+                return row.get(columnId - 1);
+            }
+
+            public List<String> toExp() {
+                List<String> res = new ArrayList<>();
+                for (var e : rows.entrySet()) {
+                    var sb = new StringBuilder();
+                    sb.append(e.getKey());
+                    sb.append(",");
+                    sb.append(String.join(",", e.getValue()));
+                    res.add(sb.toString());
+                }
+                return res;
+            }
+        }
+
+        Map<String, Table> tables = new HashMap<>();
+
+        public SQL(List<String> names, List<Integer> columns) {
+            for (int i = 0; i < names.size(); i++) {
+                tables.put(names.get(i), new Table(columns.get(i)));
+            }
+        }
+
+        public boolean ins(String name, List<String> row) {
+            var table = tables.get(name);
+            if (table == null)
+                return false;
+            return table.insert(row);
+        }
+
+        public void rmv(String name, int rowId) {
+            var table = tables.get(name);
+            if (table == null)
+                return;
+            table.remove(rowId);
+        }
+
+        public String sel(String name, int rowId, int columnId) {
+            var table = tables.get(name);
+            if (table == null)
+                return "<null>";
+            return table.select(rowId, columnId);
+        }
+
+        public List<String> exp(String name) {
+            return tables.getOrDefault(name, new Table(0)).toExp();
+        }
+    }
+
     /**
      * #2483
      * 
