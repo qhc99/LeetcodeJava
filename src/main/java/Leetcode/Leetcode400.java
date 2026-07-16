@@ -1234,6 +1234,27 @@ public class Leetcode400 {
     }
 
     /**
+     * #362 HitCounter
+     */
+    class HitCounter {
+        TreeMap<Integer, Integer> timestampCount = new TreeMap<>();
+
+        public HitCounter() {
+
+        }
+
+        public void hit(int timestamp) {
+            timestampCount.put(timestamp,
+                    timestampCount.getOrDefault(timestamp, 0) + 1);
+        }
+
+        public int getHits(int timestamp) {
+            return timestampCount.subMap(timestamp - 300 + 1, timestamp + 1)
+                    .values().stream().reduce(0, (a, b) -> a + b).intValue();
+        }
+    }
+
+    /**
      * #363
      *
      * @param matrix
