@@ -8,7 +8,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Stream;
 
 @SuppressWarnings("JavaDoc")
-class Leetcode250 {
+public class Leetcode300 {
 
     /**
      * #202
@@ -1265,10 +1265,6 @@ class Leetcode250 {
         }
         return statS.equals(statT);
     }
-}
-
-@SuppressWarnings("JavaDoc")
-public class Leetcode300 {
     /**
      * #2 2
      * 

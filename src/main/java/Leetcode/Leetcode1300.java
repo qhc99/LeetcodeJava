@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SuppressWarnings("JavaDoc")
-class Leetcode1250 {
+public class Leetcode1300 {
 
     /**
      * #1207 <br/>
@@ -150,12 +150,6 @@ class WorkQueue {
     synchronized boolean isEnd() {
         return activeTasks == 0 && workQueue.isEmpty();
     }
-}
-
-@SuppressWarnings({"JavaDoc"})
-public class Leetcode1300 {
-
-
     /**
      * #1290
      *

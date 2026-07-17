@@ -17,7 +17,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeSet;
 
-class Leetcode850 {
+interface Master {
+    int guess(String word);
+}
+
+@SuppressWarnings("JavaDoc")
+public class Leetcode900 {
     /**
      * #802
      * 
@@ -578,14 +583,6 @@ class Leetcode850 {
             return false;
         }
     }
-}
-
-interface Master {
-    public int guess(String word);
-}
-
-@SuppressWarnings("JavaDoc")
-public class Leetcode900 {
     /**
      * #853
      * 
@@ -882,6 +879,18 @@ public class Leetcode900 {
 
     private static long lcm(long a, long b) {
         return a * b / gcd(a, b);
+    }
+
+    /**
+     * #894
+     * 
+     * @param n
+     * @return
+     */
+    public List<TreeNode> allPossibleFBT(int n) {
+        if (n % 2 == 0)
+            return List.of();
+        return null;
     }
 }
 

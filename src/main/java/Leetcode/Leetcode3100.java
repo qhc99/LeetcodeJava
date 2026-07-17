@@ -4,7 +4,7 @@ import java.util.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-class Leetcode3050 {
+public class Leetcode3100 {
     /**
      * #3019
      * 
@@ -110,9 +110,6 @@ class Leetcode3050 {
         public int count;
         public Map<Pair, Trie> child = new HashMap<>();
     }
-}
-
-public class Leetcode3100 {
     /**
      * #3069
      * 

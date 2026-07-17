@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-class Leetcode2050 {
+public class Leetcode2100 {
     /**
      * #2043 Bank
      */
@@ -41,9 +41,6 @@ class Leetcode2050 {
             return true;
         }
     }
-}
-
-public class Leetcode2100 {
     /**
      * #2013 DetectSquares
      */

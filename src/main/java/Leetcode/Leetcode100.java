@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @SuppressWarnings({ "Unused", "JavaDoc" })
-class Leetcode50 {
+public class Leetcode100 {
     /**
      * #1 <br/>
      * 给定 nums = [2, 7, 11, 15], target = 9 <br/>
@@ -2066,11 +2066,6 @@ class Leetcode50 {
         }
         return isMinus ? 1. / ans : ans;
     }
-
-}
-
-@SuppressWarnings("JavaDoc")
-public class Leetcode100 {
 
     /**
      * #54

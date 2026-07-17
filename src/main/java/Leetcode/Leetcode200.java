@@ -18,7 +18,7 @@ import java.util.NoSuchElementException;
 import java.util.Objects;
 
 @SuppressWarnings({ "JavaDoc" })
-class Leetcode150 {
+public class Leetcode200 {
     /**
      * #105
      *
@@ -903,11 +903,6 @@ class Leetcode150 {
             return a;
         }
     }
-}
-
-@SuppressWarnings({ "JavaDoc" })
-public class Leetcode200 {
-
     /**
      * #152 <br/>
      * 乘积最大子数组

@@ -1,7 +1,7 @@
 package Leetcode;
 
 @SuppressWarnings({"JavaDoc"})
-class Leetcode1450 {
+public class Leetcode1500 {
     /**
      * #1446
      *
@@ -19,9 +19,6 @@ class Leetcode1450 {
         }
         return ans;
     }
-}
-
-public class Leetcode1500 {
     /**
      * #1448
      * 

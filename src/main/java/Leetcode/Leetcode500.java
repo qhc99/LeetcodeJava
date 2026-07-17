@@ -3,7 +3,7 @@ package Leetcode;
 import java.util.*;
 
 @SuppressWarnings("ALL")
-class Leetcode450 {
+public class Leetcode500 {
 
     /**
      * #400
@@ -1950,11 +1950,6 @@ class Leetcode450 {
         }
         return ans;
     }
-}
-
-@SuppressWarnings({ "JavaDoc", "Unused" })
-public class Leetcode500 {
-
     /**
      * #451
      *
@@ -2389,10 +2384,6 @@ public class Leetcode500 {
 
     private static int lastKBinDigits(int num, int k) {
         return num & ((1 << k) - 1);
-    }
-
-    private static int kthBinDigit(int num, int k) {
-        return num >>> k & 1;
     }
 
     /**

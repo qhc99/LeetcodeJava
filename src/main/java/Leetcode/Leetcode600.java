@@ -5,7 +5,7 @@ import java.util.stream.IntStream;
 import java.util.function.ToDoubleFunction;
 
 @SuppressWarnings("ALL")
-class Leetcode550 {
+public class Leetcode600 {
 
     /**
      * #501 <br/>
@@ -669,11 +669,6 @@ class Leetcode550 {
             max_diam = max;
         }
     }
-}
-
-@SuppressWarnings({ "JavadocDeclaration" })
-public class Leetcode600 {
-
     /**
      * #551
      *

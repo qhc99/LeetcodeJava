@@ -3,7 +3,8 @@ package Leetcode;
 import java.util.*;
 import java.util.Iterator;
 
-class Leetcode1650 {
+@SuppressWarnings({"Unused", "JavadocDeclaration"})
+public class Leetcode1700 {
     /**
      * #1604
      * 
@@ -54,10 +55,6 @@ class Leetcode1650 {
 
     static record Entry(String name, String[] time) {
     }
-}
-
-@SuppressWarnings({"Unused", "JavadocDeclaration"})
-public class Leetcode1700 {
     /**
      * #1662
      *

@@ -4,7 +4,7 @@ import java.util.Comparator;
 import java.util.PriorityQueue;
 
 @SuppressWarnings({"JavaDoc"})
-class Leetcode950 {
+public class Leetcode1000 {
 
     /**
      * #902
@@ -85,11 +85,6 @@ class Leetcode950 {
         }
         return namePtr == name.length();
     }
-}
-
-@SuppressWarnings("JavaDoc")
-public class Leetcode1000 {
-
     /**
      * #968
      * <br/>监控二叉树

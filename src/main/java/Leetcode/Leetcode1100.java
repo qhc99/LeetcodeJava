@@ -3,7 +3,7 @@ package Leetcode;
 import java.util.*;
 
 @SuppressWarnings({"JavaDoc"})
-class Leetcode1050 {
+public class Leetcode1100 {
 
     /**
      * #1006
@@ -308,11 +308,6 @@ class Leetcode1050 {
             return tries.query(letter);
         }
     }
-}
-
-@SuppressWarnings("JavaDoc")
-public class Leetcode1100 {
-
     /**
      * #1087
      * 

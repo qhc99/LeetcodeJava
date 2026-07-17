@@ -14,7 +14,8 @@ import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-class Leetcode650 {
+@SuppressWarnings("ALL")
+public class Leetcode700 {
 
     /**
      * #621
@@ -293,11 +294,6 @@ class Leetcode650 {
         }
         return max / (double) k;
     }
-}
-
-@SuppressWarnings("ALL")
-public class Leetcode700 {
-
     /**
      * #647
      * 

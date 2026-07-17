@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-class Leetcode1150 {
+public class Leetcode1200 {
     /**
      * #1143
      * 
@@ -80,9 +80,6 @@ class Leetcode1150 {
         }
     }
 
-}
-
-public class Leetcode1200 {
     /**
      * #1169
      * 

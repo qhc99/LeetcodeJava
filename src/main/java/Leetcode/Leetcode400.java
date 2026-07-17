@@ -4,8 +4,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
-@SuppressWarnings("JavaDoc")
-class Leetcode350 {
+@SuppressWarnings({ "JavaDoc", "Unused" })
+public class Leetcode400 {
 
     /**
      * #300
@@ -1127,11 +1127,6 @@ class Leetcode350 {
         }
         return res;
     }
-}
-
-@SuppressWarnings({ "JavaDoc", "Unused" })
-public class Leetcode400 {
-
     /**
      * #354
      *
@@ -1151,7 +1146,7 @@ public class Leetcode400 {
         for (int i = 0; i < h.length; i++) {
             h[i] = envelopes[i][1];
         }
-        return Leetcode350.lengthOfLIS(h);
+        return Leetcode400.lengthOfLIS(h);
     }
 
     /**

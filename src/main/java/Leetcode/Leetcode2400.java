@@ -2,7 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
-class Leetcode2350 {
+public class Leetcode2400 {
     /**
      * #2303
      * 
@@ -67,9 +67,6 @@ class Leetcode2350 {
 
         return Arrays.stream(totalTime).max().getAsInt();
     }
-}
-
-public class Leetcode2400 {
     /**
      * #2373
      * 
