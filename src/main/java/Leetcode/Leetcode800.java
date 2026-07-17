@@ -753,6 +753,68 @@ public class Leetcode800 {
     }
 
     /**
+     * #773
+     * 
+     * @param board
+     * @return
+     */
+    public int slidingPuzzle(int[][] board) {
+        int[] target = new int[6];
+        System.arraycopy(board[0], 0, target, 0, 3);
+        System.arraycopy(board[1], 0, target, 3, 3);
+        Set<Board2x3> visited = new HashSet<>();
+        Board2x3 init = new Board2x3(new int[] { 1, 2, 3, 4, 5, 0 }, 1, 2, 0);
+        if (Arrays.equals(target, init.board))
+            return 0;
+        visited.add(init);
+        Queue<Board2x3> queue = new ArrayDeque<>();
+        queue.add(init);
+        int[] dx = new int[] { -1, 1, 0, 0 };
+        int[] dy = new int[] { 0, 0, -1, 1 };
+        while (!queue.isEmpty()) {
+            var b = queue.poll();
+            var idx0 = b.i0 * 3 + b.j0;
+            for (int t = 0; t < 4; t++) {
+                var i = b.i0 + dx[t];
+                var j = b.j0 + dy[t];
+                if (i >= 0 && i <= 1 && j >= 0 && j <= 2) {
+                    var nb = new int[6];
+                    System.arraycopy(b.board, 0, nb, 0, 6);
+                    var idx = i * 3 + j;
+                    var v = nb[idx];
+                    nb[idx] = nb[idx0];
+                    nb[idx0] = v;
+                    var nextBoard = new Board2x3(nb, i, j, b.dist + 1);
+                    if (Arrays.equals(target, nb))
+                        return b.dist + 1;
+                    if (!visited.contains(nextBoard)) {
+                        visited.add(nextBoard);
+                        queue.add(nextBoard);
+                    }
+                }
+
+            }
+
+        }
+        return -1;
+    }
+
+    static record Board2x3(int[] board, int i0, int j0, int dist) {
+        @Override
+        public final boolean equals(Object arg0) {
+            if (arg0 instanceof Board2x3 b) {
+                return Arrays.equals(board, b.board);
+            }
+            return false;
+        }
+
+        @Override
+        public final int hashCode() {
+            return Arrays.hashCode(board);
+        }
+    }
+
+    /**
      * #778
      * 
      * @param grid
