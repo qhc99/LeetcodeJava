@@ -98,6 +98,25 @@ public class Leetcode600 {
     }
 
     /**
+     * #509
+     * 
+     * @param n
+     * @return
+     */
+    public int fib(int n) {
+        if (n <= 1)
+            return n;
+        int a = 0, b = 1;
+        for (; n > 1; n--) {
+            a += b;
+            var t = a;
+            a = b;
+            b = t;
+        }
+        return b;
+    }
+
+    /**
      * #525 <br>
      * 连续数组 <br>
      * 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
@@ -669,6 +688,7 @@ public class Leetcode600 {
             max_diam = max;
         }
     }
+
     /**
      * #551
      *
