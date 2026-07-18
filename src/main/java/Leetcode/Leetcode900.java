@@ -583,6 +583,7 @@ public class Leetcode900 {
             return false;
         }
     }
+
     /**
      * #853
      * 
@@ -890,7 +891,23 @@ public class Leetcode900 {
     public List<TreeNode> allPossibleFBT(int n) {
         if (n % 2 == 0)
             return List.of();
-        return null;
+        Map<Integer, List<TreeNode>> trees = new HashMap<>();
+        trees.put(1, List.of(new TreeNode()));
+        for (int i = 3; i <= n; i += 2) {
+            List<TreeNode> res = new ArrayList<>();
+            for (int j = i - 2, k = 1; j >= 1; j -= 2, k += 2) {
+                for (var l : trees.get(k)) {
+                    for (var r : trees.get(j)) {
+                        var node = new TreeNode();
+                        res.add(node);
+                        node.left = l;
+                        node.right = r;
+                    }
+                }
+            }
+            trees.put(i, res);
+        }
+        return trees.get(n);
     }
 }
 

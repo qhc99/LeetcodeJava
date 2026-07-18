@@ -1,13 +1,6 @@
 package Leetcode;
 
 import java.util.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.Deque;
-import java.util.List;
-import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -506,6 +499,52 @@ public class Leetcode100 {
             }
         }
         return max_area;
+    }
+
+    public String longestCommonPrefix(String[] strs) {
+        var trie = new Trie();
+        int minLen = Integer.MAX_VALUE;
+        for (var s : strs) {
+            trie.add(s);
+            minLen = Math.min(minLen, s.length());
+        }
+        var ret = trie.commonPrefix();
+        return ret.substring(0, Math.min(minLen, ret.length()));
+    }
+
+    static class Trie {
+        Map<Character, Trie> children = new HashMap<>();
+
+        void add(String s) {
+            if (s.length() == 0) {
+                children.put(null, new Trie());
+            }
+            add(this, s, 0);
+        }
+
+        void add(Trie n, String s, int idx) {
+            if (idx < s.length()) {
+                var child = n.children.computeIfAbsent(s.charAt(idx),
+                        (k) -> new Trie());
+                add(child, s, idx + 1);
+            }
+        }
+
+        String commonPrefix() {
+            var sb = new StringBuilder();
+            commonPrefix(this, sb);
+            return sb.toString();
+        }
+
+        void commonPrefix(Trie n, StringBuilder sb) {
+            if (n.children.size() == 1) {
+                var entry = n.children.entrySet().iterator().next();
+                if (entry.getKey() != null) {
+                    sb.append(entry.getKey());
+                }
+                commonPrefix(entry.getValue(), sb);
+            }
+        }
     }
 
     /**
