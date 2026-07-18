@@ -86,6 +86,33 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2461
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public long maximumSubarraySum(int[] nums, int k) {
+        long res = 0;
+        Set<Integer> inQueue = new HashSet<>();
+        Queue<Integer> queue = new ArrayDeque<>();
+        long sum = 0;
+        for (var n : nums) {
+            while (inQueue.contains(n) || queue.size() >= k) {
+                var v = queue.poll();
+                sum -= v;
+                inQueue.remove(v);
+            }
+            sum += n;
+            inQueue.add(n);
+            queue.add(n);
+            if (queue.size() == k)
+                res = Math.max(res, sum);
+        }
+        return res;
+    }
+
+    /**
      * #2483
      * 
      * @param customers
