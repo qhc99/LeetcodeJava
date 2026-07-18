@@ -1,9 +1,8 @@
 package Leetcode;
 
 import java.util.*;
-import java.util.Iterator;
 
-@SuppressWarnings({"Unused", "JavadocDeclaration"})
+@SuppressWarnings({ "Unused", "JavadocDeclaration" })
 public class Leetcode1700 {
     /**
      * #1604
@@ -55,6 +54,61 @@ public class Leetcode1700 {
 
     static record Entry(String name, String[] time) {
     }
+
+    /**
+     * #1610
+     * 
+     * @param points
+     * @param angle
+     * @param location
+     * @return
+     */
+    public int visiblePoints(List<List<Integer>> points, int angle,
+            List<Integer> location) {
+        int zeros = 0;
+        double range = angle / 180. * Math.PI;
+        List<List<Integer>> sortedPoints = new ArrayList<>();
+        for (var p : points) {
+            p.set(0, p.get(0) - location.get(0));
+            p.set(1, p.get(1) - location.get(1));
+            if (p.get(0) == p.get(1) && p.get(0) == 0)
+                zeros++;
+            else
+                sortedPoints.add(p);
+        }
+
+        List<Double> sortedAngles = sortedPoints.stream().map(p -> {
+            var a = Math.atan2(p.get(1), p.get(0));
+            if (a < 0)
+                a += 2 * Math.PI;
+            return a;
+        }).sorted().toList();
+        Deque<AnglePos> deque = new ArrayDeque<>();
+
+        int maxLen = deque.size();
+        for (int i = 0; i < sortedAngles.size() * 2; i++) {
+            var a = sortedAngles.get(i % sortedAngles.size());
+            if (i >= sortedAngles.size())
+                a += Math.PI * 2;
+            if (a > range + Math.PI * 2)
+                break;
+            deque.add(new AnglePos(i, a));
+            var end = deque.peekLast();
+            var start = deque.peekFirst();
+            while (end.angle - start.angle > range
+                    || end.idx - start.idx + 1 > sortedAngles.size()) {
+                deque.poll();
+                start = deque.peekFirst();
+            }
+            maxLen = Math.max(maxLen, deque.size());
+        }
+
+        return zeros + maxLen;
+    }
+
+    static record AnglePos(int idx, double angle) {
+    }
+
     /**
      * #1662
      *
@@ -69,9 +123,10 @@ public class Leetcode1700 {
             if (iter2.hasNext()) {
                 var i1 = iter1.next();
                 var i2 = iter2.next();
-                if (!i1.equals(i2)) return false;
-            }
-            else return false;
+                if (!i1.equals(i2))
+                    return false;
+            } else
+                return false;
         }
         return !iter2.hasNext();
     }
@@ -89,8 +144,7 @@ public class Leetcode1700 {
         public boolean hasNext() {
             if (word_idx + 1 < words[arr_idx].length()) {
                 return true;
-            }
-            else {
+            } else {
                 return arr_idx + 1 < words.length;
             }
         }
