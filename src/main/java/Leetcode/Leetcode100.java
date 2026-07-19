@@ -2578,6 +2578,23 @@ public class Leetcode100 {
     }
 
     /**
+     * #83
+     * 
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates(ListNode head) {
+        var ptr = head;
+        for (; ptr != null && ptr.next != null; ptr = ptr.next) {
+            while (ptr.next != null && ptr.val == ptr.next.val) {
+                var n = ptr.next.next;
+                ptr.next = n;
+            }
+        }
+        return head;
+    }
+
+    /**
      * #84
      * 
      * @param heights
@@ -2625,7 +2642,7 @@ public class Leetcode100 {
         int k = 0;
         var arr2 = nums2;
         while (i < m || j < n) {
-            if (i == m || (j != n && arr2[j] < arr1[i])) 
+            if (i == m || (j != n && arr2[j] < arr1[i]))
                 nums1[k++] = arr2[j++];
             else
                 nums1[k++] = arr1[i++];
