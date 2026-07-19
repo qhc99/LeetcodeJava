@@ -415,6 +415,47 @@ public class Leetcode300 {
     }
 
     /**
+     * #223
+     * 
+     * @param ax1
+     * @param ay1
+     * @param ax2
+     * @param ay2
+     * @param bx1
+     * @param by1
+     * @param bx2
+     * @param by2
+     * @return
+     */
+    public int computeArea(int ax1, int ay1, int ax2, int ay2, int bx1, int by1,
+            int bx2, int by2) {
+        int[] xa = new int[] { ax1, ax2 };
+        int[] xb = new int[] { bx1, bx2 };
+        if (ax1 > bx1) {
+            var t = xa;
+            xa = xb;
+            xb = t;
+        }
+        int dx = 0;
+        if (xa[1] > xb[0]) {
+            dx = Math.min(xa[1], xb[1]) - Math.max(xa[0], xb[0]);
+        }
+
+        int[] ya = new int[] { ay1, ay2 };
+        int[] yb = new int[] { by1, by2 };
+        if (ay1 > by1) {
+            var t = ya;
+            ya = yb;
+            yb = t;
+        }
+        int dy = 0;
+        if (ya[1] > yb[0]) {
+            dy = Math.min(ya[1], yb[1]) - Math.max(ya[0], yb[0]);
+        }
+        return (ax2 - ax1) * (ay2 - ay1) + (bx2 - bx1) * (by2 - by1) - dx * dy;
+    }
+
+    /**
      * #224
      *
      * @param s
@@ -1265,6 +1306,7 @@ public class Leetcode300 {
         }
         return statS.equals(statT);
     }
+
     /**
      * #2 2
      * 

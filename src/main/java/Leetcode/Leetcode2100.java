@@ -4,44 +4,6 @@ import java.util.*;
 
 public class Leetcode2100 {
     /**
-     * #2043 Bank
-     */
-    class Bank {
-
-        long[] balance;
-
-        public Bank(long[] balance) {
-            this.balance = balance;
-        }
-
-        boolean invalidAccount(int a) {
-            return a < 1 || a > balance.length;
-        }
-
-        public boolean transfer(int account1, int account2, long money) {
-            if (invalidAccount(account1) || invalidAccount(account2)
-                    || balance[account1 - 1] < money)
-                return false;
-            balance[account1 - 1] -= money;
-            balance[account2 - 1] += money;
-            return true;
-        }
-
-        public boolean deposit(int account, long money) {
-            if (invalidAccount(account))
-                return false;
-            balance[account - 1] += money;
-            return true;
-        }
-
-        public boolean withdraw(int account, long money) {
-            if (invalidAccount(account) || balance[account - 1] < money)
-                return false;
-            balance[account - 1] -= money;
-            return true;
-        }
-    }
-    /**
      * #2013 DetectSquares
      */
     class DetectSquares {
@@ -113,5 +75,88 @@ public class Leetcode2100 {
             }
             return res;
         }
+    }
+
+        /**
+     * #2043 Bank
+     */
+    class Bank {
+
+        long[] balance;
+
+        public Bank(long[] balance) {
+            this.balance = balance;
+        }
+
+        boolean invalidAccount(int a) {
+            return a < 1 || a > balance.length;
+        }
+
+        public boolean transfer(int account1, int account2, long money) {
+            if (invalidAccount(account1) || invalidAccount(account2)
+                    || balance[account1 - 1] < money)
+                return false;
+            balance[account1 - 1] -= money;
+            balance[account2 - 1] += money;
+            return true;
+        }
+
+        public boolean deposit(int account, long money) {
+            if (invalidAccount(account))
+                return false;
+            balance[account - 1] += money;
+            return true;
+        }
+
+        public boolean withdraw(int account, long money) {
+            if (invalidAccount(account) || balance[account - 1] < money)
+                return false;
+            balance[account - 1] -= money;
+            return true;
+        }
+    }
+
+    /**
+     * #2050
+     * 
+     * @param n
+     * @param relations
+     * @param time
+     * @return
+     */
+    public int minimumTime(int n, int[][] relations, int[] time) {
+        int[] totalTime = new int[n + 1];
+        int[] depCount = new int[n + 1];
+        List<Integer> toVisit = new ArrayList<>();
+        Map<Integer, List<Integer>> dep = new HashMap<>();
+        Map<Integer, List<Integer>> unblock = new HashMap<>();
+        for (var r : relations) {
+            dep.computeIfAbsent(r[1], k -> new ArrayList<>()).add(r[0]);
+            depCount[r[1]]++;
+            unblock.computeIfAbsent(r[0], k -> new ArrayList<>()).add(r[1]);
+        }
+
+        for (int i = 1; i <= n; i++) {
+            if (depCount[i] == 0)
+                toVisit.add(i);
+        }
+
+        while (!toVisit.isEmpty()) {
+            List<Integer> next = new ArrayList<>();
+            for (var i : toVisit) {
+                for (var ub : unblock.getOrDefault(i, List.of())) {
+                    depCount[ub]--;
+                    if (depCount[ub] == 0) {
+                        next.add(ub);
+                    }
+                }
+                totalTime[i] = time[i - 1] + dep.getOrDefault(i, List.of())
+                        .stream().map(idx -> totalTime[idx])
+                        .max((a, b) -> a - b).orElse(0);
+            }
+            toVisit = next;
+        }
+
+        return Arrays.stream(totalTime).max().getAsInt();
     }
 }

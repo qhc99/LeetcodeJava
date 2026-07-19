@@ -25,48 +25,27 @@ public class Leetcode2400 {
     }
 
     /**
-     * #2050
+     * #2365
      * 
-     * @param n
-     * @param relations
-     * @param time
+     * @param tasks
+     * @param space
      * @return
      */
-    public int minimumTime(int n, int[][] relations, int[] time) {
-        int[] totalTime = new int[n + 1];
-        int[] depCount = new int[n + 1];
-        List<Integer> toVisit = new ArrayList<>();
-        Map<Integer, List<Integer>> dep = new HashMap<>();
-        Map<Integer, List<Integer>> unblock = new HashMap<>();
-        for (var r : relations) {
-            dep.computeIfAbsent(r[1], k -> new ArrayList<>()).add(r[0]);
-            depCount[r[1]]++;
-            unblock.computeIfAbsent(r[0], k -> new ArrayList<>()).add(r[1]);
-        }
-
-        for (int i = 1; i <= n; i++) {
-            if (depCount[i] == 0)
-                toVisit.add(i);
-        }
-
-        while (!toVisit.isEmpty()) {
-            List<Integer> next = new ArrayList<>();
-            for (var i : toVisit) {
-                for (var ub : unblock.getOrDefault(i, List.of())) {
-                    depCount[ub]--;
-                    if (depCount[ub] == 0) {
-                        next.add(ub);
-                    }
+    public long taskSchedulerII(int[] tasks, int space) {
+        long day = 1;
+        Map<Integer, Long> record = new HashMap<>();
+        for(var task : tasks){
+            var d = record.get(task);
+            if(d != null){
+                if(day - d <= space){
+                    day+= space - day + d + 1;
                 }
-                totalTime[i] = time[i - 1] + dep.getOrDefault(i, List.of())
-                        .stream().map(idx -> totalTime[idx])
-                        .max((a, b) -> a - b).orElse(0);
             }
-            toVisit = next;
+            record.put(task, day++);
         }
-
-        return Arrays.stream(totalTime).max().getAsInt();
+        return --day;
     }
+
     /**
      * #2373
      * 

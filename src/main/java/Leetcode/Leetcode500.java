@@ -19,13 +19,15 @@ public class Leetcode500 {
             len *= 10;
             size++;
         }
-        return ithDigit((n - 1) % size, (int) (Math.pow(10, size - 1) - 1 + Math.ceil(((double) n) / size)), size);
+        return ithDigit((n - 1) % size, (int) (Math.pow(10, size - 1) - 1
+                + Math.ceil(((double) n) / size)), size);
 
     }
 
     private static int ithDigit(int i, int num, int size) {
         while (i != 0) {
-            num -= ((int) (num / Math.pow(10, size - 1))) * Math.pow(10, size - 1);
+            num -= ((int) (num / Math.pow(10, size - 1)))
+                    * Math.pow(10, size - 1);
             size--;
             i--;
         }
@@ -42,9 +44,12 @@ public class Leetcode500 {
     public static String removeKdigits(String num, int k) {
 
         if (num.length() == 1) {
-            if (k == 1) return "0";
-            else if (k == 0) return num;
-            else throw new RuntimeException();
+            if (k == 1)
+                return "0";
+            else if (k == 0)
+                return num;
+            else
+                throw new RuntimeException();
         }
 
         char[] chrs = num.toCharArray();
@@ -52,7 +57,8 @@ public class Leetcode500 {
         sb.append(chrs[0]);
         for (int i = 1; i < chrs.length; i++) {
             var current = chrs[i];
-            while (sb.length() > 0 && k > 0 && sb.charAt(sb.length() - 1) > current) {
+            while (sb.length() > 0 && k > 0
+                    && sb.charAt(sb.length() - 1) > current) {
                 sb.deleteCharAt(sb.length() - 1);
                 k--;
             }
@@ -70,8 +76,9 @@ public class Leetcode500 {
     }
 
     /**
-     * #404
-     * <br>左叶子之和
+     * #404 <br>
+     * 左叶子之和
+     * 
      * <pre>
      *     3
      *    / \
@@ -88,15 +95,12 @@ public class Leetcode500 {
     public static int sumOfLeftLeaves(TreeNode root) {
         if (root == null) {
             return 0;
-        }
-        else {
+        } else {
             if (root.left == null) {
                 return sumOfLeftLeaves(root.right);
-            }
-            else if (root.left.left == null && root.left.right == null) {
+            } else if (root.left.left == null && root.left.right == null) {
                 return root.left.val + sumOfLeftLeaves(root.right);
-            }
-            else {
+            } else {
                 return sumOfLeftLeaves(root.left) + sumOfLeftLeaves(root.right);
             }
         }
@@ -112,8 +116,7 @@ public class Leetcode500 {
         Arrays.sort(people, (a, b) -> {
             if (a[0] != b[0]) {
                 return b[0] - a[0];
-            }
-            else {
+            } else {
                 return a[1] - b[1];
             }
         });
@@ -132,19 +135,19 @@ public class Leetcode500 {
 
     /*
      * Licensed to the Apache Software Foundation (ASF) under one or more
-     * contributor license agreements.  See the NOTICE file distributed with
-     * this work for additional information regarding copyright ownership.
-     * The ASF licenses this file to You under the Apache License, Version 2.0
-     * (the "License"); you may not use this file except in compliance with
-     * the License.  You may obtain a copy of the License at
+     * contributor license agreements. See the NOTICE file distributed with this
+     * work for additional information regarding copyright ownership. The ASF
+     * licenses this file to You under the Apache License, Version 2.0 (the
+     * "License"); you may not use this file except in compliance with the
+     * License. You may obtain a copy of the License at
      *
-     *      http://www.apache.org/licenses/LICENSE-2.0
+     * http://www.apache.org/licenses/LICENSE-2.0
      *
      * Unless required by applicable law or agreed to in writing, software
-     * distributed under the License is distributed on an "AS IS" BASIS,
-     * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     * See the License for the specific language governing permissions and
-     * limitations under the License.
+     * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+     * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+     * License for the specific language governing permissions and limitations
+     * under the License.
      */
     interface OrderedIterator<E> extends Iterator<E> {
 
@@ -165,19 +168,21 @@ public class Leetcode500 {
 
     }
 
-
     /**
-     * A <code>List</code> implementation that is optimised for fast insertions and
-     * removals at any index in the list.
+     * A <code>List</code> implementation that is optimised for fast insertions
+     * and removals at any index in the list.
      * <p>
-     * This list implementation utilises a tree structure internally to ensure that
-     * all insertions and removals are O(log n). This provides much faster performance
-     * than both an <code>ArrayList</code> and a <code>LinkedList</code> where elements
-     * are inserted and removed repeatedly from anywhere in the list.
+     * This list implementation utilises a tree structure internally to ensure
+     * that all insertions and removals are O(log n). This provides much faster
+     * performance than both an <code>ArrayList</code> and a
+     * <code>LinkedList</code> where elements are inserted and removed
+     * repeatedly from anywhere in the list.
      * </p>
      * <p>
-     * The following relative performance statistics are indicative of this class:
+     * The following relative performance statistics are indicative of this
+     * class:
      * </p>
+     * 
      * <pre>
      *              get  add  insert  iterate  remove
      * TreeList       3    5       1       2       1
@@ -185,24 +190,24 @@ public class Leetcode500 {
      * LinkedList  5800    1     350       2     325
      * </pre>
      * <p>
-     * <code>ArrayList</code> is a good general purpose list implementation.
-     * It is faster than <code>TreeList</code> for most operations except inserting
-     * and removing in the middle of the list. <code>ArrayList</code> also uses less
-     * memory as <code>TreeList</code> uses one object per entry.
+     * <code>ArrayList</code> is a good general purpose list implementation. It
+     * is faster than <code>TreeList</code> for most operations except inserting
+     * and removing in the middle of the list. <code>ArrayList</code> also uses
+     * less memory as <code>TreeList</code> uses one object per entry.
      * </p>
      * <p>
      * <code>LinkedList</code> is rarely a good choice of implementation.
-     * <code>TreeList</code> is almost always a good replacement for it, although it
-     * does use slightly more memory.
+     * <code>TreeList</code> is almost always a good replacement for it,
+     * although it does use slightly more memory.
      * </p>
      *
      * @since 3.1
      */
     public static class TreeList<E> extends AbstractList<E> {
-//    add; toArray; iterator; insert; get; indexOf; remove
-//    TreeList = 1260;7360;3080;  160;   170;3400;  170;
-//   ArrayList =  220;1480;1760; 6870;    50;1540; 7200;
-//  LinkedList =  270;7360;3350;55860;290720;2910;55200;
+        // add; toArray; iterator; insert; get; indexOf; remove
+        // TreeList = 1260;7360;3080; 160; 170;3400; 170;
+        // ArrayList = 220;1480;1760; 6870; 50;1540; 7200;
+        // LinkedList = 270;7360;3350;55860;290720;2910;55200;
 
         /**
          * The root node in the AVL tree
@@ -214,7 +219,7 @@ public class Leetcode500 {
          */
         private int size;
 
-        //-----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
 
         /**
          * Constructs a new empty list.
@@ -237,7 +242,7 @@ public class Leetcode500 {
             }
         }
 
-        //-----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
 
         /**
          * Gets the element at the specified index.
@@ -338,7 +343,7 @@ public class Leetcode500 {
             return array;
         }
 
-        //-----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
 
         /**
          * Adds a new element to the list.
@@ -352,19 +357,19 @@ public class Leetcode500 {
             checkInterval(index, 0, size());
             if (root == null) {
                 root = new AVLNode<>(index, obj, null, null);
-            }
-            else {
+            } else {
                 root = root.insert(index, obj);
             }
             size++;
         }
 
         /**
-         * Appends all of the elements in the specified collection to the end of this list,
-         * in the order that they are returned by the specified collection's Iterator.
+         * Appends all of the elements in the specified collection to the end of
+         * this list, in the order that they are returned by the specified
+         * collection's Iterator.
          * <p>
-         * This method runs in O(n + log m) time, where m is
-         * the size of this list and n is the size of {@code c}.
+         * This method runs in O(n + log m) time, where m is the size of this
+         * list and n is the size of {@code c}.
          *
          * @param c the collection to be added to this list
          * @return {@code true} if this list changed as a result of the call
@@ -425,7 +430,7 @@ public class Leetcode500 {
             size = 0;
         }
 
-        //-----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
 
         /**
          * Checks whether the index is valid.
@@ -435,33 +440,38 @@ public class Leetcode500 {
          * @param endIndex   the last allowed index
          * @throws IndexOutOfBoundsException if the index is invalid
          */
-        private void checkInterval(final int index, final int startIndex, final int endIndex) {
+        private void checkInterval(final int index, final int startIndex,
+                final int endIndex) {
             if (index < startIndex || index > endIndex) {
-                throw new IndexOutOfBoundsException("Invalid index:" + index + ", size=" + size());
+                throw new IndexOutOfBoundsException(
+                        "Invalid index:" + index + ", size=" + size());
             }
         }
 
-        //-----------------------------------------------------------------------
+        // -----------------------------------------------------------------------
 
         /**
          * Implements an AVLNode which keeps the offset updated.
          * <p>
-         * This node contains the real work.
-         * TreeList is just there to implement {@link java.util.List}.
-         * The nodes don't know the index of the object they are holding.  They
-         * do know however their position relative to their parent node.
-         * This allows to calculate the index of a node while traversing the tree.
+         * This node contains the real work. TreeList is just there to implement
+         * {@link java.util.List}. The nodes don't know the index of the object
+         * they are holding. They do know however their position relative to
+         * their parent node. This allows to calculate the index of a node while
+         * traversing the tree.
          * <p>
-         * The Faedelung calculation stores a flag for both the left and right child
-         * to indicate if they are a child (false) or a link as in linked list (true).
+         * The Faedelung calculation stores a flag for both the left and right
+         * child to indicate if they are a child (false) or a link as in linked
+         * list (true).
          */
         static class AVLNode<E> {
             /**
-             * The left child node or the predecessor if {@link #leftIsPrevious}.
+             * The left child node or the predecessor if
+             * {@link #leftIsPrevious}.
              */
             private AVLNode<E> left;
             /**
-             * Flag indicating that left reference is not a subtree but the predecessor.
+             * Flag indicating that left reference is not a subtree but the
+             * predecessor.
              */
             private boolean leftIsPrevious;
             /**
@@ -469,7 +479,8 @@ public class Leetcode500 {
              */
             private AVLNode<E> right;
             /**
-             * Flag indicating that right reference is not a subtree but the successor.
+             * Flag indicating that right reference is not a subtree but the
+             * successor.
              */
             private boolean rightIsNext;
             /**
@@ -490,11 +501,13 @@ public class Leetcode500 {
              *
              * @param relativePosition the relative position of the node
              * @param obj              the value for the node
-             * @param rightFollower    the node with the value following this one
+             * @param rightFollower    the node with the value following this
+             *                         one
              * @param leftFollower     the node with the value leading this one
              */
             private AVLNode(final int relativePosition, final E obj,
-                            final AVLNode<E> rightFollower, final AVLNode<E> leftFollower) {
+                    final AVLNode<E> rightFollower,
+                    final AVLNode<E> leftFollower) {
                 this.relativePosition = relativePosition;
                 value = obj;
                 rightIsNext = true;
@@ -517,40 +530,50 @@ public class Leetcode500 {
             /**
              * Constructs a new AVL tree from a collection.
              * <p>
-             * This is a recursive helper for {@link #AVLNode(Collection)}. A call
-             * to this method will construct the subtree for elements {@code start}
-             * through {@code end} of the collection, assuming the iterator
-             * {@code e} already points at element {@code start}.
+             * This is a recursive helper for {@link #AVLNode(Collection)}. A
+             * call to this method will construct the subtree for elements
+             * {@code start} through {@code end} of the collection, assuming the
+             * iterator {@code e} already points at element {@code start}.
              *
-             * @param iterator                 an iterator over the collection, which should already point
-             *                                 to the element at index {@code start} within the collection
-             * @param start                    the index of the first element in the collection that
-             *                                 should be in this subtree
-             * @param end                      the index of the last element in the collection that
-             *                                 should be in this subtree
+             * @param iterator                 an iterator over the collection,
+             *                                 which should already point to the
+             *                                 element at index {@code start}
+             *                                 within the collection
+             * @param start                    the index of the first element in
+             *                                 the collection that should be in
+             *                                 this subtree
+             * @param end                      the index of the last element in
+             *                                 the collection that should be in
+             *                                 this subtree
              * @param absolutePositionOfParent absolute position of this node's
-             *                                 parent, or 0 if this node is the root
-             * @param prev                     the {@code AVLNode} corresponding to element (start - 1)
-             *                                 of the collection, or null if start is 0
-             * @param next                     the {@code AVLNode} corresponding to element (end + 1)
-             *                                 of the collection, or null if end is the last element of the collection
+             *                                 parent, or 0 if this node is the
+             *                                 root
+             * @param prev                     the {@code AVLNode} corresponding
+             *                                 to element (start - 1) of the
+             *                                 collection, or null if start is 0
+             * @param next                     the {@code AVLNode} corresponding
+             *                                 to element (end + 1) of the
+             *                                 collection, or null if end is the
+             *                                 last element of the collection
              */
-            private AVLNode(final Iterator<? extends E> iterator, final int start, final int end,
-                            final int absolutePositionOfParent, final AVLNode<E> prev, final AVLNode<E> next) {
+            private AVLNode(final Iterator<? extends E> iterator,
+                    final int start, final int end,
+                    final int absolutePositionOfParent, final AVLNode<E> prev,
+                    final AVLNode<E> next) {
                 final int mid = start + (end - start) / 2;
                 if (start < mid) {
-                    left = new AVLNode<>(iterator, start, mid - 1, mid, prev, this);
-                }
-                else {
+                    left = new AVLNode<>(iterator, start, mid - 1, mid, prev,
+                            this);
+                } else {
                     leftIsPrevious = true;
                     left = prev;
                 }
                 value = iterator.next();
                 relativePosition = mid - absolutePositionOfParent;
                 if (mid < end) {
-                    right = new AVLNode<>(iterator, mid + 1, end, mid, this, next);
-                }
-                else {
+                    right = new AVLNode<>(iterator, mid + 1, end, mid, this,
+                            next);
+                } else {
                     rightIsNext = true;
                     right = next;
                 }
@@ -576,8 +599,8 @@ public class Leetcode500 {
             }
 
             /**
-             * Locate the element with the given index relative to the
-             * offset of the parent of this node.
+             * Locate the element with the given index relative to the offset of
+             * the parent of this node.
              */
             AVLNode<E> get(final int index) {
                 final int indexRelativeToMe = index - relativePosition;
@@ -586,7 +609,9 @@ public class Leetcode500 {
                     return this;
                 }
 
-                final AVLNode<E> nextNode = indexRelativeToMe < 0 ? getLeftSubTree() : getRightSubTree();
+                final AVLNode<E> nextNode = indexRelativeToMe < 0
+                        ? getLeftSubTree()
+                        : getRightSubTree();
                 if (nextNode == null) {
                     return null;
                 }
@@ -598,7 +623,8 @@ public class Leetcode500 {
              */
             int indexOf(final Object object, final int index) {
                 if (getLeftSubTree() != null) {
-                    final int result = left.indexOf(object, index + left.relativePosition);
+                    final int result = left.indexOf(object,
+                            index + left.relativePosition);
                     if (result != -1) {
                         return result;
                     }
@@ -607,7 +633,8 @@ public class Leetcode500 {
                     return index;
                 }
                 if (getRightSubTree() != null) {
-                    return right.indexOf(object, index + right.relativePosition);
+                    return right.indexOf(object,
+                            index + right.relativePosition);
                 }
                 return -1;
             }
@@ -655,8 +682,8 @@ public class Leetcode500 {
             /**
              * Inserts a node at the position index.
              *
-             * @param index is the index of the position relative to the position of
-             *              the parent node.
+             * @param index is the index of the position relative to the
+             *              position of the parent node.
              * @param obj   is the object to be stored in the position.
              */
             AVLNode<E> insert(final int index, final E obj) {
@@ -668,11 +695,11 @@ public class Leetcode500 {
                 return insertOnRight(indexRelativeToMe, obj);
             }
 
-            private AVLNode<E> insertOnLeft(final int indexRelativeToMe, final E obj) {
+            private AVLNode<E> insertOnLeft(final int indexRelativeToMe,
+                    final E obj) {
                 if (getLeftSubTree() == null) {
                     setLeft(new AVLNode<>(-1, obj, this, left), null);
-                }
-                else {
+                } else {
                     setLeft(left.insert(indexRelativeToMe, obj), null);
                 }
 
@@ -684,11 +711,11 @@ public class Leetcode500 {
                 return ret;
             }
 
-            private AVLNode<E> insertOnRight(final int indexRelativeToMe, final E obj) {
+            private AVLNode<E> insertOnRight(final int indexRelativeToMe,
+                    final E obj) {
                 if (getRightSubTree() == null) {
                     setRight(new AVLNode<>(+1, obj, right, this), null);
-                }
-                else {
+                } else {
                     setRight(right.insert(indexRelativeToMe, obj), null);
                 }
                 if (relativePosition < 0) {
@@ -699,7 +726,7 @@ public class Leetcode500 {
                 return ret;
             }
 
-            //-----------------------------------------------------------------------
+            // -----------------------------------------------------------------------
 
             /**
              * Gets the left node, returning null if its a faedelung.
@@ -736,8 +763,9 @@ public class Leetcode500 {
             /**
              * Removes the node at a given position.
              *
-             * @param index is the index of the element to be removed relative to the position of
-             *              the parent node of the current node.
+             * @param index is the index of the element to be removed relative
+             *              to the position of the parent node of the current
+             *              node.
              */
             AVLNode<E> remove(final int index) {
                 final int indexRelativeToMe = index - relativePosition;
@@ -750,8 +778,7 @@ public class Leetcode500 {
                     if (relativePosition < 0) {
                         relativePosition++;
                     }
-                }
-                else {
+                } else {
                     setLeft(left.remove(indexRelativeToMe), left.left);
                     if (relativePosition > 0) {
                         relativePosition--;
@@ -802,7 +829,8 @@ public class Leetcode500 {
                     return left;
                 }
                 if (getLeftSubTree() == null) {
-                    right.relativePosition += relativePosition - (relativePosition < 0 ? 0 : 1);
+                    right.relativePosition += relativePosition
+                            - (relativePosition < 0 ? 0 : 1);
                     right.min().setLeft(null, left);
                     return right;
                 }
@@ -818,8 +846,7 @@ public class Leetcode500 {
                     if (relativePosition < 0) {
                         relativePosition++;
                     }
-                }
-                else {
+                } else {
                     // more on the left or equal, so delete from the left
                     final AVLNode<E> leftMax = left.max();
                     value = leftMax.value;
@@ -829,7 +856,8 @@ public class Leetcode500 {
                     final AVLNode<E> leftPrevious = left.left;
                     left = left.removeMax();
                     if (left == null) {
-                        // special case where left that was deleted was a double link
+                        // special case where left that was deleted was a double
+                        // link
                         // only occurs when height difference is equal
                         left = leftPrevious;
                         leftIsPrevious = true;
@@ -842,29 +870,29 @@ public class Leetcode500 {
                 return this;
             }
 
-            //-----------------------------------------------------------------------
+            // -----------------------------------------------------------------------
 
             /**
              * Balances according to the AVL algorithm.
              */
             private AVLNode<E> balance() {
                 switch (heightRightMinusLeft()) {
-                    case 1:
-                    case 0:
-                    case -1:
-                        return this;
-                    case -2:
-                        if (left.heightRightMinusLeft() > 0) {
-                            setLeft(left.rotateLeft(), null);
-                        }
-                        return rotateRight();
-                    case 2:
-                        if (right.heightRightMinusLeft() < 0) {
-                            setRight(right.rotateRight(), null);
-                        }
-                        return rotateLeft();
-                    default:
-                        throw new RuntimeException("tree inconsistent!");
+                case 1:
+                case 0:
+                case -1:
+                    return this;
+                case -2:
+                    if (left.heightRightMinusLeft() > 0) {
+                        setLeft(left.rotateLeft(), null);
+                    }
+                    return rotateRight();
+                case 2:
+                    if (right.heightRightMinusLeft() < 0) {
+                        setRight(right.rotateRight(), null);
+                    }
+                    return rotateLeft();
+                default:
+                    throw new RuntimeException("tree inconsistent!");
                 }
             }
 
@@ -896,7 +924,9 @@ public class Leetcode500 {
             private void recalcHeight() {
                 height = Math.max(
                         getLeftSubTree() == null ? -1 : getLeftSubTree().height,
-                        getRightSubTree() == null ? -1 : getRightSubTree().height) + 1;
+                        getRightSubTree() == null ? -1
+                                : getRightSubTree().height)
+                        + 1;
             }
 
             /**
@@ -910,7 +940,8 @@ public class Leetcode500 {
              * Returns the height difference right - left
              */
             private int heightRightMinusLeft() {
-                return getHeight(getRightSubTree()) - getHeight(getLeftSubTree());
+                return getHeight(getRightSubTree())
+                        - getHeight(getLeftSubTree());
             }
 
             private AVLNode<E> rotateLeft() {
@@ -919,7 +950,8 @@ public class Leetcode500 {
 
                 final int newTopPosition = relativePosition + getOffset(newTop);
                 final int myNewPosition = -newTop.relativePosition;
-                final int movedPosition = getOffset(newTop) + getOffset(movedNode);
+                final int movedPosition = getOffset(newTop)
+                        + getOffset(movedNode);
 
                 setRight(movedNode, newTop);
                 newTop.setLeft(this, null);
@@ -936,7 +968,8 @@ public class Leetcode500 {
 
                 final int newTopPosition = relativePosition + getOffset(newTop);
                 final int myNewPosition = -newTop.relativePosition;
-                final int movedPosition = getOffset(newTop) + getOffset(movedNode);
+                final int movedPosition = getOffset(newTop)
+                        + getOffset(movedNode);
 
                 setLeft(movedNode, newTop);
                 newTop.setRight(this, null);
@@ -948,58 +981,70 @@ public class Leetcode500 {
             }
 
             /**
-             * Sets the left field to the node, or the previous node if that is null
+             * Sets the left field to the node, or the previous node if that is
+             * null
              *
              * @param node     the new left subtree node
              * @param previous the previous node in the linked list
              */
-            private void setLeft(final AVLNode<E> node, final AVLNode<E> previous) {
+            private void setLeft(final AVLNode<E> node,
+                    final AVLNode<E> previous) {
                 leftIsPrevious = node == null;
                 left = leftIsPrevious ? previous : node;
                 recalcHeight();
             }
 
             /**
-             * Sets the right field to the node, or the next node if that is null
+             * Sets the right field to the node, or the next node if that is
+             * null
              *
              * @param node the new left subtree node
              * @param next the next node in the linked list
              */
-            private void setRight(final AVLNode<E> node, final AVLNode<E> next) {
+            private void setRight(final AVLNode<E> node,
+                    final AVLNode<E> next) {
                 rightIsNext = node == null;
                 right = rightIsNext ? next : node;
                 recalcHeight();
             }
 
             /**
-             * Appends the elements of another tree list to this tree list by efficiently
-             * merging the two AVL trees. This operation is destructive to both trees and
-             * runs in O(log(m + n)) time.
+             * Appends the elements of another tree list to this tree list by
+             * efficiently merging the two AVL trees. This operation is
+             * destructive to both trees and runs in O(log(m + n)) time.
              *
-             * @param otherTree   the root of the AVL tree to merge with this one
+             * @param otherTree   the root of the AVL tree to merge with this
+             *                    one
              * @param currentSize the number of elements in this AVL tree
              * @return the root of the new, merged AVL tree
              */
-            private AVLNode<E> addAll(AVLNode<E> otherTree, final int currentSize) {
+            private AVLNode<E> addAll(AVLNode<E> otherTree,
+                    final int currentSize) {
                 final AVLNode<E> maxNode = max();
                 final AVLNode<E> otherTreeMin = otherTree.min();
 
-                // We need to efficiently merge the two AVL trees while keeping them
-                // balanced (or nearly balanced). To do this, we take the shorter
-                // tree and combine it with a similar-height subtree of the taller
+                // We need to efficiently merge the two AVL trees while keeping
+                // them
+                // balanced (or nearly balanced). To do this, we take the
+                // shorter
+                // tree and combine it with a similar-height subtree of the
+                // taller
                 // tree. There are two symmetric cases:
-                //   * this tree is taller, or
-                //   * otherTree is taller.
+                // * this tree is taller, or
+                // * otherTree is taller.
                 if (otherTree.height > height) {
-                    // CASE 1: The other tree is taller than this one. We will thus
+                    // CASE 1: The other tree is taller than this one. We will
+                    // thus
                     // merge this tree into otherTree.
 
                     // STEP 1: Remove the maximum element from this tree.
                     final AVLNode<E> leftSubTree = removeMax();
 
                     // STEP 2: Navigate left from the root of otherTree until we
-                    // find a subtree, s, that is no taller than me. (While we are
-                    // navigating left, we store the nodes we encounter in a stack
+                    // find a subtree, s, that is no taller than me. (While we
+                    // are
+                    // navigating left, we store the nodes we encounter in a
+                    // stack
                     // so that we can re-balance them in step 4.)
                     final Deque<AVLNode<E>> sAncestors = new ArrayDeque<>();
                     AVLNode<E> s = otherTree;
@@ -1014,8 +1059,10 @@ public class Leetcode500 {
                         }
                     }
 
-                    // STEP 3: Replace s with a newly constructed subtree whose root
-                    // is maxNode, whose left subtree is leftSubTree, and whose right
+                    // STEP 3: Replace s with a newly constructed subtree whose
+                    // root
+                    // is maxNode, whose left subtree is leftSubTree, and whose
+                    // right
                     // subtree is s.
                     maxNode.setLeft(leftSubTree, null);
                     maxNode.setRight(s, otherTreeMin);
@@ -1025,12 +1072,15 @@ public class Leetcode500 {
                     }
                     if (s != null) {
                         s.min().setLeft(null, maxNode);
-                        s.relativePosition = sAbsolutePosition - currentSize + 1;
+                        s.relativePosition = sAbsolutePosition - currentSize
+                                + 1;
                     }
-                    maxNode.relativePosition = currentSize - 1 - sParentAbsolutePosition;
+                    maxNode.relativePosition = currentSize - 1
+                            - sParentAbsolutePosition;
                     otherTree.relativePosition += currentSize;
 
-                    // STEP 4: Re-balance the tree and recalculate the heights of s's ancestors.
+                    // STEP 4: Re-balance the tree and recalculate the heights
+                    // of s's ancestors.
                     s = maxNode;
                     while (!sAncestors.isEmpty()) {
                         final AVLNode<E> sAncestor = sAncestors.pop();
@@ -1064,7 +1114,8 @@ public class Leetcode500 {
                     s.max().setRight(null, otherTreeMin);
                     s.relativePosition = sAbsolutePosition - currentSize;
                 }
-                otherTreeMin.relativePosition = currentSize - sParentAbsolutePosition;
+                otherTreeMin.relativePosition = currentSize
+                        - sParentAbsolutePosition;
 
                 s = otherTreeMin;
                 while (!sAncestors.isEmpty()) {
@@ -1080,24 +1131,17 @@ public class Leetcode500 {
              */
             @Override
             public String toString() {
-                return "AVLNode(" +
-                        relativePosition +
-                        ',' +
-                        (left != null) +
-                        ',' +
-                        value +
-                        ',' +
-                        (getRightSubTree() != null) +
-                        ", faedelung " +
-                        rightIsNext +
-                        " )";
+                return "AVLNode(" + relativePosition + ',' + (left != null)
+                        + ',' + value + ',' + (getRightSubTree() != null)
+                        + ", faedelung " + rightIsNext + " )";
             }
         }
 
         /**
          * A list iterator over the linked list.
          */
-        static class TreeListIterator<E> implements ListIterator<E>, OrderedIterator<E> {
+        static class TreeListIterator<E>
+                implements ListIterator<E>, OrderedIterator<E> {
             /**
              * The parent list
              */
@@ -1111,8 +1155,8 @@ public class Leetcode500 {
              */
             private int nextIndex;
             /**
-             * Cache of the last node that was returned by {@link #next()}
-             * or {@link #previous()}.
+             * Cache of the last node that was returned by {@link #next()} or
+             * {@link #previous()}.
              */
             private AVLNode<E> current;
             /**
@@ -1120,10 +1164,10 @@ public class Leetcode500 {
              */
             private int currentIndex;
             /**
-             * The modification count that the list is expected to have. If the list
-             * doesn't have this count, then a
-             * {@link java.util.ConcurrentModificationException} may be thrown by
-             * the operations.
+             * The modification count that the list is expected to have. If the
+             * list doesn't have this count, then a
+             * {@link java.util.ConcurrentModificationException} may be thrown
+             * by the operations.
              */
             private int expectedModCount;
 
@@ -1133,11 +1177,13 @@ public class Leetcode500 {
              * @param parent    the parent list
              * @param fromIndex the index to start at
              */
-            protected TreeListIterator(final TreeList<E> parent, final int fromIndex) throws IndexOutOfBoundsException {
+            protected TreeListIterator(final TreeList<E> parent,
+                    final int fromIndex) throws IndexOutOfBoundsException {
                 super();
                 this.parent = parent;
                 this.expectedModCount = parent.modCount;
-                this.next = parent.root == null ? null : parent.root.get(fromIndex);
+                this.next = parent.root == null ? null
+                        : parent.root.get(fromIndex);
                 this.nextIndex = fromIndex;
                 this.currentIndex = -1;
             }
@@ -1146,8 +1192,10 @@ public class Leetcode500 {
              * Checks the modification count of the list is the value that this
              * object expects.
              *
-             * @throws ConcurrentModificationException If the list's modification
-             *                                         count isn't the value that was expected.
+             * @throws ConcurrentModificationException If the list's
+             *                                         modification count isn't
+             *                                         the value that was
+             *                                         expected.
              */
             protected void checkModCount() {
                 if (parent.modCount != expectedModCount) {
@@ -1164,7 +1212,8 @@ public class Leetcode500 {
             public E next() {
                 checkModCount();
                 if (!hasNext()) {
-                    throw new NoSuchElementException("No element at index " + nextIndex + ".");
+                    throw new NoSuchElementException(
+                            "No element at index " + nextIndex + ".");
                 }
                 if (next == null) {
                     next = parent.root.get(nextIndex);
@@ -1185,12 +1234,12 @@ public class Leetcode500 {
             public E previous() {
                 checkModCount();
                 if (!hasPrevious()) {
-                    throw new NoSuchElementException("Already at start of list.");
+                    throw new NoSuchElementException(
+                            "Already at start of list.");
                 }
                 if (next == null) {
                     next = parent.root.get(nextIndex - 1);
-                }
-                else {
+                } else {
                     next = next.previous();
                 }
                 final E value = next.getValue();
@@ -1220,8 +1269,10 @@ public class Leetcode500 {
                     // remove() following next()
                     nextIndex--;
                 }
-                // the AVL node referenced by next may have become stale after a remove
-                // reset it now: will be retrieved by next call to next()/previous() via nextIndex
+                // the AVL node referenced by next may have become stale after a
+                // remove
+                // reset it now: will be retrieved by next call to
+                // next()/previous() via nextIndex
                 next = null;
                 current = null;
                 currentIndex = -1;
@@ -1250,7 +1301,6 @@ public class Leetcode500 {
 
     }
 
-
     /**
      * #407
      *
@@ -1261,28 +1311,33 @@ public class Leetcode500 {
 
         int m = heightMap.length, n = heightMap[0].length;
         BitSet isBrink = new BitSet(m * n);
-        PriorityQueue<PosHeight> queue = new PriorityQueue<>(2 * (m + n), Comparator.comparing(PosHeight::height));
+        PriorityQueue<PosHeight> queue = new PriorityQueue<>(2 * (m + n),
+                Comparator.comparing(PosHeight::height));
         for (int j = 0; j < n; j++) {
             int i = 0;
-            if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+            if (!isBrink.get(i * n + j))
+                queue.add(new PosHeight(i, j, heightMap[i][j]));
             isBrink.set(i * n + j, true);
             i = m - 1;
-            if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+            if (!isBrink.get(i * n + j))
+                queue.add(new PosHeight(i, j, heightMap[i][j]));
             isBrink.set(i * n + j, true);
         }
 
         for (int i = 0; i < m; i++) {
             int j = 0;
-            if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+            if (!isBrink.get(i * n + j))
+                queue.add(new PosHeight(i, j, heightMap[i][j]));
             isBrink.set(i * n + j, true);
             j = n - 1;
-            if (!isBrink.get(i * n + j)) queue.add(new PosHeight(i, j, heightMap[i][j]));
+            if (!isBrink.get(i * n + j))
+                queue.add(new PosHeight(i, j, heightMap[i][j]));
             isBrink.set(i * n + j, true);
         }
         int ans = 0;
         while (queue.size() > 0) {
             var gap = queue.poll();
-//      System.out.printf("poll %s \n",gap.toString());
+            // System.out.printf("poll %s \n",gap.toString());
             int i = gap.i, j = gap.j;
             ans = fill(i, j, i + 1, j, heightMap, queue, isBrink, ans);
             ans = fill(i, j, i - 1, j, heightMap, queue, isBrink, ans);
@@ -1296,17 +1351,19 @@ public class Leetcode500 {
     record PosHeight(int i, int j, int height) {
     }
 
-    private static int fill(int bi, int bj, int i, int j, int[][] heightMap, PriorityQueue<PosHeight> queue, BitSet isBrink, int ans) {
+    private static int fill(int bi, int bj, int i, int j, int[][] heightMap,
+            PriorityQueue<PosHeight> queue, BitSet isBrink, int ans) {
         int m = heightMap.length, n = heightMap[0].length;
         if (i < m && i >= 0 && j < n && j >= 0 && !isBrink.get(i * n + j)) {
             isBrink.set(i * n + j, true);
             if (heightMap[bi][bj] > heightMap[i][j]) {
                 ans += heightMap[bi][bj] - heightMap[i][j];
                 heightMap[i][j] = heightMap[bi][bj];
-//        System.out.printf("i %s,j %s, min %s\n",i,j,min);
+                // System.out.printf("i %s,j %s, min %s\n",i,j,min);
             }
             queue.add(new PosHeight(i, j, heightMap[i][j]));
-//      System.out.printf("add i %s, j %s, height %s\n",i,j,heightMap[i][j]);
+            // System.out.printf("add i %s, j %s, height
+            // %s\n",i,j,heightMap[i][j]);
         }
         return ans;
     }
@@ -1332,8 +1389,7 @@ public class Leetcode500 {
         for (var v : values) {
             if (v % 2 == 0) {
                 ans += v;
-            }
-            else {
+            } else {
                 has_odd = true;
                 ans += v - 1;
             }
@@ -1343,16 +1399,16 @@ public class Leetcode500 {
     }
 
     /**
-     * #410
-     * <br>输入:
-     * <br>nums = [7,2,5,10,8]
-     * <br>m = 2
-     * <br>输出:
-     * <br>18
-     * <br>解释:
-     * <br>一共有四种方法将nums分割为2个子数组。
-     * <br>其中最好的方式是将其分为[7,2,5] 和 [10,8]，
-     * <br>因为此时这两个子数组各自的和的最大值为18，在所有情况中最小。
+     * #410 <br>
+     * 输入: <br>
+     * nums = [7,2,5,10,8] <br>
+     * m = 2 <br>
+     * 输出: <br>
+     * 18 <br>
+     * 解释: <br>
+     * 一共有四种方法将nums分割为2个子数组。 <br>
+     * 其中最好的方式是将其分为[7,2,5] 和 [10,8]， <br>
+     * 因为此时这两个子数组各自的和的最大值为18，在所有情况中最小。
      *
      * @param nums array
      * @param m    number of group
@@ -1369,8 +1425,7 @@ public class Leetcode500 {
             long mid = (sum - max) / 2 + max;
             if (canSplit(nums, mid, m)) {
                 sum = mid;
-            }
-            else {
+            } else {
                 max = mid + 1;
             }
         }
@@ -1383,8 +1438,7 @@ public class Leetcode500 {
         for (var n : nums) {
             if (tSum + n <= sum) {
                 tSum += n;
-            }
-            else {
+            } else {
                 tSum = n;
                 split++;
                 if (split > limit) {
@@ -1393,6 +1447,29 @@ public class Leetcode500 {
             }
         }
         return split <= limit;
+    }
+
+    /**
+     * #412
+     * 
+     * @param n
+     * @return
+     */
+    public List<String> fizzBuzz(int n) {
+        List<String> res = new ArrayList<>(n);
+        for (int i = 1; i <= n; i++) {
+            boolean three = i % 3 == 0;
+            boolean five = i % 5 == 0;
+            if (three && five)
+                res.add("FizzBuzz");
+            else if (three)
+                res.add("Fizz");
+            else if (five)
+                res.add("Buzz");
+            else
+                res.add(String.valueOf(i));
+        }
+        return res;
     }
 
     /**
@@ -1559,16 +1636,16 @@ public class Leetcode500 {
                     if (c == '0' & ptr.right != null && ptr.right.mid != null) {
                         ptr = ptr.right.mid;
 
-                    }
-                    else if (c == '1' & ptr.left != null && ptr.left.mid != null) {
+                    } else if (c == '1' & ptr.left != null
+                            && ptr.left.mid != null) {
                         ptr = ptr.left.mid;
+                    } else {
+                        if (!ptr.contain)
+                            ptr = ptr.mid;
                     }
-                    else {
-                        if (!ptr.contain) ptr = ptr.mid;
-                    }
-                }
-                else {
-                    if (!ptr.contain) ptr = ptr.mid;
+                } else {
+                    if (!ptr.contain)
+                        ptr = ptr.mid;
                 }
             }
             max = Math.max(max, n ^ ptr.val);
@@ -1580,7 +1657,6 @@ public class Leetcode500 {
     public static int kthBinDigit(int num, int k) {
         return (num >>> k) & 1;
     }
-
 
     static class TernaryTries<Value> {
         private int n;
@@ -1598,11 +1674,8 @@ public class Leetcode500 {
 
             @Override
             public String toString() {
-                return "Node{" +
-                        "char=" + c +
-                        ", contain=" + contain +
-                        ", val=" + val +
-                        '}';
+                return "Node{" + "char=" + c + ", contain=" + contain + ", val="
+                        + val + '}';
             }
 
             public boolean isContain() {
@@ -1660,14 +1733,11 @@ public class Leetcode500 {
             char c = key.charAt(d);
             if (c < x.c) {
                 return get(x.left, key, d);
-            }
-            else if (c > x.c) {
+            } else if (c > x.c) {
                 return get(x.right, key, d);
-            }
-            else if (d < key.length() - 1) {
+            } else if (d < key.length() - 1) {
                 return get(x.mid, key, d + 1);
-            }
-            else {
+            } else {
                 return x;
             }
         }
@@ -1687,7 +1757,8 @@ public class Leetcode500 {
             return ret;
         }
 
-        private boolean remove(Node<Value> n, Node<Value> p, Children direct, String key, int d) {
+        private boolean remove(Node<Value> n, Node<Value> p, Children direct,
+                String key, int d) {
             if (n == null) {
                 return false;
             }
@@ -1696,36 +1767,34 @@ public class Leetcode500 {
                 var ret = remove(n.left, n, Children.LEFT, key, d);
                 removeSelf(n, p, direct);
                 return ret;
-            }
-            else if (c > n.c) {
+            } else if (c > n.c) {
                 var ret = remove(n.right, n, Children.RIGHT, key, d);
                 removeSelf(n, p, direct);
                 return ret;
-            }
-            else if (d < key.length() - 1) {
+            } else if (d < key.length() - 1) {
                 var ret = remove(n.mid, n, Children.MID, key, d + 1);
                 removeSelf(n, p, direct);
                 return ret;
-            }
-            else if (n.contain) {
+            } else if (n.contain) {
                 n.contain = false;
                 removeSelf(n, p, direct);
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         }
 
         private void removeSelf(Node<Value> n, Node<Value> p, Children direct) {
-            if (!n.contain && n.left == null && n.mid == null && n.right == null && p != null) {
+            if (!n.contain && n.left == null && n.mid == null && n.right == null
+                    && p != null) {
                 switch (direct) {
-                    case MID -> p.mid = null;
-                    case LEFT -> p.left = null;
-                    case RIGHT -> p.right = null;
+                case MID -> p.mid = null;
+                case LEFT -> p.left = null;
+                case RIGHT -> p.right = null;
                 }
             }
-            if (p == null && !n.contain && n.left == null && n.mid == null && n.right == null) {
+            if (p == null && !n.contain && n.left == null && n.mid == null
+                    && n.right == null) {
                 root = null;
             }
         }
@@ -1745,14 +1814,11 @@ public class Leetcode500 {
             }
             if (c < x.c) {
                 x.left = put(x.left, key, val, d);
-            }
-            else if (c > x.c) {
+            } else if (c > x.c) {
                 x.right = put(x.right, key, val, d);
-            }
-            else if (d < key.length() - 1) {
+            } else if (d < key.length() - 1) {
                 x.mid = put(x.mid, key, val, d + 1);
-            }
-            else {
+            } else {
                 x.val = val;
                 x.contain = true;
             }
@@ -1770,11 +1836,9 @@ public class Leetcode500 {
                 char c = query.charAt(i);
                 if (c < x.c) {
                     x = x.left;
-                }
-                else if (c > x.c) {
+                } else if (c > x.c) {
                     x = x.right;
-                }
-                else {
+                } else {
                     i++;
                     if (x.contain) {
                         length = i;
@@ -1804,7 +1868,8 @@ public class Leetcode500 {
             return queue;
         }
 
-        private void collect(Node<Value> x, StringBuilder prefix, Queue<String> queue) {
+        private void collect(Node<Value> x, StringBuilder prefix,
+                Queue<String> queue) {
             if (x == null) {
                 return;
             }
@@ -1818,7 +1883,8 @@ public class Leetcode500 {
         }
     }
 
-    private static void bfs(Tuple t, Deque<Tuple> deque, int[][] heights, Set<Tuple> set) {
+    private static void bfs(Tuple t, Deque<Tuple> deque, int[][] heights,
+            Set<Tuple> set) {
         int i = t.i, j = t.j, m = heights.length, n = heights[0].length;
         if (i - 1 >= 0) {
             var tt = new Tuple(i - 1, j);
@@ -1878,8 +1944,7 @@ public class Leetcode500 {
                         current.put(last_c, current.get(last_c) - 1);
                         l++;
                     }
-                }
-                else {
+                } else {
                     do {
                         var last_c = s.charAt(l);
                         current.put(last_c, current.get(last_c) - 1);
@@ -1887,8 +1952,7 @@ public class Leetcode500 {
                     } while (!canFillIn(c, current, chars));
                     current.put(c, current.getOrDefault(c, 0) + 1);
                 }
-            }
-            else {
+            } else {
                 l = r + 1;
                 current.clear();
             }
@@ -1896,7 +1960,8 @@ public class Leetcode500 {
         return ans;
     }
 
-    private static boolean canFillIn(char c, Map<Character, Integer> current, Map<Character, Integer> chars) {
+    private static boolean canFillIn(char c, Map<Character, Integer> current,
+            Map<Character, Integer> chars) {
         return current.getOrDefault(c, 0) + 1 <= chars.get(c);
     }
 
@@ -1910,7 +1975,8 @@ public class Leetcode500 {
         int ans = 0;
         for (int i = 0; i < points.length; i++) {
             var p = points[i];
-            Map<Integer, Integer> distCount = new HashMap<>(points.length - i - 1);
+            Map<Integer, Integer> distCount = new HashMap<>(
+                    points.length - i - 1);
             for (int j = 0; j < points.length; j++) {
                 if (j != i) {
                     var pp = points[j];
@@ -1950,6 +2016,7 @@ public class Leetcode500 {
         }
         return ans;
     }
+
     /**
      * #451
      *
