@@ -122,6 +122,29 @@ public class Leetcode300 {
     }
 
     /**
+     * #209
+     * 
+     * @param target
+     * @param nums
+     * @return
+     */
+    public int minSubArrayLen(int target, int[] nums) {
+        int res = Integer.MAX_VALUE;
+        Queue<Integer> queue = new ArrayDeque<>();
+        int sum = 0;
+        for (var v : nums) {
+            queue.add(v);
+            sum += v;
+            while (!queue.isEmpty() && sum >= target) {
+                res = Math.min(res, queue.size());
+                sum -= queue.poll();
+            }
+        }
+
+        return res == Integer.MAX_VALUE ? 0 : res;
+    }
+
+    /**
      * #212
      *
      * @param board
