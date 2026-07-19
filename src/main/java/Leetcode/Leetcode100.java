@@ -2610,6 +2610,29 @@ public class Leetcode100 {
     }
 
     /**
+     * #88
+     * 
+     * @param nums1
+     * @param m
+     * @param nums2
+     * @param n
+     */
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int[] arr1 = new int[m];
+        System.arraycopy(nums1, 0, arr1, 0, m);
+        int i = 0;
+        int j = 0;
+        int k = 0;
+        var arr2 = nums2;
+        while (i < m || j < n) {
+            if (i == m || (j != n && arr2[j] < arr1[i])) 
+                nums1[k++] = arr2[j++];
+            else
+                nums1[k++] = arr1[i++];
+        }
+    }
+
+    /**
      * #90 <br/>
      * 子集 II
      *
