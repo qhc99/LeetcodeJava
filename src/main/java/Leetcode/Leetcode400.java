@@ -1098,6 +1098,19 @@ public class Leetcode400 {
     }
 
     /**
+     * #344
+     * 
+     * @param s
+     */
+    public void reverseString(char[] s) {
+        for (int i = 0, j = s.length - 1; i < j; i++, j--) {
+            var t = s[i];
+            s[i] = s[j];
+            s[j] = t;
+        }
+    }
+
+    /**
      * #347
      * 
      * @param nums
@@ -1127,6 +1140,7 @@ public class Leetcode400 {
         }
         return res;
     }
+
     /**
      * #354
      *
