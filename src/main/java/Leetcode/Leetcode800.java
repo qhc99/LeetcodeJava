@@ -462,6 +462,7 @@ public class Leetcode800 {
         }
         return dp[cost.length];
     }
+
     /**
      * #751
      * 
@@ -600,6 +601,40 @@ public class Leetcode800 {
         for (var i : arr) {
             sb.append(i);
         }
+        return sb.toString();
+    }
+
+    /**
+     * #761
+     * 
+     * @param s
+     * @return
+     */
+    public String makeLargestSpecial(String s) {
+        return makeLargestSpecial(s, 0, s.length() - 1);
+    }
+
+    String makeLargestSpecial(String s, int l, int r) {
+        if (l >= r)
+            return "";
+        List<String> sub = new ArrayList<>();
+        int diff = 0;
+        int start = l;
+        for (int i = l; i <= r; i++) {
+            var c = s.charAt(i);
+            if (c == '1')
+                diff++;
+            else
+                diff--;
+            if (diff == 0) {
+                sub.add("(" + makeLargestSpecial(s, start + 1, i - 1) + ")");
+                start = i + 1;
+            }
+        }
+        sub.sort((a, b) -> b.compareTo(a));
+        StringBuilder sb = new StringBuilder();
+        for (var ss : sub)
+            sb.append(ss);
         return sb.toString();
     }
 
