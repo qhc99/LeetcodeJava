@@ -903,6 +903,18 @@ public class Leetcode200 {
             return a;
         }
     }
+
+    /**
+     * #151
+     * 
+     * @param s
+     * @return
+     */
+    public String reverseWords(String s) {
+        return String.join(" ", Arrays.stream(s.trim().split(" "))
+                .filter(v -> !v.isEmpty()).toList().reversed());
+    }
+
     /**
      * #152 <br/>
      * 乘积最大子数组
