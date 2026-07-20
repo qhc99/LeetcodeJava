@@ -101,4 +101,24 @@ public class Leetcode2600 {
         // no overflow
         return res;
     }
+
+    /**
+     * #2592
+     * 
+     * @param nums
+     * @return
+     */
+    public int maximizeGreatness(int[] nums) {
+        Arrays.sort(nums);
+        int res = 0;
+        Queue<Integer> queue = new ArrayDeque<>();
+        for (var n : nums) {
+            if (!queue.isEmpty() && queue.peek() < n) {
+                queue.poll();
+                res++;
+            }
+            queue.add(n);
+        }
+        return res;
+    }
 }
