@@ -25,6 +25,36 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2342
+     * 
+     * @param nums
+     * @return
+     */
+    public int maximumSum(int[] nums) {
+        int res = -1;
+        Map<Integer, List<Integer>> map = new HashMap<>();
+        for (var n : nums) {
+            var q = map.computeIfAbsent(sumOfDigits(n), k -> new ArrayList<>());
+            q.add(n);
+            q.sort((a, b) -> b - a);
+            if (q.size() > 2)
+                q.removeLast();
+            if (q.size() == 2)
+                res = Math.max(q.stream().mapToInt(i -> i).sum(), res);
+        }
+        return res;
+    }
+
+    int sumOfDigits(int i) {
+        int res = 0;
+        while (i > 0) {
+            res += i % 10;
+            i /= 10;
+        }
+        return res;
+    }
+
+    /**
      * #2365
      * 
      * @param tasks
@@ -34,11 +64,11 @@ public class Leetcode2400 {
     public long taskSchedulerII(int[] tasks, int space) {
         long day = 1;
         Map<Integer, Long> record = new HashMap<>();
-        for(var task : tasks){
+        for (var task : tasks) {
             var d = record.get(task);
-            if(d != null){
-                if(day - d <= space){
-                    day+= space - day + d + 1;
+            if (d != null) {
+                if (day - d <= space) {
+                    day += space - day + d + 1;
                 }
             }
             record.put(task, day++);
