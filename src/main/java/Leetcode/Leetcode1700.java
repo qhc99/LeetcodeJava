@@ -159,4 +159,40 @@ public class Leetcode1700 {
             return words[arr_idx].charAt(word_idx);
         }
     }
+
+    /**
+     * #1669
+     * 
+     * @param list1
+     * @param a
+     * @param b
+     * @param list2
+     * @return
+     */
+    public ListNode mergeInBetween(ListNode list1, int a, int b,
+            ListNode list2) {
+
+        ListNode handle = new ListNode();
+        var ptr = list2;
+        while (ptr.next != null) {
+            ptr = ptr.next;
+        }
+        var list2Tail = ptr;
+        handle.next = list1;
+        ptr = handle;
+        while (a > 0) {
+            ptr = ptr.next;
+            a--;
+            b--;
+        }
+        var list1Tail = ptr;
+        while (b > 0) {
+            ptr = ptr.next;
+            b--;
+        }
+        var tail = ptr.next.next;
+        list1Tail.next = list2;
+        list2Tail.next = tail;
+        return handle.next;
+    }
 }
