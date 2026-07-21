@@ -2677,6 +2677,53 @@ public class Leetcode500 {
     }
 
     /**
+     * #490
+     * 
+     * @param maze
+     * @param start
+     * @param destination
+     * @return
+     */
+    public boolean hasPath(int[][] maze, int[] start, int[] destination) {
+        var m = maze.length;
+        var n = maze[0].length;
+        return visit(start[0], start[1], maze, new boolean[m][n], destination);
+    }
+
+    boolean visit(int i, int j, int[][] maze, boolean[][] visiting,
+            int[] destination) {
+        visiting[i][j] = true;
+        if (i == destination[0] && j == destination[1])
+            return true;
+
+        int l = j;
+        while (l - 1 >= 0 && maze[i][l - 1] == 0)
+            l--;
+        if (!visiting[i][l] && visit(i, l, maze, visiting, destination))
+            return true;
+
+        int r = j;
+        while (r + 1 < maze[0].length && maze[i][r + 1] == 0)
+            r++;
+        if (!visiting[i][r] && visit(i, r, maze, visiting, destination))
+            return true;
+
+        int t = i;
+        while (t - 1 >= 0 && maze[t - 1][j] == 0)
+            t--;
+        if (!visiting[t][j] && visit(t, j, maze, visiting, destination))
+            return true;
+
+        int d = i;
+        while (d + 1 < maze.length && maze[d + 1][j] == 0)
+            d++;
+        if (!visiting[d][j] && visit(d, j, maze, visiting, destination))
+            return true;
+
+        return false;
+    }
+
+    /**
      * #493
      *
      * @param nums
