@@ -1966,6 +1966,40 @@ public class Leetcode500 {
     }
 
     /**
+     * #443
+     * 
+     * @param chars
+     * @return
+     */
+    public int compress(char[] chars) {
+        // ["a","a","b","b","c","c","c"]
+        int i = 0;
+        char current = '\n';
+        int count = 0;
+        for (var c : chars) {
+            if (c == current)
+                count++;
+            else {
+                if (count > 1) {
+                    var ints = String.valueOf(count).toCharArray();
+                    System.arraycopy(ints, 0, chars, i, ints.length);
+                    i += ints.length;
+                }
+                current = c;
+                chars[i] = current;
+                i++;
+                count = 1;
+            }
+        }
+        if (count > 1) {
+            var ints = String.valueOf(count).toCharArray();
+            System.arraycopy(ints, 0, chars, i, ints.length);
+            i += ints.length;
+        }
+        return i;
+    }
+
+    /**
      * #447
      *
      * @param points
@@ -1998,7 +2032,7 @@ public class Leetcode500 {
     }
 
     /**
-     * 3448
+     * #448
      *
      * @param nums
      * @return
