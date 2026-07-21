@@ -717,7 +717,8 @@ public class Leetcode100 {
                 }
                 int a = j + 1, b = len - 1;
                 while (a < b) {
-                    int t = nums[i] + nums[j] + nums[a] + nums[b];
+                    long t = (long) nums[i] + (long) nums[j] + (long) nums[a]
+                            + (long) nums[b];
                     if (t == target) {
                         res.add(List.of(nums[i], nums[j], nums[a], nums[b]));
                         a++;
