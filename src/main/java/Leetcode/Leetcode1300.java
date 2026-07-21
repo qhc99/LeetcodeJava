@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -121,6 +122,48 @@ public class Leetcode1300 {
         return result;
     }
 
+    /**
+     * #1288
+     * 
+     * @param intervals
+     * @return
+     */
+    public int removeCoveredIntervals(int[][] intervals) {
+        Arrays.sort(intervals, (a, b) -> {
+            var c = a[0] - b[0];
+            if (c != 0)
+                return c;
+            return b[1] - a[1];
+        });
+        int top = -1;
+        int rm = 0;
+        for (int i = 1; i < intervals.length; i++) {
+            var current = intervals[i];
+            if (current[1] > top)
+                top = current[1];
+            else
+                rm++;
+        }
+
+        return intervals.length - rm;
+    }
+
+    /**
+     * #1290
+     *
+     * @param head
+     * @return
+     */
+    public static int getDecimalValue(ListNode head) {
+        int ans = 0;
+        do {
+            ans *= 2;
+            ans += head.val;
+            head = head.next;
+        } while (head != null);
+        return ans;
+    }
+
 }
 
 class WorkQueue {
@@ -150,19 +193,5 @@ class WorkQueue {
     synchronized boolean isEnd() {
         return activeTasks == 0 && workQueue.isEmpty();
     }
-    /**
-     * #1290
-     *
-     * @param head
-     * @return
-     */
-    public static int getDecimalValue(ListNode head) {
-        int ans = 0;
-        do {
-            ans *= 2;
-            ans += head.val;
-            head = head.next;
-        } while (head != null);
-        return ans;
-    }
+
 }
