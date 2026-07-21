@@ -1564,6 +1564,61 @@ public class Leetcode300 {
     }
 
     /**
+     * #273
+     * 
+     * @param num
+     * @return
+     */
+    public String numberToWords(int num) {
+        if (num == 0)
+            return "Zero";
+        List<String> res = new ArrayList<>();
+        int idx = -1;
+        while (num > 0) {
+            if (idx >= 0)
+                res.add(thousands[idx]);
+            var rem = num % 1000;
+            if (!hundred2Words(rem, res) && !res.isEmpty())
+                res.removeLast();
+            num /= 1000;
+            idx++;
+        }
+        return String.join(" ", res.reversed());
+    }
+
+    Map<Integer, String> one = Map.of(1, "One", 2, "Two", 3, "Three", 4, "Four",
+            5, "Five", 6, "Six", 7, "Seven", 8, "Eight", 9, "Nine");
+    Map<Integer, String> tenMultiples = Map.of(10, "Ten", 11, "Eleven", 12,
+            "Twelve", 13, "Thirteen", 14, "Fourteen", 15, "Fifteen", 16,
+            "Sixteen", 17, "Seventeen", 18, "Eighteen", 19, "Nineteen");
+    Map<Integer, String> tys = Map.of(2, "Twenty", 3, "Thirty", 4, "Forty", 5,
+            "Fifty", 6, "Sixty", 7, "Seventy", 8, "Eighty", 9, "Ninety");
+    String[] thousands = new String[] { "Thousand", "Million", "Billion" };
+    List<Map<Integer, String>> tyIds = List.of(one, tys);
+
+    boolean hundred2Words(int n, List<String> res) {
+        var before = res.size();
+        var rem = n % 100;
+        if (rem < 10) {
+            if (rem != 0)
+                res.add(one.get(rem));
+        } else if (rem < 20) {
+            res.add(tenMultiples.get(rem));
+        } else {
+            if (rem % 10 != 0)
+                res.add(one.get(rem % 10));
+            if (rem / 10 != 0)
+                res.add(tys.get(rem / 10));
+        }
+        n /= 100;
+        if (n > 0) {
+            res.add("Hundred");
+            res.add(one.get(n));
+        }
+        return res.size() != before;
+    }
+
+    /**
      * #274
      *
      * @param citations
