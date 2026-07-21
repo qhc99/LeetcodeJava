@@ -79,4 +79,22 @@ public class Leetcode2000 {
             return id;
         }
     }
+
+    /**
+     * #1961
+     * 
+     * @param piles
+     * @param k
+     * @return
+     */
+    public int minStoneSum(int[] piles, int k) {
+        Queue<Integer> queue = new PriorityQueue<>((a, b) -> b - a);
+        for (var v : piles)
+            queue.add(v);
+        for (; k > 0; k--) {
+            var v = queue.poll();
+            queue.add(v - v / 2);
+        }
+        return queue.stream().mapToInt(i -> i).sum();
+    }
 }
