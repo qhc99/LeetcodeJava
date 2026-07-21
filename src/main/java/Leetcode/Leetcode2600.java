@@ -1,5 +1,6 @@
 package Leetcode;
 
+import java.math.BigInteger;
 import java.util.*;
 
 import Leetcode.Leetcode2600.Allocator.Block;
@@ -69,6 +70,75 @@ public class Leetcode2600 {
             }
             return res;
         }
+    }
+
+    /**
+     * #2539
+     * 
+     * @param s
+     * @return
+     */
+    public int countGoodSubsequences(String s) {
+        long res = 0;
+        int[] freq = new int['z' - 'a' + 1];
+        int maxFreq = 0;
+        for (var c : s.toCharArray()) {
+            maxFreq = Math.max(maxFreq, ++freq[c - 'a']);
+        }
+        for (int f = 1; f <= maxFreq; f++) {
+            long t = 1;
+            for (var cf : freq) {
+                if (cf >= f) {
+                    t = t * (nCr(cf, f) + 1) % (1_000_000_000 + 7);
+                }
+            }
+            res = (res + (t - 1)) % (1_000_000_000 + 7);
+        }
+
+        return (int) res;
+    }
+
+    private static final int MOD = 1_000_000_007;
+    private static final int N = 10_001;
+
+    private static final long[] fact = new long[N];
+    private static final long[] invFact = new long[N];
+
+    static {
+        fact[0] = 1;
+
+        for (int i = 1; i < N; i++) {
+            fact[i] = fact[i - 1] * i % MOD;
+        }
+
+        invFact[N - 1] = pow(fact[N - 1], MOD - 2);
+
+        for (int i = N - 1; i >= 1; i--) {
+            invFact[i - 1] = invFact[i] * i % MOD;
+        }
+    }
+
+    private static long pow(long base, long exponent) {
+        long result = 1;
+
+        while (exponent > 0) {
+            if ((exponent & 1) != 0) {
+                result = result * base % MOD;
+            }
+
+            base = base * base % MOD;
+            exponent >>= 1;
+        }
+
+        return result;
+    }
+
+    private long nCr(int n, int r) {
+        if (r < 0 || r > n) {
+            return 0;
+        }
+
+        return fact[n] * invFact[r] % MOD * invFact[n - r] % MOD;
     }
 
     /**
