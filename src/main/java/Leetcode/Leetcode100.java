@@ -2287,6 +2287,29 @@ public class Leetcode100 {
     }
 
     /**
+     * #63
+     * 
+     * @param obstacleGrid
+     * @return
+     */
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        int m = obstacleGrid.length, n = obstacleGrid[0].length;
+        int[][] dp = new int[m][n];
+        dp[0][0] = 1 - obstacleGrid[0][0];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if ((i == 0 && j == 0) || obstacleGrid[i][j] == 1)
+                    continue;
+                var top = i - 1 >= 0 ? dp[i - 1][j] : 0;
+                var left = j - 1 >= 0 ? dp[i][j - 1] : 0;
+                dp[i][j] = top + left;
+            }
+        }
+
+        return dp[m - 1][n - 1];
+    }
+
+    /**
      * #64 说明：每次只能向下或者向右移动一步。 (上, 左) 输入: [ [1,3,1], [1,5,1], [4,2,1] ] 输出: 7 解释:
      * 因为路径 1→3→1→1→1 的总和最小。
      *
