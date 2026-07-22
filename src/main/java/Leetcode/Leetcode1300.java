@@ -19,6 +19,28 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Leetcode1300 {
 
     /**
+     * #1200
+     * 
+     * @param arr
+     * @return
+     */
+    public List<List<Integer>> minimumAbsDifference(int[] arr) {
+        Arrays.sort(arr);
+        int dist = Integer.MAX_VALUE;
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 1; i < arr.length; i++) {
+            dist = Math.min(dist, arr[i] - arr[i - 1]);
+        }
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] - arr[i - 1] == dist)
+                res.add(List.of(arr[i - 1], arr[i]));
+
+        }
+        return res;
+
+    }
+
+    /**
      * #1207 <br/>
      * 
      * <pre>
