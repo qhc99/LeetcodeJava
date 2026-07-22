@@ -2602,12 +2602,34 @@ public class Leetcode100 {
     }
 
     /**
-     * #83
+     * #82
      * 
      * @param head
      * @return
      */
     public ListNode deleteDuplicates(ListNode head) {
+        ListNode handle = new ListNode();
+        handle.next = head;
+        var ptr = handle;
+        ListNode dup = null;
+        while (ptr.next != null) {
+            if ((ptr.next.next != null && ptr.next.val == ptr.next.next.val)
+                    || (dup != null && ptr.next.val == dup.val)) {
+                dup = ptr.next;
+                ptr.next = ptr.next.next;
+            } else
+                ptr = ptr.next;
+        }
+        return handle.next;
+    }
+
+    /**
+     * #83
+     * 
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates2(ListNode head) {
         var ptr = head;
         for (; ptr != null && ptr.next != null; ptr = ptr.next) {
             while (ptr.next != null && ptr.val == ptr.next.val) {
@@ -2738,6 +2760,52 @@ public class Leetcode100 {
             left_tail.next = right_node;
         }
         return handle.next;
+    }
+
+    /**
+     * #93
+     * 
+     * @param s
+     * @return
+     */
+    public List<String> restoreIpAddresses(String s) {
+        List<String> res = new ArrayList<>();
+        restoreIpAddresses(s, 0, 0, new ArrayList<>(), res);
+        return res;
+    }
+
+    void restoreIpAddresses(String s, int pos, int idx, List<String> current,
+            List<String> res) {
+        if (pos >= s.length())
+            return;
+        if (idx == 3) {
+            if (s.length() - pos > 3)
+                return;
+            if (s.charAt(pos) == '0' && pos + 1 < s.length())
+                return;
+            var numStr = s.substring(pos, s.length());
+            if (Integer.valueOf(numStr) > 255)
+                return;
+            current.add(numStr);
+            res.add(String.join(".", current));
+            current.removeLast();
+            return;
+        }
+        if (s.charAt(pos) == '0') {
+            current.add("0");
+            restoreIpAddresses(s, pos + 1, idx + 1, current, res);
+            current.removeLast();
+        } else {
+            for (int len = 1; len <= 3 && pos + len <= s.length(); len++) {
+                var numStr = s.substring(pos, pos + len);
+                if (len == 3 && Integer.valueOf(numStr) > 255) {
+                    return;
+                }
+                current.add(numStr);
+                restoreIpAddresses(s, pos + len, idx + 1, current, res);
+                current.removeLast();
+            }
+        }
     }
 
     /**
