@@ -72,6 +72,34 @@ public class Leetcode700 {
 
         return i - 1;
     }
+/**
+ * #628
+ * @param nums
+ * @return
+ */
+    public int maximumProduct(int[] nums) {
+                int[][] dp = new int[3][2];
+        int len = 0;
+        dp[0][0] = dp[1][0] = dp[2][0] = Integer.MAX_VALUE;
+        dp[0][1] = dp[1][1] = dp[2][1] = Integer.MIN_VALUE;
+        for(var n : nums){
+            if(len >= 2){
+                dp[2][0] = Math.min(Math.min(n*dp[1][0],n*dp[1][1]), dp[2][0]);
+                dp[2][1] = Math.max(Math.max(n*dp[1][0],n*dp[1][1]), dp[2][1]);
+            }
+            if(len >= 1){
+                dp[1][0] = Math.min(Math.min(n*dp[0][0],n*dp[0][1]),dp[1][0]);
+                dp[1][1] = Math.max(Math.max(n*dp[0][0],n*dp[0][1]),dp[1][1]);
+                if(len == 1) len++;
+            }
+            if(len >= 0){
+                dp[0][0] = Math.min(dp[0][0],n);
+                dp[0][1] = Math.max(dp[0][1],n);
+                if(len == 0) len++;
+            }
+        }
+        return dp[2][1];
+    }
 
     /**
      * #631
