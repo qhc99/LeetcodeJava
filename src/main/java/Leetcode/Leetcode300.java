@@ -1645,6 +1645,42 @@ public class Leetcode300 {
         return s;
     }
 
+    class Relation {
+        boolean knows(int a, int b) {
+            return false;
+        }
+    }
+
+    public class Solution extends Relation {
+        public int findCelebrity(int n) {
+            Queue<Integer> queue = new ArrayDeque<>();
+            for (int i = 0; i < n; i++)
+                queue.add(i);
+            while (queue.size() >= 2) {
+                var a = queue.poll();
+                var b = queue.poll();
+                var t1 = knows(a, b);
+                var t2 = knows(b, a);
+                if (t1 ^ t2) {
+                    if (t1)
+                        queue.add(b);
+                    else
+                        queue.add(a);
+                }
+            }
+            if (queue.isEmpty())
+                return -1;
+            int c = queue.poll();
+            for (int i = 0; i < n; i++) {
+                if (i != c) {
+                    if (knows(c, i) || !knows(i, c))
+                        return -1;
+                }
+            }
+            return c;
+        }
+    }
+
     /**
      * #279
      *
