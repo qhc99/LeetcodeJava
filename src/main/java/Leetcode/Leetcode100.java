@@ -2439,6 +2439,30 @@ public class Leetcode100 {
     }
 
     /**
+     * #69
+     * 
+     * @param x
+     * @return
+     */
+    public int mySqrt(int x) {
+        if (x <= 1)
+            return x;
+        int s = 1, e = x;
+        while (e - s > 1) {
+            long mid = s + (e - s) / 2;
+            long v = mid * mid;
+            if (v == x) {
+                return (int) mid;
+            } else if (v < x) {
+                s = (int) mid;
+            } else {
+                e = (int) mid;
+            }
+        }
+        return s;
+    }
+
+    /**
      * #71
      * 
      * @param path
