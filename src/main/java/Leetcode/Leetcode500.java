@@ -1473,6 +1473,32 @@ public class Leetcode500 {
     }
 
     /**
+     * #414
+     * 
+     * @param nums
+     * @return
+     */
+    public int thirdMax(int[] nums) {
+        Queue<Integer> queue = new PriorityQueue<>(
+                (a, b) -> Integer.compare(b, a));
+        for (var n : nums)
+            queue.add(n);
+        int first = queue.peek();
+        int second = first;
+        int third = first;
+        while (!queue.isEmpty() && queue.peek() == first)
+            queue.poll();
+        if (!queue.isEmpty())
+            second = queue.peek();
+        while (!queue.isEmpty() && queue.peek() == second)
+            queue.poll();
+        if (!queue.isEmpty())
+            third = queue.peek();
+
+        return third;
+    }
+
+    /**
      * #415
      *
      * @param num1
