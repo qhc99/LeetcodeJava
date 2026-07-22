@@ -2151,6 +2151,33 @@ public class Leetcode300 {
     }
 
     /**
+     * #290
+     * 
+     * @param pattern
+     * @param s
+     * @return
+     */
+    public boolean wordPattern(String pattern, String s) {
+        var words = s.split(" ");
+        if (words.length != pattern.length())
+            return false;
+        Map<Character, String> to = new HashMap<>();
+        Map<String, Character> from = new HashMap<>();
+        for (int i = 0; i < pattern.length(); i++) {
+            var c = pattern.charAt(i);
+            var w = words[i];
+            var t = to.get(c);
+            var f = from.get(w);
+            if (t == null && f == null) {
+                to.put(c, w);
+                from.put(w, c);
+            } else if (!(t != null && f != null && c == f && t.equals(w)))
+                return false;
+        }
+        return true;
+    }
+
+    /**
      * #295
      */
     static class MedianFinder {
