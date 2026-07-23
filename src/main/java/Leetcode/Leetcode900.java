@@ -188,6 +188,27 @@ public class Leetcode900 {
     }
 
     /**
+     * #806
+     * 
+     * @param widths
+     * @param s
+     * @return
+     */
+    public int[] numberOfLines(int[] widths, String s) {
+        int[] res = new int[2];
+        res[0] = 1;
+        for (var c : s.toCharArray()) {
+            var w = widths[c - 'a'];
+            res[1] += w;
+            if (res[1] > 100) {
+                res[0]++;
+                res[1] = w;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #808
      * 
      * @param n
