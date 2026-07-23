@@ -1056,6 +1056,27 @@ public class Leetcode200 {
     }
 
     /**
+     * #165
+     * 
+     * @param version1
+     * @param version2
+     * @return
+     */
+    public int compareVersion(String version1, String version2) {
+        var arr1 = version1.split("\\.");
+        var arr2 = version2.split("\\.");
+        for (int i = 0; i < arr1.length || i < arr2.length; i++) {
+            var n1 = i < arr1.length ? Integer.valueOf(arr1[i]) : 0;
+            var n2 = i < arr2.length ? Integer.valueOf(arr2[i]) : 0;
+            var c = Integer.compare(n1, n2);
+            if (c != 0)
+                return c;
+        }
+
+        return 0;
+    }
+
+    /**
      * #166
      *
      * @param numerator
