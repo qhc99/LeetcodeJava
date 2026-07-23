@@ -39,6 +39,29 @@ public class Leetcode300 {
     }
 
     /**
+     * #204
+     * 
+     * @param n
+     * @return
+     */
+    public int countPrimes(int n) {
+        if (n <= 1)
+            return 0;
+        boolean[] isPrime = new boolean[n];
+        Arrays.fill(isPrime, true);
+        int res = 0;
+        int i = 2;
+        for (; i < n; i++) {
+            if (isPrime[i]) {
+                res++;
+                for (int j = 2; j * i < n; j++)
+                    isPrime[j * i] = false;
+            }
+        }
+        return res++;
+    }
+
+    /**
      * #208
      */
     public static class Trie {
