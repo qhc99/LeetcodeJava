@@ -1692,6 +1692,36 @@ public class Leetcode400 {
     }
 
     /**
+     * #384 Solution
+     */
+    class Solution {
+        int[] nums;
+        int[] current;
+        Random rand = new Random();
+
+        public Solution(int[] nums) {
+            this.nums = nums;
+            current = new int[nums.length];
+            System.arraycopy(nums, 0, current, 0, nums.length);
+        }
+
+        public int[] reset() {
+            System.arraycopy(nums, 0, current, 0, nums.length);
+            return current;
+        }
+
+        public int[] shuffle() {
+            for (int i = 1; i < current.length; i++) {
+                var r = rand.nextInt(i + 1);
+                var t = current[r];
+                current[r] = current[i];
+                current[i] = t;
+            }
+            return current;
+        }
+    }
+
+    /**
      * #387
      * 
      * @param s
