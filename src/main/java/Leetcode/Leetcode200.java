@@ -234,6 +234,28 @@ public class Leetcode200 {
     }
 
     /**
+     * #118
+     * 
+     * @param numRows
+     * @return
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(List.of(1));
+        for (int i = 1; i < numRows; i++) {
+            var prev = res.getLast();
+            List<Integer> l = new ArrayList<>();
+            l.add(1);
+            for (int j = 0; j + 1 < prev.size(); j++) {
+                l.add(prev.get(j) + prev.get(j + 1));
+            }
+            l.add(1);
+            res.add(l);
+        }
+        return res;
+    }
+
+    /**
      * #128
      *
      * @param nums
