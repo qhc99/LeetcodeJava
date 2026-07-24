@@ -7,6 +7,28 @@ import Leetcode.Leetcode2000.PathNode;
 
 public class Leetcode2000 {
     /**
+     * #1944
+     * 
+     * @param heights
+     * @return
+     */
+    public int[] canSeePersonsCount(int[] heights) {
+        Stack<Integer> stack = new Stack<>();
+        int[] res = new int[heights.length];
+        for (int i = heights.length - 1; i >= 0; i--) {
+            var h = heights[i];
+            while (!stack.isEmpty() && stack.peek() < h) {
+                stack.pop();
+                res[i]++;
+            }
+            if (!stack.isEmpty())
+                res[i]++;
+            stack.push(h);
+        }
+        return res;
+    }
+
+    /**
      * #1948
      * 
      * @param paths
