@@ -55,6 +55,40 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2360
+     * 
+     * @param edges
+     * @return
+     */
+    public int longestCycle(int[] edges) {
+        int res = -1;
+        Set<Integer> visited = new HashSet<>();
+        Map<Integer, Integer> visiting = new HashMap<>();
+        for (int i = 0; i < edges.length; i++) {
+            res = Math.max(res, visitCycle(i, edges, 0, visited, visiting));
+        }
+        return res;
+    }
+
+    int visitCycle(int i, int[] edges, int depth, Set<Integer> visited,
+            Map<Integer, Integer> visiting) {
+        if (visited.contains(i))
+            return -1;
+        visiting.put(i, depth);
+        int res = -1;
+        var next = edges[i];
+        if (next != -1) {
+            var d = visiting.get(next);
+            if (d != null)
+                return depth + 1 - d;
+            res = visitCycle(next, edges, depth + 1, visited, visiting);
+        }
+        visited.add(i);
+        visiting.remove(i);
+        return res;
+    }
+
+    /**
      * #2365
      * 
      * @param tasks
