@@ -2,12 +2,13 @@ package Leetcode;
 
 import java.util.*;
 
-@SuppressWarnings({"JavaDoc"})
+@SuppressWarnings({ "JavaDoc" })
 public class Leetcode1100 {
 
     /**
-     * #1006
-     * <br/>笨阶乘
+     * #1006 <br/>
+     * 笨阶乘
+     * 
      * <pre>
      * clumsy(10) = 10 * 9 / 8 + 7 - 6 * 5 / 4 + 3 - 2 * 1
      * </pre>
@@ -23,22 +24,22 @@ public class Leetcode1100 {
         while (N >= 1) {
             int reminder = flag % 4;
             switch (reminder) {
-                case 0 -> {
-                    stack.addLast(stack.removeLast() * N);
-                    flag++;
-                }
-                case 1 -> {
-                    stack.addLast(stack.removeLast() / N);
-                    flag++;
-                }
-                case 2 -> {
-                    stack.addLast(N);
-                    flag++;
-                }
-                case 3 -> {
-                    stack.addLast(-N);
-                    flag = 0;
-                }
+            case 0 -> {
+                stack.addLast(stack.removeLast() * N);
+                flag++;
+            }
+            case 1 -> {
+                stack.addLast(stack.removeLast() / N);
+                flag++;
+            }
+            case 2 -> {
+                stack.addLast(N);
+                flag++;
+            }
+            case 3 -> {
+                stack.addLast(-N);
+                flag = 0;
+            }
             }
             N--;
         }
@@ -110,19 +111,17 @@ public class Leetcode1100 {
         return sum[0];
     }
 
-    private static void sumRootToLeafRecursiveSolve(TreeNode n, StringBuilder str, int[] sum) {
+    private static void sumRootToLeafRecursiveSolve(TreeNode n,
+            StringBuilder str, int[] sum) {
         int len = str.length();
         str.append(n.val);
         if (n.left == null && n.right == null) {
             sum[0] += Integer.parseInt(str.toString(), 2);
-        }
-        else if (n.left == null) {
+        } else if (n.left == null) {
             sumRootToLeafRecursiveSolve(n.right, str, sum);
-        }
-        else if (n.right == null) {
+        } else if (n.right == null) {
             sumRootToLeafRecursiveSolve(n.left, str, sum);
-        }
-        else {
+        } else {
             sumRootToLeafRecursiveSolve(n.left, str, sum);
             sumRootToLeafRecursiveSolve(n.right, str, sum);
         }
@@ -143,7 +142,8 @@ public class Leetcode1100 {
         return ans[0];
     }
 
-    private static void maxAncestorDiffApply(TreeNode n, int max_ancestor, int min_ancestor, int[] ans) {
+    private static void maxAncestorDiffApply(TreeNode n, int max_ancestor,
+            int min_ancestor, int[] ans) {
         max_ancestor = Math.max(n.val, max_ancestor);
         min_ancestor = Math.min(n.val, min_ancestor);
         if (n.left != null) {
@@ -159,8 +159,9 @@ public class Leetcode1100 {
     }
 
     /**
-     * #1024
-     * <br/>视频剪辑
+     * #1024 <br/>
+     * 视频剪辑
+     * 
      * <pre>
      * 输入：clips = [[0,2],[4,6],[8,10],[1,9],[1,5],[5,9]], T = 10
      * 输出：3
@@ -242,14 +243,11 @@ public class Leetcode1100 {
                 }
                 if (c < x.ctr) {
                     x.left = put(x.left, key, d);
-                }
-                else if (c > x.ctr) {
+                } else if (c > x.ctr) {
                     x.right = put(x.right, key, d);
-                }
-                else if (d < key.length() - 1) {
+                } else if (d < key.length() - 1) {
                     x.mid = put(x.mid, key, d + 1);
-                }
-                else {
+                } else {
                     x.contain = true;
                 }
                 return x;
@@ -287,14 +285,12 @@ public class Leetcode1100 {
                 }
                 if (letter == current.ctr) {
                     return current;
-                }
-                else if (letter < current.ctr) {
+                } else if (letter < current.ctr) {
                     return search(current.left, letter);
-                }
-                else return search(current.right, letter);
+                } else
+                    return search(current.right, letter);
             }
         }
-
 
         ModifiedTernaryTries tries = new ModifiedTernaryTries();
 
@@ -308,6 +304,41 @@ public class Leetcode1100 {
             return tries.query(letter);
         }
     }
+
+    /**
+     * #1053
+     * 
+     * @param arr
+     * @return
+     */
+    public int[] prevPermOpt1(int[] arr) {
+        if (arr.length > 1) {
+            int i = arr.length - 1;
+            for (; i >= 1; i--) {
+                if (arr[i - 1] > arr[i])
+                    break;
+            }
+            if (i >= 1 && arr[i - 1] > arr[i]) {
+                i = i - 1;
+                int j = arr.length - 1;
+                for (; j > i; j--) {
+                    if (arr[i] > arr[j])
+                        break;
+                }
+                if (j > i && arr[i] > arr[j]) {
+                    while (arr[j - 1] == arr[j]) {
+                        j--;
+                    }
+                    var t = arr[i];
+                    arr[i] = arr[j];
+                    arr[j] = t;
+                }
+            }
+        }
+
+        return arr;
+    }
+
     /**
      * #1087
      * 
