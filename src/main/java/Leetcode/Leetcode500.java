@@ -2026,6 +2026,50 @@ public class Leetcode500 {
     }
 
     /**
+     * #445
+     * 
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode addTwoNumbers(ListNode l1, ListNode l2) {
+        Stack<ListNode> stack1 = new Stack<>();
+        Stack<ListNode> stack2 = new Stack<>();
+        var ptr = l1;
+        while (ptr != null) {
+            stack1.push(ptr);
+            ptr = ptr.next;
+        }
+        ptr = l2;
+        while (ptr != null) {
+            stack2.push(ptr);
+            ptr = ptr.next;
+        }
+        if (stack1.size() < stack2.size()) {
+            var t = stack1;
+            stack1 = stack2;
+            stack2 = t;
+            var swap = l1;
+            l1 = l2;
+            l2 = swap;
+        }
+        int t = 0;
+        while (!stack1.isEmpty()) {
+            var n1 = stack1.pop();
+            var n2 = !stack2.isEmpty() ? stack2.pop().val : 0;
+            n1.val += n2 + t;
+            t = 0;
+            if (n1.val >= 10) {
+                t = 1;
+                n1.val -= 10;
+            }
+        }
+        if (t == 1)
+            return new ListNode(t, l1);
+        return l1;
+    }
+
+    /**
      * #447
      *
      * @param points
