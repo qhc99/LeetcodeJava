@@ -1942,6 +1942,106 @@ public class Leetcode500 {
         }
     }
 
+    class Node {
+        public int val;
+        public List<Node> children;
+
+        public Node() {
+        }
+
+        public Node(int _val) {
+            val = _val;
+        }
+
+        public Node(int _val, List<Node> _children) {
+            val = _val;
+            children = _children;
+        }
+    };
+
+    /**
+     * #428 Codec
+     */
+    class Codec {
+        // Encodes a tree to a single string.
+        public String serialize(Node root) {
+            StringBuilder sb = new StringBuilder();
+            visitSerialize(root, sb);
+            return sb.toString();
+        }
+
+        void visitSerialize(Node n, StringBuilder sb) {
+            sb.append("(");
+            if (n != null)
+                sb.append(n.val);
+            if (n != null && n.children != null) {
+                for (var c : n.children)
+                    visitSerialize(c, sb);
+            }
+            sb.append(")");
+        }
+
+        static class Tokenizer {
+            String s;
+            int idx = 0;
+
+            Tokenizer(String s) {
+                this.s = s;
+            }
+
+            int next() {
+                if (idx >= s.length())
+                    return -3;
+                if (s.charAt(idx) == '(') {
+                    idx++;
+                    return -1;
+                } else if (s.charAt(idx) == ')') {
+                    idx++;
+                    return -2;
+                } else {
+                    StringBuilder it = new StringBuilder();
+                    for (; idx < s.length()
+                            && Character.isDigit(s.charAt(idx)); idx++) {
+                        it.append(s.charAt(idx));
+                    }
+                    return Integer.valueOf(it.toString());
+                }
+            }
+
+        }
+
+        // Decodes your encoded data to tree.
+        public Node deserialize(String data) {
+            var tokenizer = new Tokenizer(data);
+            tokenizer.next(); // always (
+            var root = new Node(0, new ArrayList<>());
+            if (!visitDeserialize(root, tokenizer)) {
+                return null;
+            }
+            return root;
+
+        }
+
+        boolean visitDeserialize(Node n, Tokenizer tokenizer) {
+            int token = tokenizer.next();
+            if (token < 0)
+                return false;
+            while (token >= -1) {
+                if (token >= 0)
+                    n.val = token;
+                else {
+                    n.children.add(new Node(0, new ArrayList<>()));
+                    if (!visitDeserialize(n.children.getLast(), tokenizer)) {
+                        n.children.removeLast();
+                        n.children.add(null);
+                    }
+                }
+                token = tokenizer.next();
+            }
+            return true;
+        }
+    }
+
     /**
      * #438
      *
