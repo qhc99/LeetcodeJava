@@ -72,30 +72,89 @@ public class Leetcode700 {
 
         return i - 1;
     }
-/**
- * #628
- * @param nums
- * @return
- */
+
+    /**
+     * #622 MyCircularQueue
+     */
+    class MyCircularQueue {
+        int[] arr;
+        int head = 0, tail = 0;
+        boolean isEmpty = true;
+
+        public MyCircularQueue(int k) {
+            arr = new int[k];
+        }
+
+        public boolean enQueue(int value) {
+            if (isFull())
+                return false;
+            isEmpty = false;
+            arr[tail] = value;
+            tail = (tail + 1) % arr.length;
+            return true;
+        }
+
+        public boolean deQueue() {
+            if (isEmpty())
+                return false;
+            head = (head + 1) % arr.length;
+            if (head == tail)
+                isEmpty = true;
+            return true;
+        }
+
+        public int Front() {
+            if (isEmpty())
+                return -1;
+            return arr[head];
+        }
+
+        public int Rear() {
+            if (isEmpty())
+                return -1;
+            return arr[(tail - 1 + arr.length) % arr.length];
+        }
+
+        public boolean isEmpty() {
+            return head == tail && isEmpty;
+        }
+
+        public boolean isFull() {
+            return head == tail && !isEmpty;
+        }
+    }
+
+    /**
+     * #628
+     * 
+     * @param nums
+     * @return
+     */
     public int maximumProduct(int[] nums) {
-                int[][] dp = new int[3][2];
+        int[][] dp = new int[3][2];
         int len = 0;
         dp[0][0] = dp[1][0] = dp[2][0] = Integer.MAX_VALUE;
         dp[0][1] = dp[1][1] = dp[2][1] = Integer.MIN_VALUE;
-        for(var n : nums){
-            if(len >= 2){
-                dp[2][0] = Math.min(Math.min(n*dp[1][0],n*dp[1][1]), dp[2][0]);
-                dp[2][1] = Math.max(Math.max(n*dp[1][0],n*dp[1][1]), dp[2][1]);
+        for (var n : nums) {
+            if (len >= 2) {
+                dp[2][0] = Math.min(Math.min(n * dp[1][0], n * dp[1][1]),
+                        dp[2][0]);
+                dp[2][1] = Math.max(Math.max(n * dp[1][0], n * dp[1][1]),
+                        dp[2][1]);
             }
-            if(len >= 1){
-                dp[1][0] = Math.min(Math.min(n*dp[0][0],n*dp[0][1]),dp[1][0]);
-                dp[1][1] = Math.max(Math.max(n*dp[0][0],n*dp[0][1]),dp[1][1]);
-                if(len == 1) len++;
+            if (len >= 1) {
+                dp[1][0] = Math.min(Math.min(n * dp[0][0], n * dp[0][1]),
+                        dp[1][0]);
+                dp[1][1] = Math.max(Math.max(n * dp[0][0], n * dp[0][1]),
+                        dp[1][1]);
+                if (len == 1)
+                    len++;
             }
-            if(len >= 0){
-                dp[0][0] = Math.min(dp[0][0],n);
-                dp[0][1] = Math.max(dp[0][1],n);
-                if(len == 0) len++;
+            if (len >= 0) {
+                dp[0][0] = Math.min(dp[0][0], n);
+                dp[0][1] = Math.max(dp[0][1], n);
+                if (len == 0)
+                    len++;
             }
         }
         return dp[2][1];
@@ -322,6 +381,7 @@ public class Leetcode700 {
         }
         return max / (double) k;
     }
+
     /**
      * #647
      * 
