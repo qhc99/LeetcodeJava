@@ -245,21 +245,19 @@ public class Leetcode100 {
      */
     @SuppressWarnings("SpellCheckingInspection, Unused")
     public static String convert(String s, int numRows) {
-        int len = s.length();
         List<StringBuilder> rows = new ArrayList<>();
         for (int i = 0; i < numRows; i++) {
             rows.add(new StringBuilder());
         }
-        List<Integer> T = new ArrayList<>(); // numRows==4: 0 1 2 3 2 1
-        for (int i = 0; i < numRows; i++) {
-            T.add(i % numRows);
-        }
-        for (int i = 2 * numRows - 2; i > numRows; i--) {
-            T.add(i % numRows);
-        }
-        int t = T.size();
-        for (int i = 0; i < len; i++) {
-            rows.get(T.get(i % t)).append(s.charAt(i));
+        int r = 0;
+        int d = numRows > 1 ? 1 : 0;
+        for (int i = 0; i < s.length(); i++) {
+            rows.get(r).append(s.charAt(i));
+            r += d;
+            if (r >= numRows || r < 0) {
+                r -= 2 * d;
+                d = -d;
+            }
         }
         StringBuilder res = new StringBuilder();
         for (StringBuilder row : rows) {
