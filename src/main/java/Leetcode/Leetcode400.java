@@ -2037,6 +2037,28 @@ public class Leetcode400 {
     }
 
     /**
+     * #398 Solution
+     */
+    static class Solution398 {
+        class Solution {
+            Map<Integer, List<Integer>> idx = new HashMap<>();
+            Random rand = new Random();
+
+            public Solution(int[] nums) {
+                for (int i = 0; i < nums.length; i++) {
+                    var n = nums[i];
+                    idx.computeIfAbsent(n, k -> new ArrayList<>()).add(i);
+                }
+            }
+
+            public int pick(int target) {
+                var l = idx.get(target);
+                return l.get(rand.nextInt(0, l.size()));
+            }
+        }
+    }
+
+    /**
      * #399
      *
      * @param equations
