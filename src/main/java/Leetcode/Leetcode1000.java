@@ -1,9 +1,10 @@
 package Leetcode;
 
 import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.HashMap;
+import java.util.*;
 
-@SuppressWarnings({"JavaDoc"})
+@SuppressWarnings({ "JavaDoc" })
 public class Leetcode1000 {
 
     /**
@@ -22,8 +23,10 @@ public class Leetcode1000 {
             var S_digit = Integer.parseInt(String.valueOf(S.charAt(idx)));
             for (var num_s : digits) {
                 var num = Integer.parseInt(num_s);
-                if (num < S_digit) dp[idx] += Math.pow(digits.length, len_n - 1 - idx);
-                else if (num == S_digit) dp[idx] += dp[idx + 1];
+                if (num < S_digit)
+                    dp[idx] += Math.pow(digits.length, len_n - 1 - idx);
+                else if (num == S_digit)
+                    dp[idx] += dp[idx + 1];
             }
         }
         for (int i = 1; i < len_n; i++) {
@@ -70,14 +73,12 @@ public class Leetcode1000 {
                 if (typed.charAt(typedPtr) == name.charAt(namePtr)) {
                     lastChar = name.charAt(namePtr);
                     namePtr++;
-                }
-                else {
+                } else {
                     if (typed.charAt(typedPtr) != lastChar) {
                         return false;
                     }
                 }
-            }
-            else {
+            } else {
                 if (typed.charAt(typedPtr) != lastChar) {
                     return false;
                 }
@@ -85,17 +86,41 @@ public class Leetcode1000 {
         }
         return namePtr == name.length();
     }
+
     /**
-     * #968
-     * <br/>监控二叉树
-     * grady algorithm
+     * #930
+     * 
+     * @param nums
+     * @param goal
+     * @return
+     */
+    public int numSubarraysWithSum(int[] nums, int goal) {
+        int res = 0;
+        for (int i = 1; i < nums.length; i++) {
+            nums[i] += nums[i - 1];
+        }
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            var v = nums[i];
+            if (v == goal)
+                res++;
+            res += count.getOrDefault(v - goal, 0);
+            count.put(v, count.getOrDefault(v, 0) + 1);
+        }
+        return res;
+    }
+
+    /**
+     * #968 <br/>
+     * 监控二叉树 grady algorithm
      *
      * @param root tree
      * @return number of camera
      */
     public int minCameraCover(TreeNode root) {
         var solver = new MinCameraCoverSolver();
-        if (solver.dfs(root) == MinCameraCoverSolver.Status.NOT_BEING_MONITORED) {
+        if (solver
+                .dfs(root) == MinCameraCoverSolver.Status.NOT_BEING_MONITORED) {
             solver.res++;
         }
         return solver.res;
@@ -103,9 +128,7 @@ public class Leetcode1000 {
 
     private static class MinCameraCoverSolver {
         enum Status {
-            NOT_BEING_MONITORED,
-            BEING_MONITORED,
-            CAMERA_INSTALLED
+            NOT_BEING_MONITORED, BEING_MONITORED, CAMERA_INSTALLED
         }
 
         int res = 0;
@@ -116,22 +139,25 @@ public class Leetcode1000 {
             }
             Status left = dfs(tn.left);
             Status right = dfs(tn.right);
-            //左右子节点均已被监控，此时跳过
-            if (left == Status.BEING_MONITORED && right == Status.BEING_MONITORED) {
+            // 左右子节点均已被监控，此时跳过
+            if (left == Status.BEING_MONITORED
+                    && right == Status.BEING_MONITORED) {
                 return Status.NOT_BEING_MONITORED;
             }
-            //2种情况，1、一个子节点安装监控，另一个已被监控  2、两个子节点均有监控  此时不需要安装监控器，且该节点已被监控
-            if ((left == Status.CAMERA_INSTALLED && right == Status.CAMERA_INSTALLED) ||
-                    (left == Status.CAMERA_INSTALLED && right == Status.BEING_MONITORED) ||
-                    (left == Status.BEING_MONITORED && right == Status.CAMERA_INSTALLED)) {
+            // 2种情况，1、一个子节点安装监控，另一个已被监控 2、两个子节点均有监控 此时不需要安装监控器，且该节点已被监控
+            if ((left == Status.CAMERA_INSTALLED
+                    && right == Status.CAMERA_INSTALLED)
+                    || (left == Status.CAMERA_INSTALLED
+                            && right == Status.BEING_MONITORED)
+                    || (left == Status.BEING_MONITORED
+                            && right == Status.CAMERA_INSTALLED)) {
                 return Status.BEING_MONITORED;
             }
-            //其他情况均需要安装监控，不然会有节点监控不到
+            // 其他情况均需要安装监控，不然会有节点监控不到
             res++;
             return Status.CAMERA_INSTALLED;
         }
     }
-
 
     /**
      * #973
@@ -150,7 +176,8 @@ public class Leetcode1000 {
                 point = p;
             }
         }
-        PriorityQueue<Data> queue = new PriorityQueue<>(Comparator.comparing(d -> d.dist));
+        PriorityQueue<Data> queue = new PriorityQueue<>(
+                Comparator.comparing(d -> d.dist));
         int[][] ans = new int[k][];
         for (var p : points) {
             queue.add(new Data(p[0] * p[0] + p[1] * p[1], p));
