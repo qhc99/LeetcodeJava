@@ -1300,38 +1300,7 @@ public class Leetcode200 {
      * @return
      */
     public int maxProfit(int k, int[] prices) {
-        int count = 0;
-        int maxP = 0;
-        int state = 0; // even, down, up
-        Queue<Integer> queue = new PriorityQueue<>(
-                (a, b) -> Integer.compare(b, a));
-        int l = 0;
-        for (int i = 1; i < prices.length; i++) {
-            var trend = Integer.compare(prices[i], prices[i-1]);
-            if (state == 0)
-                state = trend;
-            else if (state > 0 && trend < 0) {
-                count++;
-                maxP += prices[i - 1] - prices[l];
-                l = i - 1;
-                state = trend;
-            } else if (state < 0 && trend > 0) {
-                if (l != 0)
-                    queue.add(prices[i - 1] - prices[l]);
-                l = i - 1;
-                state = trend;
-            }
-        }
-        if (state > 0) {
-            count++;
-            maxP += prices[prices.length - 1] - prices[l];
-        }
-        while (count > k && !queue.isEmpty()) {
-            maxP += queue.poll();
-            count--;
-        }
-
-        return maxP;
+        return 0;
     }
 
     /**
