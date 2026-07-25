@@ -275,6 +275,34 @@ public class Leetcode200 {
     }
 
     /**
+     * 123
+     * 
+     * @param prices
+     * @return
+     */
+    public int maxProfit2(int[] prices) {
+        int res = 0;
+        int len = prices.length;
+        int[] lMin = new int[len], rMax = new int[len], lProfit = new int[len],
+                rProfit = new int[len];
+        lMin[0] = prices[0];
+        for (int i = 1; i < len; i++) {
+            lMin[i] = Math.min(prices[i], lMin[i - 1]);
+            lProfit[i] = Math.max(lProfit[i - 1], prices[i] - lMin[i]);
+        }
+        rMax[len - 1] = prices[len - 1];
+        for (int i = len - 2; i >= 0; i--) {
+            rMax[i] = Math.max(prices[i], rMax[i + 1]);
+            rProfit[i] = Math.max(rProfit[i + 1], rMax[i] - prices[i]);
+        }
+        for (int i = 0; i < len; i++)
+            res = Math.max(lProfit[i] + ((i + 1 < len) ? rProfit[i + 1] : 0),
+                    res);
+
+        return res;
+    }
+
+    /**
      * #128
      *
      * @param nums
