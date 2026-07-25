@@ -39,6 +39,26 @@ public class Leetcode300 {
     }
 
     /**
+     * #203
+     * 
+     * @param head
+     * @param val
+     * @return
+     */
+    public ListNode removeElements(ListNode head, int val) {
+        ListNode handle = new ListNode();
+        handle.next = head;
+        var ptr = handle;
+        while (ptr.next != null) {
+            if (ptr.next.val == val)
+                ptr.next = ptr.next.next;
+            else
+                ptr = ptr.next;
+        }
+        return handle.next;
+    }
+
+    /**
      * #204
      * 
      * @param n
@@ -461,6 +481,33 @@ public class Leetcode300 {
     }
 
     /**
+     * #219
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public boolean containsNearbyDuplicate(int[] nums, int k) {
+        if (k < 1 || nums.length < 2)
+            return false;
+        if (nums[0] == nums[1])
+            return true;
+
+        Set<Integer> seen = new HashSet<>();
+        int l = 0;
+        seen.add(nums[0]);
+        seen.add(nums[1]);
+        for (int r = 2; r < nums.length; r++) {
+            if (r - l > k)
+                seen.remove(nums[l++]);
+            if (seen.contains(nums[r]))
+                return true;
+            seen.add(nums[r]);
+        }
+        return false;
+    }
+
+    /**
      * #223
      * 
      * @param ax1
@@ -545,6 +592,37 @@ public class Leetcode300 {
             }
             queue.addLast(val);
             num.delete(0, num.length());
+        }
+    }
+
+    /**
+     * #225 MyStack
+     */
+    class MyStack {
+        Queue<Integer> q1 = new ArrayDeque<>();
+        Queue<Integer> q2 = new ArrayDeque<>();
+
+        public MyStack() {
+
+        }
+
+        public void push(int x) {
+            q2.add(x);
+            q2.addAll(q1);
+            q1 = q2;
+            q2 = new ArrayDeque<>();
+        }
+
+        public int pop() {
+            return q1.poll();
+        }
+
+        public int top() {
+            return q1.peek();
+        }
+
+        public boolean empty() {
+            return q1.isEmpty();
         }
     }
 
