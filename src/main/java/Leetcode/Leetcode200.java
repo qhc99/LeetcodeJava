@@ -256,6 +256,25 @@ public class Leetcode200 {
     }
 
     /**
+     * #122
+     * 
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        int p = prices[0];
+        int res = 0;
+        for (int i = 1; i < prices.length; i++) {
+            var c = prices[i];
+            if (c > p) {
+                res += (c - p);
+            }
+            p = c;
+        }
+        return res;
+    }
+
+    /**
      * #128
      *
      * @param nums
