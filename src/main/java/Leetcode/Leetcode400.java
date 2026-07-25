@@ -252,6 +252,34 @@ public class Leetcode400 {
     }
 
     /**
+     * #314
+     * 
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> verticalOrder(TreeNode root) {
+        List<List<Integer>> res = new ArrayList<>();
+        Map<Integer, List<Integer>> cols = new TreeMap<>();
+        Queue<Pair> queue = new ArrayDeque<>();
+        queue.add(new Pair(root, 0));
+        while (!queue.isEmpty()) {
+            var p = queue.poll();
+            if (p.n != null) {
+                cols.computeIfAbsent(p.col, k -> new ArrayList<>())
+                        .add(p.n.val);
+                queue.add(new Pair(p.n.left, p.col - 1));
+                queue.add(new Pair(p.n.right, p.col + 1));
+            }
+        }
+        for (var l : cols.values())
+            res.add(l);
+        return res;
+    }
+
+    static record Pair(TreeNode n, int col) {
+    }
+
+    /**
      * #315
      *
      * @param array
