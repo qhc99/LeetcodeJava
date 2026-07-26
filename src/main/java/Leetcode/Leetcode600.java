@@ -808,6 +808,42 @@ public class Leetcode600 {
     }
 
     /**
+     * #565
+     * 
+     * @param nums
+     * @return
+     */
+    public int arrayNesting(int[] nums) {
+        int res = 0;
+        Set<Integer> start = new HashSet<>();
+        Set<Integer> visited = new HashSet<>();
+        Map<Integer, Integer> cache = new HashMap<>();
+        for (var n : nums) {
+            if (!start.contains(n)) {
+                start.add(n);
+                res = Math.max(res, dfsNest(n, nums, 1, visited, cache));
+            }
+        }
+        return res;
+    }
+
+    int dfsNest(int i, int[] nums, int depth, Set<Integer> visited,
+            Map<Integer, Integer> cache) {
+        var c = cache.get(i);
+        if (c != null) {
+            return c;
+        }
+        if (visited.contains(i)) {
+            return depth - 1;
+        }
+        visited.add(i);
+        var v = dfsNest(nums[i], nums, depth + 1, visited, cache);
+        visited.remove(i);
+        cache.put(i, v - depth + 1);
+        return v;
+    }
+
+    /**
      * #567
      * 
      * @param s1
