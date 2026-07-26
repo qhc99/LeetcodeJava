@@ -2570,6 +2570,72 @@ public class Leetcode500 {
     }
 
     /**
+     * #468
+     * 
+     * @param queryIP
+     * @return
+     */
+    public String validIPAddress(String queryIP) {
+        if (queryIP.contains("."))
+            return validIPAddressv4(queryIP);
+        else if (queryIP.contains(":"))
+            return validIPAddressv6(queryIP);
+        return "Neither";
+    }
+
+    String validIPAddressv4(String s) {
+        var parts = s.split("\\.");
+        int split = 0;
+        for (var c : s.toCharArray()) {
+            if (c == '.') {
+                split++;
+            }
+        }
+        if (parts.length != 4 || split != 3)
+            return "Neither";
+        for (var p : parts) {
+            if (p.isEmpty() || p.length() > 3)
+                return "Neither";
+            for (var c : p.toCharArray()) {
+                if (!Character.isDigit(c))
+                    return "Neither";
+            }
+            if (p.startsWith("0") && p.length() != 1)
+                return "Neither";
+            var v = Integer.valueOf(p);
+            if (v > 255)
+                return "Neither";
+        }
+        return "IPv4";
+    }
+
+    String validIPAddressv6(String s) {
+        var parts = s.split(":");
+        int split = 0;
+        for (var c : s.toCharArray()) {
+            if (c == ':') {
+                split++;
+            }
+        }
+        if (parts.length != 8 || split != 7)
+            return "Neither";
+        for (var p : parts) {
+            if (p.length() > 4 || p.isEmpty())
+                return "Neither";
+            for (var c : p.toCharArray()) {
+                if (!Character.isDigit(c)
+                        && (((Character.isUpperCase(c) && c > 'F')
+                                || (Character.isLowerCase(c) && c > 'f')
+                                || (!Character.isUpperCase(c)
+                                        && !Character.isLowerCase(c))))) {
+                    return "Neither";
+                }
+            }
+        }
+        return "IPv6";
+    }
+
+    /**
      * #474
      *
      * @param strs
