@@ -151,6 +151,33 @@ public class Leetcode600 {
     }
 
     /**
+     * #523
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public boolean checkSubarraySum(int[] nums, int k) {
+        nums[0] %= k;
+        Map<Integer, Integer> valIdx = new HashMap<>();
+        valIdx.put(nums[0], 0);
+        for (int i = 0; i < nums.length; i++) {
+            if (i - 1 >= 0)
+                nums[i] += nums[i - 1];
+            nums[i] %= k;
+            if ((nums[i] == 0 && i >= 1))
+                return true;
+            var idx = valIdx.get(nums[i]);
+            if (idx != null && i - idx > 1)
+                return true;
+            if (!valIdx.containsKey(nums[i]))
+                valIdx.put(nums[i], i);
+        }
+
+        return false;
+    }
+
+    /**
      * #525 <br>
      * 连续数组 <br>
      * 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
