@@ -67,6 +67,36 @@ public class Leetcode800 {
     }
 
     /**
+     * #713
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int numSubarrayProductLessThanK(int[] nums, int k) {
+        if (k == 0)
+            return 0;
+        if (nums.length == 1)
+            return nums[0] == k ? 1 : 0;
+        int res = 0;
+        long v = nums[0];
+        if (v == k)
+            res++;
+        int l = 0;
+        for (int i = 1; i < nums.length; i++) {
+            while (v * nums[i] >= k && l < i) {
+                v /= nums[l++];
+            }
+            if (v * nums[i] < k) {
+                res += i + 1 - l;
+                v *= nums[i];
+            } else
+                l = i + 1;
+        }
+        return res;
+    }
+
+    /**
      * #726
      *
      * @param formula
