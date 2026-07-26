@@ -67,6 +67,64 @@ public class Leetcode800 {
     }
 
     /**
+     * #706 MyHashMap
+     */
+    class MyHashMap {
+        static class Node {
+            int key;
+            int val;
+
+            Node(int k, int v) {
+                key = k;
+                val = v;
+            }
+        }
+
+        int size = 10000;
+        List<List<Node>> map = new ArrayList<>();
+
+        public MyHashMap() {
+            for (int i = 0; i < size; i++) {
+                map.add(new ArrayList<>());
+            }
+        }
+
+        public void put(int key, int value) {
+            var i = Integer.hashCode(key) % size;
+            var l = map.get(i);
+            for (var n : l) {
+                if (n.key == key) {
+                    n.val = value;
+                    return;
+                }
+            }
+            l.add(new Node(key, value));
+        }
+
+        public int get(int key) {
+            var i = Integer.hashCode(key) % size;
+            var l = map.get(i);
+            for (var n : l) {
+                if (n.key == key) {
+                    return n.val;
+                }
+            }
+            return -1;
+        }
+
+        public void remove(int key) {
+            var i = Integer.hashCode(key) % size;
+            var l = map.get(i);
+            for (var n : l) {
+                if (n.key == key) {
+                    l.remove(n);
+                    return;
+                }
+            }
+        }
+    }
+
+    /**
      * #713
      * 
      * @param nums

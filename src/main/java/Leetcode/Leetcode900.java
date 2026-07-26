@@ -921,6 +921,56 @@ public class Leetcode900 {
     }
 
     /**
+     * #885
+     * 
+     * @param rows
+     * @param cols
+     * @param rStart
+     * @param cStart
+     * @return
+     */
+    public int[][] spiralMatrixIII(int rows, int cols, int rStart, int cStart) {
+        int state = 0; // r,d,l,u
+        int len = 1;
+        int step = 0;
+        int visited = 0;
+        int[][] res = new int[rows * cols][2];
+        int i = rStart, j = cStart;
+        while (visited < res.length) {
+            if (i >= 0 && i < rows && j >= 0 && j < cols) {
+                res[visited][0] = i;
+                res[visited++][1] = j;
+            }
+            if (step == len) {
+                step = 0;
+                state++;
+                state %= 4;
+                if (state == 2 || state == 0)
+                    len++;
+            }
+            if (state == 0)
+                j++;
+            else if (state == 1)
+                i++;
+            else if (state == 2)
+                j--;
+            else
+                i--;
+
+            step++;
+        }
+        return res;
+    }
+
+    static class Visitor {
+        int rows;
+        int cols;
+        int rStart;
+        int cStart;
+        int state = 0; // r,d,l,u
+    }
+
+    /**
      * #894
      * 
      * @param n
