@@ -1170,6 +1170,34 @@ public class Leetcode400 {
     }
 
     /**
+     * #348 TicTacToe
+     */
+    class TicTacToe {
+        int[][] rows;
+        int[][] cols;
+        int[][] diag = new int[2][2];
+        int n;
+
+        public TicTacToe(int n) {
+            this.n = n;
+            rows = new int[n][2];
+            cols = new int[n][2];
+        }
+
+        public int move(int row, int col, int player) {
+            if (++rows[row][player - 1] == n)
+                return player;
+            if (++cols[col][player - 1] == n)
+                return player;
+            if (row == col && ++diag[0][player - 1] == n)
+                return player;
+            if (row + col == n - 1 && ++diag[1][player - 1] == n)
+                return player;
+            return 0;
+        }
+    }
+
+    /**
      * #349
      * 
      * @param nums1
@@ -1188,7 +1216,7 @@ public class Leetcode400 {
         for (var n : nums2)
             set.add(n);
         for (var n : nums1) {
-            if (set.contains(n) && !added.contains(n)){
+            if (set.contains(n) && !added.contains(n)) {
                 added.add(n);
                 res.add(n);
             }
