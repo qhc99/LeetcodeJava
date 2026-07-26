@@ -1300,7 +1300,24 @@ public class Leetcode200 {
      * @return
      */
     public int maxProfit(int k, int[] prices) {
-        return 0;
+        int len = prices.length;
+        k = Math.min(k, len / 2);
+        int[][] buy = new int[len][k + 1];
+        int[][] sell = new int[len][k + 1];
+        buy[0][0] = -prices[0];
+        for(int j = 1; j <= k; j++){
+            buy[0][j] = Integer.MIN_VALUE / 2;
+            sell[0][j] = Integer.MIN_VALUE / 2;
+        }
+        for (int i = 1; i < len; i++) {
+            buy[i][0]  = Math.max(sell[i - 1][0] - prices[i], buy[i - 1][0]);
+            for (int j = 1; j <= k; j++) {
+                sell[i][j] = Math.max(buy[i - 1][j - 1] + prices[i],
+                        sell[i - 1][j]);
+                buy[i][j] = Math.max(sell[i - 1][j] - prices[i], buy[i - 1][j]);
+            }
+        }
+        return Arrays.stream(sell[len-1]).max().getAsInt();
     }
 
     /**

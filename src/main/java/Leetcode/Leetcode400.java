@@ -1170,6 +1170,33 @@ public class Leetcode400 {
     }
 
     /**
+     * #349
+     * 
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        if (nums2.length > nums1.length) {
+            var t = nums1;
+            nums1 = nums2;
+            nums2 = t;
+        }
+        List<Integer> res = new ArrayList<>();
+        Set<Integer> set = new HashSet<>();
+        Set<Integer> added = new HashSet<>();
+        for (var n : nums2)
+            set.add(n);
+        for (var n : nums1) {
+            if (set.contains(n) && !added.contains(n)){
+                added.add(n);
+                res.add(n);
+            }
+        }
+        return res.stream().mapToInt(i -> i).toArray();
+    }
+
+    /**
      * #354
      *
      * @param envelopes
