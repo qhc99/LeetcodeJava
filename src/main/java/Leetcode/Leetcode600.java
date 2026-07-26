@@ -117,6 +117,40 @@ public class Leetcode600 {
     }
 
     /**
+     * #515
+     * 
+     * @param root
+     * @return
+     */
+    public List<Integer> largestValues(TreeNode root) {
+        Map<Integer, Integer> levelMaxVal = new HashMap<>();
+        int maxLevel = 0;
+        List<Integer> res = new ArrayList<>();
+        Queue<NodeLevel> queue = new ArrayDeque<>();
+        if (root != null)
+            queue.add(new NodeLevel(root, 0));
+        while (!queue.isEmpty()) {
+            var nl = queue.poll();
+            maxLevel = Math.max(maxLevel, nl.level);
+            levelMaxVal.put(nl.level, Math.max(
+                    levelMaxVal.getOrDefault(nl.level, Integer.MIN_VALUE),
+                    nl.n.val));
+            if (nl.n.left != null)
+                queue.add(new NodeLevel(nl.n.left, nl.level + 1));
+            if (nl.n.right != null)
+                queue.add(new NodeLevel(nl.n.right, nl.level + 1));
+        }
+        if (!levelMaxVal.isEmpty()) {
+            for (int i = 0; i <= maxLevel; i++)
+                res.add(levelMaxVal.get(i));
+        }
+        return res;
+    }
+
+    static record NodeLevel(TreeNode n, int level) {
+    }
+
+    /**
      * #525 <br>
      * 连续数组 <br>
      * 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
