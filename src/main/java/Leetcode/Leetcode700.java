@@ -18,6 +18,29 @@ import java.util.regex.Pattern;
 public class Leetcode700 {
 
     /**
+     * #605
+     * 
+     * @param flowerbed
+     * @param n
+     * @return
+     */
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        if (n == 0)
+            return true;
+        for (int i = 0; i < flowerbed.length; i++) {
+            var l = i == 0 || flowerbed[i - 1] == 0;
+            var r = i == flowerbed.length - 1 || flowerbed[i + 1] == 0;
+            if (l && r && flowerbed[i] == 0) {
+                n--;
+                if (n == 0)
+                    return true;
+                flowerbed[i] = 1;
+            }
+        }
+        return n == 0;
+    }
+
+    /**
      * #621
      * 
      * @param tasks
