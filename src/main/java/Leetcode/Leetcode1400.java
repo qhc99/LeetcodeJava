@@ -29,6 +29,42 @@ public class Leetcode1400 {
     }
 
     /**
+     * #1352 ProductOfNumbers
+     */
+    class ProductOfNumbers {
+        List<Node> list = new ArrayList<>();
+
+        static record Node(long val, int dist) {
+        }
+
+        public ProductOfNumbers() {
+
+        }
+
+        public void add(int num) {
+            var dist = num == 0 ? 0 : Integer.MAX_VALUE / 2;
+            var last = list.isEmpty() ? null : list.getLast();
+            var val = num;
+            if (last != null) {
+                dist = Math.min(last.dist + 1, dist);
+                if (last.val != 0)
+                    val *= last.val;
+            }
+            list.add(new Node(val, dist));
+
+        }
+
+        public int getProduct(int k) {
+            var last = list.getLast();
+            if (k > last.dist)
+                return 0;
+            if (k == last.dist || k == list.size())
+                return (int) last.val;
+            return (int) (last.val / list.get(list.size() - 1 - k).val);
+        }
+    }
+
+    /**
      * #1353
      * 
      * @param events
