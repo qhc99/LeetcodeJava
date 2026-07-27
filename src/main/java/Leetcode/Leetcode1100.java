@@ -306,6 +306,23 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1047
+     * 
+     * @param s
+     * @return
+     */
+    public String removeDuplicates(String s) {
+        StringBuilder sb = new StringBuilder();
+        for (var c : s.toCharArray()) {
+            if (sb.isEmpty() || sb.charAt(sb.length() - 1) != c)
+                sb.append(c);
+            else if (!sb.isEmpty())
+                sb.delete(sb.length() - 1, sb.length());
+        }
+        return sb.toString();
+    }
+
+    /**
      * #1053
      * 
      * @param arr
