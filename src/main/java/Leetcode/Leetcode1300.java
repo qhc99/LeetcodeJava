@@ -132,6 +132,38 @@ public class Leetcode1300 {
     }
 
     /**
+     * #1249
+     * 
+     * @param s
+     * @return
+     */
+    public String minRemoveToMakeValid(String s) {
+        int count = 0;
+        var sb = new StringBuilder();
+        for (var c : s.toCharArray()) {
+            if (c == '(') {
+                count++;
+                sb.append(c);
+            } else if (c == ')') {
+                if (count > 0) {
+                    count--;
+                    sb.append(c);
+                }
+            } else {
+                sb.append(c);
+            }
+        }
+        for (int i = sb.length() - 1; i >= 0 && count > 0; i--) {
+            var c = sb.charAt(i);
+            if (c == '(') {
+                count--;
+                sb.delete(i, i + 1);
+            }
+        }
+        return sb.toString();
+    }
+
+    /**
      * #1275
      * 
      * @param moves
