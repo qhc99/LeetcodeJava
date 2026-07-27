@@ -1,7 +1,5 @@
 package Leetcode;
 
-import java.util.Comparator;
-import java.util.HashMap;
 import java.util.*;
 
 @SuppressWarnings({ "JavaDoc" })
@@ -108,6 +106,41 @@ public class Leetcode1000 {
             count.put(v, count.getOrDefault(v, 0) + 1);
         }
         return res;
+    }
+
+    /**
+     * #953
+     * 
+     * @param words
+     * @param order
+     * @return
+     */
+    public boolean isAlienSorted(String[] words, String order) {
+        Map<Character, Integer> ord = new HashMap<>();
+        for (int i = 0; i < order.length(); i++) {
+            ord.put(order.charAt(i), i);
+        }
+        for (int i = 0; i < words.length - 1; i++) {
+            var a = words[i];
+            var b = words[i + 1];
+            if (isAlienSortedCompare(a.toCharArray(), b.toCharArray(),
+                    ord) > 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    int isAlienSortedCompare(char[] a, char[] b,
+            Map<Character, Integer> order) {
+        for (int i = 0; i < a.length && i < b.length; i++) {
+            var m = order.get(a[i]);
+            var n = order.get(b[i]);
+            var c = Integer.compare(m, n);
+            if (c != 0)
+                return c;
+        }
+        return Integer.compare(a.length, b.length);
     }
 
     /**
