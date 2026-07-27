@@ -155,6 +155,26 @@ public class Leetcode800 {
     }
 
     /**
+     * #714
+     * 
+     * @param prices
+     * @param fee
+     * @return
+     */
+    public int maxProfit(int[] prices, int fee) {
+        int[] buy = new int[2];
+        int[] sell = new int[2];
+        buy[0] = -prices[0] - fee;
+        for (int i = 1; i < prices.length; i++) {
+            buy[1] = Math.max(buy[0], sell[0] - fee - prices[i]);
+            sell[1] = Math.max(sell[0], buy[0] - fee + prices[i]);
+            buy[0] = buy[1];
+            sell[0] = sell[1];
+        }
+        return sell[0];
+    }
+
+    /**
      * #726
      *
      * @param formula
