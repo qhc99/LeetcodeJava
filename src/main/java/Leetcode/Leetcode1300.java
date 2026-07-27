@@ -1,19 +1,6 @@
 package Leetcode;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.*;
 
 @SuppressWarnings("JavaDoc")
 public class Leetcode1300 {
@@ -142,6 +129,50 @@ public class Leetcode1300 {
             }
         }
         return result;
+    }
+
+    /**
+     * #1275
+     * 
+     * @param moves
+     * @return
+     */
+    public String tictactoe(int[][] moves) {
+        var t = new TicTacToe(3);
+        for (int i = 0; i < moves.length; i++) {
+            var m = moves[i];
+            var res = t.move(m[0], m[1], i % 2 == 0 ? 1 : 2);
+            if (res == 1)
+                return "A";
+            else if (res == 2)
+                return "B";
+        }
+        return moves.length == 9 ? "Draw" : "Pending";
+    }
+
+    static class TicTacToe {
+        int[][] rows;
+        int[][] cols;
+        int[][] diag = new int[2][2];
+        int n;
+
+        public TicTacToe(int n) {
+            this.n = n;
+            rows = new int[n][2];
+            cols = new int[n][2];
+        }
+
+        public int move(int row, int col, int player) {
+            if (++rows[row][player - 1] == n)
+                return player;
+            if (++cols[col][player - 1] == n)
+                return player;
+            if (row == col && ++diag[0][player - 1] == n)
+                return player;
+            if (row + col == n - 1 && ++diag[1][player - 1] == n)
+                return player;
+            return 0;
+        }
     }
 
     /**
