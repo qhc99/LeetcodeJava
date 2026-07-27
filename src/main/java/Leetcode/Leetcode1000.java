@@ -34,6 +34,40 @@ public class Leetcode1000 {
     }
 
     /**
+     * #907
+     * 
+     * @param arr
+     * @return
+     */
+    public int sumSubarrayMins(int[] arr) {
+        long[] left = new long[arr.length];
+        long[] right = new long[arr.length];
+        Stack<Integer> idx = new Stack<>();
+        for (int i = 0; i < arr.length; i++) {
+            while (!idx.isEmpty() && arr[idx.peek()] >= arr[i]) {
+                idx.pop();
+            }
+            left[i] = i - (idx.isEmpty() ? -1 : idx.peek());
+            idx.add(i);
+        }
+        idx.clear();
+        for (int i = arr.length - 1; i >= 0; i--) {
+            while (!idx.isEmpty() && arr[idx.peek()] > arr[i]) {
+                idx.pop();
+            }
+            right[i] = (idx.isEmpty() ? arr.length : idx.peek()) - i;
+            idx.add(i);
+        }
+        long mod = 1_000_000_007;
+        int res = 0;
+        for (int i = 0; i < arr.length; i++) {
+            res += ((left[i] * right[i]) % mod * arr[i]) % mod;
+            res %= mod;
+        }
+        return res;
+    }
+
+    /**
      * @param digits
      * @param n      start from 1, radix 10
      * @return
