@@ -79,6 +79,36 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1011
+     * 
+     * @param weights
+     * @param days
+     * @return
+     */
+    public int shipWithinDays(int[] weights, int days) {
+        var r = Arrays.stream(weights).sum();
+        var l = Arrays.stream(weights).max().getAsInt();
+        while (l < r) {
+            int mid = l + (r - l) / 2;
+            int c = 0;
+            int d = 1;
+            for (var w : weights) {
+                if (c + w > mid) {
+                    d++;
+                    c = w;
+                } else
+                    c += w;
+            }
+            if (d <= days)
+                r = mid;
+            else
+                l = mid;
+        }
+
+        return l;
+    }
+
+    /**
      * #1015
      *
      * @param k
