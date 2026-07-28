@@ -55,6 +55,22 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2351
+     * 
+     * @param s
+     * @return
+     */
+    public char repeatedCharacter(String s) {
+        int[] count = new int['z' - 'a' + 1];
+        for (var c : s.toCharArray()) {
+            count[c - 'a']++;
+            if (count[c - 'a'] == 2)
+                return c;
+        }
+        return ' ';
+    }
+
+    /**
      * #2360
      * 
      * @param edges
