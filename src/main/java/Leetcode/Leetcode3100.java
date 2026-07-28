@@ -110,6 +110,7 @@ public class Leetcode3100 {
         public int count;
         public Map<Pair, Trie> child = new HashMap<>();
     }
+
     /**
      * #3069
      * 
@@ -215,5 +216,23 @@ public class Leetcode3100 {
             }
             return res;
         }
+    }
+
+    /**
+     * #3074
+     * 
+     * @param apple
+     * @param capacity
+     * @return
+     */
+    public int minimumBoxes(int[] apple, int[] capacity) {
+        int sum = Arrays.stream(apple).sum();
+        Arrays.sort(capacity);
+        int res = 0;
+        for (int i = capacity.length - 1; sum > 0; i--) {
+            sum -= capacity[i];
+            res++;
+        }
+        return res;
     }
 }
