@@ -88,7 +88,7 @@ public class Leetcode1000 {
     }
 
     /**
-     * #090
+     * #909
      * 
      * @param board
      * @return
@@ -303,6 +303,52 @@ public class Leetcode1000 {
         }
 
         return ans;
+    }
+
+    /**
+     * #996
+     * 
+     * @param nums
+     * @return
+     */
+    public int numSquarefulPerms(int[] nums) {
+        int res = 0;
+        Map<Pair, Integer> cache = new HashMap<>();
+        Set<Integer> placed = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (!placed.contains(nums[i])) {
+                placed.add(nums[i]);
+                res += visit(nums[i], 1 << i, cache, nums);
+
+            }
+        }
+        return res;
+    }
+
+    static record Pair(int n, int selected) {
+    }
+
+    int visit(int n, int selected, Map<Pair, Integer> cache, int[] nums) {
+        var ce = cache.get(new Pair(n, selected));
+        if (ce != null)
+            return ce;
+        if (((~(-1 << nums.length)) ^ selected) == 0) {
+            cache.put(new Pair(n, selected), 1);
+            return 1;
+        }
+        int res = 0;
+        Set<Integer> placed = new HashSet<>();
+        for (int i = 0; i < nums.length; i++) {
+            var sum = n + nums[i];
+            int sq = (int) Math.sqrt(sum);
+            if (sq * sq == sum && ((1 << i) & selected) == 0
+                    && !placed.contains(nums[i])) {
+                placed.add(nums[i]);
+                res += visit(nums[i], 1 << i | selected, cache, nums);
+            }
+        }
+        cache.put(new Pair(n, selected), res);
+        return res;
     }
 
     /**
