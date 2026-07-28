@@ -123,23 +123,14 @@ public class Leetcode1700 {
             count1[c - 'a']++;
         for (var c : word2.toCharArray())
             count2[c - 'a']++;
-        bubbleSort(count1);
-        bubbleSort(count2);
-        return Arrays.equals(count1, count2);
-    }
-
-    void bubbleSort(int[] arr) {
-        for (int i = 0; i < arr.length; i++) {
-            if (arr[i] != 0) {
-                for (int j = i + 1; j < arr.length; j++) {
-                    if (arr[j] != 0 && arr[j] < arr[i]) {
-                        var t = arr[i];
-                        arr[i] = arr[j];
-                        arr[j] = t;
-                    }
-                }
-            }
+        for (int i = 0; i < count1.length; i++) {
+            if ((count1[i] == 0 && count2[i] != 0)
+                    || (count1[i] != 0 && count2[i] == 0))
+                return false;
         }
+        Arrays.sort(count1);
+        Arrays.sort(count2);
+        return Arrays.equals(count1, count2);
     }
 
     /**
