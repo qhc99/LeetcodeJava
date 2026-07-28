@@ -77,7 +77,48 @@ public class Leetcode2100 {
         }
     }
 
-        /**
+    /**
+     * #2023
+     * 
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int numOfPairs(String[] nums, String target) {
+        Map<Integer, List<Integer>> startWith = new HashMap<>();
+        Map<Integer, List<Integer>> endWith = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            var s = nums[i];
+            if (target.startsWith(s))
+                startWith.computeIfAbsent(s.length(), k -> new ArrayList<>())
+                        .add(i);
+            if (target.endsWith(s))
+                endWith.computeIfAbsent(s.length(), k -> new ArrayList<>())
+                        .add(i);
+        }
+        int res = 0;
+        for (var e : startWith.entrySet()) {
+            var len = e.getKey();
+            var l = e.getValue();
+            var r = endWith.getOrDefault(target.length() - len, List.of());
+            if (r.isEmpty())
+                continue;
+            var s1 = new HashSet<>(l);
+            var s2 = new HashSet<>(r);
+            var lSize = s1.size();
+            s1.retainAll(s2);
+            lSize -= s1.size();
+            s2.removeAll(s1);
+            var rSize = s2.size();
+            var mSize = s1.size();
+            res += lSize * rSize + lSize * mSize + mSize * rSize
+                    + mSize * (mSize - 1);
+        }
+
+        return res;
+    }
+
+    /**
      * #2043 Bank
      */
     class Bank {
