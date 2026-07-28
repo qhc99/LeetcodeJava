@@ -110,6 +110,39 @@ public class Leetcode1700 {
     }
 
     /**
+     * #1657
+     * 
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public boolean closeStrings(String word1, String word2) {
+        int[] count1 = new int['z' - 'a' + 1];
+        int[] count2 = new int['z' - 'a' + 1];
+        for (var c : word1.toCharArray())
+            count1[c - 'a']++;
+        for (var c : word2.toCharArray())
+            count2[c - 'a']++;
+        bubbleSort(count1);
+        bubbleSort(count2);
+        return Arrays.equals(count1, count2);
+    }
+
+    void bubbleSort(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            if (arr[i] != 0) {
+                for (int j = i + 1; j < arr.length; j++) {
+                    if (arr[j] != 0 && arr[j] < arr[i]) {
+                        var t = arr[i];
+                        arr[i] = arr[j];
+                        arr[j] = t;
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * #1662
      *
      * @param word1
