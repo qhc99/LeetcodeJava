@@ -97,26 +97,25 @@ public class Leetcode1000 {
         int n = board.length;
         boolean[][] visited = new boolean[n][n];
         Queue<int[]> queue = new ArrayDeque<>();
-        queue.add(new int[] { board[n - 1][0] == -1 ? 1 : board[n - 1][0], 0 });
+        var start = board[n - 1][0] == -1 ? 1 : board[n - 1][0];
+        if (start == n * n)
+            return 0;
+        queue.add(new int[] { start, 0 });
         while (!queue.isEmpty()) {
             var data = queue.poll();
             var num = data[0];
-            if (num == n * n)
-                return data[1];
-            boolean jumpFar = false;
-            for (int i = 6; i >= 0; i--) {
+            for (int i = 6; i >= 1; i--) {
                 if (num + i > n * n)
                     continue;
                 var p = num2pos(num + i, n);
                 if (!visited[p[0]][p[1]]) {
                     visited[p[0]][p[1]] = true;
-                    if (board[p[0]][p[1]] != -1 || !jumpFar) {
-                        queue.add(new int[] {
-                                board[p[0]][p[1]] != -1 ? board[p[0]][p[1]]
-                                        : num + i,
-                                data[1] + 1 });
-                        jumpFar = true;
-                    }
+                    var next = board[p[0]][p[1]] != -1 ? board[p[0]][p[1]]
+                            : num + i;
+                    if (next == n * n)
+                        return data[1] + 1;
+                    queue.add(new int[] { next, data[1] + 1 });
+
                 }
             }
         }
