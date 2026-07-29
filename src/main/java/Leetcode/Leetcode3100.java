@@ -24,6 +24,65 @@ public class Leetcode3100 {
     }
 
     /**
+     * #3030
+     * 
+     * @param image
+     * @param threshold
+     * @return
+     */
+    public int[][] resultGrid(int[][] image, int threshold) {
+        int m = image.length, n = image[0].length;
+        int[][] regionCount = new int[m][n];
+        int[][] regionSum = new int[m][n];
+
+        int[] ndx = new int[] { 0, 0, 1, -1 };
+        int[] ndy = new int[] { 1, -1, 0, 0 };
+        for (int i = 0; i < m - 2; i++) {
+            for (int j = 0; j < n - 2; j++) {
+                int lx = i, rx = i + 3;
+                int ly = j, ry = j + 3;
+                int sum = 0;
+                boolean isRegion = true;
+                for (int d = 0; d < 9 && isRegion; d++) {
+                    var dx = d / 3;
+                    var dy = d % 3;
+                    int x = dx + i;
+                    int y = dy + j;
+                    sum += image[x][y];
+                    for (int k = 0; k < 4 && isRegion; k++) {
+                        int nx = x + ndx[k];
+                        int ny = y + ndy[k];
+                        if (nx >= lx && nx < rx && ny >= ly && ny < ry && Math
+                                .abs(image[x][y] - image[nx][ny]) > threshold) {
+                            isRegion = false;
+                        }
+                    }
+                }
+                sum /= 9;
+                if (isRegion) {
+                    for (int d = 0; d < 9; d++) {
+                        var dx = d / 3;
+                        var dy = d % 3;
+                        int x = dx + i;
+                        int y = dy + j;
+                        regionSum[x][y] += sum;
+                        regionCount[x][y] += 1;
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                regionSum[i][j] = regionCount[i][j] == 0 ? image[i][j]
+                        : regionSum[i][j] / regionCount[i][j];
+            }
+        }
+
+        return regionSum;
+    }
+
+    /**
      * #3034,#3036
      * 
      * @param nums
