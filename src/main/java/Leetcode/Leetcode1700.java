@@ -110,6 +110,42 @@ public class Leetcode1700 {
     }
 
     /**
+     * #1650
+     * 
+     * @param p
+     * @param q
+     * @return
+     */
+    static class Nest1 {
+        static class Node {
+            public int val;
+            public Node left;
+            public Node right;
+            public Node parent;
+        };
+
+        public Node lowestCommonAncestor(Node p, Node q) {
+            Queue<Node> queue = new ArrayDeque<>();
+            Set<Node> visited = new HashSet<>();
+            visited.add(p);
+            visited.add(q);
+            queue.add(q);
+            queue.add(p);
+            while (!queue.isEmpty()) {
+                var n = queue.poll();
+                if (n != null) {
+                    if (visited.contains(n))
+                        return n;
+                    visited.add(n);
+                    if (n.parent != null)
+                        queue.add(n.parent);
+                }
+            }
+            return null;
+        }
+    }
+
+    /**
      * #1657
      * 
      * @param word1
