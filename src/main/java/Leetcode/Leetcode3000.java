@@ -2,7 +2,7 @@ package Leetcode;
 
 public class Leetcode3000 {
     /**
-     * #2970
+     * #2970,2972
      * 
      * @param nums
      * @return

@@ -4,6 +4,55 @@ import java.util.*;
 
 public class Leetcode2100 {
     /**
+     * #2104
+     * 
+     * @param nums
+     * @return
+     */
+    public long subArrayRanges(int[] nums) {
+        int[] minLeft = new int[nums.length];
+        int[] minRight = new int[nums.length];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < nums.length; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] > nums[i])
+                stack.pop();
+            minLeft[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.add(i);
+        }
+        stack.clear();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && nums[stack.peek()] >= nums[i])
+                stack.pop();
+            minRight[i] = stack.isEmpty() ? nums.length : stack.peek();
+            stack.add(i);
+        }
+        stack.clear();
+        int[] maxLeft = new int[nums.length];
+        int[] maxRight = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] <= nums[i])
+                stack.pop();
+            maxLeft[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.add(i);
+        }
+        stack.clear();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i])
+                stack.pop();
+            maxRight[i] = stack.isEmpty() ? nums.length : stack.peek();
+            stack.add(i);
+        }
+        long res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            long n = nums[i];
+            res += n * ((i - maxLeft[i]) * (maxRight[i] - i)
+                    - (i - minLeft[i]) * (minRight[i] - i));
+        }
+
+        return res;
+    }
+
+    /**
      * #2013 DetectSquares
      */
     class DetectSquares {
