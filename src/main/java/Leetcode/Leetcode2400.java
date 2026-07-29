@@ -151,4 +151,49 @@ public class Leetcode2400 {
         }
         return res;
     }
+
+    /**
+     * #2397
+     * 
+     * @param matrix
+     * @param numSelect
+     * @return
+     */
+    public int maximumRows(int[][] matrix, int numSelect) {
+        List<Integer> mat = new ArrayList<>();
+        int res = 0;
+        int cols = matrix[0].length;
+        for (var l : matrix) {
+            var count1 = Arrays.stream(l).filter(i -> i == 1).count();
+            if (count1 == 0) {
+                res++;
+            } else if (count1 <= numSelect) {
+                int b = 0;
+                for (int i = 0; i < l.length; i++) {
+                    if (l[i] == 1) {
+                        b |= 1 << i;
+                    }
+                }
+                mat.add(b);
+            }
+        }
+
+        return res + visit(-1, numSelect, mat, cols);
+    }
+
+    int visit(int start, int numSelect, List<Integer> mat, int cols) {
+        if (mat.isEmpty())
+            return 0;
+        if (numSelect == 0) {
+            return (int) mat.stream().filter(b -> b == 0).count();
+        }
+        int res = 0;
+        for (int i = start + 1; i + numSelect <= cols; i++) {
+            int ii = i;
+            res = Math.max(visit(i, numSelect - 1,
+                    mat.stream().map(b -> b & (~(1 << ii))).toList(), cols),
+                    res);
+        }
+        return res;
+    }
 }
