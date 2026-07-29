@@ -4,6 +4,8 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.stream.IntStream;
 
+import Leetcode.Leetcode400.Visit;
+
 @SuppressWarnings({ "JavaDoc", "Unused" })
 public class Leetcode400 {
 
@@ -427,6 +429,77 @@ public class Leetcode400 {
         }
         return stack.toString();
     }
+
+    /**
+     * #317
+     * 
+     * @param grid
+     * @return
+     */
+    public int shortestDistance(int[][] grid) {
+        Map<Pos, int[][]> source2dist = new HashMap<>();
+        Queue<Visit> queue = new ArrayDeque<>();
+        int m = grid.length;
+        int n = grid[0].length;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    var source = new Pos(i, j);
+                    var map = new int[m][n];
+                    for (var r : map) {
+                        Arrays.fill(r, Integer.MAX_VALUE);
+                    }
+                    source2dist.put(source, map);
+                    queue.add(new Visit(source, source, 0));
+                    map[i][j] = 0;
+                }
+            }
+        }
+        int[] dx = new int[] { 0, 0, 1, -1 };
+        int[] dy = new int[] { 1, -1, 0, 0 };
+        while (!queue.isEmpty()) {
+            var visit = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                int x = visit.current.i + dx[i];
+                int y = visit.current.j + dy[i];
+                var next = new Pos(x, y);
+                if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 0
+                        && source2dist
+                                .get(visit.source)[x][y] == Integer.MAX_VALUE) {
+                    source2dist.get(visit.source)[x][y] = visit.dist + 1;
+                    queue.add(new Visit(visit.source, next, visit.dist + 1));
+
+                }
+            }
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                var pos = new Pos(i, j);
+                if (grid[i][j] == 0 && source2dist.values().stream()
+                        .allMatch(d -> d[pos.i][pos.j] != Integer.MAX_VALUE)) {
+                    min = Math.min(min, source2dist.values().stream()
+                            .map(d -> d[pos.i][pos.j]).mapToInt(v -> v).sum());
+                }
+            }
+        }
+
+        return min == Integer.MAX_VALUE ? -1 : min;
+    }
+
+    static record Visit(Pos source, Pos current, int dist) {
+    }
+
+    static record Pos(int i, int j) {
+    }
+    // [
+    // [1,1,1,1,1,0],
+    // [0,0,0,0,0,1],
+    // [0,1,1,0,0,1],
+    // [1,0,0,1,0,1],
+    // [1,0,1,0,0,1],
+    // [1,0,0,0,0,1],
+    // [0,1,1,1,1,0]]
 
     /**
      * #318
