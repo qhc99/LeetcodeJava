@@ -869,6 +869,31 @@ public class Leetcode800 {
     }
 
     /**
+     * #769
+     * 
+     * @param arr
+     * @return
+     */
+    public int maxChunksToSorted2(int[] arr) {
+        int res = 1;
+        int[] maxLeft = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            if (i - 1 < 0 || arr[i] >= maxLeft[i - 1])
+                maxLeft[i] = arr[i];
+            else
+                maxLeft[i] = maxLeft[i - 1];
+        }
+        int min = Integer.MAX_VALUE;
+        for (int j = arr.length - 1; j >= 1; j--) {
+            min = Math.min(min, arr[j]);
+            if (min >= maxLeft[j - 1]) {
+                res++;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #773
      * 
      * @param board
