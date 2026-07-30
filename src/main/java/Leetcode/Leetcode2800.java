@@ -46,4 +46,32 @@ public class Leetcode2800 {
             return false;
         }
     }
+
+    /**
+     * #2788
+     * 
+     * @param words
+     * @param separator
+     * @return
+     */
+    public List<String> splitWordsBySeparator(List<String> words,
+            char separator) {
+        List<String> res = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        for (var w : words) {
+            for (var c : w.toCharArray()) {
+                if (c != separator)
+                    sb.append(c);
+                else if (!sb.isEmpty()) {
+                    res.add(sb.toString());
+                    sb.delete(0, sb.length());
+                }
+            }
+            if (!sb.isEmpty()) {
+                res.add(sb.toString());
+                sb.delete(0, sb.length());
+            }
+        }
+        return res;
+    }
 }
