@@ -175,6 +175,26 @@ public class Leetcode800 {
     }
 
     /**
+     * #724
+     * 
+     * @param nums
+     * @return
+     */
+    public int pivotIndex(int[] nums) {
+        for (int i = 1; i < nums.length; i++) {
+            nums[i] += nums[i - 1];
+        }
+        for (int i = 0; i < nums.length; i++) {
+            var l = i - 1 >= 0 ? nums[i - 1] : 0;
+            var r = nums[nums.length - 1] - nums[i];
+            if (l == r)
+                return i;
+        }
+
+        return -1;
+    }
+
+    /**
      * #726
      *
      * @param formula
