@@ -1125,6 +1125,37 @@ public class Leetcode400 {
     }
 
     /**
+     * #340
+     * 
+     * @param s
+     * @param k
+     * @return
+     */
+    public int lengthOfLongestSubstringKDistinct(String s, int k) {
+        int res = 1;
+        if (k <= 0)
+            return k;
+        Map<Character, Integer> count = new HashMap<>();
+        count.put(s.charAt(0), 1);
+        int l = 0;
+        for (int i = 1; i < s.length(); i++) {
+            var c = s.charAt(i);
+            count.put(c, 1 + count.getOrDefault(c, 0));
+
+            while (count.size() > k) {
+                var lc = s.charAt(l++);
+                var v = count.get(lc);
+                if (v == 1)
+                    count.remove(lc);
+                else
+                    count.put(lc, v - 1);
+            }
+            res = Math.max(res, i + 1 - l);
+        }
+        return res;
+    }
+
+    /**
      * #341
      */
     public static class NestedIterator implements Iterator<Integer> {
