@@ -1399,6 +1399,37 @@ public class Leetcode400 {
     }
 
     /**
+     * #359 Logger
+     */
+    class Logger {
+        static record Msg(String m, int time) {
+        }
+
+        Queue<Msg> queue = new ArrayDeque<>();
+        Map<String, Integer> time = new HashMap<>();
+
+        public Logger() {
+
+        }
+
+        public boolean shouldPrintMessage(int timestamp, String message) {
+            while (!queue.isEmpty() && timestamp - queue.peek().time >= 10) {
+                var m = queue.poll();
+                if (time.getOrDefault(m.m, -1) == m.time)
+                    time.remove(m.m);
+            }
+            if (!time.containsKey(message)) {
+                queue.add(new Msg(message, timestamp));
+                time.put(message, timestamp);
+                return true;
+            }
+
+            return false;
+
+        }
+    }
+
+    /**
      * #362 HitCounter
      */
     class HitCounter {
