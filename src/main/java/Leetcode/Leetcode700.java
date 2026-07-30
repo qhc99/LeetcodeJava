@@ -537,6 +537,34 @@ public class Leetcode700 {
     }
 
     /**
+     * #661
+     * 
+     * @param img
+     * @return
+     */
+    public int[][] imageSmoother(int[][] img) {
+        int[] dx = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+        int[] dy = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+        int m = img.length, n = img[0].length;
+        int[][] res = new int[m][n];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                int sum = 0, count = 0;
+                for (int k = 0; k < 9; k++) {
+                    var x = i + dx[k];
+                    var y = j + dy[k];
+                    if (x >= 0 && x < m && y >= 0 && y < n) {
+                        sum += img[x][y];
+                        count++;
+                    }
+                }
+                res[i][j] = sum / count;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #665
      *
      * @param nums
