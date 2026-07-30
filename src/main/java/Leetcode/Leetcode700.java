@@ -590,6 +590,29 @@ public class Leetcode700 {
     }
 
     /**
+     * #668
+     *
+     * @param m
+     * @param n
+     * @param k
+     * @return
+     */
+    public static int findKthNumber(int m, int n, int k) {
+        int start = 1, end = m * n + 1;
+
+        while (end - start > 1) {
+            int mid = start + (end - start) / 2;
+            int order = count_of_less_than(mid, m, n);
+            if (order >= k) {
+                end = mid;
+            } else {
+                start = mid + 1;
+            }
+        }
+        return start;
+    }
+
+    /**
      * #674 回文子串个数 输入："aaa" 输出：6 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
      *
      * @param s String
@@ -742,29 +765,6 @@ public class Leetcode700 {
         return Math.abs(d - 24) <= tol;
     }
 
-    /**
-     * #668
-     *
-     * @param m
-     * @param n
-     * @param k
-     * @return
-     */
-    public static int findKthNumber(int m, int n, int k) {
-        int start = 1, end = m * n + 1;
-
-        while (end - start > 1) {
-            int mid = start + (end - start) / 2;
-            int order = count_of_less_than(mid, m, n);
-            if (order >= k) {
-                end = mid;
-            } else {
-                start = mid + 1;
-            }
-        }
-        return start;
-    }
-
     private static int count_of_less_than(int x, int m, int n) {
         int ans = 0;
         for (int i = x / n + 1; i <= m; i++) {
@@ -840,6 +840,37 @@ public class Leetcode700 {
                 return -1;
             }
         }
+    }
+
+    /**
+     * #688
+     * 
+     * @param n
+     * @param k
+     * @param row
+     * @param column
+     * @return
+     */
+    public double knightProbability(int n, int k, int row, int column) {
+        double[][][] dp = new double[k + 1][n][n];
+        dp[0][row][column] = 1;
+        int[] dx = new int[] { 1, 2, 1, 2, -1, -2, -1, -2 };
+        int[] dy = new int[] { 2, 1, -2, -1, 2, 1, -2, -1 };
+        for (int i = 1; i <= k; i++) {
+            for (int x = 0; x < n; x++) {
+                for (int y = 0; y < n; y++) {
+                    for (int j = 0; j < 8; j++) {
+                        var nx = x + dx[j];
+                        var ny = y + dy[j];
+                        if (nx >= 0 && nx < n && ny >= 0 && ny < n) {
+                            dp[i][x][y] += dp[i - 1][nx][ny] / 8.;
+                        }
+                    }
+                }
+            }
+        }
+        return Arrays.stream(dp[k]).map(col -> Arrays.stream(col).sum())
+                .mapToDouble(i -> i).sum();
     }
 
     /**
