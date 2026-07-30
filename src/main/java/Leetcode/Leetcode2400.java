@@ -55,6 +55,32 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2347
+     * 
+     * @param ranks
+     * @param suits
+     * @return
+     */
+    public String bestHand(int[] ranks, char[] suits) {
+        int[] suitCount = new int['d' - 'a' + 1];
+        int[] rankCount = new int[14];
+        for (var r : ranks)
+            rankCount[r]++;
+        for (var s : suits)
+            suitCount[s - 'a']++;
+        if (Arrays.stream(suitCount).anyMatch(i -> i == 5)) {
+            return "Flush";
+        }
+        if (Arrays.stream(rankCount).anyMatch(i -> i >= 3)) {
+            return "Three of a Kind";
+        }
+        if (Arrays.stream(rankCount).anyMatch(i -> i == 2)) {
+            return "Pair";
+        }
+        return "High Card";
+    }
+
+    /**
      * #2351
      * 
      * @param s
