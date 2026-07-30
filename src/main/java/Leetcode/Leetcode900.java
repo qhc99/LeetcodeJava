@@ -846,6 +846,64 @@ public class Leetcode900 {
     }
 
     /**
+     * #874
+     * 
+     * @param commands
+     * @param obstacles
+     * @return
+     */
+    public int robotSim(int[] commands, int[][] obstacles) {
+        int i = 0, j = 0, state = 0; // n e s w
+        int res = 0;
+        Set<Pos> obs = new HashSet<>();
+        for (var o : obstacles)
+            obs.add(new Pos(o[0], o[1]));
+        for (var c : commands) {
+            if (c < 0) {
+                c = c * 2 + 3;
+                state += c;
+                if (state < 0)
+                    state += 4;
+                state %= 4;
+            } else {
+                for (; c > 0; c--) {
+                    int ni = i;
+                    int nj = j;
+                    switch (state) {
+                    case 0:
+                        nj += 1;
+                        break;
+                    case 1:
+                        ni += 1;
+                        break;
+                    case 2:
+                        nj -= 1;
+                        break;
+                    case 3:
+                        ni -= 1;
+                        break;
+                    default:
+                        break;
+                    }
+                    if (!obs.contains(new Pos(ni, nj))) {
+                        var abi = Math.abs(ni);
+                        var abj = Math.abs(nj);
+                        res = Math.max(res, abi * abi + abj * abj);
+                        i = ni;
+                        j = nj;
+                    } else
+                        break;
+                }
+
+            }
+        }
+        return res;
+    }
+
+    static record Pos(int x, int y) {
+    }
+
+    /**
      * #875
      * 
      * @param piles
