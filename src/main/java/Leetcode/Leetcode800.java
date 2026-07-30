@@ -713,6 +713,44 @@ public class Leetcode800 {
     }
 
     /**
+     * #759
+     * 
+     * @param schedule
+     * @return
+     */
+    public List<Interval> employeeFreeTime(List<List<Interval>> schedule) {
+        List<Interval> res = new ArrayList<>();
+        int maxWorkTime = Integer.MIN_VALUE;
+        Queue<Interval> queue = new PriorityQueue<>(
+                (a, b) -> Integer.compare(a.start, b.start));
+        for (var s : schedule)
+            for (var i : s)
+                queue.add(i);
+        while (!queue.isEmpty()) {
+            var it = queue.poll();
+            if (it.start > maxWorkTime) {
+                if (maxWorkTime != Integer.MIN_VALUE)
+                    res.add(new Interval(maxWorkTime, it.start));
+            }
+            maxWorkTime = Math.max(maxWorkTime, it.end);
+        }
+        return res;
+    }
+
+    class Interval {
+        public int start;
+        public int end;
+
+        public Interval() {
+        }
+
+        public Interval(int _start, int _end) {
+            start = _start;
+            end = _end;
+        }
+    };
+
+    /**
      * #761
      * 
      * @param s
