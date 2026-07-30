@@ -461,6 +461,31 @@ public class Leetcode900 {
     }
 
     /**
+     * #824
+     * 
+     * @param sentence
+     * @return
+     */
+    public String toGoatLatin(String sentence) {
+        var words = sentence.split(" ");
+        Set<Character> vowels = Set.of('a', 'e', 'i', 'o', 'u', 'A', 'E', 'I',
+                'O', 'U');
+        for (int i = 0; i < words.length; i++) {
+            var sb = new StringBuilder();
+            sb.append(words[i]);
+            var c = words[i].charAt(0);
+            if (!vowels.contains(words[i].charAt(0))) {
+                sb.delete(0, 1);
+                sb.append(c);
+            }
+            sb.append("ma");
+            sb.append("a".repeat(i + 1));
+            words[i] = sb.toString();
+        }
+        return String.join(" ", words);
+    }
+
+    /**
      * #843
      * 
      * @param words
