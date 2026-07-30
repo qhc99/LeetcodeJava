@@ -336,6 +336,44 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1041
+     * 
+     * @param instructions
+     * @return
+     */
+    public boolean isRobotBounded(String instructions) {
+        int state = 0;
+        int i = 0, j = 0;
+        for (var s : instructions.toCharArray()) {
+            if (s == 'G') {
+                switch (state) {
+                case 0:
+                    j++;
+                    break;
+                case 1:
+                    i++;
+                    break;
+                case 2:
+                    j--;
+                    break;
+                case 3:
+                    i--;
+                    break;
+                default:
+                    break;
+                }
+            } else if (s == 'L') {
+                state--;
+                if (state < 0)
+                    state += 4;
+            } else {
+                state = (state + 1) % 4;
+            }
+        }
+        return state != 0 || (i == 0 && j == 0);
+    }
+
+    /**
      * #1047
      * 
      * @param s
