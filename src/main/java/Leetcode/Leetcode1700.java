@@ -56,6 +56,45 @@ public class Leetcode1700 {
     }
 
     /**
+     * #1606
+     * 
+     * @param k
+     * @param arrival
+     * @param load
+     * @return
+     */
+    public List<Integer> busiestServers(int k, int[] arrival, int[] load) {
+        TreeSet<Integer> idle = new TreeSet<>();
+        Queue<int[]> busy = new PriorityQueue<>(
+                (a, b) -> Integer.compare(a[0], b[0]));
+        Map<Integer, Integer> busyCount = new HashMap<>();
+        int maxCount = 0;
+        for (int i = 0; i < k; i++)
+            idle.add(i);
+        for (int i = 0; i < arrival.length; i++) {
+            while (!busy.isEmpty() && busy.peek()[0] <= arrival[i]) {
+                idle.add(busy.poll()[1]);
+            }
+
+            if (!idle.isEmpty()) {
+                var s = idle.ceiling(i % k);
+                if (s == null)
+                    s = idle.ceiling(0);
+
+                idle.remove(s);
+
+                busy.add(new int[] { arrival[i] + load[i], s });
+                var v = 1 + busyCount.getOrDefault(s, 0);
+                busyCount.put(s, v);
+                maxCount = Math.max(maxCount, v);
+            }
+        }
+        int max = maxCount;
+        return busyCount.entrySet().stream().filter(e -> e.getValue() == max)
+                .map(e -> e.getKey()).toList();
+    }
+
+    /**
      * #1610
      * 
      * @param points
