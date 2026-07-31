@@ -1,25 +1,6 @@
 package Leetcode;
 
-import java.math.BigInteger;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-
-import Leetcode.Leetcode200.Reader4;
-
-import java.util.BitSet;
-import java.util.Deque;
-import java.util.NoSuchElementException;
-import java.util.Objects;
-import java.util.PriorityQueue;
+import java.util.*;
 
 @SuppressWarnings({ "JavaDoc" })
 public class Leetcode200 {
@@ -170,6 +151,30 @@ public class Leetcode200 {
             right = _right;
             next = _next;
         }
+    }
+
+    /**
+     * #112
+     * 
+     * @param root
+     * @param targetSum
+     * @return
+     */
+    public boolean hasPathSum(TreeNode root, int targetSum) {
+        if (root == null)
+            return false;
+        return hasPathSum(root, 0, targetSum);
+    }
+
+    public boolean hasPathSum(TreeNode node, int current, int targetSum) {
+        current += node.val;
+        if (node.left == null && node.right == null)
+            return current == targetSum;
+        if (node.left != null && hasPathSum(node.left, current, targetSum))
+            return true;
+        if (node.right != null && hasPathSum(node.right, current, targetSum))
+            return true;
+        return false;
     }
 
     /**
