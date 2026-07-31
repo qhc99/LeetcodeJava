@@ -173,6 +173,26 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2591
+     * 
+     * @param money
+     * @param children
+     * @return
+     */
+    public int distMoney(int money, int children) {
+        money -= children; // all 1
+        if (money < 0)
+            return -1;
+        int res = Math.min(money / 7, children);
+        money -= 7 * res;
+        if ((children - res == 0 && money != 0)
+                || (children - res == 1 && money == 3)) {
+            res--;
+        }
+        return res;
+    }
+
+    /**
      * #2592
      * 
      * @param nums
