@@ -1,15 +1,6 @@
 package Leetcode;
 
 import java.util.*;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.PriorityQueue;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -314,6 +305,49 @@ public class Leetcode700 {
             queue.add(row);
         }
         return res;
+    }
+
+    /**
+     * #635 LogSystem
+     */
+    class LogSystem {
+        TreeMap<String, List<Integer>> map = new TreeMap<>();
+        Map<String, Integer> idx = Map.of("Year", 1, "Month", 2, "Day", 3,
+                "Hour", 4, "Minute", 5, "Second", 6);
+        String[] min = new String[] { "2000", "01", "01", "00", "00", "00" };
+        String[] max = new String[] { "2017", "12", "31", "23", "59", "59" };
+
+        public LogSystem() {
+
+        }
+
+        public void put(int id, String timestamp) {
+            map.computeIfAbsent(timestamp, k -> new ArrayList<>()).add(id);
+        }
+
+        public List<Integer> retrieve(String start, String end,
+                String granularity) {
+            var t = map
+                    .subMap(floor(start, granularity), true,
+                            ceil(end, granularity), true)
+                    .sequencedEntrySet().stream().map(e -> e.getValue())
+                    .flatMap(l -> l.stream()).toList();
+            return t;
+        }
+
+        String floor(String s, String granularity) {
+            var arr = s.split(":");
+            for (int i = idx.get(granularity); i < arr.length; i++)
+                arr[i] = min[i];
+            return String.join(":", arr);
+        }
+
+        String ceil(String s, String granularity) {
+            var arr = s.split(":");
+            for (int i = idx.get(granularity); i < arr.length; i++)
+                arr[i] = max[i];
+            return String.join(":", arr);
+        }
     }
 
     /**
