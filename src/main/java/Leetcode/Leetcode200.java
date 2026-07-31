@@ -12,6 +12,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
+
+import Leetcode.Leetcode200.Reader4;
+
 import java.util.BitSet;
 import java.util.Deque;
 import java.util.NoSuchElementException;
@@ -1038,7 +1041,7 @@ public class Leetcode200 {
         }
     }
 
-    class Reader4 {
+    static class Reader4 {
         int read4(char[] buf4) {
             return 0;
         }
@@ -1069,6 +1072,44 @@ public class Leetcode200 {
             }
             return len;
         }
+    }
+
+    /**
+     * #158 Solution
+     */
+    static class Nest2 {
+        class Solution extends Reader4 {
+            Queue<Character> cache = new ArrayDeque<>();
+
+            /**
+             * @param buf Destination buffer
+             * @param n   Number of characters to read
+             * @return The number of actual characters read
+             */
+            public int read(char[] buf, int n) {
+                char[] buf4 = new char[4];
+                int len = 0;
+                while (!cache.isEmpty() && len < n) {
+                    buf[len++] = cache.poll();
+                }
+                while (len < n) {
+                    var l = read4(buf4);
+                    if (l > 0) {
+                        var fill = Math.min(l, n - len);
+                        System.arraycopy(buf4, 0, buf, len, fill);
+                        len += fill;
+                        for (int i = fill; i < l; i++) {
+                            cache.add(buf4[i]);
+                        }
+                    }
+
+                    if (l < 4)
+                        break;
+                }
+                return len;
+            }
+        }
+
     }
 
     /**
