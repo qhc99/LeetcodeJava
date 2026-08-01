@@ -461,6 +461,40 @@ public class Leetcode900 {
     }
 
     /**
+     * #820
+     * 
+     * @param words
+     * @return
+     */
+    public int minimumLengthEncoding(String[] words) {
+        Arrays.sort(words, (a, b) -> Integer.compare(b.length(), a.length()));
+        var root = new TrieNode();
+        int len = 0;
+        int count = 0;
+        for (var w : words) {
+            var ptr = root;
+            var arr = w.toCharArray();
+            for (int i = arr.length - 1; i > 0; i--) {
+                var c = arr[i];
+                ptr = ptr.children.computeIfAbsent(c, k -> new TrieNode());
+
+            }
+            var c = arr[0];
+            if (!ptr.children.containsKey(c)) {
+                len += arr.length;
+                count++;
+            }
+            ptr.children.computeIfAbsent(c, k -> new TrieNode());
+
+        }
+        return len + count;
+    }
+
+    static class TrieNode {
+        Map<Character, TrieNode> children = new HashMap<>();
+    }
+
+    /**
      * #824
      * 
      * @param sentence
