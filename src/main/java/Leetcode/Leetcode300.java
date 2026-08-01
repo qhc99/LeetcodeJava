@@ -1049,7 +1049,39 @@ public class Leetcode300 {
     }
 
     /**
-     * #2 2
+     * #243
+     * 
+     * @param wordsDict
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public int shortestDistance(String[] wordsDict, String word1,
+            String word2) {
+        if (word1.equals(word2))
+            return 0;
+        Deque<Integer> arr1 = new ArrayDeque<>();
+        Deque<Integer> arr2 = new ArrayDeque<>();
+        for (int i = 0; i < wordsDict.length; i++) {
+            var w = wordsDict[i];
+            if (w.equals(word1))
+                arr1.add(i);
+            else if (w.equals(word2))
+                arr2.add(i);
+        }
+        int res = Integer.MAX_VALUE;
+        while (!arr1.isEmpty() && !arr2.isEmpty()) {
+            res = Math.min(res, Math.abs(arr1.peek() - arr2.peek()));
+            if (arr1.peek() < arr2.peek())
+                arr1.poll();
+            else
+                arr2.poll();
+        }
+        return res;
+    }
+
+    /**
+     * #252
      * 
      * @param intervals
      * @return

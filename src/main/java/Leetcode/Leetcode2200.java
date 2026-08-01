@@ -22,4 +22,26 @@ public class Leetcode2200 {
         }
         return 0;
     }
+
+    /**
+     * #2150
+     * 
+     * @param nums
+     * @return
+     */
+    public List<Integer> findLonely(int[] nums) {
+        Map<Integer, Integer> count = new HashMap<>();
+        for (var n : nums)
+            count.put(n, 1 + count.getOrDefault(n, 0));
+        List<Integer> res = new ArrayList<>();
+        for (var n : nums) {
+            if (count.getOrDefault(n, 0) == 1
+                    && count.getOrDefault(n + 1, 0) == 0
+                    && count.getOrDefault(n - 1, 0) == 0) {
+                res.add(n);
+            }
+        }
+        return res;
+
+    }
 }
