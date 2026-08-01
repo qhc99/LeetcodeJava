@@ -1438,11 +1438,97 @@ public class Leetcode100 {
      * @param board 9*9 board
      */
 
-    public static void solveSudoku(char[][] board) {
+    public void solveSudoku(char[][] board) {
         // TODO attempted
-        
+        Map<Integer, Set<Integer>> groups = new HashMap<>(9);
+        Map<Integer, Set<Integer>> rows = new HashMap<>(9);
+        Map<Integer, Set<Integer>> cols = new HashMap<>(9);
+        for (int i = 0; i < 9; i++) {
+            rows.put(i, new HashSet<>());
+            cols.put(i, new HashSet<>());
+            groups.put(i, new HashSet<>());
+        }
+        for (int i = 0; i < 9; i++) {
+            for (int j = 0; j < 9; j++) {
+                char v = board[i][j];
+                if (v != '.') {
+                    int n = v - '0';
+                    rows.get(i).add(n);
+                    cols.get(j).add(n);
+                    groups.get(i / 3 * 3 + j / 3).add(n);
+                }
+            }
+        }
+        Stack<Pos> stack = new Stack<>();
+
+        for (var i : rows
+                .entrySet().stream().sorted((a, b) -> Integer
+                        .compare(a.getValue().size(), b.getValue().size()))
+                .map(e -> e.getKey()).toList()) {
+            for (var j : cols.entrySet().stream()
+                    .sorted((a, b) -> Integer.compare(a.getValue().size(),
+                            b.getValue().size()))
+                    .map(e -> e.getKey()).toList()) {
+                if (board[i][j] == '.') {
+                    stack.add(new Pos(i, j));
+                }
+            }
+        }
+        solve(board, stack, groups, rows, cols);
     }
 
+    boolean solve(char[][] board, Stack<Pos> stack,
+            Map<Integer, Set<Integer>> groups, Map<Integer, Set<Integer>> rows,
+            Map<Integer, Set<Integer>> cols) {
+        if (stack.isEmpty())
+            return true;
+        var pos = stack.pop();
+        var row = rows.get(pos.i);
+        var col = cols.get(pos.j);
+        var group = groups.get(pos.i / 3 * 3 + pos.j / 3);
+        for (int n = 1; n <= 9; n++) {
+            if (!row.contains(n) && !col.contains(n) && !group.contains(n)) {
+                row.add(n);
+                col.add(n);
+                group.add(n);
+                board[pos.i][pos.j] = (char) ('0' + n);
+                if (solve(board, stack, groups, rows, cols)) {
+                    return true;
+                }
+                row.remove(n);
+                col.remove(n);
+                group.remove(n);
+                board[pos.i][pos.j] = '.';
+            }
+        }
+        stack.add(pos);
+        return false;
+    }
+
+    static record Pos(int i, int j) {
+    }
+
+    // [
+    // [".",".","3",".",".",".",".",".","."],
+    // ["4",".",".",".","8",".",".","3","6"],
+    // [".",".","8","3",".",".","1",".","."],
+    // [".","4",".",".","6",".",".","7","3"],
+    // [".",".",".","9",".",".",".","1","."],
+    // [".",".",".",".",".","2",".",".","."],
+    // [".",".","4",".","7",".",".","6","8"],
+    // ["6",".",".",".",".",".",".",".","."],
+    // ["7",".",".",".",".",".","5",".","."]]
+
+    // [
+    // [".",".",".",".",".",".",".",".","."],
+    // [".","9",".",".","1",".",".","3","."],
+    // [".",".","6",".","2",".","7",".","."],
+    // [".",".",".","3",".","4",".",".","."],
+    // ["2","1",".",".",".",".",".","9","8"],
+    // [".",".",".",".",".",".",".",".","."],
+    // [".",".","2","5",".","6","4",".","."],
+    // [".","8",".",".",".",".",".","1","."],
+    // [".",".",".",".",".",".",".",".","."]]
     /**
      * #38 <br/>
      * 外观数列
