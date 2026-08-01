@@ -121,6 +121,38 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1870
+     * 
+     * @param dist
+     * @param hour
+     * @return
+     */
+    public int minSpeedOnTime(int[] dist, double hour) {
+        int r = Integer.MAX_VALUE;
+        int l = 0; // (l,r]
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            double time = 0;
+            for (int i = 0; i < dist.length - 1; i++) {
+                time += Math.ceilDiv(dist[i], mid);
+            }
+            time += dist[dist.length - 1] / (double) mid;
+            if (time <= hour)
+                r = mid;
+            else
+                l = mid;
+        }
+        double time = 0;
+        for (int i = 0; i < dist.length - 1; i++) {
+            time += Math.ceilDiv(dist[i], r);
+        }
+        time += dist[dist.length - 1] / (double) r;
+        if (time > hour)
+            return -1;
+        return r;
+    }
+
+    /**
      * #1899
      * 
      * @param triplets
