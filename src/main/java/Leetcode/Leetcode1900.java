@@ -77,31 +77,47 @@ public class Leetcode1900 {
      * @return
      */
     public int maximumPopulation(int[][] logs) {
-        Queue<int[]> birth = new PriorityQueue<>(
-                (a, b) -> Integer.compare(a[0], b[0]));
-        Queue<int[]> death = new PriorityQueue<>(
-                (a, b) -> Integer.compare(a[1], b[1]));
+        // Queue<int[]> birth = new PriorityQueue<>(
+        // (a, b) -> Integer.compare(a[0], b[0]));
+        // Queue<int[]> death = new PriorityQueue<>(
+        // (a, b) -> Integer.compare(a[1], b[1]));
+        // for (var l : logs) {
+        // birth.add(l);
+        // death.add(l);
+        // }
+        // int maxP = 0;
+        // int p = 0;
+        // int year = 0;
+        // while (!birth.isEmpty()) {
+        // var b = birth.poll();
+        // var y = b[0];
+        // p++;
+        // while (!death.isEmpty() && death.peek()[1] <= y) {
+        // death.poll();
+        // p--;
+        // }
+        // if (p > maxP) {
+        // maxP = p;
+        // year = y;
+        // }
+        // }
+        // return year;
+
+        int[] diff = new int[102];
         for (var l : logs) {
-            birth.add(l);
-            death.add(l);
+            diff[l[0] - 1950]++;
+            diff[l[1] - 1950]--;
         }
-        int maxP = 0;
-        int p = 0;
-        int year = 0;
-        while (!birth.isEmpty()) {
-            var b = birth.poll();
-            var y = b[0];
-            p++;
-            while (!death.isEmpty() && death.peek()[1] <= y) {
-                death.poll();
-                p--;
-            }
-            if (p > maxP) {
-                maxP = p;
-                year = y;
+        int max_people = 0, s = 0, year = 0;
+        for (int i = 0; i < 102; i++) {
+            s += diff[i];
+            if (s > max_people) {
+                max_people = s;
+                year = i;
             }
         }
-        return year;
+        return year + 1950;
+
     }
 
     /**
