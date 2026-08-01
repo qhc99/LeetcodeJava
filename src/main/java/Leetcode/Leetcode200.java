@@ -2,6 +2,8 @@ package Leetcode;
 
 import java.util.*;
 
+import Leetcode.Leetcode400.Visit;
+
 @SuppressWarnings({ "JavaDoc" })
 public class Leetcode200 {
     /**
@@ -309,6 +311,82 @@ public class Leetcode200 {
                     res);
 
         return res;
+    }
+
+    /**
+     * #126
+     * 
+     * @param beginWord
+     * @param endWord
+     * @param wordList
+     * @return
+     */
+    public List<List<String>> findLadders(String beginWord, String endWord,
+            List<String> wordList) {
+        Map<Integer, List<Integer>> neighbor = new HashMap<>();
+        Set<String> set = new HashSet<>(wordList);
+        set.remove(beginWord);
+        var wList = new ArrayList<>(set.stream().toList());
+        wList.add(beginWord);
+        int target = -1;
+        for (int i = 0; i < wList.size(); i++) {
+            if (wList.get(i).equals(endWord)) {
+                target = i;
+                break;
+            }
+        }
+        if (target == -1)
+            return List.of();
+        for (int i = wList.size() - 1; i > 0; i--) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (isClose(wList.get(i), wList.get(j))) {
+                    neighbor.computeIfAbsent(i, k -> new ArrayList<>()).add(j);
+                    neighbor.computeIfAbsent(j, k -> new ArrayList<>()).add(i);
+                }
+            }
+        }
+        List<List<Integer>> res = new ArrayList<>();
+        Queue<Visit> queue = new ArrayDeque<>();
+        List<Integer> initPath = new ArrayList<>();
+        boolean[] visited = new boolean[wList.size()];
+        initPath.add(wList.size() - 1);
+        queue.add(new Visit(wList.size() - 1, initPath));
+        while (!queue.isEmpty()) {
+            var visit = queue.poll();
+            visited[visit.current] = true;
+            for (var n : neighbor.getOrDefault(visit.current, List.of())) {
+                if (!visited[n]) {
+                    List<Integer> nextPath = new ArrayList<>();
+                    nextPath.addAll(visit.path);
+                    nextPath.add(n);
+                    if (n != target && (res.isEmpty()
+                            || res.getLast().size() > nextPath.size())) {
+                        queue.add(new Visit(n, nextPath));
+                    } else if (n == target && (res.isEmpty()
+                            || res.getLast().size() == nextPath.size()))
+                        res.add(nextPath);
+                }
+            }
+        }
+        return res.stream()
+                .map(l -> l.stream().map(id -> wordList.get(id)).toList())
+                .toList();
+    }
+
+    static record Visit(int current, List<Integer> path) {
+    }
+
+    boolean isClose(String a, String b) {
+        var a1 = a.toCharArray();
+        var a2 = b.toCharArray();
+        int diff = 0;
+        for (int i = 0; i < a1.length; i++) {
+            if (a1[i] != a2[i])
+                diff++;
+            if (diff >= 2)
+                return false;
+        }
+        return diff == 1;
     }
 
     /**
