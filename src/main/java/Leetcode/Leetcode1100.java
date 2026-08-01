@@ -480,6 +480,15 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1091
+     * @param grid
+     * @return
+     */
+        public int shortestPathBinaryMatrix(int[][] grid) {
+        return 0;
+    }
+
+    /**
      * #1094
      *
      * @param trips

@@ -350,27 +350,45 @@ public class Leetcode200 {
         }
         List<List<String>> res = new ArrayList<>();
         Map<String, Integer> dist = new HashMap<>();
+        Set<String> bfsInQueue = new HashSet<>();
+        Queue<Visit> queue = new ArrayDeque<>();
+        queue.add(new Visit(endWord, 1));
+        bfsInQueue.add(endWord);
+        while (!queue.isEmpty()) {
+            var v = queue.poll();
+            dist.put(v.s, v.len);
+            for (var nb : neighbor.getOrDefault(v.s, List.of())) {
+                if (!bfsInQueue.contains(nb)) {
+                    bfsInQueue.add(nb);
+                    queue.add(new Visit(nb, v.len + 1));
+                }
+            }
+        }
+        if (!dist.containsKey(beginWord))
+            return List.of();
         List<String> path = new ArrayList<>();
         path.add(beginWord);
-        dfs(beginWord, dist, endWord, path, res,
-                neighbor);
-        return res.stream().filter(p->p.size() == dist.get(endWord)).toList();
+        dfs(beginWord, dist, endWord, path, res, neighbor);
+        return res.stream().toList();
     }
 
-    void dfs(String current, Map<String, Integer> dist, String target, List<String> path,
-            List<List<String>> res, Map<String, List<String>> neighbor) {
-        if(path.size() > dist.getOrDefault(current, Integer.MAX_VALUE)){
-            return;
-        }
-        dist.put(current, path.size());
-        if(current.equals(target)){
+    static record Visit(String s, int len) {
+    }
+
+    void dfs(String current, Map<String, Integer> dist, String target,
+            List<String> path, List<List<String>> res,
+            Map<String, List<String>> neighbor) {
+        if (current.equals(target)) {
             res.add(new ArrayList<>(path));
             return;
         }
-        for(var nb : neighbor.getOrDefault(current, List.of())){
-            path.add(nb);
-            dfs(nb, dist, target, path, res, neighbor);
-            path.removeLast();
+        int currentLen = dist.get(current);
+        for (var nb : neighbor.getOrDefault(current, List.of())) {
+            if (currentLen - 1 == dist.getOrDefault(nb, Integer.MAX_VALUE)) {
+                path.add(nb);
+                dfs(nb, dist, target, path, res, neighbor);
+                path.removeLast();
+            }
         }
     }
 
