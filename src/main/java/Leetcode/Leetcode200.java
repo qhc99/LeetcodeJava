@@ -2,6 +2,7 @@ package Leetcode;
 
 import java.util.*;
 
+import Leetcode.Leetcode2000.PathNode;
 import Leetcode.Leetcode400.Visit;
 
 @SuppressWarnings({ "JavaDoc" })
@@ -323,71 +324,54 @@ public class Leetcode200 {
      */
     public List<List<String>> findLadders(String beginWord, String endWord,
             List<String> wordList) {
-        // TODO attemped
-        Map<Integer, List<Integer>> neighbor = new HashMap<>();
-        Set<String> set = new HashSet<>(wordList);
-        set.remove(beginWord);
-        var wList = new ArrayList<>(set.stream().toList());
-        wList.add(beginWord);
-        int target = -1;
-        for (int i = 0; i < wList.size(); i++) {
-            if (wList.get(i).equals(endWord)) {
-                target = i;
-                break;
-            }
-        }
-        if (target == -1)
+        Map<String, List<String>> neighbor = new HashMap<>();
+        wordList.remove(beginWord);
+        wordList.add(beginWord);
+        Set<String> wordListSet = new HashSet<>(wordList);
+        if (!wordListSet.contains(endWord))
             return List.of();
-        for (int i = wList.size() - 1; i > 0; i--) {
-            for (int j = i - 1; j >= 0; j--) {
-                if (isClose(wList.get(i), wList.get(j))) {
-                    neighbor.computeIfAbsent(i, k -> new ArrayList<>()).add(j);
-                    neighbor.computeIfAbsent(j, k -> new ArrayList<>()).add(i);
+        for (var w : wordList) {
+            var wc = w.toCharArray();
+            for (int j = 0; j < wc.length; j++) {
+                var save = wc[j];
+                for (int k = 0; k < 'z' - 'a' + 1; k++) {
+                    char c = (char) ('a' + k);
+                    if (c != save) {
+                        wc[j] = c;
+                        var wcs = String.valueOf(wc);
+                        if (wordListSet.contains(wcs)) {
+                            neighbor.computeIfAbsent(w,
+                                    key -> new ArrayList<>()).add(wcs);
+                        }
+                    }
                 }
+                wc[j] = save;
             }
         }
-        List<List<Integer>> res = new ArrayList<>();
-        Queue<Visit> queue = new ArrayDeque<>();
-        List<Integer> initPath = new ArrayList<>();
-        boolean[] visited = new boolean[wList.size()];
-        initPath.add(wList.size() - 1);
-        queue.add(new Visit(wList.size() - 1, initPath));
-        while (!queue.isEmpty()) {
-            var visit = queue.poll();
-            visited[visit.current] = true;
-            for (var n : neighbor.getOrDefault(visit.current, List.of())) {
-                if (!visited[n]) {
-                    List<Integer> nextPath = new ArrayList<>();
-                    nextPath.addAll(visit.path);
-                    nextPath.add(n);
-                    if (n != target && (res.isEmpty()
-                            || res.getLast().size() > nextPath.size())) {
-                        queue.add(new Visit(n, nextPath));
-                    } else if (n == target && (res.isEmpty()
-                            || res.getLast().size() == nextPath.size()))
-                        res.add(nextPath);
-                }
-            }
-        }
-        return res.stream()
-                .map(l -> l.stream().map(id -> wordList.get(id)).toList())
-                .toList();
+        List<List<String>> res = new ArrayList<>();
+        Map<String, Integer> dist = new HashMap<>();
+        List<String> path = new ArrayList<>();
+        path.add(beginWord);
+        dfs(beginWord, dist, endWord, path, res,
+                neighbor);
+        return res.stream().filter(p->p.size() == dist.get(endWord)).toList();
     }
 
-    static record Visit(int current, List<Integer> path) {
-    }
-
-    boolean isClose(String a, String b) {
-        var a1 = a.toCharArray();
-        var a2 = b.toCharArray();
-        int diff = 0;
-        for (int i = 0; i < a1.length; i++) {
-            if (a1[i] != a2[i])
-                diff++;
-            if (diff >= 2)
-                return false;
+    void dfs(String current, Map<String, Integer> dist, String target, List<String> path,
+            List<List<String>> res, Map<String, List<String>> neighbor) {
+        if(path.size() > dist.getOrDefault(current, Integer.MAX_VALUE)){
+            return;
         }
-        return diff == 1;
+        dist.put(current, path.size());
+        if(current.equals(target)){
+            res.add(new ArrayList<>(path));
+            return;
+        }
+        for(var nb : neighbor.getOrDefault(current, List.of())){
+            path.add(nb);
+            dfs(nb, dist, target, path, res, neighbor);
+            path.removeLast();
+        }
     }
 
     /**
