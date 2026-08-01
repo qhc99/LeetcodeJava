@@ -121,8 +121,10 @@ public class Leetcode200 {
     }
 
     public TreeNode sortedListToBST(ListNode start, ListNode end) {
-        if(start == null || start == end) return null;
-        if(start.next == end) return new TreeNode(start.val);
+        if (start == null || start == end)
+            return null;
+        if (start.next == end)
+            return new TreeNode(start.val);
         var ptr1 = start;
         var ptr2 = start;
         TreeNode n = new TreeNode();
