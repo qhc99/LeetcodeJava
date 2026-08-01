@@ -109,6 +109,36 @@ public class Leetcode200 {
     }
 
     /**
+     * #109
+     * 
+     * @param head
+     * @return
+     */
+    public TreeNode sortedListToBST(ListNode head) {
+        if (head == null)
+            return null;
+        return sortedListToBST(head, null);
+    }
+
+    public TreeNode sortedListToBST(ListNode start, ListNode end) {
+        if(start == null || start == end) return null;
+        if(start.next == end) return new TreeNode(start.val);
+        var ptr1 = start;
+        var ptr2 = start;
+        TreeNode n = new TreeNode();
+        while (ptr2.next != end) {
+            ptr1 = ptr1.next;
+            ptr2 = ptr2.next;
+            if (ptr2.next != end)
+                ptr2 = ptr2.next;
+        }
+        n.val = ptr1.val;
+        n.left = sortedListToBST(start, ptr1);
+        n.right = sortedListToBST(ptr1.next, end);
+        return n;
+    }
+
+    /**
      * #111 <br/>
      * 给定一个二叉树，找出其最小深度。
      *
