@@ -1,6 +1,8 @@
 package Leetcode;
 
 import java.util.Arrays;
+import java.util.PriorityQueue;
+import java.util.Queue;
 
 public class Leetcode1900 {
     /**
@@ -66,6 +68,40 @@ public class Leetcode1900 {
                 return Math.min(minSize, right.query(q));
             }
         }
+    }
+
+    /**
+     * #1854
+     * 
+     * @param logs
+     * @return
+     */
+    public int maximumPopulation(int[][] logs) {
+        Queue<int[]> birth = new PriorityQueue<>(
+                (a, b) -> Integer.compare(a[0], b[0]));
+        Queue<int[]> death = new PriorityQueue<>(
+                (a, b) -> Integer.compare(a[1], b[1]));
+        for (var l : logs) {
+            birth.add(l);
+            death.add(l);
+        }
+        int maxP = 0;
+        int p = 0;
+        int year = 0;
+        while (!birth.isEmpty()) {
+            var b = birth.poll();
+            var y = b[0];
+            p++;
+            while (!death.isEmpty() && death.peek()[1] <= y) {
+                death.poll();
+                p--;
+            }
+            if (p > maxP) {
+                maxP = p;
+                year = y;
+            }
+        }
+        return year;
     }
 
     /**
