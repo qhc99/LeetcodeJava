@@ -1050,67 +1050,39 @@ public class Leetcode100 {
      * @param words words
      * @return result index
      */
-    @SuppressWarnings("SpellCheckingInspection, Unused")
     public static List<Integer> findSubstring(String s, String[] words) {
         List<Integer> res = new ArrayList<>();
-        if (s == null || s.length() == 0 || words == null || words.length == 0
-                || words[0].length() == 0) {
+        Map<String, Integer> targetDiff = new HashMap<>();
+        for (var w : words)
+            targetDiff.put(w, 1 + targetDiff.getOrDefault(w, 0));
+        int wLen = words[0].length();
+        if (wLen * words.length > s.length())
             return res;
-        }
-        Map<String, Integer> words_and_count = new HashMap<>();
-        for (var word : words) {
-            Integer count = words_and_count.getOrDefault(word, 0);
-            words_and_count.put(word, count + 1);
-        }
-        int s_len = s.length();
-        int word_len = words[0].length();
-        int words_count = words.length;
-        int valid_word_upper_bound = s_len - word_len + 1;
-        String[] match_res = new String[valid_word_upper_bound];
-        for (int i = 0; i < valid_word_upper_bound; i++) {
-            for (String word : words) {
-                if (s.substring(i, i + word_len).equals(word)) {
-                    match_res[i] = word;
-                    break;
+        for (int offset = 0; offset < wLen; offset++) {
+            int count = 0;
+            int l = offset;
+            var diff = new HashMap<>(targetDiff);
+            for (int i = offset; i + wLen <= s.length(); i += wLen) {
+                var current = s.substring(i, i + wLen);
+                diff.put(current, diff.getOrDefault(current, 0) - 1);
+                if (diff.get(current) == 0)
+                    diff.remove(current);
+                count++;
+                if (count > words.length) {
+                    var start = s.substring(l, l + wLen);
+                    l += wLen;
+                    count--;
+                    diff.put(start, diff.getOrDefault(start, 0) + 1);
+                    if (diff.get(start) == 0)
+                        diff.remove(start);
                 }
-            }
-        }
-        int valid_chain_upper_bound = s_len - word_len * words_count + 1;
-        Map<String, Integer> check_map = new HashMap<>();
-        for (var word : words) {
-            check_map.put(word, 0);
-        }
-        for (int idx1 = 0; idx1 < valid_chain_upper_bound; idx1++) {
-            if (canChain(idx1, word_len, words_count, match_res)) {
-                int count = 0;
-                for (var entry : check_map.entrySet()) {
-                    entry.setValue(0);
-                }
-                for (int idx2 = idx1; count < words_count; idx2 += word_len) {
-                    Integer c = check_map.get(match_res[idx2]);
-                    check_map.put(match_res[idx2], c + 1);
-                    count++;
-                }
-                if (check_map.equals(words_and_count)) {
-                    res.add(idx1);
+                if (count == words.length) {
+                    if (diff.isEmpty())
+                        res.add(l);
                 }
             }
         }
         return res;
-    }
-
-    private static boolean canChain(int idx, int word_len, int words_count,
-            String[] match_res) {
-        boolean can_chain = true;
-        int count = 0;
-        for (; count < words_count; idx += word_len) {
-            count++;
-            if (match_res[idx] == null) {
-                can_chain = false;
-                break;
-            }
-        }
-        return can_chain;
     }
 
     /**
