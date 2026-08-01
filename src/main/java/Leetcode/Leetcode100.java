@@ -1439,7 +1439,6 @@ public class Leetcode100 {
      */
 
     public void solveSudoku(char[][] board) {
-        // TODO attempted
         Map<Integer, Set<Integer>> groups = new HashMap<>(9);
         Map<Integer, Set<Integer>> rows = new HashMap<>(9);
         Map<Integer, Set<Integer>> cols = new HashMap<>(9);
@@ -1460,7 +1459,6 @@ public class Leetcode100 {
             }
         }
         Stack<Pos> stack = new Stack<>();
-
         for (var i : rows
                 .entrySet().stream().sorted((a, b) -> Integer
                         .compare(a.getValue().size(), b.getValue().size()))
