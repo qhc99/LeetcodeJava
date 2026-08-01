@@ -481,11 +481,43 @@ public class Leetcode1100 {
 
     /**
      * #1091
+     * 
      * @param grid
      * @return
      */
-        public int shortestPathBinaryMatrix(int[][] grid) {
-        return 0;
+    public int shortestPathBinaryMatrix(int[][] grid) {
+        int n = grid.length;
+        if (grid[0][0] == 1 || grid[n - 1][n - 1] == 1)
+            return -1;
+        if (n == 1)
+            return 1;
+        Queue<Pos> queue = new ArrayDeque<>();
+        boolean[][] inQueue = new boolean[n][n];
+        queue.add(new Pos(0, 0, 1));
+        while (!queue.isEmpty()) {
+            var p = queue.poll();
+            for (int dx = -1; dx <= 1; dx++) {
+                for (int dy = -1; dy <= 1; dy++) {
+                    if (!(dy == 0 && dx == 0)) {
+                        var next = new Pos(p.i + dx, p.j + dy, p.dist + 1);
+                        if (next.i >= 0 && next.i < n && next.j >= 0
+                                && next.j < n && !inQueue[next.i][next.j]) {
+                            if (next.i == n - 1 && next.j == n - 1) {
+                                return next.dist;
+                            }
+                            if (grid[next.i][next.j] == 0) {
+                                inQueue[next.i][next.j] = true;
+                                queue.add(next);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    static record Pos(int i, int j, int dist) {
     }
 
     /**
