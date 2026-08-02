@@ -25,6 +25,43 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2435
+     * 
+     * @param grid
+     * @param k
+     * @return
+     */
+    public int numberOfPaths(int[][] grid, int k) {
+        int m = grid.length, n = grid[0].length;
+        int[][][] dp = new int[m][n][k];
+        int mod = 1_000_000_007;
+        dp[0][0][grid[0][0] % k]++;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                for (int t = 0; t < k; t++) {
+                    // ? + grid[i][j] = t;
+                    var tt = t - grid[i][j];
+                    tt %= k;
+                    if (tt < 0)
+                        tt += k;
+                    if (i - 1 >= 0) {
+                        var up = dp[i - 1][j];
+                        dp[i][j][t] += up[tt];
+                        dp[i][j][t] %= mod;
+                    }
+                    if (j - 1 >= 0) {
+                        var left = dp[i][j - 1];
+                        dp[i][j][t] += left[tt];
+                        dp[i][j][t] %= mod;
+                    }
+                }
+            }
+        }
+
+        return dp[m - 1][n - 1][0];
+    }
+
+    /**
      * #2342
      * 
      * @param nums
