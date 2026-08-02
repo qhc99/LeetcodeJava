@@ -249,4 +249,68 @@ public class Leetcode2100 {
 
         return Arrays.stream(totalTime).max().getAsInt();
     }
+
+    /**
+     * #2065
+     * 
+     * @param values
+     * @param edges
+     * @param maxTime
+     * @return
+     */
+    public int maximalPathQuality(int[] values, int[][] edges, int maxTime) {
+        int n = values.length;
+        Map<Integer, Map<Integer, Integer>> edgeGraph = new HashMap<>();
+        for (var e : edges) {
+            edgeGraph.computeIfAbsent(e[0], k -> new HashMap<>()).put(e[1],
+                    e[2]);
+            edgeGraph.computeIfAbsent(e[1], k -> new HashMap<>()).put(e[0],
+                    e[2]);
+
+        }
+
+        int[] backTime = new int[n];
+        Arrays.fill(backTime, Integer.MAX_VALUE);
+        backTime[0] = 0;
+        Queue<NodeDist> queue = new PriorityQueue<>(
+                (a, b) -> Integer.compare(a.dist, b.dist));
+        queue.add(new NodeDist(0, 0));
+        while (!queue.isEmpty()) {
+            var node = queue.poll();
+            for (var nb : edgeGraph.computeIfAbsent(node.id, k -> Map.of())
+                    .entrySet()) {
+                var nextDist = node.dist + nb.getValue();
+                if (nextDist < backTime[nb.getKey()]) {
+                    backTime[nb.getKey()] = nextDist;
+                    queue.add(new NodeDist(nb.getKey(), nextDist));
+                }
+            }
+        }
+        var init = values[0];
+        values[0] = 0;
+        return dfs(0, 0, init, backTime, values, edgeGraph, maxTime);
+    }
+
+    static record NodeDist(int id, int dist) {
+    }
+
+    int dfs(int currentNode, int currentTime, int currentValue, int[] backTime,
+            int[] values, Map<Integer, Map<Integer, Integer>> edgeGraph,
+            int maxTime) {
+        int max = currentValue;
+        for (var nb : edgeGraph.computeIfAbsent(currentNode, k -> Map.of())
+                .entrySet()) {
+            if (currentTime + nb.getValue()
+                    + backTime[nb.getKey()] <= maxTime) {
+                var v = values[nb.getKey()];
+                values[nb.getKey()] = 0;
+                max = Math.max(max,
+                        dfs(nb.getKey(), currentTime + nb.getValue(),
+                                currentValue + v, backTime, values, edgeGraph,
+                                maxTime));
+                values[nb.getKey()] = v;
+            }
+        }
+        return max;
+    }
 }
