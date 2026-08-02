@@ -192,6 +192,25 @@ public class Leetcode1000 {
     }
 
     /**
+     * #933 RecentCounter
+     */
+    class RecentCounter {
+        Queue<Integer> queue = new ArrayDeque<>();
+
+        public RecentCounter() {
+
+        }
+
+        public int ping(int t) {
+            while (!queue.isEmpty() && queue.peek() < t - 3000) {
+                queue.poll();
+            }
+            queue.add(t);
+            return queue.size();
+        }
+    }
+
+    /**
      * #953
      * 
      * @param words
