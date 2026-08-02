@@ -115,6 +115,51 @@ public class Leetcode1300 {
     }
 
     /**
+     * #1229
+     * 
+     * @param slots1
+     * @param slots2
+     * @param duration
+     * @return
+     */
+    public List<Integer> minAvailableDuration(int[][] slots1, int[][] slots2,
+            int duration) {
+        Arrays.sort(slots1, (a, b) -> Integer.compare(a[0], b[0]));
+        Arrays.sort(slots2, (a, b) -> Integer.compare(a[0], b[0]));
+
+        List<Integer> res = new ArrayList<>();
+        int i = 0, j = 0;
+        while (i < slots1.length && j < slots2.length) {
+            var r1 = slots1[i];
+            var r2 = slots2[j];
+            if (r1[1] <= r2[1]) {
+                if (r1[1] >= r2[0]) {
+                    var s = Math.max(r1[0], r2[0]);
+                    var e = r1[1];
+                    if (e - s >= duration) {
+                        res.add(s);
+                        res.add(Math.min(s + duration, e));
+                        return res;
+                    }
+                }
+                i++;
+            } else {
+                if (r2[1] >= r1[0]) {
+                    var s = Math.max(r1[0], r2[0]);
+                    var e = r2[1];
+                    if (e - s >= duration) {
+                        res.add(s);
+                        res.add(Math.min(s + duration, e));
+                        return res;
+                    }
+                }
+                j++;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #1242
      * 
      * @param startUrl
