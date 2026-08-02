@@ -138,26 +138,32 @@ public class Leetcode1000 {
 
     /**
      * #918
+     * 
      * @param nums
      * @return
      */
-        public int maxSubarraySumCircular(int[] nums) {
+    public int maxSubarraySumCircular(int[] nums) {
         int res = Integer.MIN_VALUE;
-        Queue<Integer> queue = new ArrayDeque<>();
-        int sum = 0;
-        for(int i = 0; i < nums.length * 2; i++){
-            var n = nums[i % nums.length];
-            while (sum < 0) {
-                var p = queue.poll();
-                sum -= p;
+        int[] arr = new int[nums.length * 2 + 1];
+        System.arraycopy(nums, 0, arr, 1, nums.length);
+        System.arraycopy(nums, 0, arr, nums.length + 1, nums.length);
+        for (int i = 1; i < arr.length; i++) {
+            arr[i] += arr[i - 1];
+        }
+        Deque<Integer> idxDeque = new ArrayDeque<>(); // inc
+        idxDeque.add(0);
+        for (int i = 1; i < arr.length; i++) {
+            while (!idxDeque.isEmpty() && i - idxDeque.peekFirst() > nums.length) {
+                idxDeque.pollFirst();
             }
-            queue.add(n);
-            sum += n;
-            while (queue.size() > nums.length) {
-                var p = queue.poll();
-                sum -= p;
+            int min = arr[idxDeque.peekFirst()];
+            var n = arr[i];
+            res = Math.max(n - min, res);
+            while (!idxDeque.isEmpty() && arr[idxDeque.peekLast()] >= arr[i]) {
+                idxDeque.pollLast();
             }
-            res = Math.max(res, sum);
+            idxDeque.addLast(i);
+
         }
         return res;
     }
