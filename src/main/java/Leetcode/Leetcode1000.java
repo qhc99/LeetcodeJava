@@ -153,7 +153,8 @@ public class Leetcode1000 {
         Deque<Integer> idxDeque = new ArrayDeque<>(); // inc
         idxDeque.add(0);
         for (int i = 1; i < arr.length; i++) {
-            while (!idxDeque.isEmpty() && i - idxDeque.peekFirst() > nums.length) {
+            while (!idxDeque.isEmpty()
+                    && i - idxDeque.peekFirst() > nums.length) {
                 idxDeque.pollFirst();
             }
             int min = arr[idxDeque.peekFirst()];
