@@ -125,6 +125,90 @@ public class Leetcode800 {
     }
 
     /**
+     * #707 MyLinkedList
+     */
+    class MyLinkedList {
+
+        static class Node {
+            Node prev;
+            Node next;
+            int val;
+        }
+
+        Node head = new Node();
+        Node tail = new Node();
+
+        public MyLinkedList() {
+            head.next = tail;
+            tail.prev = head;
+
+        }
+
+        public int get(int index) {
+            int i = 0;
+            var ptr = head.next;
+            for (; index > 0 && ptr != tail; index--) {
+                ptr = ptr.next;
+            }
+            if (index == 0 && ptr != tail) {
+                return ptr.val;
+            }
+            return -1;
+        }
+
+        public void addAtHead(int val) {
+            var n = new Node();
+            n.val = val;
+            var next = head.next;
+            head.next = n;
+            n.prev = head;
+            n.next = next;
+            next.prev = n;
+        }
+
+        public void addAtTail(int val) {
+            var prev = tail.prev;
+            var n = new Node();
+            n.val = val;
+            prev.next = n;
+            n.prev = prev;
+            n.next = tail;
+            tail.prev = n;
+        }
+
+        public void addAtIndex(int index, int val) {
+            int i = 0;
+            var ptr = head.next;
+            for (; index > 0 && ptr != tail; index--) {
+                ptr = ptr.next;
+            }
+            if (index == 0) {
+                var n = new Node();
+                n.val = val;
+                var prev = ptr.prev;
+                prev.next = n;
+                n.prev = prev;
+                n.next = ptr;
+                ptr.prev = n;
+            }
+        }
+
+        public void deleteAtIndex(int index) {
+            int i = 0;
+            var ptr = head.next;
+            for (; index > 0 && ptr != tail; index--) {
+                ptr = ptr.next;
+            }
+            if (index == 0 && ptr != tail) {
+                var prev = ptr.prev;
+                var next = ptr.next;
+                prev.next = next;
+                next.prev = prev;
+            }
+        }
+    }
+
+    /**
      * #713
      * 
      * @param nums
