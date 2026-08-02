@@ -2043,6 +2043,124 @@ public class Leetcode500 {
     }
 
     /**
+     * #432 AllOne
+     */
+    class AllOne {
+        DoubleLinkedList list = new DoubleLinkedList();
+
+        static class Node {
+            Node prev;
+            Node next;
+            int val;
+            Set<String> rc = new HashSet<>();
+
+            void detach() {
+                prev.next = next;
+                next.prev = prev;
+            }
+
+            void insertAfter(Node n) {
+                n.next.prev = this;
+                next = n.next;
+                n.next = this;
+                prev = n;
+
+            }
+        }
+
+        static class DoubleLinkedList {
+            Node head = new Node();
+            Node tail = new Node();
+            Map<String, Node> str2Node = new HashMap<>();
+
+            DoubleLinkedList() {
+                head.next = tail;
+                tail.prev = head;
+            }
+
+            void inc(String key) {
+                var n = str2Node.get(key);
+                if (n == null) {
+                    n = initKeyNode(key);
+                    str2Node.put(key, n);
+                    return;
+                }
+                if (n.next == tail || n.next.val != n.val + 1) {
+                    var newNode = new Node();
+                    newNode.val = n.val + 1;
+                    newNode.insertAfter(n);
+                }
+                n.next.rc.add(key);
+                n.rc.remove(key);
+                if (n.rc.isEmpty())
+                    n.detach();
+                str2Node.put(key, n.next);
+            }
+
+            void dec(String key) {
+                var n = str2Node.get(key);
+                if ((n.prev == head || n.prev.val != n.val - 1) && n.val != 1) {
+                    var newNode = new Node();
+                    newNode.val = n.val - 1;
+                    newNode.insertAfter(n.prev);
+                }
+                if (n.val != 1)
+                    n.prev.rc.add(key);
+                n.rc.remove(key);
+                if (n.rc.isEmpty())
+                    n.detach();
+                if (n.val != 1)
+                    str2Node.put(key, n.prev);
+                else
+                    str2Node.remove(key);
+            }
+
+            Node initKeyNode(String key) {
+                if (head.next == tail || head.next.val != 1) {
+                    var node = new Node();
+                    node.val = 1;
+                    node.insertAfter(head);
+                }
+                head.next.rc.add(key);
+                return head.next;
+            }
+
+            String min() {
+                if (head.next == tail)
+                    return "";
+                return head.next.rc.iterator().next();
+            }
+
+            String max() {
+                if (tail.prev == head)
+                    return "";
+                return tail.prev.rc.iterator().next();
+            }
+
+        }
+
+        public AllOne() {
+
+        }
+
+        public void inc(String key) {
+            list.inc(key);
+        }
+
+        public void dec(String key) {
+            list.dec(key);
+        }
+
+        public String getMaxKey() {
+            return list.max();
+        }
+
+        public String getMinKey() {
+            return list.min();
+        }
+    }
+
+    /**
      * #438
      *
      * @param s
