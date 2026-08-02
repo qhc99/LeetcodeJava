@@ -351,6 +351,39 @@ public class Leetcode700 {
     }
 
     /**
+     * #636
+     * 
+     * @param n
+     * @param logs
+     * @return
+     */
+    public int[] exclusiveTime(int n, List<String> logs) {
+        int[] res = new int[n];
+        Stack<Integer> start = new Stack<>();
+        int time = 0;
+        for (var log : logs) {
+            var arr = log.split(":");
+            var id = Integer.valueOf(arr[0]);
+            var state = arr[1];
+            var t = Integer.valueOf(arr[2]);
+            var isEnd = state.equals("end");
+            if (isEnd)
+                t++;
+            var v = t - time;
+            if (!start.isEmpty()) {
+                res[start.peek()] += v;
+            }
+            time = t;
+            if (!isEnd)
+                start.add(id);
+            else
+                start.pop();
+
+        }
+        return res;
+    }
+
+    /**
      * #638
      *
      * @param price
