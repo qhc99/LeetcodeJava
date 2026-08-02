@@ -1559,6 +1559,45 @@ public class Leetcode400 {
     }
 
     /**
+     * #365
+     */
+    public boolean canMeasureWater(int x, int y, int target) {
+        return dfs(0, 0, x, y, target, new HashSet<>());
+    }
+
+    public boolean dfs(int l, int r, int x, int y, int target,
+            Set<State> visited) {
+        if (l + r == target)
+            return true;
+        var s = new State(l, r);
+        if (visited.contains(s))
+            return false;
+        visited.add(s);
+        // fill
+        if (l == 0 && dfs(x, r, x, y, target, visited))
+            return true;
+        if (r == 0 && dfs(l, y, x, y, target, visited))
+            return true;
+        // empty
+        if (l != 0 && dfs(0, r, x, y, target, visited))
+            return true;
+        if (r != 0 && dfs(l, 0, x, y, target, visited))
+            return true;
+        // pour
+        if (l < x && r > 0 && dfs(l + Math.min(x - l, r),
+                r - Math.min(x - l, r), x, y, target, visited))
+            return true;
+        if (r < y && l > 0 && dfs(l - Math.min(l, y - r),
+                r + Math.min(l, y - r), x, y, target, visited))
+            return true;
+
+        return false;
+    }
+
+    static record State(int l, int r) {
+    }
+
+    /**
      * #368
      *
      * @param nums
