@@ -276,6 +276,40 @@ public class Leetcode1000 {
     }
 
     /**
+     * #986
+     * 
+     * @param firstList
+     * @param secondList
+     * @return
+     */
+    public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
+        int i = 0, j = 0;
+        List<int[]> res = new ArrayList<>();
+        while (i < firstList.length && j < secondList.length) {
+            var a = firstList[i];
+            var b = secondList[j];
+            if (a[1] <= b[1]) {
+                if (a[1] >= b[0]) {
+                    res.add(new int[] { Math.max(a[0], b[0]),
+                            Math.min(a[1], b[1]) });
+                }
+                i++;
+            } else {
+                if (b[1] >= a[0]) {
+                    res.add(new int[] { Math.max(a[0], b[0]),
+                            Math.min(a[1], b[1]) });
+                }
+                j++;
+            }
+        }
+
+        int[][] ans = new int[res.size()][];
+        for (int t = 0; t < res.size(); t++)
+            ans[t] = res.get(t);
+        return ans;
+    }
+
+    /**
      * #973
      *
      * @param points
