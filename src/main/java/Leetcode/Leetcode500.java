@@ -2724,6 +2724,25 @@ public class Leetcode500 {
     }
 
     /**
+     * #477
+     * 
+     * @param nums
+     * @return
+     */
+    public int totalHammingDistance(int[] nums) {
+        int res = 0;
+        for (int i = 0; i < 32; i++) {
+            int count = 0;
+            for (var n : nums) {
+                if ((n & (1 << i)) == 0)
+                    count++;
+            }
+            res += count * (nums.length - count);
+        }
+        return res;
+    }
+
+    /**
      * #480
      *
      * @param nums
