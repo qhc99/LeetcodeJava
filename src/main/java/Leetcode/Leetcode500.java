@@ -3100,6 +3100,25 @@ public class Leetcode500 {
     }
 
     /**
+     * #496
+     * 
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] nextGreaterElement(int[] nums1, int[] nums2) {
+        Deque<Integer> decDeque = new ArrayDeque<>();
+        Map<Integer, Integer> map = new HashMap<>();
+        for (var n : nums2) {
+            while (!decDeque.isEmpty() && n > decDeque.peekLast()) {
+                map.put(decDeque.pollLast(), n);
+            }
+            decDeque.add(n);
+        }
+        return Arrays.stream(nums1).map(v -> map.getOrDefault(v, -1)).toArray();
+    }
+
+    /**
      * #498
      *
      * @param mat
