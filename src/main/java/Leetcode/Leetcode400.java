@@ -1243,6 +1243,27 @@ public class Leetcode400 {
     }
 
     /**
+     * #346 MovingAverage
+     */
+    class MovingAverage {
+        Queue<Integer> queue = new ArrayDeque<>();
+        int maxLen;
+        int sum;
+
+        public MovingAverage(int size) {
+            maxLen = size;
+        }
+
+        public double next(int val) {
+            sum += val;
+            queue.add(val);
+            while (queue.size() > maxLen)
+                sum -= queue.poll();
+            return sum / (double) queue.size();
+        }
+    }
+
+    /**
      * #347
      * 
      * @param nums

@@ -137,6 +137,32 @@ public class Leetcode1000 {
     }
 
     /**
+     * #918
+     * @param nums
+     * @return
+     */
+        public int maxSubarraySumCircular(int[] nums) {
+        int res = Integer.MIN_VALUE;
+        Queue<Integer> queue = new ArrayDeque<>();
+        int sum = 0;
+        for(int i = 0; i < nums.length * 2; i++){
+            var n = nums[i % nums.length];
+            while (sum < 0) {
+                var p = queue.poll();
+                sum -= p;
+            }
+            queue.add(n);
+            sum += n;
+            while (queue.size() > nums.length) {
+                var p = queue.poll();
+                sum -= p;
+            }
+            res = Math.max(res, sum);
+        }
+        return res;
+    }
+
+    /**
      * #925
      *
      * @param name  name string
