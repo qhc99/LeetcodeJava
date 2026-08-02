@@ -1114,6 +1114,43 @@ public class Leetcode900 {
         }
         return trees.get(n);
     }
+
+    /**
+     * #889
+     * 
+     * @param preorder
+     * @param postorder
+     * @return
+     */
+    public TreeNode constructFromPrePost(int[] preorder, int[] postorder) {
+        Queue<Integer> preorderQueue = new ArrayDeque<>();
+
+        for (var v : preorder)
+            preorderQueue.add(v);
+        Queue<Integer> postorderQueue = new ArrayDeque<>();
+        for (var v : postorder)
+            postorderQueue.add(v);
+        return visit(preorderQueue, postorderQueue);
+    }
+
+    TreeNode visit(Queue<Integer> preorderQueue,
+            Queue<Integer> postorderQueue) {
+        var v = preorderQueue.poll();
+        var node = new TreeNode(v);
+        if (v.equals(postorderQueue.peek())) {
+            postorderQueue.poll();
+            return node;
+        }
+        node.left = visit(preorderQueue, postorderQueue);
+        if (v.equals(postorderQueue.peek())) {
+            postorderQueue.poll();
+            return node;
+        }
+        node.right = visit(preorderQueue, postorderQueue);
+        postorderQueue.poll();
+        return node;
+
+    }
 }
 
 /**
