@@ -600,6 +600,77 @@ public class Leetcode800 {
     }
 
     /**
+     * #737
+     * 
+     * @param sentence1
+     * @param sentence2
+     * @param similarPairs
+     * @return
+     */
+    public boolean areSentencesSimilarTwo(String[] sentence1,
+            String[] sentence2, List<List<String>> similarPairs) {
+        if (sentence1.length != sentence2.length)
+            return false;
+        int id = 0;
+        Map<String, Integer> str2id = new HashMap<>();
+        for (var p : similarPairs)
+            for (var s : p)
+                if (!str2id.containsKey(s))
+                    str2id.put(s, id++);
+        DisjointSet2 set = new DisjointSet2(str2id.size());
+        for (var p : similarPairs)
+            set.union(str2id.get(p.get(0)), str2id.get(p.get(1)));
+        for (int i = 0; i < sentence1.length; i++) {
+            var s1 = sentence1[i];
+            var s2 = sentence2[i];
+            var id1 = str2id.getOrDefault(s1, -1);
+            var id2 = str2id.getOrDefault(s2, -1);
+            if (!s1.equals(s2) && (id1 < 0 || id2 < 0
+                    || set.parent(id1) != set.parent(id2)))
+                return false;
+        }
+        return true;
+    }
+
+    static class DisjointSet2 {
+        public int[] parent;
+        int[] rank;
+
+        DisjointSet2(int len) {
+            parent = new int[len];
+            rank = new int[len];
+            for (int i = 0; i < len; i++) {
+                parent[i] = i;
+            }
+        }
+
+        int parent(int i) {
+            if (parent[i] != i) {
+                parent[i] = parent(parent[i]);
+            }
+            return parent[i];
+        }
+
+        boolean isLinked(int a, int b) {
+            return parent(a) == parent(b);
+        }
+
+        void union(int a, int b) {
+            var pa = parent(a);
+            var pb = parent(b);
+            if (pa == pb)
+                return;
+            if (rank[pa] < rank[pb]) {
+                parent[pa] = pb;
+            } else {
+                parent[pb] = pa;
+                if (rank[pa] == rank[pb])
+                    rank[pa]++;
+            }
+        }
+    }
+
+    /**
      * #739
      * 
      * @param temperatures
