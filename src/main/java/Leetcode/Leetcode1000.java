@@ -192,6 +192,34 @@ public class Leetcode1000 {
     }
 
     /**
+     * #931
+     * 
+     * @param matrix
+     * @return
+     */
+    public int minFallingPathSum(int[][] matrix) {
+        int n = matrix.length;
+        int[][] dp = new int[2][n];
+        System.arraycopy(matrix[0], 0, dp[0], 0, n);
+        for (int i = 1; i < n; i++) {
+            System.arraycopy(matrix[i], 0, dp[1], 0, n);
+            for (int j = 0; j < n; j++) {
+                int min = Integer.MAX_VALUE;
+                if (j - 1 >= 0)
+                    min = Math.min(min, dp[0][j - 1]);
+                min = Math.min(min, dp[0][j]);
+                if (j + 1 < n)
+                    min = Math.min(min, dp[0][j + 1]);
+                dp[1][j] += min;
+            }
+            var t = dp[0];
+            dp[0] = dp[1];
+            dp[1] = t;
+        }
+        return Arrays.stream(dp[0]).min().getAsInt();
+    }
+
+    /**
      * #933 RecentCounter
      */
     class RecentCounter {
