@@ -600,6 +600,112 @@ public class Leetcode800 {
     }
 
     /**
+     * #736
+     * 
+     * @param expression
+     * @return
+     */
+    public int evaluate(String expression) {
+        return eval(lexer(expression), null);
+    }
+
+    int eval(Queue<String> exp, SymTable symTable) {
+        boolean scope = false;
+        if (exp.peek().equals("(")) {
+            exp.poll();
+            scope = true;
+            symTable = new SymTable(symTable);
+        }
+
+        if (isVar(exp.peek())) {
+            int res = symTable.getVar(exp.poll());
+            if (scope)
+                exp.poll();
+            return res;
+
+        } else if (isNum(exp.peek())) {
+            int res = Integer.valueOf(exp.poll());
+            if (scope)
+                exp.poll();
+            return res;
+        }
+        var cmd = exp.poll();
+        if (cmd.equals("add") || cmd.equals("mult")) {
+            int a = eval(exp, symTable);
+            int b = eval(exp, symTable);
+            exp.poll(); // ')'
+            return cmd.equals("add") ? a + b : a * b;
+        } else {
+            // let
+            while (isVar(exp.peek())) {
+                var v = exp.poll();
+                if (exp.peek().equals(")")) {
+                    exp.poll();
+                    return symTable.getVar(v);
+                }
+                int val = eval(exp, symTable);
+                symTable.put(v, val);
+            }
+            int res = eval(exp, symTable);
+            exp.poll(); // ')'
+            return res;
+        }
+    }
+
+    boolean isVar(String s) {
+        return Character.isAlphabetic(s.charAt(0)) && !s.equals("add")
+                && !s.equals("let") && !s.equals("mult");
+    }
+
+    boolean isNum(String s) {
+        return s.charAt(0) == '-' || Character.isDigit(s.charAt(0));
+    }
+
+    Queue<String> lexer(String expression) {
+        int i = 0;
+        Queue<String> res = new ArrayDeque<>();
+        while (i < expression.length()) {
+            var c = expression.charAt(i);
+            if (c == ' ')
+                i++;
+            else if (c == '(' || c == ')') {
+                res.add(String.valueOf(c));
+                i++;
+            } else {
+                var s = i;
+                while (i < expression.length() && expression.charAt(i) != ' '
+                        && expression.charAt(i) != '('
+                        && expression.charAt(i) != ')') {
+                    i++;
+                }
+                res.add(expression.substring(s, i));
+            }
+        }
+        return res;
+    }
+
+    static class SymTable {
+        SymTable prev = null;
+        Map<String, Integer> table = new HashMap<>();
+
+        SymTable(SymTable p) {
+            prev = p;
+        }
+
+        int getVar(String s) {
+            if (table.containsKey(s))
+                return table.get(s);
+            if (prev != null)
+                return prev.getVar(s);
+            throw new RuntimeException();
+        }
+
+        void put(String var, int val) {
+            table.put(var, val);
+        }
+    }
+
+    /**
      * #737
      * 
      * @param sentence1
