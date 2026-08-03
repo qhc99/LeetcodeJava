@@ -1283,6 +1283,114 @@ public class Leetcode800 {
     }
 
     /**
+     * #772
+     * 
+     * @param s
+     * @return
+     */
+    public int calculate(String s) {
+        var exp = lexerCalc(s);
+        exp.addFirst("(");
+        exp.addLast(")");
+        return calc(exp);
+    }
+
+    int calc(Deque<String> exp) {
+        if (exp.peek().equals("(")) {
+            exp.poll();
+        }
+        Deque<String> mediumRes = new ArrayDeque<>();
+        while (!exp.isEmpty()) {
+            var sym = exp.pollFirst();
+            if (isOp(sym)) {
+                mediumRes.addLast(sym);
+            } else if (isNumCalc(sym)) {
+                if (mediumRes.size() <= 2) {
+                    mediumRes.addLast(sym);
+                    continue;
+                }
+                if (mediumRes.peekLast().equals("*")
+                        || mediumRes.peekLast().equals("/")) {
+                    mediumRes.addLast(sym);
+                    clearCache(mediumRes);
+                } else {
+                    mediumRes.addLast(sym);
+                    var a = mediumRes.pollFirst();
+                    var op = mediumRes.pollFirst();
+                    var b = mediumRes.pollFirst();
+                    mediumRes.addFirst(String.valueOf(calcOp(a, op, b)));
+                }
+            } else if (sym.equals("(")) {
+                exp.addFirst(String.valueOf(calc(exp)));
+            } else {
+                break;
+            }
+        }
+        clearCache(mediumRes);
+        return Integer.valueOf(mediumRes.peekFirst());
+    }
+
+    int calcOp(String sa, String op, String sb) {
+        int res = 0;
+        var b = Integer.valueOf(sb);
+        var a = Integer.valueOf(sa);
+        if (op.equals("+")) {
+            res = a + b;
+        } else if (op.equals("-")) {
+            res = a - b;
+        } else if (op.equals("*")) {
+            res = a * b;
+        } else if (op.equals("/")) {
+            res = a / b;
+        }
+        return res;
+    }
+
+    void clearCache(Deque<String> mediumRes) {
+        while (mediumRes.size() >= 3) {
+            var a = mediumRes.pollFirst();
+            var op = mediumRes.pollFirst();
+            var b = mediumRes.pollFirst();
+            if (op.equals("+") || op.equals("-")){
+                mediumRes.addFirst(b);
+                clearCache(mediumRes);
+                b = mediumRes.pollFirst();
+            }
+            mediumRes.addFirst(String.valueOf(calcOp(a, op, b)));
+        }
+    }
+
+    boolean isNumCalc(String s) {
+        return Character.isDigit(s.charAt(0));
+    }
+
+    boolean isOp(String s) {
+        return s.charAt(0) == '+' || s.charAt(0) == '-' || s.charAt(0) == '*'
+                || s.charAt(0) == '/';
+    }
+
+    Deque<String> lexerCalc(String s) {
+        Deque<String> res = new ArrayDeque<>();
+        int i = 0;
+        var arr = s.toCharArray();
+        while (i < arr.length) {
+            if (s.charAt(i) == '(' || s.charAt(i) == ')' || s.charAt(i) == '+'
+                    || s.charAt(i) == '-' || s.charAt(i) == '*'
+                    || s.charAt(i) == '/') {
+                res.add(String.valueOf(arr[i++]));
+            } else {
+                int j = i;
+                while (j < arr.length && Character.isDigit(s.charAt(j))) {
+                    j++;
+                }
+                res.add(s.substring(i, j));
+                i = j;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #773
      * 
      * @param board
