@@ -8,9 +8,6 @@ public class Leetcode3500 {
      * #3408 TaskManager
      */
     class TaskManager {
-        static record Task(int id, int userId) {
-        }
-
         Map<Integer, Integer> task2Priority = new HashMap<>();
         Map<Integer, Integer> task2user = new HashMap<>();
         TreeMap<Integer, TreeSet<Integer>> priority2task = new TreeMap<>();
