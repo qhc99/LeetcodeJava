@@ -111,4 +111,25 @@ public class Leetcode1400 {
         }
         return join;
     }
+
+    /**
+     * #1392
+     * 
+     * @param s
+     * @return
+     */
+    public String longestPrefix(String s) {
+        int[] fail = new int[s.length()];
+        int ptr = 0;
+        for (int j = 1; j < s.length(); j++) {
+            while (ptr > 0 && s.charAt(ptr) != s.charAt(j)) {
+                ptr = fail[ptr - 1];
+            }
+            if (s.charAt(ptr) == s.charAt(j))
+                ptr++;
+            fail[j] = ptr;
+        }
+
+        return s.substring(0, fail[s.length() - 1]);
+    }
 }
