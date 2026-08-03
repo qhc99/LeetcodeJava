@@ -1523,7 +1523,8 @@ public class Leetcode800 {
         for (int i = 0; i < n; i++) {
             var nbs = graph[i];
             for (var nb : nbs) {
-                if(set.parent(i) == set.parent(nb)) return false;
+                if (set.parent(i) == set.parent(nb))
+                    return false;
             }
         }
 
