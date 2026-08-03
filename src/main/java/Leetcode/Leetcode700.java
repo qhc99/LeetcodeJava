@@ -680,6 +680,43 @@ public class Leetcode700 {
     }
 
     /**
+     * #670
+     * 
+     * @param num
+     * @return
+     */
+    public int maximumSwap(int num) {
+        List<Integer> arr = new ArrayList<>();
+        while (num > 0) {
+            arr.add(num % 10);
+            num /= 10;
+        }
+        Stack<Integer> idxInc = new Stack<>();
+        for (int i = 0; i < arr.size(); i++) {
+            if (idxInc.isEmpty() || arr.get(idxInc.peek()) < arr.get(i)) {
+                idxInc.add(i);
+            }
+        }
+        for (int i = arr.size() - 1; i > 0; i--) {
+            while (!idxInc.isEmpty() && idxInc.peek() >= i) {
+                idxInc.pop();
+            }
+            if (!idxInc.isEmpty() && arr.get(i) < arr.get(idxInc.peek())) {
+                var t = arr.get(i);
+                arr.set(i, arr.get(idxInc.peek()));
+                arr.set(idxInc.peek(), t);
+                break;
+            }
+        }
+        int res = 0;
+        for (int i = arr.size() - 1; i >= 0; i--) {
+            res *= 10;
+            res += arr.get(i);
+        }
+        return res;
+    }
+
+    /**
      * #674 回文子串个数 输入："aaa" 输出：6 解释：6个回文子串: "a", "a", "a", "aa", "aa", "aaa"
      *
      * @param s String
