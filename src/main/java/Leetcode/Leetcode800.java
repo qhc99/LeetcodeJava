@@ -423,6 +423,76 @@ public class Leetcode800 {
     }
 
     /**
+     * #729 MyCalendar
+     */
+    class MyCalendar {
+        static class SegTree {
+            int rangeLeft;
+            int rangeRight;
+            SegTree left;
+            SegTree right;
+            boolean bookLeft;
+            boolean bookRight;
+
+            SegTree(int s, int e) {
+                rangeLeft = s;
+                rangeRight = e;
+            }
+
+            void insert(int s, int e) {
+                if (s == rangeLeft && e == rangeRight) {
+                    bookLeft = bookRight = true;
+                    return;
+                }
+                int mid = rangeLeft + (rangeRight - rangeLeft) / 2;
+
+                if (e >= mid + 1) {
+                    if (right == null)
+                        right = new SegTree(mid + 1, rangeRight);
+                    right.insert(Math.max(s, mid + 1), e);
+                    bookRight = true;
+                }
+                if (s <= mid) {
+                    if (left == null)
+                        left = new SegTree(rangeLeft, mid);
+                    left.insert(s, Math.min(e, mid));
+                    bookLeft = true;
+                }
+            }
+
+            boolean overlap(int s, int e) {
+                if (s == rangeLeft && e == rangeRight)
+                    return bookLeft || bookRight;
+                int mid = rangeLeft + (rangeRight - rangeLeft) / 2;
+                boolean inLeft = false, inRight = false;
+                if (e >= mid + 1) {
+                    inRight = right != null
+                            ? right.overlap(Math.max(s, mid + 1), e)
+                            : bookRight;
+                }
+                if (s <= mid && !inRight) {
+                    inLeft = left != null ? left.overlap(s, Math.min(e, mid))
+                            : bookLeft;
+                }
+                return inLeft || inRight;
+            }
+        }
+
+        SegTree tree = new SegTree(0, 1_000_000_000 - 1);
+
+        public MyCalendar() {
+
+        }
+
+        public boolean book(int startTime, int endTime) {
+            if (tree.overlap(startTime, endTime - 1))
+                return false;
+            tree.insert(startTime, endTime - 1);
+            return true;
+        }
+    }
+
+    /**
      * #731
      */
     class MyCalendarTwo {
