@@ -1296,38 +1296,18 @@ public class Leetcode800 {
     }
 
     int calc(Deque<String> exp) {
-        if (exp.peek().equals("(")) {
-            exp.poll();
-        }
         Deque<String> mediumRes = new ArrayDeque<>();
         while (!exp.isEmpty()) {
             var sym = exp.pollFirst();
-            if (isOp(sym)) {
-                mediumRes.addLast(sym);
-            } else if (isNumCalc(sym)) {
-                if (mediumRes.size() <= 2) {
-                    mediumRes.addLast(sym);
-                    continue;
-                }
-                if (mediumRes.peekLast().equals("*")
-                        || mediumRes.peekLast().equals("/")) {
-                    mediumRes.addLast(sym);
-                    clearCache(mediumRes);
-                } else {
-                    mediumRes.addLast(sym);
-                    var a = mediumRes.pollFirst();
-                    var op = mediumRes.pollFirst();
-                    var b = mediumRes.pollFirst();
-                    mediumRes.addFirst(String.valueOf(calcOp(a, op, b)));
-                }
-            } else if (sym.equals("(")) {
+            if (isOp(sym) || isNumCalc(sym))
+                mediumRes.add(sym);
+            else if (sym.equals("("))
                 exp.addFirst(String.valueOf(calc(exp)));
-            } else {
+            else
                 break;
-            }
         }
-        clearCache(mediumRes);
-        return Integer.valueOf(mediumRes.peekFirst());
+        computeMediumRes(mediumRes);
+        return Integer.valueOf(mediumRes.peek());
     }
 
     int calcOp(String sa, String op, String sb) {
@@ -1346,18 +1326,29 @@ public class Leetcode800 {
         return res;
     }
 
-    void clearCache(Deque<String> mediumRes) {
+    void computeMediumRes(Deque<String> mediumRes) {
+        Deque<String> sum = new ArrayDeque<>();
         while (mediumRes.size() >= 3) {
             var a = mediumRes.pollFirst();
             var op = mediumRes.pollFirst();
-            var b = mediumRes.pollFirst();
-            if (op.equals("+") || op.equals("-")){
-                mediumRes.addFirst(b);
-                clearCache(mediumRes);
-                b = mediumRes.pollFirst();
+            if (op.equals("*") || op.equals("/"))
+                mediumRes.addFirst(
+                        String.valueOf(calcOp(a, op, mediumRes.pollFirst())));
+            else {
+                sum.addLast(a);
+                sum.addLast(op);
             }
-            mediumRes.addFirst(String.valueOf(calcOp(a, op, b)));
         }
+        while (!mediumRes.isEmpty()) {
+            sum.addLast(mediumRes.pollFirst());
+        }
+        while (sum.size() >= 3) {
+            var a = sum.pollFirst();
+            var op = sum.pollFirst();
+            var b = sum.pollFirst();
+            sum.addFirst(String.valueOf(calcOp(a, op, b)));
+        }
+        mediumRes.add(sum.poll());
     }
 
     boolean isNumCalc(String s) {
