@@ -576,8 +576,8 @@ public class Leetcode100 {
             } else {
                 return "X" + intToRoman(num - 10);
             }
-        } else if(num >= 1){
-            int d = num ;
+        } else if (num >= 1) {
+            int d = num;
             if (d == 9) {
                 return "IX" + intToRoman(num - 9);
             } else if (d == 4) {
