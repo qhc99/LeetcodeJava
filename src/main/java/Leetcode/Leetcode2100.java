@@ -325,7 +325,7 @@ public class Leetcode2100 {
     public String getDirections(TreeNode root, int startValue, int destValue) {
         Map<Integer, Map<Integer, String>> graph = new HashMap<>();
 
-        visitDir(root, startValue, destValue, graph);
+        visitDir(root, startValue, destValue, graph, new boolean[2]);
         Queue<DirVisit> queue = new ArrayDeque<>();
         queue.add(new DirVisit(startValue, null));
         Set<Integer> isQueued = new HashSet<>();
@@ -365,29 +365,42 @@ public class Leetcode2100 {
     static record DirVisit(int id, DirNode path) {
     }
 
-    boolean visitDir(TreeNode node, int startValue, int destValue,
-            Map<Integer, Map<Integer, String>> graph) {
-        boolean res = false;
+    boolean[] visitDir(TreeNode node, int startValue, int destValue,
+            Map<Integer, Map<Integer, String>> graph, boolean[] globalFound) {
+        // found start/dest
+        boolean[] subTreeFound = new boolean[2];
         if (node == null)
-            return res;
+            return subTreeFound;
         if (node.val == startValue || node.val == destValue) {
-            res = true;
+            globalFound[0] |= node.val == startValue;
+            globalFound[1] |= node.val == destValue;
+            subTreeFound[0] |= node.val == startValue;
+            subTreeFound[1] |= node.val == destValue;
         }
-        var l = visitDir(node.left, startValue, destValue, graph);
-        var r = visitDir(node.right, startValue, destValue, graph);
-        if (l) {
+        if (globalFound[0] && globalFound[1])
+            return subTreeFound;
+        var leftSubTreeFound = visitDir(node.left, startValue, destValue, graph,
+                globalFound);
+        if (leftSubTreeFound[0] ^ leftSubTreeFound[1]) {
             graph.computeIfAbsent(node.val, k -> new HashMap<>())
                     .put(node.left.val, "L");
             graph.computeIfAbsent(node.left.val, k -> new HashMap<>())
                     .put(node.val, "U");
         }
-        if (r) {
+        subTreeFound[0] |= leftSubTreeFound[0];
+        subTreeFound[1] |= leftSubTreeFound[1];
+        if (globalFound[0] && globalFound[1])
+            return subTreeFound;
+        var rightSubTreeFound = visitDir(node.right, startValue, destValue,
+                graph, globalFound);
+        if (rightSubTreeFound[0] ^ rightSubTreeFound[1]) {
             graph.computeIfAbsent(node.val, k -> new HashMap<>())
                     .put(node.right.val, "R");
             graph.computeIfAbsent(node.right.val, k -> new HashMap<>())
                     .put(node.val, "U");
         }
-        res |= l || r;
-        return res;
+        subTreeFound[0] |= rightSubTreeFound[0];
+        subTreeFound[1] |= rightSubTreeFound[1];
+        return subTreeFound;
     }
 }
