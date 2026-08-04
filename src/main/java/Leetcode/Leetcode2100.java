@@ -324,7 +324,7 @@ public class Leetcode2100 {
      */
     public String getDirections(TreeNode root, int startValue, int destValue) {
         Map<Integer, Edge> graph = new HashMap<>();
-        visitDir(root, startValue, destValue, graph, new boolean[2]);
+        visitDir(root, startValue, destValue, graph, new FoundPair());
         StringBuilder sb = new StringBuilder();
         int ptr = startValue;
         while (ptr != destValue) {
@@ -339,42 +339,47 @@ public class Leetcode2100 {
 
     }
 
-    boolean[] visitDir(TreeNode node, int startValue, int destValue,
-            Map<Integer, Edge> graph, boolean[] globalFound) {
+    static class FoundPair {
+        boolean foundStart;
+        boolean foundEnd;
+    }
+
+    FoundPair visitDir(TreeNode node, int startValue, int destValue,
+            Map<Integer, Edge> graph, FoundPair globalFound) {
         // found start/dest
-        boolean[] subTreeFound = new boolean[2];
+        FoundPair subTreeFound = new FoundPair();
         if (node == null)
             return subTreeFound;
         if (node.val == startValue || node.val == destValue) {
-            globalFound[0] |= node.val == startValue;
-            globalFound[1] |= node.val == destValue;
-            subTreeFound[0] |= node.val == startValue;
-            subTreeFound[1] |= node.val == destValue;
+            globalFound.foundStart |= node.val == startValue;
+            globalFound.foundEnd |= node.val == destValue;
+            subTreeFound.foundStart |= node.val == startValue;
+            subTreeFound.foundEnd |= node.val == destValue;
         }
-        if (globalFound[0] && globalFound[1])
+        if (globalFound.foundStart && globalFound.foundEnd)
             return subTreeFound;
         var leftSubTreeFound = visitDir(node.left, startValue, destValue, graph,
                 globalFound);
-        if (leftSubTreeFound[0] ^ leftSubTreeFound[1]) {
-            if (leftSubTreeFound[1])
+        if (leftSubTreeFound.foundStart ^ leftSubTreeFound.foundEnd) {
+            if (leftSubTreeFound.foundEnd)
                 graph.put(node.val, new Edge(node.left.val, "L"));
-            if (leftSubTreeFound[0])
+            if (leftSubTreeFound.foundStart)
                 graph.put(node.left.val, new Edge(node.val, "U"));
         }
-        subTreeFound[0] |= leftSubTreeFound[0];
-        subTreeFound[1] |= leftSubTreeFound[1];
-        if (globalFound[0] && globalFound[1])
+        subTreeFound.foundStart |= leftSubTreeFound.foundStart;
+        subTreeFound.foundEnd |= leftSubTreeFound.foundEnd;
+        if (globalFound.foundStart && globalFound.foundEnd)
             return subTreeFound;
         var rightSubTreeFound = visitDir(node.right, startValue, destValue,
                 graph, globalFound);
-        if (rightSubTreeFound[0] ^ rightSubTreeFound[1]) {
-            if (rightSubTreeFound[1])
+        if (rightSubTreeFound.foundStart ^ rightSubTreeFound.foundEnd) {
+            if (rightSubTreeFound.foundEnd)
                 graph.put(node.val, new Edge(node.right.val, "R"));
-            if (rightSubTreeFound[0])
+            if (rightSubTreeFound.foundStart)
                 graph.put(node.right.val, new Edge(node.val, "U"));
         }
-        subTreeFound[0] |= rightSubTreeFound[0];
-        subTreeFound[1] |= rightSubTreeFound[1];
+        subTreeFound.foundStart |= rightSubTreeFound.foundStart;
+        subTreeFound.foundEnd |= rightSubTreeFound.foundEnd;
         return subTreeFound;
     }
 }
