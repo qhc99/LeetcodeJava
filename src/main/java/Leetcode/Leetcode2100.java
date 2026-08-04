@@ -323,50 +323,24 @@ public class Leetcode2100 {
      * @return
      */
     public String getDirections(TreeNode root, int startValue, int destValue) {
-        Map<Integer, Map<Integer, String>> graph = new HashMap<>();
-
+        Map<Integer, Edge> graph = new HashMap<>();
         visitDir(root, startValue, destValue, graph, new boolean[2]);
-        Queue<DirVisit> queue = new ArrayDeque<>();
-        queue.add(new DirVisit(startValue, null));
-        Set<Integer> isQueued = new HashSet<>();
-        isQueued.add(startValue);
-        while (!queue.isEmpty()) {
-            var visit = queue.poll();
-            for (var nb : graph.getOrDefault(visit.id, Map.of()).entrySet()) {
-                if (nb.getKey().equals(destValue)) {
-                    var path = new DirNode(visit.path, nb.getValue());
-                    List<String> reversed = new ArrayList<>();
-                    while (path != null) {
-                        reversed.add(path.val);
-                        path = path.prev;
-                    }
-                    return String.join("", reversed.reversed());
-                }
-                if (!isQueued.contains(nb.getKey())) {
-                    isQueued.add(nb.getKey());
-                    queue.add(new DirVisit(nb.getKey(),
-                            new DirNode(visit.path, nb.getValue())));
-                }
-            }
+        StringBuilder sb = new StringBuilder();
+        int ptr = startValue;
+        while (ptr != destValue) {
+            var edge = graph.get(ptr);
+            ptr = edge.end;
+            sb.append(edge.path);
         }
-        return null;
+        return sb.toString();
     }
 
-    static class DirNode {
-        DirNode prev;
-        String val;
+    static record Edge(int end, String path) {
 
-        DirNode(DirNode p, String v) {
-            prev = p;
-            val = v;
-        }
-    }
-
-    static record DirVisit(int id, DirNode path) {
     }
 
     boolean[] visitDir(TreeNode node, int startValue, int destValue,
-            Map<Integer, Map<Integer, String>> graph, boolean[] globalFound) {
+            Map<Integer, Edge> graph, boolean[] globalFound) {
         // found start/dest
         boolean[] subTreeFound = new boolean[2];
         if (node == null)
@@ -382,10 +356,10 @@ public class Leetcode2100 {
         var leftSubTreeFound = visitDir(node.left, startValue, destValue, graph,
                 globalFound);
         if (leftSubTreeFound[0] ^ leftSubTreeFound[1]) {
-            graph.computeIfAbsent(node.val, k -> new HashMap<>())
-                    .put(node.left.val, "L");
-            graph.computeIfAbsent(node.left.val, k -> new HashMap<>())
-                    .put(node.val, "U");
+            if (leftSubTreeFound[1])
+                graph.put(node.val, new Edge(node.left.val, "L"));
+            if (leftSubTreeFound[0])
+                graph.put(node.left.val, new Edge(node.val, "U"));
         }
         subTreeFound[0] |= leftSubTreeFound[0];
         subTreeFound[1] |= leftSubTreeFound[1];
@@ -394,10 +368,10 @@ public class Leetcode2100 {
         var rightSubTreeFound = visitDir(node.right, startValue, destValue,
                 graph, globalFound);
         if (rightSubTreeFound[0] ^ rightSubTreeFound[1]) {
-            graph.computeIfAbsent(node.val, k -> new HashMap<>())
-                    .put(node.right.val, "R");
-            graph.computeIfAbsent(node.right.val, k -> new HashMap<>())
-                    .put(node.val, "U");
+            if (rightSubTreeFound[1])
+                graph.put(node.val, new Edge(node.right.val, "R"));
+            if (rightSubTreeFound[0])
+                graph.put(node.right.val, new Edge(node.val, "U"));
         }
         subTreeFound[0] |= rightSubTreeFound[0];
         subTreeFound[1] |= rightSubTreeFound[1];
