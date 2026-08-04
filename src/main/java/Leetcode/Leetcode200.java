@@ -1231,6 +1231,33 @@ public class Leetcode200 {
     }
 
     /**
+     * #159
+     * 
+     * @param s
+     * @return
+     */
+    public int lengthOfLongestSubstringTwoDistinct(String s) {
+        Map<Character, Integer> count = new HashMap<>(('z' - 'a' + 1) * 2);
+        int i = 0;
+        int max = 1;
+        count.put(s.charAt(0), 1);
+        for (int j = 1; j < s.length(); j++) {
+            var c = s.charAt(j);
+            count.put(c, 1 + count.getOrDefault(c, 0));
+            while (count.size() > 2) {
+                var rmChar = s.charAt(i++);
+                var rmCount = count.get(rmChar);
+                if (rmCount == 1)
+                    count.remove(rmChar);
+                else
+                    count.put(rmChar, rmCount - 1);
+            }
+            max = Math.max(max, j + 1 - i);
+        }
+        return max;
+    }
+
+    /**
      * #160 相交链表
      *
      * @param headA linked list
