@@ -24,6 +24,33 @@ public class Leetcode2200 {
     }
 
     /**
+     * #2145
+     * 
+     * @param differences
+     * @param lower
+     * @param upper
+     * @return
+     */
+    public int numberOfArrays(int[] differences, int lower, int upper) {
+        long[] diff = new long[differences.length];
+        for (int i = 0; i < differences.length; i++)
+            diff[i] = differences[i];
+        for (int i = 1; i < differences.length; i++)
+            diff[i] += diff[i - 1];
+        long min = Arrays.stream(diff).min().getAsLong();
+        long max = Arrays.stream(diff).max().getAsLong();
+        // offset + min >= lower
+        // offset >= lower
+        // offset + max <= upper
+        // offset <= upper
+        var l = lower - min;
+        l = Math.max(l, lower);
+        var r = upper - max;
+        r = Math.min(upper, r);
+        return Math.max(0, (int) (r + 1 - l));
+    }
+
+    /**
      * #2150
      * 
      * @param nums
