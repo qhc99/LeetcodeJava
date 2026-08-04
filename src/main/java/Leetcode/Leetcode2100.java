@@ -313,4 +313,81 @@ public class Leetcode2100 {
         }
         return max;
     }
+
+    /**
+     * #2096
+     * 
+     * @param root
+     * @param startValue
+     * @param destValue
+     * @return
+     */
+    public String getDirections(TreeNode root, int startValue, int destValue) {
+        Map<Integer, Map<Integer, String>> graph = new HashMap<>();
+
+        visitDir(root, startValue, destValue, graph);
+        Queue<DirVisit> queue = new ArrayDeque<>();
+        queue.add(new DirVisit(startValue, null));
+        Set<Integer> isQueued = new HashSet<>();
+        isQueued.add(startValue);
+        while (!queue.isEmpty()) {
+            var visit = queue.poll();
+            for (var nb : graph.getOrDefault(visit.id, Map.of()).entrySet()) {
+                if (nb.getKey().equals(destValue)) {
+                    var path = new DirNode(visit.path, nb.getValue());
+                    List<String> reversed = new ArrayList<>();
+                    while (path != null) {
+                        reversed.add(path.val);
+                        path = path.prev;
+                    }
+                    return String.join("", reversed.reversed());
+                }
+                if (!isQueued.contains(nb.getKey())) {
+                    isQueued.add(nb.getKey());
+                    queue.add(new DirVisit(nb.getKey(),
+                            new DirNode(visit.path, nb.getValue())));
+                }
+            }
+        }
+        return null;
+    }
+
+    static class DirNode {
+        DirNode prev;
+        String val;
+
+        DirNode(DirNode p, String v) {
+            prev = p;
+            val = v;
+        }
+    }
+
+    static record DirVisit(int id, DirNode path) {
+    }
+
+    boolean visitDir(TreeNode node, int startValue, int destValue,
+            Map<Integer, Map<Integer, String>> graph) {
+        boolean res = false;
+        if (node == null)
+            return res;
+        if (node.val == startValue || node.val == destValue) {
+            res = true;
+        }
+        var l = visitDir(node.left, startValue, destValue, graph);
+        var r = visitDir(node.right, startValue, destValue, graph);
+        if (l) {
+            graph.computeIfAbsent(node.val, k -> new HashMap<>())
+                    .put(node.left.val, "L");
+            graph.computeIfAbsent(node.left.val, k -> new HashMap<>())
+                    .put(node.val, "U");
+        }
+        if (r) {
+            graph.computeIfAbsent(node.val, k -> new HashMap<>())
+                    .put(node.right.val, "R");
+            graph.computeIfAbsent(node.right.val, k -> new HashMap<>())
+                    .put(node.val, "U");
+        }
+        res |= l || r;
+        return res;
+    }
 }
