@@ -76,6 +76,38 @@ public class Leetcode500 {
     }
 
     /**
+     * #403
+     * 
+     * @param stones
+     * @return
+     */
+    public boolean canCross(int[] stones) {
+        if (stones.length > 1 && stones[1] != 1)
+            return false;
+        Map<Integer, Integer> dist2idx = new HashMap<>();
+        for (int i = 0; i < stones.length; i++)
+            dist2idx.put(stones[i], i);
+        List<Set<Integer>> speedAtStones = new ArrayList<>();
+        for (int i = 0; i < stones.length; i++)
+            speedAtStones.add(new HashSet<>());
+        speedAtStones.get(1).add(1);
+        for (int i = 1; i < stones.length; i++) {
+            var dist = stones[i];
+            for (var speed : speedAtStones.get(i)) {
+                for (int ds = -1; ds <= 1; ds++) {
+                    var nextIdx = dist2idx.get(speed + ds + dist);
+                    if (nextIdx != null && nextIdx == stones.length - 1)
+                        return true;
+                    if (nextIdx != null && nextIdx > i) {
+                        speedAtStones.get(nextIdx).add(speed + ds);
+                    }
+                }
+            }
+        }
+        return speedAtStones.get(stones.length - 1).isEmpty();
+    }
+
+    /**
      * #404 <br>
      * 左叶子之和
      * 
