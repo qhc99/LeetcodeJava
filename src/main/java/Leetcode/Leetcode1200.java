@@ -1,10 +1,41 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.concurrent.Semaphore;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntConsumer;
 
 public class Leetcode1200 {
+
+    /**
+     * #1117 H2O
+     */
+    class H2O {
+        Semaphore ox = new Semaphore(0);
+        Semaphore hy = new Semaphore(2);
+
+        public H2O() {
+
+        }
+
+        public void hydrogen(Runnable releaseHydrogen)
+                throws InterruptedException {
+            hy.acquire();
+            // releaseHydrogen.run() outputs "H". Do not change or remove this
+            // line.
+            releaseHydrogen.run();
+            ox.release(1);
+        }
+
+        public void oxygen(Runnable releaseOxygen) throws InterruptedException {
+            ox.acquire(2);
+            // releaseOxygen.run() outputs "O". Do not change or remove this
+            // line.
+            releaseOxygen.run();
+            hy.release(2);
+        }
+    }
+
     /**
      * #1143
      * 
