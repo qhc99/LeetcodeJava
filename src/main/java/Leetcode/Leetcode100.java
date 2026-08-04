@@ -2180,6 +2180,36 @@ public class Leetcode100 {
     }
 
     /**
+     * #59
+     * 
+     * @param n
+     * @return
+     */
+    public int[][] generateMatrix(int n) {
+        int[][] res = new int[n][n];
+        int offset = 0, len = n, val = 1;
+        while (len > 1) {
+            for (int y = 0; y < len; y++) {
+                res[offset][offset + y] = val++;
+            }
+            for (int x = 1; x < len; x++) {
+                res[offset + x][offset + len - 1] = val++;
+            }
+            for (int y = len - 2; y >= 0; y--) {
+                res[offset + len - 1][offset + y] = val++;
+            }
+            for (int x = len - 2; x >= 1; x--) {
+                res[offset + x][offset] = val++;
+            }
+            len -= 2;
+            offset++;
+        }
+        if (len > 0)
+            res[offset][offset] = val;
+        return res;
+    }
+
+    /**
      * @param n
      * @param k
      * @return
