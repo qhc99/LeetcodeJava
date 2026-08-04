@@ -546,6 +546,52 @@ public class Leetcode100 {
     }
 
     /**
+     * #12
+     * 
+     * @param num
+     * @return
+     */
+    public String intToRoman(int num) {
+        if (num >= 1000) {
+            return "M" + intToRoman(num - 1000);
+        } else if (num >= 100) {
+            int d = num / 100;
+            if (d == 9) {
+                return "CM" + intToRoman(num - 900);
+            } else if (d == 4) {
+                return "CD" + intToRoman(num - 400);
+            } else if (num >= 500) {
+                return "D" + intToRoman(num - 500);
+            } else {
+                return "C" + intToRoman(num - 100);
+            }
+        } else if (num >= 10) {
+            int d = num / 10;
+            if (d == 9) {
+                return "XC" + intToRoman(num - 90);
+            } else if (d == 4) {
+                return "XL" + intToRoman(num - 40);
+            } else if (num >= 50) {
+                return "L" + intToRoman(num - 50);
+            } else {
+                return "X" + intToRoman(num - 10);
+            }
+        } else if(num >= 1){
+            int d = num ;
+            if (d == 9) {
+                return "IX" + intToRoman(num - 9);
+            } else if (d == 4) {
+                return "IV" + intToRoman(num - 4);
+            } else if (num >= 5) {
+                return "V" + intToRoman(num - 5);
+            } else {
+                return "I" + intToRoman(num - 1);
+            }
+        } else
+            return "";
+    }
+
+    /**
      * #15 <br/>
      * 三数之和
      * 
