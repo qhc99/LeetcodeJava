@@ -46,6 +46,90 @@ public class Leetcode400 {
     }
 
     /**
+     * #301
+     * 
+     * @param s
+     * @return
+     */
+    public List<String> removeInvalidParentheses(String s) {
+        var mismatch = searchMismatch(s);
+        List<String> res = new ArrayList<>();
+        dfs(0, s.toCharArray(), mismatch[0], mismatch[1], res);
+        return res;
+    }
+
+    void dfs(int idx, char[] arr, int left, int right, List<String> res) {
+        if (left == 0 && right == 0 && isValid(arr)) {
+            res.add(arr2String(arr));
+            return;
+        }
+        while (idx < arr.length && arr[idx] != '(' && arr[idx] != ')') {
+            idx++;
+        }
+        if (idx >= arr.length)
+            return;
+        if (left + right > arr.length - idx)
+            return;
+        var c = arr[idx];
+        if (left > 0 && c == '(' && (idx - 1 < 0 || arr[idx - 1] != '(')) {
+            arr[idx] = '0';
+            dfs(idx + 1, arr, left - 1, right, res);
+            arr[idx] = '(';
+        }
+        if (right > 0 && c == ')' && (idx - 1 < 0 || arr[idx - 1] != ')')) {
+            arr[idx] = '0';
+            dfs(idx + 1, arr, left, right - 1, res);
+            arr[idx] = ')';
+        }
+        dfs(idx + 1, arr, left, right, res);
+
+    }
+
+    boolean isValid(char[] arr) {
+        int leftCount = 0;
+        for (var c : arr) {
+            if (c == '(') {
+                leftCount++;
+            } else if (c == ')') {
+                leftCount--;
+            }
+            if (leftCount < 0) {
+                return false;
+            }
+        }
+        return leftCount == 0;
+    }
+
+    String arr2String(char[] arr) {
+        // use placeholder 0
+        StringBuilder sb = new StringBuilder();
+        for (var c : arr) {
+            if (c != '0')
+                sb.append(c);
+        }
+
+        return sb.toString();
+    }
+
+    int[] searchMismatch(String s) {
+        int leftCount = 0;
+        int rightMismatch = 0;
+        for (int r = 0; r < s.length(); r++) {
+            if (s.charAt(r) == '(') {
+                leftCount++;
+            } else if (s.charAt(r) == ')') {
+                leftCount--;
+            }
+            if (leftCount < 0) {
+                leftCount = 0;
+                rightMismatch++;
+            }
+        }
+        int leftMisMatch = leftCount;
+        return new int[] { leftMisMatch, rightMismatch };
+    }
+
+    /**
      * #304
      */
     public static class NumMatrix {
