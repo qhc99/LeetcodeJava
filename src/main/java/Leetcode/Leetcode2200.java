@@ -24,6 +24,51 @@ public class Leetcode2200 {
     }
 
     /**
+     * #2115
+     * 
+     * @param recipes
+     * @param ingredients
+     * @param supplies
+     * @return
+     */
+    public List<String> findAllRecipes(String[] recipes,
+            List<List<String>> ingredients, String[] supplies) {
+        List<String> res = new ArrayList<>();
+        Queue<String> unusedSupplies = new ArrayDeque<>();
+        for (var s : supplies)
+            unusedSupplies.add(s);
+        Map<String, List<String>> unlock = new HashMap<>();
+        Map<String, Set<String>> waiting = new HashMap<>();
+        for (int i = 0; i < recipes.length; i++) {
+            waiting.computeIfAbsent(recipes[i], k -> new HashSet<>())
+                    .addAll(ingredients.get(i));
+            for (var ingredient : ingredients.get(i))
+                unlock.computeIfAbsent(ingredient, k -> new ArrayList<>())
+                        .add(recipes[i]);
+        }
+        while (!unusedSupplies.isEmpty()) {
+            var supply = unusedSupplies.poll();
+            for (var recipe : unlock.getOrDefault(supply, List.of())) {
+                if (waiting.containsKey(supply)) {
+                    res.add(supply);
+                    waiting.remove(supply);
+                    continue;
+                }
+                var s = waiting.get(recipe);
+                if (s != null) {
+                    s.remove(supply);
+                    if (s.isEmpty()) {
+                        waiting.remove(recipe);
+                        res.add(recipe);
+                        unusedSupplies.add(recipe);
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      * #2145
      * 
      * @param differences
