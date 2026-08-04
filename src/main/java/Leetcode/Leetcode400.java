@@ -1985,9 +1985,8 @@ public class Leetcode400 {
          */
         public boolean insert(int val) {
             nums.add(val);
-            Set<Integer> set = idx.getOrDefault(val, new HashSet<>());
+            var set = idx.computeIfAbsent(val, k -> new HashSet<>());
             set.add(nums.size() - 1);
-            idx.put(val, set);
             return set.size() == 1;
         }
 
@@ -1999,19 +1998,18 @@ public class Leetcode400 {
             if (!idx.containsKey(val)) {
                 return false;
             }
-            Iterator<Integer> it = idx.get(val).iterator();
-            int i = it.next();
+            int i = idx.get(val).iterator().next();
             int lastNum = nums.get(nums.size() - 1);
             nums.set(i, lastNum);
             idx.get(val).remove(i);
             idx.get(lastNum).remove(nums.size() - 1);
-            if (i < nums.size() - 1) {
+            if (i != nums.size() - 1) {
                 idx.get(lastNum).add(i);
             }
             if (idx.get(val).size() == 0) {
                 idx.remove(val);
             }
-            nums.remove(nums.size() - 1);
+            nums.removeLast();
             return true;
         }
 
