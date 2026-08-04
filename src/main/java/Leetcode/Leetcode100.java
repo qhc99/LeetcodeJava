@@ -2609,6 +2609,29 @@ public class Leetcode100 {
     }
 
     /**
+     * #80
+     * 
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates2(int[] nums) {
+        int i = 2, j = 2;
+        while (i < nums.length && j < nums.length) {
+            if (nums[i - 2] != nums[i] && i == j) {
+                i++;
+                j++;
+                continue;
+            }
+            if (nums[i - 2] != nums[j])
+                nums[i++] = nums[j++];
+            else
+                j++;
+        }
+
+        return i;
+    }
+
+    /**
      * #82
      * 
      * @param head
