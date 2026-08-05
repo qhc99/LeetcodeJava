@@ -151,6 +151,58 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2456
+     * 
+     * @param creators
+     * @param ids
+     * @param views
+     * @return
+     */
+    public List<List<String>> mostPopularCreator(String[] creators,
+            String[] ids, int[] views) {
+        Set<String> popularCreators = new HashSet<>();
+        int maxCreatorViews = 0;
+        Map<String, Integer> creatorViews = new HashMap<>();
+        Map<String, Integer> creatorMostPopularMovieViews = new HashMap<>();
+        Map<String, String> creatorMostPopularMovieId = new HashMap<>();
+        Map<String, Map<String, Integer>> creatorMovieViews = new HashMap<>();
+        int n = creators.length;
+
+        for (int i = 0; i < n; i++) {
+            var creator = creators[i];
+            var movieName = ids[i];
+            var view = views[i];
+            var map = creatorMovieViews.computeIfAbsent(creator,
+                    k -> new HashMap<>());
+            var movieTotalViews = view + map.getOrDefault(movieName, 0);
+            map.put(movieName, movieTotalViews);
+            if (movieTotalViews > creatorMostPopularMovieViews
+                    .getOrDefault(creator, -1)) {
+                creatorMostPopularMovieViews.put(creator, movieTotalViews);
+                creatorMostPopularMovieId.put(creator, movieName);
+            } else if (movieTotalViews == creatorMostPopularMovieViews
+                    .get(creator)
+                    && movieName.compareTo(
+                            creatorMostPopularMovieId.get(creator)) < 0) {
+                creatorMostPopularMovieId.put(creator, movieName);
+
+            }
+            var creatorTotalViews = view
+                    + creatorViews.getOrDefault(creator, 0);
+            creatorViews.put(creator, creatorTotalViews);
+            if (creatorTotalViews > maxCreatorViews) {
+                maxCreatorViews = creatorTotalViews;
+                popularCreators.clear();
+                popularCreators.add(creator);
+            } else if (creatorTotalViews == maxCreatorViews)
+                popularCreators.add(creator);
+        }
+        return popularCreators.stream()
+                .map(c -> List.of(c, creatorMostPopularMovieId.get(c)))
+                .toList();
+    }
+
+    /**
      * #2461
      * 
      * @param nums
