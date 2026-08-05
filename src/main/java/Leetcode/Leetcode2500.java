@@ -291,7 +291,7 @@ public class Leetcode2500 {
             var l = ls[idx];
             if (l > message.length())
                 break;
-            var r = rs[idx];
+            var r = Math.min(rs[idx], message.length());
             while (r - l >= 1) { // [l,r]
                 int mid = l + (r - l) / 2;
                 if (splitCapacity(mid, limit) >= message.length())
