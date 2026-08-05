@@ -14,7 +14,7 @@ public class Leetcode2500 {
     public int mostBooked(int n, int[][] meetings) {
         int[] count = new int[n];
         Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
-        TreeSet<Integer> freeRooms = new TreeSet<>();
+        Queue<Integer> freeRooms = new PriorityQueue<>();
         Queue<MeetingRoom> busyRooms = new PriorityQueue<>(
                 (a, b) -> Long.compare(a.end, b.end));
         for (int i = 0; i < n; i++)
@@ -38,7 +38,7 @@ public class Leetcode2500 {
             while (!busyRooms.isEmpty() && busyRooms.peek().end <= start) {
                 freeRooms.add(busyRooms.poll().id);
             }
-            var room = freeRooms.pollFirst();
+            var room = freeRooms.poll();
             busyRooms.add(new MeetingRoom(room, end));
             prevStart = start;
             count[room]++;
