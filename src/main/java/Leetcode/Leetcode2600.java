@@ -98,6 +98,47 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2523
+     * 
+     * @param left
+     * @param right
+     * @return
+     */
+    public int[] closestPrimes(int left, int right) {
+        boolean[] notPrime = new boolean[right + 1];
+        notPrime[0] = notPrime[1] = true;
+
+        for (int n = 2; n <= right; n++) {
+            if (!notPrime[n]) {
+                for (int i = 2; i * n <= right; i++) {
+                    notPrime[i * n] = true;
+                }
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        for (int n = left; n <= right; n++) {
+            if (!notPrime[n]) {
+                res.add(n);
+            }
+        }
+        int[] ans = new int[] { -1, -1 };
+        if (res.size() >= 2) {
+            ans[0] = res.get(0);
+            ans[1] = res.get(1);
+            for (int i = 1; i < res.size() - 1; i++) {
+                var n1 = res.get(i);
+                var n2 = res.get(i + 1);
+                if (n2 - n1 < ans[1] - ans[0]) {
+                    ans[0] = n1;
+                    ans[1] = n2;
+                }
+            }
+        }
+        return ans;
+
+    }
+
+    /**
      * #2539
      * 
      * @param s
