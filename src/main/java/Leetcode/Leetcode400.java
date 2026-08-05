@@ -1535,6 +1535,42 @@ public class Leetcode400 {
     }
 
     /**
+     * #358
+     * 
+     * @param s
+     * @param k
+     * @return
+     */
+    public String rearrangeString(String s, int k) {
+        int[] count = new int['z' - 'a' + 1];
+        StringBuilder sb = new StringBuilder();
+        Queue<Character> queue = new PriorityQueue<>(
+                (a, b) -> Integer.compare(count[b - 'a'], count[a - 'a']));
+        for (var c : s.toCharArray())
+            count[c - 'a']++;
+        for (int i = 0; i < count.length; i++)
+            if (count[i] != 0)
+                queue.add((char) ('a' + i));
+        Queue<CharPos> prev = new ArrayDeque<>();
+        for (int i = 0; i < s.length(); i++) {
+            while (!prev.isEmpty() && i - prev.peek().pos >= k) {
+                queue.add(prev.poll().c);
+            }
+            if (queue.isEmpty())
+                return "";
+            var c = queue.poll();
+            count[c - 'a']--;
+            sb.append(c);
+            if (count[c - 'a'] > 0)
+                prev.add(new CharPos(c, i));
+        }
+        return sb.toString();
+    }
+
+    static record CharPos(char c, int pos) {
+    }
+
+    /**
      * #359 Logger
      */
     class Logger {
