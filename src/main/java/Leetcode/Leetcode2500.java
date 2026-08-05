@@ -136,6 +136,33 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2422
+     * 
+     * @param nums
+     * @return
+     */
+    public int minimumOperations(int[] nums) {
+        int i = 0, j = nums.length - 1;
+        int ops = 0;
+        while (i < j) {
+            if (nums[i] == nums[j]) {
+                i++;
+                j--;
+            } else if (nums[i] < nums[j]) {
+                nums[i + 1] += nums[i];
+                i++;
+                ops++;
+            } else {
+                nums[j - 1] += nums[j];
+                j--;
+                ops++;
+            }
+        }
+
+        return ops;
+    }
+
+    /**
      * #2433
      * 
      * @param pref
