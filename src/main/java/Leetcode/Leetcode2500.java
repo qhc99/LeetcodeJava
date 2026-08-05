@@ -196,6 +196,26 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2640
+     * 
+     * @param nums
+     * @return
+     */
+    public long[] findPrefixScore(int[] nums) {
+        long[] res = new long[nums.length];
+        int max = Integer.MIN_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            var n = nums[i];
+            max = Math.max(max, n);
+            var conver = max + n;
+            res[i] = conver;
+            if (i - 1 >= 0)
+                res[i] += res[i - 1];
+        }
+        return res;
+    }
+
+    /**
      * #2456
      * 
      * @param creators
