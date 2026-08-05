@@ -2385,8 +2385,41 @@ public class Leetcode400 {
      * @return
      */
     public int longestSubstring(String s, int k) {
-        
-        return 0;
+        Map<Character, Integer> count = new HashMap<>();
+        Set<Character> nonZeroLessThanK = new HashSet<>();
+        int res = 0;
+        for (int kind = 1; kind <= 'z' - 'a' + 1; kind++) {
+            count.clear();
+            nonZeroLessThanK.clear();
+            int l = -1;
+            for (int r = 0; r < s.length(); r++) {
+                var currentChar = s.charAt(r);
+                var currentCharCount = 1 + count.getOrDefault(currentChar, 0);
+                count.put(currentChar, currentCharCount);
+                if (currentCharCount > 0 && currentCharCount < k)
+                    nonZeroLessThanK.add(currentChar);
+                else
+                    nonZeroLessThanK.remove(currentChar);
+                if (l == -1)
+                    l = r;
+                while (count.size() > kind) {
+                    var leftChar = s.charAt(l++);
+                    var leftCharCount = count.get(leftChar) - 1;
+                    if (leftCharCount == 0)
+                        count.remove(leftChar);
+                    else
+                        count.put(leftChar, leftCharCount);
+
+                    if (leftCharCount > 0 && leftCharCount < k)
+                        nonZeroLessThanK.add(leftChar);
+                    else
+                        nonZeroLessThanK.remove(leftChar);
+                }
+                if (nonZeroLessThanK.isEmpty())
+                    res = Math.max(res, r + 1 - l);
+            }
+        }
+        return res;
     }
 
     /**
