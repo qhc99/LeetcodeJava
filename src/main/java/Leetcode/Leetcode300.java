@@ -1176,6 +1176,30 @@ public class Leetcode300 {
     }
 
     /**
+     * #259
+     * 
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int threeSumSmaller(int[] nums, int target) {
+        Arrays.sort(nums);
+        int res = 0;
+        for (int i = 0; i < nums.length - 2; i++) {
+            var n1 = nums[i];
+            int k = nums.length - 1;
+            for (int j = i + 1; j < nums.length - 1 && j < k; j++) {
+                var n2 = nums[j];
+                while (k > j && n1 + n2 + nums[k] >= target) {
+                    k--;
+                }
+                res += k - j;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #261
      * 
      * @param n

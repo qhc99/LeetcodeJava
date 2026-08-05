@@ -2378,6 +2378,18 @@ public class Leetcode400 {
     }
 
     /**
+     * #395
+     * 
+     * @param s
+     * @param k
+     * @return
+     */
+    public int longestSubstring(String s, int k) {
+        
+        return 0;
+    }
+
+    /**
      * #397
      *
      * @param n
