@@ -275,6 +275,71 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2468
+     * 
+     * @param message
+     * @param limit
+     * @return
+     */
+    public String[] splitMessage(String message, int limit) {
+        // {1,9,10,99,100,999,1000,9999}
+        int[] ls = new int[] { 1, 10, 100, 1000 };
+        int[] rs = new int[] { 9, 99, 999, 9999 };
+        int idx = 0;
+        int parts = -1;
+        for (; idx < 4; idx++) {
+            var l = ls[idx];
+            var r = rs[idx];
+            while (r - l >= 1) { // [l,r]
+                int mid = l + (r - l) / 2;
+                if (splitCapacity(mid, limit) >= message.length())
+                    r = mid;
+                else
+                    l = mid + 1;
+            }
+            if (splitCapacity(l, limit) >= message.length()) {
+                parts = l;
+                break;
+            }
+        }
+        if (parts == -1)
+            return new String[0];
+
+        String[] res = new String[parts];
+        int id = 1;
+        int partCap = limit - String.valueOf(parts).length() - 3;
+        for (int i = 0; i < message.length() && id <= res.length; id++) {
+            var cap = partCap - String.valueOf(id).length();
+            res[id - 1] = String.format("%s<%d/%d>",
+                    message.substring(i, Math.min(i + cap, message.length())),
+                    id, parts);
+            i += cap;
+        }
+        return res;
+    }
+
+    int splitCapacity(int parts, int limit) {
+        var partCap = limit - String.valueOf(parts).length() - 3;
+        var totalCap = partCap * parts;
+        return totalCap - seqDigitsLength(parts);
+    }
+
+    int seqDigitsLength(int i) {
+        // i >= 1 i <= 10_000
+        // 1~9,10~99,100~999,1000~9999,10000~99999
+        if (i >= 10_000) {
+            return 9 + 90 * 2 + 900 * 3 + 9000 * 4 + (i + 1 - 10_000) * 5;
+        } else if (i >= 1_000) {
+            return 9 + 90 * 2 + 900 * 3 + (i + 1 - 1000) * 4;
+        } else if (i >= 100) {
+            return 9 + 90 * 2 + (i + 1 - 100) * 3;
+        } else if (i >= 10) {
+            return 9 + (i + 1 - 10) * 2;
+        } else
+            return i;
+    }
+
+    /**
      * #2483
      * 
      * @param customers
