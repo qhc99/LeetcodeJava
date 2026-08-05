@@ -73,6 +73,31 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2506
+     * 
+     * @param words
+     * @return
+     */
+    public int similarPairs(String[] words) {
+        Map<Integer, Integer> count = new HashMap<>();
+        int res = 0;
+        for (var w : words) {
+            int b = str2bytes(w);
+            var bc = count.getOrDefault(b, 0);
+            res += bc;
+            count.put(b, 1 + bc);
+        }
+        return res;
+    }
+
+    int str2bytes(String s) {
+        int res = 0;
+        for (var c : s.toCharArray())
+            res |= (1 << (c - 'a'));
+        return res;
+    }
+
+    /**
      * #2539
      * 
      * @param s
