@@ -289,6 +289,8 @@ public class Leetcode2500 {
         int parts = -1;
         for (; idx < 4; idx++) {
             var l = ls[idx];
+            if (l > message.length())
+                break;
             var r = rs[idx];
             while (r - l >= 1) { // [l,r]
                 int mid = l + (r - l) / 2;
