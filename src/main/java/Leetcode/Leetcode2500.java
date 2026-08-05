@@ -309,9 +309,9 @@ public class Leetcode2500 {
 
         String[] res = new String[parts];
         int id = 1;
-        int partCap = limit - String.valueOf(parts).length() - 3;
+        int partCap = limit - digitCount(parts) - 3;
         for (int i = 0; i < message.length() && id <= res.length; id++) {
-            var cap = partCap - String.valueOf(id).length();
+            var cap = partCap - digitCount(id);
             res[id - 1] = String.format("%s<%d/%d>",
                     message.substring(i, Math.min(i + cap, message.length())),
                     id, parts);
@@ -321,9 +321,18 @@ public class Leetcode2500 {
     }
 
     int splitCapacity(int parts, int limit) {
-        var partCap = limit - String.valueOf(parts).length() - 3;
+        var partCap = limit - digitCount(parts) - 3;
         var totalCap = partCap * parts;
         return totalCap - seqDigitsLength(parts);
+    }
+
+    static int digitCount(int x) {
+        int digits = 1;
+        while (x >= 10) {
+            x /= 10;
+            digits++;
+        }
+        return digits;
     }
 
     int seqDigitsLength(int i) {
