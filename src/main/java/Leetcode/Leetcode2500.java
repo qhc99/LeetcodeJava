@@ -5,6 +5,56 @@ import java.util.*;
 public class Leetcode2500 {
 
     /**
+     * #2402
+     * 
+     * @param n
+     * @param meetings
+     * @return
+     */
+    public int mostBooked(int n, int[][] meetings) {
+        int[] count = new int[n];
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[0], b[0]));
+        TreeSet<Integer> freeRooms = new TreeSet<>();
+        Queue<MeetingRoom> busyRooms = new PriorityQueue<>(
+                (a, b) -> Long.compare(a.end, b.end));
+        for (int i = 0; i < n; i++)
+            freeRooms.add(i);
+        int id = 0, max = 0;
+        long prevStart = 0;
+        for (var meeting : meetings) {
+            long start = meeting[0], end = meeting[1];
+            if (start < prevStart) {
+                // wait in line
+                var wait = prevStart - start;
+                start += wait;
+                end += wait;
+            }
+            if (freeRooms.isEmpty() && busyRooms.peek().end > start) {
+                // wait for first free room
+                var wait = busyRooms.peek().end - start;
+                start += wait;
+                end += wait;
+            }
+            while (!busyRooms.isEmpty() && busyRooms.peek().end <= start) {
+                freeRooms.add(busyRooms.poll().id);
+            }
+            var room = freeRooms.pollFirst();
+            busyRooms.add(new MeetingRoom(room, end));
+            prevStart = start;
+            count[room]++;
+            if (count[room] > max || (count[room] == max && room < id)) {
+                max = count[room];
+                id = room;
+            }
+        }
+
+        return id;
+    }
+
+    static record MeetingRoom(int id, long end) {
+    }
+
+    /**
      * #2408 SQL
      */
     class SQL {
@@ -94,8 +144,8 @@ public class Leetcode2500 {
     public int[] findArray(int[] pref) {
         int[] res = new int[pref.length];
         res[0] = pref[0];
-        for(int i = 1; i < pref.length; i++){
-            res[i] = pref[i] ^ pref[i-1];
+        for (int i = 1; i < pref.length; i++) {
+            res[i] = pref[i] ^ pref[i - 1];
         }
         return res;
     }
