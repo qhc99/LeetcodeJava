@@ -136,6 +136,24 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2414
+     * 
+     * @param s
+     * @return
+     */
+    public int longestContinuousSubstring(String s) {
+        int l = 0;
+        int max = 0;
+        for (int r = 0; r < s.length(); r++) {
+            if (r - 1 < 0 || s.charAt(r) - s.charAt(r - 1) != 1) {
+                l = r;
+            }
+            max = Math.max(max, r + 1 - l);
+        }
+        return max;
+    }
+
+    /**
      * #2422
      * 
      * @param nums
