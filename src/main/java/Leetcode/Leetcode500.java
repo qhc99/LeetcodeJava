@@ -1,6 +1,26 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.ConcurrentModificationException;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
+import java.util.Stack;
+import java.util.TreeSet;
 
 @SuppressWarnings("ALL")
 public class Leetcode500 {
@@ -44,12 +64,13 @@ public class Leetcode500 {
     public static String removeKdigits(String num, int k) {
 
         if (num.length() == 1) {
-            if (k == 1)
+            if (k == 1) {
                 return "0";
-            else if (k == 0)
+            } else if (k == 0) {
                 return num;
-            else
+            } else {
                 throw new RuntimeException();
+            }
         }
 
         char[] chrs = num.toCharArray();
@@ -77,27 +98,31 @@ public class Leetcode500 {
 
     /**
      * #403
-     * 
+     *
      * @param stones
      * @return
      */
     public boolean canCross(int[] stones) {
-        if (stones.length > 1 && stones[1] != 1)
+        if (stones.length > 1 && stones[1] != 1) {
             return false;
+        }
         Map<Integer, Integer> dist2idx = new HashMap<>();
-        for (int i = 0; i < stones.length; i++)
+        for (int i = 0; i < stones.length; i++) {
             dist2idx.put(stones[i], i);
+        }
         List<Set<Integer>> speedAtStones = new ArrayList<>();
-        for (int i = 0; i < stones.length; i++)
+        for (int i = 0; i < stones.length; i++) {
             speedAtStones.add(new HashSet<>());
+        }
         speedAtStones.get(1).add(1);
         for (int i = 1; i < stones.length; i++) {
             var dist = stones[i];
             for (var speed : speedAtStones.get(i)) {
                 for (int ds = -1; ds <= 1; ds++) {
                     var nextIdx = dist2idx.get(speed + ds + dist);
-                    if (nextIdx != null && nextIdx == stones.length - 1)
+                    if (nextIdx != null && nextIdx == stones.length - 1) {
                         return true;
+                    }
                     if (nextIdx != null && nextIdx > i) {
                         speedAtStones.get(nextIdx).add(speed + ds);
                     }
@@ -110,7 +135,7 @@ public class Leetcode500 {
     /**
      * #404 <br>
      * 左叶子之和
-     * 
+     *
      * <pre>
      *     3
      *    / \
@@ -214,7 +239,7 @@ public class Leetcode500 {
      * The following relative performance statistics are indicative of this
      * class:
      * </p>
-     * 
+     *
      * <pre>
      *              get  add  insert  iterate  remove
      * TreeList       3    5       1       2       1
@@ -252,7 +277,6 @@ public class Leetcode500 {
         private int size;
 
         // -----------------------------------------------------------------------
-
         /**
          * Constructs a new empty list.
          */
@@ -275,7 +299,6 @@ public class Leetcode500 {
         }
 
         // -----------------------------------------------------------------------
-
         /**
          * Gets the element at the specified index.
          *
@@ -376,12 +399,11 @@ public class Leetcode500 {
         }
 
         // -----------------------------------------------------------------------
-
         /**
          * Adds a new element to the list.
          *
          * @param index the index to add before
-         * @param obj   the element to add
+         * @param obj the element to add
          */
         @Override
         public void add(final int index, final E obj) {
@@ -423,7 +445,7 @@ public class Leetcode500 {
          * Sets the element at the specified index.
          *
          * @param index the index to set
-         * @param obj   the object to store at the specified index
+         * @param obj the object to store at the specified index
          * @return the previous object at that index
          * @throws IndexOutOfBoundsException if the index is invalid
          */
@@ -463,13 +485,12 @@ public class Leetcode500 {
         }
 
         // -----------------------------------------------------------------------
-
         /**
          * Checks whether the index is valid.
          *
-         * @param index      the index to check
+         * @param index the index to check
          * @param startIndex the first allowed index
-         * @param endIndex   the last allowed index
+         * @param endIndex the last allowed index
          * @throws IndexOutOfBoundsException if the index is invalid
          */
         private void checkInterval(final int index, final int startIndex,
@@ -481,7 +502,6 @@ public class Leetcode500 {
         }
 
         // -----------------------------------------------------------------------
-
         /**
          * Implements an AVLNode which keeps the offset updated.
          * <p>
@@ -496,6 +516,7 @@ public class Leetcode500 {
          * list (true).
          */
         static class AVLNode<E> {
+
             /**
              * The left child node or the predecessor if
              * {@link #leftIsPrevious}.
@@ -532,10 +553,9 @@ public class Leetcode500 {
              * Constructs a new node with a relative position.
              *
              * @param relativePosition the relative position of the node
-             * @param obj              the value for the node
-             * @param rightFollower    the node with the value following this
-             *                         one
-             * @param leftFollower     the node with the value leading this one
+             * @param obj the value for the node
+             * @param rightFollower the node with the value following this one
+             * @param leftFollower the node with the value leading this one
              */
             private AVLNode(final int relativePosition, final E obj,
                     final AVLNode<E> rightFollower,
@@ -567,26 +587,20 @@ public class Leetcode500 {
              * {@code start} through {@code end} of the collection, assuming the
              * iterator {@code e} already points at element {@code start}.
              *
-             * @param iterator                 an iterator over the collection,
-             *                                 which should already point to the
-             *                                 element at index {@code start}
-             *                                 within the collection
-             * @param start                    the index of the first element in
-             *                                 the collection that should be in
-             *                                 this subtree
-             * @param end                      the index of the last element in
-             *                                 the collection that should be in
-             *                                 this subtree
+             * @param iterator an iterator over the collection, which should
+             * already point to the element at index {@code start} within the
+             * collection
+             * @param start the index of the first element in the collection
+             * that should be in this subtree
+             * @param end the index of the last element in the collection that
+             * should be in this subtree
              * @param absolutePositionOfParent absolute position of this node's
-             *                                 parent, or 0 if this node is the
-             *                                 root
-             * @param prev                     the {@code AVLNode} corresponding
-             *                                 to element (start - 1) of the
-             *                                 collection, or null if start is 0
-             * @param next                     the {@code AVLNode} corresponding
-             *                                 to element (end + 1) of the
-             *                                 collection, or null if end is the
-             *                                 last element of the collection
+             * parent, or 0 if this node is the root
+             * @param prev the {@code AVLNode} corresponding to element (start -
+             * 1) of the collection, or null if start is 0
+             * @param next the {@code AVLNode} corresponding to element (end +
+             * 1) of the collection, or null if end is the last element of the
+             * collection
              */
             private AVLNode(final Iterator<? extends E> iterator,
                     final int start, final int end,
@@ -715,8 +729,8 @@ public class Leetcode500 {
              * Inserts a node at the position index.
              *
              * @param index is the index of the position relative to the
-             *              position of the parent node.
-             * @param obj   is the object to be stored in the position.
+             * position of the parent node.
+             * @param obj is the object to be stored in the position.
              */
             AVLNode<E> insert(final int index, final E obj) {
                 final int indexRelativeToMe = index - relativePosition;
@@ -759,7 +773,6 @@ public class Leetcode500 {
             }
 
             // -----------------------------------------------------------------------
-
             /**
              * Gets the left node, returning null if its a faedelung.
              */
@@ -796,8 +809,7 @@ public class Leetcode500 {
              * Removes the node at a given position.
              *
              * @param index is the index of the element to be removed relative
-             *              to the position of the parent node of the current
-             *              node.
+             * to the position of the parent node of the current node.
              */
             AVLNode<E> remove(final int index) {
                 final int indexRelativeToMe = index - relativePosition;
@@ -903,28 +915,27 @@ public class Leetcode500 {
             }
 
             // -----------------------------------------------------------------------
-
             /**
              * Balances according to the AVL algorithm.
              */
             private AVLNode<E> balance() {
                 switch (heightRightMinusLeft()) {
-                case 1:
-                case 0:
-                case -1:
-                    return this;
-                case -2:
-                    if (left.heightRightMinusLeft() > 0) {
-                        setLeft(left.rotateLeft(), null);
-                    }
-                    return rotateRight();
-                case 2:
-                    if (right.heightRightMinusLeft() < 0) {
-                        setRight(right.rotateRight(), null);
-                    }
-                    return rotateLeft();
-                default:
-                    throw new RuntimeException("tree inconsistent!");
+                    case 1:
+                    case 0:
+                    case -1:
+                        return this;
+                    case -2:
+                        if (left.heightRightMinusLeft() > 0) {
+                            setLeft(left.rotateLeft(), null);
+                        }
+                        return rotateRight();
+                    case 2:
+                        if (right.heightRightMinusLeft() < 0) {
+                            setRight(right.rotateRight(), null);
+                        }
+                        return rotateLeft();
+                    default:
+                        throw new RuntimeException("tree inconsistent!");
                 }
             }
 
@@ -1016,7 +1027,7 @@ public class Leetcode500 {
              * Sets the left field to the node, or the previous node if that is
              * null
              *
-             * @param node     the new left subtree node
+             * @param node the new left subtree node
              * @param previous the previous node in the linked list
              */
             private void setLeft(final AVLNode<E> node,
@@ -1045,8 +1056,7 @@ public class Leetcode500 {
              * efficiently merging the two AVL trees. This operation is
              * destructive to both trees and runs in O(log(m + n)) time.
              *
-             * @param otherTree   the root of the AVL tree to merge with this
-             *                    one
+             * @param otherTree the root of the AVL tree to merge with this one
              * @param currentSize the number of elements in this AVL tree
              * @return the root of the new, merged AVL tree
              */
@@ -1174,6 +1184,7 @@ public class Leetcode500 {
          */
         static class TreeListIterator<E>
                 implements ListIterator<E>, OrderedIterator<E> {
+
             /**
              * The parent list
              */
@@ -1206,7 +1217,7 @@ public class Leetcode500 {
             /**
              * Create a ListIterator for a list.
              *
-             * @param parent    the parent list
+             * @param parent the parent list
              * @param fromIndex the index to start at
              */
             protected TreeListIterator(final TreeList<E> parent,
@@ -1225,9 +1236,7 @@ public class Leetcode500 {
              * object expects.
              *
              * @throws ConcurrentModificationException If the list's
-             *                                         modification count isn't
-             *                                         the value that was
-             *                                         expected.
+             * modification count isn't the value that was expected.
              */
             protected void checkModCount() {
                 if (parent.modCount != expectedModCount) {
@@ -1347,23 +1356,27 @@ public class Leetcode500 {
                 Comparator.comparing(PosHeight::height));
         for (int j = 0; j < n; j++) {
             int i = 0;
-            if (!isBrink.get(i * n + j))
+            if (!isBrink.get(i * n + j)) {
                 queue.add(new PosHeight(i, j, heightMap[i][j]));
+            }
             isBrink.set(i * n + j, true);
             i = m - 1;
-            if (!isBrink.get(i * n + j))
+            if (!isBrink.get(i * n + j)) {
                 queue.add(new PosHeight(i, j, heightMap[i][j]));
+            }
             isBrink.set(i * n + j, true);
         }
 
         for (int i = 0; i < m; i++) {
             int j = 0;
-            if (!isBrink.get(i * n + j))
+            if (!isBrink.get(i * n + j)) {
                 queue.add(new PosHeight(i, j, heightMap[i][j]));
+            }
             isBrink.set(i * n + j, true);
             j = n - 1;
-            if (!isBrink.get(i * n + j))
+            if (!isBrink.get(i * n + j)) {
                 queue.add(new PosHeight(i, j, heightMap[i][j]));
+            }
             isBrink.set(i * n + j, true);
         }
         int ans = 0;
@@ -1381,6 +1394,7 @@ public class Leetcode500 {
     }
 
     record PosHeight(int i, int j, int height) {
+
     }
 
     private static int fill(int bi, int bj, int i, int j, int[][] heightMap,
@@ -1443,7 +1457,7 @@ public class Leetcode500 {
      * 因为此时这两个子数组各自的和的最大值为18，在所有情况中最小。
      *
      * @param nums array
-     * @param m    number of group
+     * @param m number of group
      * @return min group sum
      */
     public static int splitArray(int[] nums, int m) {
@@ -1483,7 +1497,7 @@ public class Leetcode500 {
 
     /**
      * #412
-     * 
+     *
      * @param n
      * @return
      */
@@ -1492,40 +1506,46 @@ public class Leetcode500 {
         for (int i = 1; i <= n; i++) {
             boolean three = i % 3 == 0;
             boolean five = i % 5 == 0;
-            if (three && five)
+            if (three && five) {
                 res.add("FizzBuzz");
-            else if (three)
+            } else if (three) {
                 res.add("Fizz");
-            else if (five)
+            } else if (five) {
                 res.add("Buzz");
-            else
+            } else {
                 res.add(String.valueOf(i));
+            }
         }
         return res;
     }
 
     /**
      * #414
-     * 
+     *
      * @param nums
      * @return
      */
     public int thirdMax(int[] nums) {
         Queue<Integer> queue = new PriorityQueue<>(
                 (a, b) -> Integer.compare(b, a));
-        for (var n : nums)
+        for (var n : nums) {
             queue.add(n);
+        }
         int first = queue.peek();
         int second = first;
         int third = first;
-        while (!queue.isEmpty() && queue.peek() == first)
+        while (!queue.isEmpty() && queue.peek() == first) {
             queue.poll();
-        if (!queue.isEmpty())
+        }
+        if (!queue.isEmpty()) {
             second = queue.peek();
-        while (!queue.isEmpty() && queue.peek() == second)
+        }
+        while (!queue.isEmpty() && queue.peek() == second) {
             queue.poll();
-        if (!queue.isEmpty())
+        }
+        if (!queue.isEmpty()) {
             third = queue.peek();
+        }
 
         return third;
     }
@@ -1662,6 +1682,7 @@ public class Leetcode500 {
     }
 
     record Tuple(int i, int j) {
+
     }
 
     /**
@@ -1698,12 +1719,14 @@ public class Leetcode500 {
                             && ptr.left.mid != null) {
                         ptr = ptr.left.mid;
                     } else {
-                        if (!ptr.contain)
+                        if (!ptr.contain) {
                             ptr = ptr.mid;
+                        }
                     }
                 } else {
-                    if (!ptr.contain)
+                    if (!ptr.contain) {
                         ptr = ptr.mid;
+                    }
                 }
             }
             max = Math.max(max, n ^ ptr.val);
@@ -1717,10 +1740,12 @@ public class Leetcode500 {
     }
 
     static class TernaryTries<Value> {
+
         private int n;
         Node<Value> root;
 
         public static class Node<Value> {
+
             private char c;
             private boolean contain;
             private Node<Value> left, mid, right;
@@ -1846,9 +1871,12 @@ public class Leetcode500 {
             if (!n.contain && n.left == null && n.mid == null && n.right == null
                     && p != null) {
                 switch (direct) {
-                case MID -> p.mid = null;
-                case LEFT -> p.left = null;
-                case RIGHT -> p.right = null;
+                    case MID ->
+                        p.mid = null;
+                    case LEFT ->
+                        p.left = null;
+                    case RIGHT ->
+                        p.right = null;
                 }
             }
             if (p == null && !n.contain && n.left == null && n.mid == null
@@ -1975,6 +2003,7 @@ public class Leetcode500 {
     }
 
     class Node {
+
         public int val;
         public List<Node> children;
 
@@ -1991,10 +2020,88 @@ public class Leetcode500 {
         }
     };
 
+    static class Nest {
+
+        static class Node {
+
+            public int val;
+            public Node left;
+            public Node right;
+
+            public Node() {
+            }
+
+            public Node(int _val) {
+                val = _val;
+            }
+
+            public Node(int _val, Node _left, Node _right) {
+                val = _val;
+                left = _left;
+                right = _right;
+            }
+        };
+
+        static class DList {
+
+            Node head = new Node();
+            Node tail = new Node();
+
+            public DList() {
+                head.right = tail;
+                tail.left = head;
+            }
+
+            void append(int v) {
+                var n = new Node(v);
+                var prev = tail.left;
+                prev.right = n;
+                n.left = prev;
+                n.right = tail;
+                tail.left = n;
+            }
+
+            DList append(DList l) {
+                if (l == null) {
+                    return this;
+                }
+                var h = l.head.right;
+                var prev = tail.left;
+                prev.right = h;
+                h.left = prev;
+                tail = l.tail;
+                return this;
+            }
+
+            Node toNodes() {
+                var h = head.right;
+                var t = tail.left;
+                h.left = t;
+                t.right = h;
+                return h;
+            }
+        }
+
+        public Node treeToDoublyList(Node root) {
+            if (root == null) {
+                return null;
+            }
+            return treeToList(root).toNodes();
+        }
+
+        DList treeToList(Node n) {
+            var left = n.left != null ? treeToList(n.left) : new DList();
+            left.append(n.val);
+            var right = n.right != null ? treeToList(n.right) : null;
+            return left.append(right);
+        }
+    }
+
     /**
      * #428 Codec
      */
     class Codec {
+
         // Encodes a tree to a single string.
         public String serialize(Node root) {
             StringBuilder sb = new StringBuilder();
@@ -2004,16 +2111,19 @@ public class Leetcode500 {
 
         void visitSerialize(Node n, StringBuilder sb) {
             sb.append("(");
-            if (n != null)
+            if (n != null) {
                 sb.append(n.val);
+            }
             if (n != null && n.children != null) {
-                for (var c : n.children)
+                for (var c : n.children) {
                     visitSerialize(c, sb);
+                }
             }
             sb.append(")");
         }
 
         static class Tokenizer {
+
             String s;
             int idx = 0;
 
@@ -2022,8 +2132,9 @@ public class Leetcode500 {
             }
 
             int next() {
-                if (idx >= s.length())
+                if (idx >= s.length()) {
                     return -3;
+                }
                 if (s.charAt(idx) == '(') {
                     idx++;
                     return -1;
@@ -2056,12 +2167,13 @@ public class Leetcode500 {
 
         boolean visitDeserialize(Node n, Tokenizer tokenizer) {
             int token = tokenizer.next();
-            if (token < 0)
+            if (token < 0) {
                 return false;
+            }
             while (token >= -1) {
-                if (token >= 0)
+                if (token >= 0) {
                     n.val = token;
-                else {
+                } else {
                     n.children.add(new Node(0, new ArrayList<>()));
                     if (!visitDeserialize(n.children.getLast(), tokenizer)) {
                         n.children.removeLast();
@@ -2078,9 +2190,11 @@ public class Leetcode500 {
      * #432 AllOne
      */
     class AllOne {
+
         DoubleLinkedList list = new DoubleLinkedList();
 
         static class Node {
+
             Node prev;
             Node next;
             int val;
@@ -2101,6 +2215,7 @@ public class Leetcode500 {
         }
 
         static class DoubleLinkedList {
+
             Node head = new Node();
             Node tail = new Node();
             Map<String, Node> str2Node = new HashMap<>();
@@ -2124,8 +2239,9 @@ public class Leetcode500 {
                 }
                 n.next.rc.add(key);
                 n.rc.remove(key);
-                if (n.rc.isEmpty())
+                if (n.rc.isEmpty()) {
                     n.detach();
+                }
                 str2Node.put(key, n.next);
             }
 
@@ -2136,15 +2252,18 @@ public class Leetcode500 {
                     newNode.val = n.val - 1;
                     newNode.insertAfter(n.prev);
                 }
-                if (n.val != 1)
+                if (n.val != 1) {
                     n.prev.rc.add(key);
+                }
                 n.rc.remove(key);
-                if (n.rc.isEmpty())
+                if (n.rc.isEmpty()) {
                     n.detach();
-                if (n.val != 1)
+                }
+                if (n.val != 1) {
                     str2Node.put(key, n.prev);
-                else
+                } else {
                     str2Node.remove(key);
+                }
             }
 
             Node initKeyNode(String key) {
@@ -2158,14 +2277,16 @@ public class Leetcode500 {
             }
 
             String min() {
-                if (head.next == tail)
+                if (head.next == tail) {
                     return "";
+                }
                 return head.next.rc.iterator().next();
             }
 
             String max() {
-                if (tail.prev == head)
+                if (tail.prev == head) {
                     return "";
+                }
                 return tail.prev.rc.iterator().next();
             }
 
@@ -2243,7 +2364,7 @@ public class Leetcode500 {
 
     /**
      * #443
-     * 
+     *
      * @param chars
      * @return
      */
@@ -2253,9 +2374,9 @@ public class Leetcode500 {
         char current = '\n';
         int count = 0;
         for (var c : chars) {
-            if (c == current)
+            if (c == current) {
                 count++;
-            else {
+            } else {
                 if (count > 1) {
                     var ints = String.valueOf(count).toCharArray();
                     System.arraycopy(ints, 0, chars, i, ints.length);
@@ -2277,7 +2398,7 @@ public class Leetcode500 {
 
     /**
      * #445
-     * 
+     *
      * @param l1
      * @param l2
      * @return
@@ -2314,8 +2435,9 @@ public class Leetcode500 {
                 n1.val -= 10;
             }
         }
-        if (t == 1)
+        if (t == 1) {
             return new ListNode(t, l1);
+        }
         return l1;
     }
 
@@ -2418,7 +2540,7 @@ public class Leetcode500 {
 
     /**
      * #455,#2410
-     * 
+     *
      * @param g
      * @param s
      * @return
@@ -2463,8 +2585,9 @@ public class Leetcode500 {
             }
             if (q == m) {
                 int res = i + 1 - m;
-                if (res != 0 && res != P.length())
+                if (res != 0 && res != P.length()) {
                     return true;
+                }
                 q = PI[q];
             }
         }
@@ -2524,8 +2647,9 @@ public class Leetcode500 {
             DMNode firstNode() {
                 if (head.right != tail) {
                     return head.right;
-                } else
+                } else {
                     throw new RuntimeException();
+                }
             }
 
             boolean isEmpty() {
@@ -2533,6 +2657,7 @@ public class Leetcode500 {
             }
 
             static class DMNode {
+
                 DMNode left;
                 DMNode right;
                 final int freq;
@@ -2552,6 +2677,7 @@ public class Leetcode500 {
             }
 
             static class DLinkList {
+
                 final DLNode head, tail;
 
                 DLinkList() {
@@ -2579,11 +2705,13 @@ public class Leetcode500 {
                 DLNode lastNode() {
                     if (head.right != tail) {
                         return tail.left;
-                    } else
+                    } else {
                         throw new RuntimeException();
+                    }
                 }
 
                 static class DLNode {
+
                     DLNode left;
                     DLNode right;
                     int key;
@@ -2603,6 +2731,7 @@ public class Leetcode500 {
         }
 
         static class Info {
+
             int val;
             DLinkMatrix.DMNode nodeM;
             DLinkMatrix.DLinkList.DLNode nodeL;
@@ -2627,12 +2756,14 @@ public class Leetcode500 {
         }
 
         public int get(int key) {
-            if (capacity == 0)
+            if (capacity == 0) {
                 return -1;
+            }
             var info = key_info_map.get(key);
             int ans = -1;
-            if (info == null)
+            if (info == null) {
                 return ans;
+            }
             ans = info.val;
 
             var mNode = info.nodeM;
@@ -2641,8 +2772,9 @@ public class Leetcode500 {
             freq++;
             if (mNode.right.freq == freq) {
                 lNode.detach();
-                if (mNode.list.isEmpty())
+                if (mNode.list.isEmpty()) {
                     mNode.detach();
+                }
                 mNode.right.list.addNode(lNode);
                 info.nodeM = mNode.right;
             } else {
@@ -2651,16 +2783,18 @@ public class Leetcode500 {
                 info.nodeM = rMNode;
 
                 lNode.detach();
-                if (mNode.list.isEmpty())
+                if (mNode.list.isEmpty()) {
                     mNode.detach();
+                }
                 rMNode.list.addNode(lNode);
             }
             return ans;
         }
 
         public void put(int key, int value) {
-            if (capacity == 0)
+            if (capacity == 0) {
                 return;
+            }
             if (key_info_map.containsKey(key)) {
                 get(key);
                 key_info_map.get(key).val = value;
@@ -2670,8 +2804,9 @@ public class Leetcode500 {
                     var n = dLinkMatrix.firstNode().list.lastNode();
                     key_info_map.remove(n.key);
                     n.detach();
-                    if (dLinkMatrix.firstNode().list.isEmpty())
+                    if (dLinkMatrix.firstNode().list.isEmpty()) {
                         dLinkMatrix.firstNode().detach();
+                    }
                 }
 
                 if (dLinkMatrix.isEmpty()) {
@@ -2705,7 +2840,7 @@ public class Leetcode500 {
      */
     /**
      * #463
-     * 
+     *
      * <pre>
      * 输入:
      * [[0,1,0,0],
@@ -2720,8 +2855,8 @@ public class Leetcode500 {
      * @return perimeter
      */
     public static int islandPerimeter(int[][] grid) {
-        int[] dx = { 0, 1, 0, -1 };
-        int[] dy = { 1, 0, -1, 0 };
+        int[] dx = {0, 1, 0, -1};
+        int[] dy = {1, 0, -1, 0};
         int n = grid.length, m = grid[0].length;
         int ans = 0;
         for (int i = 0; i < n; ++i) {
@@ -2745,15 +2880,16 @@ public class Leetcode500 {
 
     /**
      * #468
-     * 
+     *
      * @param queryIP
      * @return
      */
     public String validIPAddress(String queryIP) {
-        if (queryIP.contains("."))
+        if (queryIP.contains(".")) {
             return validIPAddressv4(queryIP);
-        else if (queryIP.contains(":"))
+        } else if (queryIP.contains(":")) {
             return validIPAddressv6(queryIP);
+        }
         return "Neither";
     }
 
@@ -2765,20 +2901,25 @@ public class Leetcode500 {
                 split++;
             }
         }
-        if (parts.length != 4 || split != 3)
+        if (parts.length != 4 || split != 3) {
             return "Neither";
+        }
         for (var p : parts) {
-            if (p.isEmpty() || p.length() > 3)
+            if (p.isEmpty() || p.length() > 3) {
                 return "Neither";
-            for (var c : p.toCharArray()) {
-                if (!Character.isDigit(c))
-                    return "Neither";
             }
-            if (p.startsWith("0") && p.length() != 1)
+            for (var c : p.toCharArray()) {
+                if (!Character.isDigit(c)) {
+                    return "Neither";
+                }
+            }
+            if (p.startsWith("0") && p.length() != 1) {
                 return "Neither";
+            }
             var v = Integer.valueOf(p);
-            if (v > 255)
+            if (v > 255) {
                 return "Neither";
+            }
         }
         return "IPv4";
     }
@@ -2791,17 +2932,19 @@ public class Leetcode500 {
                 split++;
             }
         }
-        if (parts.length != 8 || split != 7)
+        if (parts.length != 8 || split != 7) {
             return "Neither";
+        }
         for (var p : parts) {
-            if (p.length() > 4 || p.isEmpty())
+            if (p.length() > 4 || p.isEmpty()) {
                 return "Neither";
+            }
             for (var c : p.toCharArray()) {
                 if (!Character.isDigit(c)
                         && (((Character.isUpperCase(c) && c > 'F')
-                                || (Character.isLowerCase(c) && c > 'f')
-                                || (!Character.isUpperCase(c)
-                                        && !Character.isLowerCase(c))))) {
+                        || (Character.isLowerCase(c) && c > 'f')
+                        || (!Character.isUpperCase(c)
+                        && !Character.isLowerCase(c))))) {
                     return "Neither";
                 }
             }
@@ -2842,10 +2985,11 @@ public class Leetcode500 {
     private static int[] countZerosAndOnes(String s) {
         int[] ans = new int[2];
         for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) == '0')
+            if (s.charAt(i) == '0') {
                 ans[0]++;
-            else
+            } else {
                 ans[1]++;
+            }
         }
         return ans;
     }
@@ -2859,18 +3003,20 @@ public class Leetcode500 {
      */
     public static int findRadius(int[] houses, int[] heaters) {
         var tree = new TreeSet<Integer>();
-        for (var n : heaters)
+        for (var n : heaters) {
             tree.add(n);
+        }
         int ans = -1;
         for (var n : houses) {
             var l = tree.floor(n);
             var r = tree.ceiling(n);
-            if (l == null)
+            if (l == null) {
                 ans = Math.max(ans, Math.abs(r - n));
-            else if (r == null)
+            } else if (r == null) {
                 ans = Math.max(ans, Math.abs(l - n));
-            else
+            } else {
                 ans = Math.max(ans, Math.min(Math.abs(l - n), Math.abs(r - n)));
+            }
         }
         return ans;
     }
@@ -2882,8 +3028,9 @@ public class Leetcode500 {
      * @return
      */
     public static int findComplement(int num) {
-        if (num == 0)
+        if (num == 0) {
             return 1;
+        }
         int i = 31;
         while (i >= 1 && kthBinDigit(num, i) == 0) {
             i--;
@@ -2899,7 +3046,7 @@ public class Leetcode500 {
 
     /**
      * #477
-     * 
+     *
      * @param nums
      * @return
      */
@@ -2908,8 +3055,9 @@ public class Leetcode500 {
         for (int i = 0; i < 32; i++) {
             int count = 0;
             for (var n : nums) {
-                if ((n & (1 << i)) == 0)
+                if ((n & (1 << i)) == 0) {
                     count++;
+                }
             }
             res += count * (nums.length - count);
         }
@@ -2929,13 +3077,15 @@ public class Leetcode500 {
         int idx = 0;
         for (var n : nums) {
             MDH.add(n);
-            if (MDH.hasMediean())
+            if (MDH.hasMediean()) {
                 ans[idx++] = MDH.median();
+            }
         }
         return ans;
     }
 
     static final class MedianDualHeap {
+
         final PriorityQueue<Long> minHeap;
         final PriorityQueue<Long> maxHeap;
 
@@ -2962,13 +3112,14 @@ public class Leetcode500 {
             queue.addLast(n);
             pollQueueExcess();
 
-            if (isEmpty())
+            if (isEmpty()) {
                 maxHeap.add(n);
-            else {
-                if (n <= maxHeap.peek())
+            } else {
+                if (n <= maxHeap.peek()) {
                     maxHeap.add(n);
-                else
+                } else {
                     minHeap.add(n);
+                }
 
                 while (maxHeap.size() > minHeap.size() + 1) {
                     minHeap.add(maxHeap.poll());
@@ -2981,18 +3132,20 @@ public class Leetcode500 {
         }
 
         public double median() {
-            if (maxHeap.size() > minHeap.size())
+            if (maxHeap.size() > minHeap.size()) {
                 return maxHeap.peek();
-            else
+            } else {
                 return (minHeap.peek() + maxHeap.peek()) / 2.;
+            }
         }
 
         private void pollQueueExcess() {
             if (queue.size() > capacity) {
                 var q = queue.pollFirst();
                 if (!minHeap.remove(q)) {
-                    if (!maxHeap.remove(q))
+                    if (!maxHeap.remove(q)) {
                         throw new RuntimeException();
+                    }
                 }
             }
         }
@@ -3005,8 +3158,9 @@ public class Leetcode500 {
      * @return
      */
     public static int magicalString(int n) {
-        if (n <= 3)
+        if (n <= 3) {
             return 1;
+        }
 
         Deque<Integer> deque = new ArrayDeque<>(n);
         deque.add(2);
@@ -3014,16 +3168,19 @@ public class Leetcode500 {
         int l = 3, ans = 1;
         while (l < n) {
             int group = deque.poll();
-            if (isOne)
+            if (isOne) {
                 ans += group;
+            }
             deque.add(isOne ? 1 : 2);
-            if (group == 2)
+            if (group == 2) {
                 deque.add(isOne ? 1 : 2);
+            }
             l += group;
             isOne = !isOne;
         }
-        if (l > n && !isOne)
+        if (l > n && !isOne) {
             ans -= l - n;
+        }
 
         return ans;
     }
@@ -3040,8 +3197,9 @@ public class Leetcode500 {
         for (int i = 0; i < s.length(); i++) {
             var c = s.charAt(i);
             if (c != '-') {
-                if (c >= 'a' && c <= 'z')
+                if (c >= 'a' && c <= 'z') {
                     c -= 'a' - 'A';
+                }
                 stack.addLast(c);
             }
         }
@@ -3068,8 +3226,9 @@ public class Leetcode500 {
         long N = Long.parseLong(n);
         for (int m = (int) Math.floor(Math.log(N) / Math.log(2)); m > 1; m--) {
             int b = (int) Math.pow(N, 1. / m);
-            if (b >= 2 && baseOnes(m, b) == N)
+            if (b >= 2 && baseOnes(m, b) == N) {
                 return String.valueOf(b);
+            }
         }
         return String.valueOf(N - 1);
     }
@@ -3094,12 +3253,14 @@ public class Leetcode500 {
         for (int i = 0; i < nums.length; i++) {
             var n = nums[i];
             if (n == 1) {
-                if (i - 1 >= 0 && nums[i - 1] == 1)
+                if (i - 1 >= 0 && nums[i - 1] == 1) {
                     count++;
-                else
+                } else {
                     count = 1;
-            } else
+                }
+            } else {
                 max = Math.max(max, count);
+            }
         }
         max = Math.max(max, count);
         return max;
@@ -3107,7 +3268,7 @@ public class Leetcode500 {
 
     /**
      * #490
-     * 
+     *
      * @param maze
      * @param start
      * @param destination
@@ -3122,32 +3283,41 @@ public class Leetcode500 {
     boolean visit(int i, int j, int[][] maze, boolean[][] visiting,
             int[] destination) {
         visiting[i][j] = true;
-        if (i == destination[0] && j == destination[1])
+        if (i == destination[0] && j == destination[1]) {
             return true;
+        }
 
         int l = j;
-        while (l - 1 >= 0 && maze[i][l - 1] == 0)
+        while (l - 1 >= 0 && maze[i][l - 1] == 0) {
             l--;
-        if (!visiting[i][l] && visit(i, l, maze, visiting, destination))
+        }
+        if (!visiting[i][l] && visit(i, l, maze, visiting, destination)) {
             return true;
+        }
 
         int r = j;
-        while (r + 1 < maze[0].length && maze[i][r + 1] == 0)
+        while (r + 1 < maze[0].length && maze[i][r + 1] == 0) {
             r++;
-        if (!visiting[i][r] && visit(i, r, maze, visiting, destination))
+        }
+        if (!visiting[i][r] && visit(i, r, maze, visiting, destination)) {
             return true;
+        }
 
         int t = i;
-        while (t - 1 >= 0 && maze[t - 1][j] == 0)
+        while (t - 1 >= 0 && maze[t - 1][j] == 0) {
             t--;
-        if (!visiting[t][j] && visit(t, j, maze, visiting, destination))
+        }
+        if (!visiting[t][j] && visit(t, j, maze, visiting, destination)) {
             return true;
+        }
 
         int d = i;
-        while (d + 1 < maze.length && maze[d + 1][j] == 0)
+        while (d + 1 < maze.length && maze[d + 1][j] == 0) {
             d++;
-        if (!visiting[d][j] && visit(d, j, maze, visiting, destination))
+        }
+        if (!visiting[d][j] && visit(d, j, maze, visiting, destination)) {
             return true;
+        }
 
         return false;
     }
@@ -3163,6 +3333,7 @@ public class Leetcode500 {
     }
 
     static class ReversePairsSolver {
+
         private void merge(int[] array, int start, int[] cache1, int[] cache2) {
             int right_idx = 0;
             int left_idx = 0;
@@ -3223,7 +3394,7 @@ public class Leetcode500 {
 
     /**
      * #494
-     * 
+     *
      * @param nums
      * @param target
      * @return
@@ -3251,7 +3422,7 @@ public class Leetcode500 {
 
     /**
      * #496
-     * 
+     *
      * @param nums1
      * @param nums2
      * @return
@@ -3283,13 +3454,15 @@ public class Leetcode500 {
             if (sum % 2 == 0) {
                 int i = Math.min(sum, m - 1);
                 int j = sum - i;
-                while (i >= 0 && j < n)
+                while (i >= 0 && j < n) {
                     ans[idx++] = mat[i--][j++];
+                }
             } else {
                 int j = Math.min(sum, n - 1);
                 int i = sum - j;
-                while (i < m && j >= 0)
+                while (i < m && j >= 0) {
                     ans[idx++] = mat[i++][j--];
+                }
             }
         }
         return ans;
