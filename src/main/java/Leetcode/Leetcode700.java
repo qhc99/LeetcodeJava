@@ -1,6 +1,17 @@
 package Leetcode;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Stack;
+import java.util.TreeMap;
 import java.util.function.BiFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -10,21 +21,23 @@ public class Leetcode700 {
 
     /**
      * #605
-     * 
+     *
      * @param flowerbed
      * @param n
      * @return
      */
     public boolean canPlaceFlowers(int[] flowerbed, int n) {
-        if (n == 0)
+        if (n == 0) {
             return true;
+        }
         for (int i = 0; i < flowerbed.length; i++) {
             var l = i == 0 || flowerbed[i - 1] == 0;
             var r = i == flowerbed.length - 1 || flowerbed[i + 1] == 0;
             if (l && r && flowerbed[i] == 0) {
                 n--;
-                if (n == 0)
+                if (n == 0) {
                     return true;
+                }
                 flowerbed[i] = 1;
             }
         }
@@ -33,7 +46,7 @@ public class Leetcode700 {
 
     /**
      * #621
-     * 
+     *
      * @param tasks
      * @param n
      * @return
@@ -45,8 +58,10 @@ public class Leetcode700 {
             var c1 = count.get(a);
             var c2 = count.get(b);
             var diff = c2 - c1;
-            if (diff != 0)
+            if (diff != 0) {
                 return diff; // Larger count
+
+            }
             return a - b; // lex
         });
 
@@ -75,8 +90,9 @@ public class Leetcode700 {
                 } else {
                     count.put(t, c - 1);
                 }
-                if (c != 1)
+                if (c != 1) {
                     queue.add(t);
+                }
                 latestPlaces.put(t, i);
                 break;
             }
@@ -91,6 +107,7 @@ public class Leetcode700 {
      * #622 MyCircularQueue
      */
     class MyCircularQueue {
+
         int[] arr;
         int head = 0, tail = 0;
         boolean isEmpty = true;
@@ -100,8 +117,9 @@ public class Leetcode700 {
         }
 
         public boolean enQueue(int value) {
-            if (isFull())
+            if (isFull()) {
                 return false;
+            }
             isEmpty = false;
             arr[tail] = value;
             tail = (tail + 1) % arr.length;
@@ -109,23 +127,27 @@ public class Leetcode700 {
         }
 
         public boolean deQueue() {
-            if (isEmpty())
+            if (isEmpty()) {
                 return false;
+            }
             head = (head + 1) % arr.length;
-            if (head == tail)
+            if (head == tail) {
                 isEmpty = true;
+            }
             return true;
         }
 
         public int Front() {
-            if (isEmpty())
+            if (isEmpty()) {
                 return -1;
+            }
             return arr[head];
         }
 
         public int Rear() {
-            if (isEmpty())
+            if (isEmpty()) {
                 return -1;
+            }
             return arr[(tail - 1 + arr.length) % arr.length];
         }
 
@@ -140,7 +162,7 @@ public class Leetcode700 {
 
     /**
      * #628
-     * 
+     *
      * @param nums
      * @return
      */
@@ -161,14 +183,16 @@ public class Leetcode700 {
                         dp[1][0]);
                 dp[1][1] = Math.max(Math.max(n * dp[0][0], n * dp[0][1]),
                         dp[1][1]);
-                if (len == 1)
+                if (len == 1) {
                     len++;
+                }
             }
             if (len >= 0) {
                 dp[0][0] = Math.min(dp[0][0], n);
                 dp[0][1] = Math.max(dp[0][1], n);
-                if (len == 0)
+                if (len == 0) {
                     len++;
+                }
             }
         }
         return dp[2][1];
@@ -180,6 +204,7 @@ public class Leetcode700 {
     class Excel {
 
         static record Cell(int row, int column) {
+
             @Override
             public final int hashCode() {
                 return Objects.hash(row, column);
@@ -187,13 +212,15 @@ public class Leetcode700 {
 
             @Override
             public final boolean equals(Object arg0) {
-                if (arg0 instanceof Cell o)
+                if (arg0 instanceof Cell o) {
                     return o.row == row && o.column == column;
+                }
                 return false;
             }
         }
 
         static record Range(int x1, int y1, int x2, int y2) {
+
         }
 
         int[][] mat;
@@ -207,8 +234,9 @@ public class Leetcode700 {
             row--;
             int col = column - 'A';
             var cell = new Cell(row, col);
-            if (formulas.containsKey(cell))
+            if (formulas.containsKey(cell)) {
                 formulas.remove(cell);
+            }
             updateCells(row, col, val - mat[row][col]);
         }
 
@@ -268,7 +296,7 @@ public class Leetcode700 {
 
     /**
      * #632
-     * 
+     *
      * @param nums
      * @return
      */
@@ -284,7 +312,7 @@ public class Leetcode700 {
         }
         PriorityQueue<Integer> queue = new PriorityQueue<Integer>(
                 (i, j) -> nums.get(i).get(idx.get(i))
-                        - nums.get(j).get(idx.get(j)));
+                - nums.get(j).get(idx.get(j)));
         for (int i = 0; i < nums.size(); i++) {
             queue.add(i);
         }
@@ -298,8 +326,9 @@ public class Leetcode700 {
                 res[1] = max;
             }
             i++;
-            if (i >= nums.get(row).size())
+            if (i >= nums.get(row).size()) {
                 break;
+            }
             idx.set(row, i);
             max = Math.max(max, nums.get(row).get(i));
             queue.add(row);
@@ -311,11 +340,12 @@ public class Leetcode700 {
      * #635 LogSystem
      */
     class LogSystem {
+
         TreeMap<String, List<Integer>> map = new TreeMap<>();
         Map<String, Integer> idx = Map.of("Year", 1, "Month", 2, "Day", 3,
                 "Hour", 4, "Minute", 5, "Second", 6);
-        String[] min = new String[] { "2000", "01", "01", "00", "00", "00" };
-        String[] max = new String[] { "2017", "12", "31", "23", "59", "59" };
+        String[] min = new String[]{"2000", "01", "01", "00", "00", "00"};
+        String[] max = new String[]{"2017", "12", "31", "23", "59", "59"};
 
         public LogSystem() {
 
@@ -337,22 +367,24 @@ public class Leetcode700 {
 
         String floor(String s, String granularity) {
             var arr = s.split(":");
-            for (int i = idx.get(granularity); i < arr.length; i++)
+            for (int i = idx.get(granularity); i < arr.length; i++) {
                 arr[i] = min[i];
+            }
             return String.join(":", arr);
         }
 
         String ceil(String s, String granularity) {
             var arr = s.split(":");
-            for (int i = idx.get(granularity); i < arr.length; i++)
+            for (int i = idx.get(granularity); i < arr.length; i++) {
                 arr[i] = max[i];
+            }
             return String.join(":", arr);
         }
     }
 
     /**
      * #636
-     * 
+     *
      * @param n
      * @param logs
      * @return
@@ -367,17 +399,19 @@ public class Leetcode700 {
             var state = arr[1];
             var t = Integer.valueOf(arr[2]);
             var isEnd = state.equals("end");
-            if (isEnd)
+            if (isEnd) {
                 t++;
+            }
             var v = t - time;
             if (!start.isEmpty()) {
                 res[start.peek()] += v;
             }
             time = t;
-            if (!isEnd)
+            if (!isEnd) {
                 start.add(id);
-            else
+            } else {
                 start.pop();
+            }
 
         }
         return res;
@@ -418,7 +452,7 @@ public class Leetcode700 {
                 if (new_need != null) {
                     min_spec_price = Math.min(min_spec_price,
                             min_offer_of(new_need, price, special, cache)
-                                    + spec.get(spec.size() - 1));
+                            + spec.get(spec.size() - 1));
                 }
             }
             var ans = Math.min(non_spec_price, min_spec_price);
@@ -432,10 +466,11 @@ public class Leetcode700 {
         List<Integer> n = new ArrayList<>(current_needs.size());
         for (int i = 0; i < current_needs.size(); i++) {
             var n_i = current_needs.get(i) - spec.get(i);
-            if (n_i >= 0)
+            if (n_i >= 0) {
                 n.add(n_i);
-            else
+            } else {
                 return null;
+            }
         }
         return n;
     }
@@ -447,6 +482,93 @@ public class Leetcode700 {
             ans += needs.get(i) * price.get(i);
         }
         return ans;
+    }
+
+    /**
+     * #642 AutocompleteSystem
+     */
+    public static final class AutocompleteSystem {
+
+        static class Node {
+
+            List<StFreq> idx = new ArrayList<>();
+            Map<Character, Node> children = new HashMap<>();
+        }
+
+        static class StFreq implements Comparable<Object> {
+
+            String sentence;
+            int freq;
+
+            public StFreq(String s, int f) {
+                sentence = s;
+                freq = f;
+            }
+
+            @Override
+            public int compareTo(Object o) {
+                if (o instanceof StFreq other) {
+                    var c = Integer.compare(other.freq, freq);
+                    if (c != 0) {
+                        return c;
+                    }
+                    return sentence.compareTo(other.sentence);
+                }
+                throw new UnsupportedOperationException("Not supported yet.");
+            }
+
+        }
+        Node root = new Node();
+        Node ptr = root;
+        StringBuilder builder = new StringBuilder();
+
+        public AutocompleteSystem(String[] sentences, int[] times) {
+            List<StFreq> list = new ArrayList<>();
+            for (int i = 0; i < sentences.length; i++) {
+                list.add(new StFreq(sentences[i], times[i]));
+            }
+
+            for (var sf : list) {
+                append(sf);
+            }
+        }
+
+        void append(StFreq sf) {
+            var n = root;
+            for (var c : sf.sentence.toCharArray()) {
+                n = n.children.computeIfAbsent(c, k -> new Node());
+                boolean added = false;
+                for (var t : n.idx) {
+                    if (t.sentence.equals(sf.sentence)) {
+                        t.freq += sf.freq;
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added) {
+                    n.idx.add(new StFreq(sf.sentence, sf.freq));
+                }
+            }
+        }
+
+        public List<String> input(char c) {
+            if (c == '#') {
+                ptr = root;
+                append(new StFreq(builder.toString(), 1));
+                builder.delete(0, builder.length());
+                return List.of();
+            }
+            builder.append(c);
+            ptr = ptr.children.computeIfAbsent(c, k -> new Node());
+            Queue<StFreq> queue = new PriorityQueue<>();
+            queue.addAll(ptr.idx);
+            List<String> res = new ArrayList<>();
+            while (!queue.isEmpty() && res.size() < 3) {
+                res.add(queue.poll().sentence);
+            }
+            return res;
+
+        }
     }
 
     /**
@@ -474,7 +596,7 @@ public class Leetcode700 {
 
     /**
      * #647
-     * 
+     *
      * @param s
      * @return
      */
@@ -510,10 +632,12 @@ public class Leetcode700 {
         int res = 0;
         for (int i = 0; i < str.length; i++) {
             var len = manacher[i];
-            if (str[i] == '$')
+            if (str[i] == '$') {
                 len--;
-            if (str[i + manacher[i] - 1] == '$')
+            }
+            if (str[i + manacher[i] - 1] == '$') {
                 len--;
+            }
             res += (len + 1) / 2;
         }
         return res;
@@ -539,10 +663,11 @@ public class Leetcode700 {
         var l = scanTree(n.left, str2node);
         var r = scanTree(n.right, str2node);
         var s = "(" + l + "," + n.val + "," + r + ")";
-        if (!str2node.containsKey(s))
+        if (!str2node.containsKey(s)) {
             str2node.put(s, null);
-        else
+        } else {
             str2node.put(s, n);
+        }
         return s;
     }
 
@@ -596,8 +721,9 @@ public class Leetcode700 {
                 var queue_n_minus_1 = last_elem_2_len.get(n - 1);
                 last_elem_2_len.computeIfAbsent(n, k -> new PriorityQueue<>(16))
                         .add(queue_n_minus_1.poll() + 1);
-                if (queue_n_minus_1.isEmpty())
+                if (queue_n_minus_1.isEmpty()) {
                     last_elem_2_len.remove(n - 1);
+                }
             }
         }
         return last_elem_2_len.values().stream().allMatch(q -> q.peek() >= 3);
@@ -605,13 +731,13 @@ public class Leetcode700 {
 
     /**
      * #661
-     * 
+     *
      * @param img
      * @return
      */
     public int[][] imageSmoother(int[][] img) {
-        int[] dx = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
-        int[] dy = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
+        int[] dx = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
+        int[] dy = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
         int m = img.length, n = img[0].length;
         int[][] res = new int[m][n];
         for (int i = 0; i < m; i++) {
@@ -681,7 +807,7 @@ public class Leetcode700 {
 
     /**
      * #670
-     * 
+     *
      * @param num
      * @return
      */
@@ -762,7 +888,7 @@ public class Leetcode700 {
 
     /**
      * #678
-     * 
+     *
      * @param s
      * @return
      */
@@ -814,31 +940,37 @@ public class Leetcode700 {
                 for (int j = i + 1; j < nums.length; j++) {
                     double[] arr = new double[nums.length - 1];
                     merge(i, j, nums, arr, Double::sum);
-                    if (judge24(arr))
+                    if (judge24(arr)) {
                         return true;
+                    }
 
                     merge(i, j, nums, arr, (a, b) -> a * b);
-                    if (judge24(arr))
+                    if (judge24(arr)) {
                         return true;
+                    }
 
                     merge(i, j, nums, arr, (a, b) -> a - b);
-                    if (judge24(arr))
+                    if (judge24(arr)) {
                         return true;
+                    }
 
                     merge(i, j, nums, arr, (a, b) -> b - a);
-                    if (judge24(arr))
+                    if (judge24(arr)) {
                         return true;
+                    }
 
                     double a = nums[i], b = nums[j];
                     if (Math.abs(b) > tol) {
                         merge(i, j, nums, arr, (a1, a2) -> a1 / a2);
-                        if (judge24(arr))
+                        if (judge24(arr)) {
                             return true;
+                        }
                     }
                     if (Math.abs(a) > tol) {
                         merge(i, j, nums, arr, (a1, a2) -> a2 / a1);
-                        if (judge24(arr))
+                        if (judge24(arr)) {
                             return true;
+                        }
                     }
                 }
             }
@@ -879,7 +1011,7 @@ public class Leetcode700 {
 
     /**
      * #680
-     * 
+     *
      * @param s
      * @return
      */
@@ -905,7 +1037,7 @@ public class Leetcode700 {
 
     /**
      * #684
-     * 
+     *
      * @param edges
      * @return
      */
@@ -948,7 +1080,7 @@ public class Leetcode700 {
 
     /**
      * #688
-     * 
+     *
      * @param n
      * @param k
      * @param row
@@ -958,8 +1090,8 @@ public class Leetcode700 {
     public double knightProbability(int n, int k, int row, int column) {
         double[][][] dp = new double[k + 1][n][n];
         dp[0][row][column] = 1;
-        int[] dx = new int[] { 1, 2, 1, 2, -1, -2, -1, -2 };
-        int[] dy = new int[] { 2, 1, -2, -1, 2, 1, -2, -1 };
+        int[] dx = new int[]{1, 2, 1, 2, -1, -2, -1, -2};
+        int[] dy = new int[]{2, 1, -2, -1, 2, 1, -2, -1};
         for (int i = 1; i <= k; i++) {
             for (int x = 0; x < n; x++) {
                 for (int y = 0; y < n; y++) {
@@ -994,8 +1126,8 @@ public class Leetcode700 {
         }
         int max_1 = w_sum_1, max_2 = max_1 + w_sum_2, max_3 = max_2 + w_sum_3;
         int max_pos_1 = 0;
-        int[] max_pos_2 = new int[] { 0, k };
-        int[] max_pos_3 = new int[] { 0, k, 2 * k };
+        int[] max_pos_2 = new int[]{0, k};
+        int[] max_pos_3 = new int[]{0, k, 2 * k};
         for (int i = 0; i + 3 * k < nums.length; i++) {
             w_sum_1 -= nums[i];
             w_sum_1 += nums[i + k];
@@ -1026,7 +1158,7 @@ public class Leetcode700 {
 
     /**
      * #692
-     * 
+     *
      * @param words
      * @param k
      * @return
@@ -1056,7 +1188,7 @@ public class Leetcode700 {
 
     /**
      * #695
-     * 
+     *
      * @param grid
      * @return
      */
@@ -1065,9 +1197,9 @@ public class Leetcode700 {
         DisjointSet set = new DisjointSet(m * n);
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (grid[i][j] == 0)
+                if (grid[i][j] == 0) {
                     set.parent[i * n + j] = -1;
-                else {
+                } else {
                     if (j + 1 < n && grid[i][j + 1] == 1) {
                         set.union(i * n + j, i * n + j + 1);
                     }
