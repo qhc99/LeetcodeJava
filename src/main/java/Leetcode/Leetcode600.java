@@ -1119,4 +1119,84 @@ public class Leetcode600 {
         }
     }
 
+    /**
+     * #588 FileSystem
+     */
+    class FileSystem {
+
+        static class File {
+            StringBuilder content = new StringBuilder();
+
+        }
+
+        static class Dir {
+            Map<String, Dir> dirs = new HashMap<>();
+            Map<String, File> files = new HashMap<>();
+
+        }
+
+        Dir root = new Dir();
+
+        public FileSystem() {
+
+        }
+
+        public List<String> ls(String path) {
+            var ptr = !path.equals("/") ? getParentDir(path) : root;
+            var name = getName(path);
+            List<String> res = new ArrayList<>();
+            if (ptr.files.containsKey(name)) {
+                return List.of(name);
+            } else {
+                if (!path.equals("/"))
+                    ptr = ptr.dirs.get(name);
+                Set<String> names = new TreeSet<>();
+                names.addAll(ptr.dirs.keySet());
+                names.addAll(ptr.files.keySet());
+                for (var n : names) {
+                    res.add(n);
+                }
+            }
+            return res;
+        }
+
+        public void mkdir(String path) {
+            var ptr = getParentDir(path);
+            var name = getName(path);
+            ptr.dirs.computeIfAbsent(name, k -> new Dir());
+        }
+
+        public void addContentToFile(String filePath, String content) {
+            var ptr = getParentDir(filePath);
+            var name = getName(filePath);
+            ptr.files.computeIfAbsent(name, k -> new File()).content
+                    .append(content);
+        }
+
+        public String readContentFromFile(String filePath) {
+            var ptr = getParentDir(filePath);
+            var name = getName(filePath);
+            return ptr.files.get(name).content.toString();
+        }
+
+        String getName(String path) {
+            var arr = path.split("/");
+            if (arr.length > 0)
+                return arr[arr.length - 1];
+            else
+                return "";
+        }
+
+        Dir getParentDir(String path) {
+            var arr = path.split("/");
+            var ptr = root;
+            for (int i = 0; i < arr.length - 1; i++) {
+                var part = arr[i];
+                if (!part.isEmpty()) {
+                    ptr = ptr.dirs.computeIfAbsent(part, k -> new Dir());
+                }
+            }
+            return ptr;
+        }
+    }
 }
