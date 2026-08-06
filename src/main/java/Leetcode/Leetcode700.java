@@ -1187,6 +1187,120 @@ public class Leetcode700 {
     }
 
     /**
+     * #694
+     */
+    public int numDistinctIslands(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        var set = new DisjointSet(m * n);
+        int[] dx = new int[]{0, 0, 1, -1};
+        int[] dy = new int[]{1, -1, 0, 0};
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != 1) {
+                    continue;
+                }
+                for (int t = 0; t < 4; t++) {
+                    var x = i + dx[t];
+                    var y = j + dy[t];
+                    if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] == 1) {
+                        set.union(i * n + j, x * n + y);
+                    }
+                }
+            }
+        }
+        Map<Integer, List<Pos>> islands = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != 1) {
+                    continue;
+                }
+                var p = new Pos(i, j);
+                islands.computeIfAbsent(set.parent(i * n + j), k -> new ArrayList<>()).add(p);
+            }
+        }
+        TriePos root = new TriePos();
+        int res = 0;
+        for (var l : islands.values()) {
+            var offset = l.stream().reduce(new Pos(m, n), (a, b) -> new Pos(Math.min(a.i, b.i), Math.min(a.j, b.j)));
+            var t = l.stream().map(p -> new Pos(p.i - offset.i, p.j - offset.j)).sorted().toList();
+            l.clear();
+            l.addAll(t);
+        }
+        for (var l : islands.values()) {
+            var ptr = root;
+            for (var p : l) {
+                ptr = ptr.children.computeIfAbsent(p, k -> new TriePos());
+            }
+            if (!ptr.hasIsland) {
+                res++;
+            }
+            ptr.hasIsland = true;
+        }
+
+        return res;
+    }
+
+    static class TriePos {
+
+        boolean hasIsland;
+        Map<Pos, TriePos> children = new HashMap<>();
+    }
+
+    static record Pos(int i, int j) implements Comparable<Pos> {
+
+        @Override
+        public int compareTo(Pos o) {
+            var c = Integer.compare(i, o.i);
+            if (c != 0) {
+                return c;
+            }
+            return Integer.compare(j, o.j);
+        }
+
+    }
+
+    static class DisjointSet {
+
+        public int[] parent;
+        int[] rank;
+
+        DisjointSet(int len) {
+            parent = new int[len];
+            rank = new int[len];
+            for (int i = 0; i < len; i++) {
+                parent[i] = i;
+            }
+        }
+
+        int parent(int i) {
+            if (parent[i] != i) {
+                parent[i] = parent(parent[i]);
+            }
+            return parent[i];
+        }
+
+        boolean isLinked(int a, int b) {
+            return parent(a) == parent(b);
+        }
+
+        void union(int a, int b) {
+            var pa = parent(a);
+            var pb = parent(b);
+            if (pa == pb) {
+                return;
+            }
+            if (rank[pa] < rank[pb]) {
+                parent[pa] = pb;
+            } else {
+                parent[pb] = pa;
+                if (rank[pa] == rank[pb]) {
+                    rank[pa]++;
+                }
+            }
+        }
+    }
+
+    /**
      * #695
      *
      * @param grid
