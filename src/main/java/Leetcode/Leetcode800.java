@@ -1,11 +1,21 @@
 package Leetcode;
 
-import java.util.*;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
-import javax.management.RuntimeErrorException;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Deque;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
+import java.util.Queue;
+import java.util.Set;
 
-@SuppressWarnings({ "unused", "JavaDoc" })
+@SuppressWarnings({"unused", "JavaDoc"})
 public class Leetcode800 {
 
     /**
@@ -41,6 +51,7 @@ public class Leetcode800 {
     }
 
     class KthLargest {
+
         Queue<Integer> geq = new PriorityQueue<>();
         int k;
 
@@ -57,8 +68,9 @@ public class Leetcode800 {
         }
 
         public int add(int val) {
-            if (geq.size() < k || val > geq.peek())
+            if (geq.size() < k || val > geq.peek()) {
                 geq.add(val);
+            }
             if (geq.size() > k) {
                 geq.poll();
             }
@@ -70,7 +82,9 @@ public class Leetcode800 {
      * #706 MyHashMap
      */
     class MyHashMap {
+
         static class Node {
+
             int key;
             int val;
 
@@ -130,6 +144,7 @@ public class Leetcode800 {
     class MyLinkedList {
 
         static class Node {
+
             Node prev;
             Node next;
             int val;
@@ -210,20 +225,23 @@ public class Leetcode800 {
 
     /**
      * #713
-     * 
+     *
      * @param nums
      * @param k
      * @return
      */
     public int numSubarrayProductLessThanK(int[] nums, int k) {
-        if (k == 0)
+        if (k == 0) {
             return 0;
-        if (nums.length == 1)
+        }
+        if (nums.length == 1) {
             return nums[0] == k ? 1 : 0;
+        }
         int res = 0;
         long v = nums[0];
-        if (v == k)
+        if (v == k) {
             res++;
+        }
         int l = 0;
         for (int i = 1; i < nums.length; i++) {
             while (v * nums[i] >= k && l < i) {
@@ -232,15 +250,16 @@ public class Leetcode800 {
             if (v * nums[i] < k) {
                 res += i + 1 - l;
                 v *= nums[i];
-            } else
+            } else {
                 l = i + 1;
+            }
         }
         return res;
     }
 
     /**
      * #714
-     * 
+     *
      * @param prices
      * @param fee
      * @return
@@ -260,7 +279,7 @@ public class Leetcode800 {
 
     /**
      * #724
-     * 
+     *
      * @param nums
      * @return
      */
@@ -271,8 +290,9 @@ public class Leetcode800 {
         for (int i = 0; i < nums.length; i++) {
             var l = i - 1 >= 0 ? nums[i - 1] : 0;
             var r = nums[nums.length - 1] - nums[i];
-            if (l == r)
+            if (l == r) {
                 return i;
+            }
         }
 
         return -1;
@@ -379,11 +399,11 @@ public class Leetcode800 {
 
     private static Map<String, Integer> merge_maps(Map<String, Integer> m1,
             Map<String, Integer> m2) {
-        if (m1.isEmpty())
+        if (m1.isEmpty()) {
             return m2;
-        else if (m2.isEmpty())
+        } else if (m2.isEmpty()) {
             return m1;
-        else {
+        } else {
             if (m1.size() < m2.size()) {
                 for (var kv : m1.entrySet()) {
                     m2.put(kv.getKey(),
@@ -426,7 +446,9 @@ public class Leetcode800 {
      * #729 MyCalendar
      */
     class MyCalendar {
+
         static class SegTree {
+
             int rangeLeft;
             int rangeRight;
             SegTree left;
@@ -447,22 +469,25 @@ public class Leetcode800 {
                 int mid = rangeLeft + (rangeRight - rangeLeft) / 2;
 
                 if (e >= mid + 1) {
-                    if (right == null)
+                    if (right == null) {
                         right = new SegTree(mid + 1, rangeRight);
+                    }
                     right.insert(Math.max(s, mid + 1), e);
                     bookRight = true;
                 }
                 if (s <= mid) {
-                    if (left == null)
+                    if (left == null) {
                         left = new SegTree(rangeLeft, mid);
+                    }
                     left.insert(s, Math.min(e, mid));
                     bookLeft = true;
                 }
             }
 
             boolean overlap(int s, int e) {
-                if (s == rangeLeft && e == rangeRight)
+                if (s == rangeLeft && e == rangeRight) {
                     return bookLeft || bookRight;
+                }
                 int mid = rangeLeft + (rangeRight - rangeLeft) / 2;
                 boolean inLeft = false, inRight = false;
                 if (e >= mid + 1) {
@@ -485,8 +510,9 @@ public class Leetcode800 {
         }
 
         public boolean book(int startTime, int endTime) {
-            if (tree.overlap(startTime, endTime - 1))
+            if (tree.overlap(startTime, endTime - 1)) {
                 return false;
+            }
             tree.insert(startTime, endTime - 1);
             return true;
         }
@@ -500,6 +526,7 @@ public class Leetcode800 {
         private static final int INF_R = 1_000_000_000;
 
         private static final class Node {
+
             int agg; // max bookings over this segment
             int tag; // lazy tag to push to children
             int left; // index of left child in arr (0 = none)
@@ -515,8 +542,8 @@ public class Leetcode800 {
 
         public boolean book(int startTime, int endTime) {
             update(1, +1, 0, INF_R, startTime, endTime - 1); // inclusive
-                                                             // [startTime,
-                                                             // endTime]
+            // [startTime,
+            // endTime]
             int k = 2;
             if (arr.get(1).agg > k) {
                 update(1, -1, 0, INF_R, startTime, endTime - 1); // rollback
@@ -558,10 +585,12 @@ public class Leetcode800 {
             }
 
             // Recurse where overlaps
-            if (mid >= ql)
+            if (mid >= ql) {
                 update(cur.left, diff, l, mid, ql, qr);
-            if (mid + 1 <= qr)
+            }
+            if (mid + 1 <= qr) {
                 update(cur.right, diff, mid + 1, r, ql, qr);
+            }
 
             Node lc = arr.get(cur.left);
             Node rc = arr.get(cur.right);
@@ -573,9 +602,11 @@ public class Leetcode800 {
      * #732
      */
     class MyCalendarThree {
+
         private static final int INF_R = 1_000_000_000;
 
         private static final class Node {
+
             int agg; // max bookings over this segment
             int tag; // lazy tag to push to children
             int left; // index of left child in arr (0 = none)
@@ -591,8 +622,8 @@ public class Leetcode800 {
 
         public int book(int startTime, int endTime) {
             update(1, +1, 0, INF_R, startTime, endTime - 1); // inclusive
-                                                             // [startTime,
-                                                             // endTime]
+            // [startTime,
+            // endTime]
             return arr.get(1).agg;
         }
 
@@ -629,10 +660,12 @@ public class Leetcode800 {
             }
 
             // Recurse where overlaps
-            if (mid >= ql)
+            if (mid >= ql) {
                 update(cur.left, diff, l, mid, ql, qr);
-            if (mid + 1 <= qr)
+            }
+            if (mid + 1 <= qr) {
                 update(cur.right, diff, mid + 1, r, ql, qr);
+            }
 
             Node lc = arr.get(cur.left);
             Node rc = arr.get(cur.right);
@@ -642,7 +675,7 @@ public class Leetcode800 {
 
     /**
      * #735
-     * 
+     *
      * @param asteroids
      * @return
      */
@@ -658,10 +691,11 @@ public class Leetcode800 {
                         && -n > queue.getLast()) {
                     queue.pollLast();
                 }
-                if (!queue.isEmpty() && queue.getLast() == -n)
+                if (!queue.isEmpty() && queue.getLast() == -n) {
                     queue.pollLast();
-                else if (queue.isEmpty() || queue.getLast() < 0)
+                } else if (queue.isEmpty() || queue.getLast() < 0) {
                     queue.add(n);
+                }
             } else {
                 queue.add(n);
             }
@@ -671,7 +705,7 @@ public class Leetcode800 {
 
     /**
      * #736
-     * 
+     *
      * @param expression
      * @return
      */
@@ -689,14 +723,16 @@ public class Leetcode800 {
 
         if (isVar(exp.peek())) {
             int res = symTable.getVar(exp.poll());
-            if (scope)
+            if (scope) {
                 exp.poll();
+            }
             return res;
 
         } else if (isNum(exp.peek())) {
             int res = Integer.valueOf(exp.poll());
-            if (scope)
+            if (scope) {
                 exp.poll();
+            }
             return res;
         }
         var cmd = exp.poll();
@@ -736,9 +772,9 @@ public class Leetcode800 {
         Queue<String> res = new ArrayDeque<>();
         while (i < expression.length()) {
             var c = expression.charAt(i);
-            if (c == ' ')
+            if (c == ' ') {
                 i++;
-            else if (c == '(' || c == ')') {
+            } else if (c == '(' || c == ')') {
                 res.add(String.valueOf(c));
                 i++;
             } else {
@@ -755,6 +791,7 @@ public class Leetcode800 {
     }
 
     static class SymTable {
+
         SymTable prev = null;
         Map<String, Integer> table = new HashMap<>();
 
@@ -763,10 +800,12 @@ public class Leetcode800 {
         }
 
         int getVar(String s) {
-            if (table.containsKey(s))
+            if (table.containsKey(s)) {
                 return table.get(s);
-            if (prev != null)
+            }
+            if (prev != null) {
                 return prev.getVar(s);
+            }
             throw new RuntimeException();
         }
 
@@ -777,7 +816,7 @@ public class Leetcode800 {
 
     /**
      * #737
-     * 
+     *
      * @param sentence1
      * @param sentence2
      * @param similarPairs
@@ -785,30 +824,37 @@ public class Leetcode800 {
      */
     public boolean areSentencesSimilarTwo(String[] sentence1,
             String[] sentence2, List<List<String>> similarPairs) {
-        if (sentence1.length != sentence2.length)
+        if (sentence1.length != sentence2.length) {
             return false;
+        }
         int id = 0;
         Map<String, Integer> str2id = new HashMap<>();
-        for (var p : similarPairs)
-            for (var s : p)
-                if (!str2id.containsKey(s))
+        for (var p : similarPairs) {
+            for (var s : p) {
+                if (!str2id.containsKey(s)) {
                     str2id.put(s, id++);
+                }
+            }
+        }
         DisjointSet2 set = new DisjointSet2(str2id.size());
-        for (var p : similarPairs)
+        for (var p : similarPairs) {
             set.union(str2id.get(p.get(0)), str2id.get(p.get(1)));
+        }
         for (int i = 0; i < sentence1.length; i++) {
             var s1 = sentence1[i];
             var s2 = sentence2[i];
             var id1 = str2id.getOrDefault(s1, -1);
             var id2 = str2id.getOrDefault(s2, -1);
             if (!s1.equals(s2) && (id1 < 0 || id2 < 0
-                    || set.parent(id1) != set.parent(id2)))
+                    || set.parent(id1) != set.parent(id2))) {
                 return false;
+            }
         }
         return true;
     }
 
     static class DisjointSet2 {
+
         public int[] parent;
         int[] rank;
 
@@ -834,21 +880,23 @@ public class Leetcode800 {
         void union(int a, int b) {
             var pa = parent(a);
             var pb = parent(b);
-            if (pa == pb)
+            if (pa == pb) {
                 return;
+            }
             if (rank[pa] < rank[pb]) {
                 parent[pa] = pb;
             } else {
                 parent[pb] = pa;
-                if (rank[pa] == rank[pb])
+                if (rank[pa] == rank[pb]) {
                     rank[pa]++;
+                }
             }
         }
     }
 
     /**
      * #739
-     * 
+     *
      * @param temperatures
      * @return
      */
@@ -858,13 +906,13 @@ public class Leetcode800 {
         for (int i = 0; i < temperatures.length; i++) {
             var t = temperatures[i];
             if (stack.size() == 0 || stack.getLast()[0] >= t) {
-                stack.addLast(new int[] { t, i });
+                stack.addLast(new int[]{t, i});
             } else {
                 while (stack.size() > 0 && stack.getLast()[0] < t) {
                     var idx = stack.pollLast()[1];
                     ans[idx] = i - idx;
                 }
-                stack.addLast(new int[] { t, i });
+                stack.addLast(new int[]{t, i});
             }
         }
         return ans;
@@ -872,7 +920,7 @@ public class Leetcode800 {
 
     /**
      * #743
-     * 
+     *
      * @param times
      * @param n
      * @param k
@@ -906,11 +954,12 @@ public class Leetcode800 {
     }
 
     static record Edge(int node, int time) {
+
     }
 
     /**
      * #746
-     * 
+     *
      * @param cost
      * @return
      */
@@ -924,7 +973,7 @@ public class Leetcode800 {
 
     /**
      * #751
-     * 
+     *
      * @param ip
      * @param n
      * @return
@@ -936,8 +985,9 @@ public class Leetcode800 {
     }
 
     void ipToCIDR(long ip, int n, List<String> res) {
-        if (n <= 0)
+        if (n <= 0) {
             return;
+        }
         if (n == 1) {
             res.add(CIDR2Ip(new CIDR(ip, 32)));
             return;
@@ -961,6 +1011,7 @@ public class Leetcode800 {
     }
 
     static record CIDR(long base, int mask) {
+
     }
 
     public String CIDR2Ip(CIDR cidr) {
@@ -969,8 +1020,9 @@ public class Leetcode800 {
         StringBuilder sb = new StringBuilder();
         for (int i = 3; i >= 0; i--) {
             sb.append((base >> (i * 8)) & ~(-1 << 8));
-            if (i != 0)
+            if (i != 0) {
                 sb.append(".");
+            }
         }
         sb.append("/");
         sb.append(mask);
@@ -991,7 +1043,7 @@ public class Leetcode800 {
 
     /**
      * #753
-     * 
+     *
      * @param n
      * @param k
      * @return
@@ -1065,7 +1117,7 @@ public class Leetcode800 {
 
     /**
      * #759
-     * 
+     *
      * @param schedule
      * @return
      */
@@ -1074,14 +1126,17 @@ public class Leetcode800 {
         int maxWorkTime = Integer.MIN_VALUE;
         Queue<Interval> queue = new PriorityQueue<>(
                 (a, b) -> Integer.compare(a.start, b.start));
-        for (var s : schedule)
-            for (var i : s)
+        for (var s : schedule) {
+            for (var i : s) {
                 queue.add(i);
+            }
+        }
         while (!queue.isEmpty()) {
             var it = queue.poll();
             if (it.start > maxWorkTime) {
-                if (maxWorkTime != Integer.MIN_VALUE)
+                if (maxWorkTime != Integer.MIN_VALUE) {
                     res.add(new Interval(maxWorkTime, it.start));
+                }
             }
             maxWorkTime = Math.max(maxWorkTime, it.end);
         }
@@ -1089,6 +1144,7 @@ public class Leetcode800 {
     }
 
     class Interval {
+
         public int start;
         public int end;
 
@@ -1103,7 +1159,7 @@ public class Leetcode800 {
 
     /**
      * #761
-     * 
+     *
      * @param s
      * @return
      */
@@ -1112,17 +1168,19 @@ public class Leetcode800 {
     }
 
     String makeLargestSpecial(String s, int l, int r) {
-        if (l >= r)
+        if (l >= r) {
             return "";
+        }
         List<String> sub = new ArrayList<>();
         int diff = 0;
         int start = l;
         for (int i = l; i <= r; i++) {
             var c = s.charAt(i);
-            if (c == '1')
+            if (c == '1') {
                 diff++;
-            else
+            } else {
                 diff--;
+            }
             if (diff == 0) {
                 sub.add("(" + makeLargestSpecial(s, start + 1, i - 1) + ")");
                 start = i + 1;
@@ -1130,15 +1188,16 @@ public class Leetcode800 {
         }
         sub.sort((a, b) -> b.compareTo(a));
         StringBuilder sb = new StringBuilder();
-        for (var ss : sub)
+        for (var ss : sub) {
             sb.append(ss);
+        }
         return sb.toString();
     }
 
     /**
      * #763 <br/>
      * 划分字母区间
-     * 
+     *
      * <pre>
      * 输入：S = "ababcbacadefegdehijhklij"
      * 输出：[9,7,8]
@@ -1169,6 +1228,7 @@ public class Leetcode800 {
     }
 
     public static final class DisjointSet {
+
         private int rank = 0;
         private DisjointSet parent = this;
 
@@ -1207,7 +1267,7 @@ public class Leetcode800 {
 
     /**
      * #765
-     * 
+     *
      * @param row
      * @return
      */
@@ -1232,8 +1292,58 @@ public class Leetcode800 {
     }
 
     /**
+     * #767
+     */
+    public String reorganizeString(String s) {
+        StringBuilder res = new StringBuilder();
+        int[] count = new int['z' - 'a' + 1];
+        for (var c : s.toCharArray()) {
+            count[c - 'a']++;
+        }
+        Queue<Character> queue = new PriorityQueue<>((a, b) -> Integer.compare(count[b - 'a'], count[a - 'a']));
+        Queue<CharPos> stash = new ArrayDeque<>();
+        for (int i = 0; i < 'z' - 'a' + 1; i++) {
+            if (count[i] != 0) {
+                queue.add((char) ('a' + i));
+            }
+        }
+        for (int i = 0; i < s.length(); i++) {
+            while (!stash.isEmpty() && i > stash.peek().pos + 1) {
+                queue.add(stash.poll().c);
+            }
+            if (queue.isEmpty()) {
+                return "";
+            }
+            var c = queue.poll();
+            res.append(c);
+            count[c - 'a']--;
+            if (count[c - 'a'] != 0) {
+                stash.add(new CharPos(c, i));
+            }
+        }
+        return res.toString();
+    }
+
+    static class CharPos implements Comparable<CharPos> {
+
+        char c;
+        int pos;
+
+        public CharPos(char c, int count) {
+            this.c = c;
+            this.pos = count;
+        }
+
+        @Override
+        public int compareTo(CharPos o) {
+            return Integer.compare(o.pos, pos);
+        }
+
+    }
+
+    /**
      * #768
-     * 
+     *
      * @param arr
      * @return
      */
@@ -1259,7 +1369,7 @@ public class Leetcode800 {
 
     /**
      * #769
-     * 
+     *
      * @param arr
      * @return
      */
@@ -1267,10 +1377,11 @@ public class Leetcode800 {
         int res = 1;
         int[] maxLeft = new int[arr.length];
         for (int i = 0; i < arr.length; i++) {
-            if (i - 1 < 0 || arr[i] >= maxLeft[i - 1])
+            if (i - 1 < 0 || arr[i] >= maxLeft[i - 1]) {
                 maxLeft[i] = arr[i];
-            else
+            } else {
                 maxLeft[i] = maxLeft[i - 1];
+            }
         }
         int min = Integer.MAX_VALUE;
         for (int j = arr.length - 1; j >= 1; j--) {
@@ -1284,7 +1395,7 @@ public class Leetcode800 {
 
     /**
      * #772
-     * 
+     *
      * @param s
      * @return
      */
@@ -1299,12 +1410,13 @@ public class Leetcode800 {
         Deque<String> mediumRes = new ArrayDeque<>();
         while (!exp.isEmpty()) {
             var sym = exp.pollFirst();
-            if (isOp(sym) || isNumCalc(sym))
+            if (isOp(sym) || isNumCalc(sym)) {
                 mediumRes.add(sym);
-            else if (sym.equals("("))
+            } else if (sym.equals("(")) {
                 exp.addFirst(String.valueOf(calc(exp)));
-            else
+            } else {
                 break;
+            }
         }
         computeMediumRes(mediumRes);
         return Integer.valueOf(mediumRes.peek());
@@ -1331,10 +1443,10 @@ public class Leetcode800 {
         while (mediumRes.size() >= 3) {
             var a = mediumRes.pollFirst();
             var op = mediumRes.pollFirst();
-            if (op.equals("*") || op.equals("/"))
+            if (op.equals("*") || op.equals("/")) {
                 mediumRes.addFirst(
                         String.valueOf(calcOp(a, op, mediumRes.pollFirst())));
-            else {
+            } else {
                 sum.addLast(a);
                 sum.addLast(op);
             }
@@ -1383,7 +1495,7 @@ public class Leetcode800 {
 
     /**
      * #773
-     * 
+     *
      * @param board
      * @return
      */
@@ -1392,14 +1504,15 @@ public class Leetcode800 {
         System.arraycopy(board[0], 0, target, 0, 3);
         System.arraycopy(board[1], 0, target, 3, 3);
         Set<Board2x3> visited = new HashSet<>();
-        Board2x3 init = new Board2x3(new int[] { 1, 2, 3, 4, 5, 0 }, 1, 2, 0);
-        if (Arrays.equals(target, init.board))
+        Board2x3 init = new Board2x3(new int[]{1, 2, 3, 4, 5, 0}, 1, 2, 0);
+        if (Arrays.equals(target, init.board)) {
             return 0;
+        }
         visited.add(init);
         Queue<Board2x3> queue = new ArrayDeque<>();
         queue.add(init);
-        int[] dx = new int[] { -1, 1, 0, 0 };
-        int[] dy = new int[] { 0, 0, -1, 1 };
+        int[] dx = new int[]{-1, 1, 0, 0};
+        int[] dy = new int[]{0, 0, -1, 1};
         while (!queue.isEmpty()) {
             var b = queue.poll();
             var idx0 = b.i0 * 3 + b.j0;
@@ -1414,8 +1527,9 @@ public class Leetcode800 {
                     nb[idx] = nb[idx0];
                     nb[idx0] = v;
                     var nextBoard = new Board2x3(nb, i, j, b.dist + 1);
-                    if (Arrays.equals(target, nb))
+                    if (Arrays.equals(target, nb)) {
                         return b.dist + 1;
+                    }
                     if (!visited.contains(nextBoard)) {
                         visited.add(nextBoard);
                         queue.add(nextBoard);
@@ -1429,6 +1543,7 @@ public class Leetcode800 {
     }
 
     static record Board2x3(int[] board, int i0, int j0, int dist) {
+
         @Override
         public final boolean equals(Object arg0) {
             if (arg0 instanceof Board2x3 b) {
@@ -1445,7 +1560,7 @@ public class Leetcode800 {
 
     /**
      * #778
-     * 
+     *
      * @param grid
      * @return
      */
@@ -1502,6 +1617,7 @@ public class Leetcode800 {
     }
 
     private static class SwimPoolHeight {
+
         final int x;
         final int y;
         final int height;
@@ -1515,7 +1631,7 @@ public class Leetcode800 {
 
     /**
      * # 780
-     * 
+     *
      * @param sx
      * @param sy
      * @param tx
@@ -1543,8 +1659,9 @@ public class Leetcode800 {
         } else if (ty == sy) {
             int diff = tx - sx;
             return diff % sy == 0;
-        } else
+        } else {
             return false;
+        }
     }
 
     /**
@@ -1572,7 +1689,7 @@ public class Leetcode800 {
 
     /**
      * #782
-     * 
+     *
      * @param board
      * @return
      */
@@ -1601,6 +1718,7 @@ public class Leetcode800 {
     }
 
     private static class Ref {
+
         int val;
     }
 
@@ -1692,8 +1810,9 @@ public class Leetcode800 {
         for (int i = 0; i < n; i++) {
             var nbs = graph[i];
             for (var nb : nbs) {
-                if (set.parent(i) == set.parent(nb))
+                if (set.parent(i) == set.parent(nb)) {
                     return false;
+                }
             }
         }
 
@@ -1712,24 +1831,25 @@ public class Leetcode800 {
         PriorityQueue<int[]> pq = new PriorityQueue<>(
                 (x, y) -> arr[x[0]] * arr[y[1]] - arr[y[0]] * arr[x[1]]);
         for (int j = 1; j < n; ++j) {
-            pq.offer(new int[] { 0, j });
+            pq.offer(new int[]{0, j});
         }
         for (int i = 1; i < k; ++i) {
             int[] frac = pq.remove();
             int x = frac[0], y = frac[1];
             if (x + 1 < y) {
-                pq.offer(new int[] { x + 1, y });
+                pq.offer(new int[]{x + 1, y});
             }
         }
-        return new int[] { arr[pq.peek()[0]], arr[pq.peek()[1]] };
+        return new int[]{arr[pq.peek()[0]], arr[pq.peek()[1]]};
     }
 
     private record DigitDp(int pos, boolean bound, boolean diff) {
+
     }
 
     /**
      * #788
-     * 
+     *
      * @param n
      * @return
      */
@@ -1750,7 +1870,7 @@ public class Leetcode800 {
 
     private static int[][][] memo = new int[5][2][2];
     private static List<Integer> digits = null;
-    private static int[] check = { 0, 0, 1, -1, -1, 1, 1, -1, 0, 1 };
+    private static int[] check = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
 
     private static int digitDp(int pos, int bound, int diff) {
         if (pos == digits.size()) {
@@ -1775,7 +1895,7 @@ public class Leetcode800 {
 
     /**
      * #789
-     * 
+     *
      * @param ghosts
      * @param target
      * @return
@@ -1794,7 +1914,7 @@ public class Leetcode800 {
 
     /**
      * #790
-     * 
+     *
      * @param n
      * @return
      */
@@ -1814,7 +1934,7 @@ public class Leetcode800 {
 
     /**
      * #792
-     * 
+     *
      * @param s
      * @param words
      * @return
