@@ -567,13 +567,16 @@ public class Leetcode900 {
                         size.put(p, c);
                     }
                 }
-                res = Math.max(res, size.values().stream().mapToInt(v->v).sum() + 1);
+                res = Math.max(res,
+                        size.values().stream().mapToInt(v -> v).sum() + 1);
                 size.clear();
             }
         }
-        res =  Math.max(res, count.values().stream().mapToInt(v->v).max().orElse(0));
+        res = Math.max(res,
+                count.values().stream().mapToInt(v -> v).max().orElse(0));
         return res;
     }
+
     /**
      * #843
      * 
@@ -1140,6 +1143,40 @@ public class Leetcode900 {
         int rStart;
         int cStart;
         int state = 0; // r,d,l,u
+    }
+
+    /**
+     * #886
+     * 
+     * @param n
+     * @param dislikes
+     * @return
+     */
+    public boolean possibleBipartition(int n, int[][] dislikes) {
+        int[] color = new int[n + 1];
+        Arrays.fill(color, -1);
+        Map<Integer, Set<Integer>> graph = new HashMap<>();
+        for (var dis : dislikes) {
+            graph.computeIfAbsent(dis[0], k -> new HashSet<>()).add(dis[1]);
+            graph.computeIfAbsent(dis[1], k -> new HashSet<>()).add(dis[0]);
+        }
+        for (var i : graph.keySet()) {
+            if (color[i] == -1 && !paint(i, 0, graph, color))
+                return false;
+        }
+        return true;
+    }
+
+    boolean paint(int i, int iColor, Map<Integer, Set<Integer>> graph,
+            int[] color) {
+        if (color[i] != -1)
+            return iColor == color[i];
+        color[i] = iColor;
+        for (var nb : graph.getOrDefault(i, Set.of())) {
+            if (!paint(nb, (iColor + 1) % 2, graph, color))
+                return false;
+        }
+        return true;
     }
 
     /**
