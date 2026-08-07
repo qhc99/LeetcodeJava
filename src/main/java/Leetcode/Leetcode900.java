@@ -921,6 +921,36 @@ public class Leetcode900 {
     }
 
     /**
+     * #856
+     * 
+     * @param s
+     * @return
+     */
+    public int scoreOfParentheses(String s) {
+        return scoreOfParentheses(s, 0, s.length());
+    }
+
+    public int scoreOfParentheses(String s, int l, int r) {
+        if (r - l <= 2)
+            return 1;
+        int res = 0;
+        int i = l;
+        int count = 0;
+        for (int j = l; j < r; j++) {
+            var c = s.charAt(j);
+            if (c == '(')
+                count++;
+            else
+                count--;
+            if (count == 0) {
+                res += i + 1 < j ? 2 * scoreOfParentheses(s, i + 1, j) : 1;
+                i = j + 1;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #867
      * 
      * @param matrix
