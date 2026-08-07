@@ -557,18 +557,20 @@ public class Leetcode900 {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] != 0)
                     continue;
-                int size = 1;
+                Map<Integer, Integer> size = new HashMap<>();
                 for (int t = 0; t < 4; t++) {
                     var x = i + dx[t];
                     var y = j + dy[t];
                     if (x >= 0 && x < n && y >= 0 && y < n && grid[x][y] == 1) {
                         var p = set.parent(x * n + y);
-                        size += count.get(p);
+                        var c = count.get(p);
+                        size.put(p, c);
                     }
                 }
-                res = Math.max(res, size);
+                res = Math.max(res, size.values().stream().mapToInt(v->v).sum() + 1);
             }
         }
+        res =  Math.max(res, count.values().stream().mapToInt(v->v).max().orElse(0));
         return res;
     }
 
