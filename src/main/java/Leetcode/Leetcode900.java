@@ -520,6 +520,97 @@ public class Leetcode900 {
     }
 
     /**
+     * #827
+     * 
+     * @param grid
+     * @return
+     */
+    public int largestIsland(int[][] grid) {
+        int n = grid.length;
+        var set = new DisjointSet2(n * n);
+        int res = 0;
+        int[] dx = new int[] { 0, 0, 1, -1 };
+        int[] dy = new int[] { 1, -1, 0, 0 };
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != 1)
+                    continue;
+                for (int t = 0; t < 4; t++) {
+                    var x = i + dx[t];
+                    var y = j + dy[t];
+                    if (x >= 0 && x < n && y >= 0 && y < n && grid[x][y] == 1) {
+                        set.union(i * n + j, x * n + y);
+                    }
+                }
+            }
+        }
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    var p = set.parent(i * n + j);
+                    count.put(p, 1 + count.getOrDefault(p, 0));
+                }
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] != 0)
+                    continue;
+                int size = 1;
+                for (int t = 0; t < 4; t++) {
+                    var x = i + dx[t];
+                    var y = j + dy[t];
+                    if (x >= 0 && x < n && y >= 0 && y < n && grid[x][y] == 1) {
+                        var p = set.parent(x * n + y);
+                        size += count.get(p);
+                    }
+                }
+                res = Math.max(res, size);
+            }
+        }
+        return res;
+    }
+
+    static class DisjointSet2 {
+        public int[] parent;
+        int[] rank;
+
+        DisjointSet2(int len) {
+            parent = new int[len];
+            rank = new int[len];
+            for (int i = 0; i < len; i++) {
+                parent[i] = i;
+            }
+        }
+
+        int parent(int i) {
+            if (parent[i] != i) {
+                parent[i] = parent(parent[i]);
+            }
+            return parent[i];
+        }
+
+        boolean isLinked(int a, int b) {
+            return parent(a) == parent(b);
+        }
+
+        void union(int a, int b) {
+            var pa = parent(a);
+            var pb = parent(b);
+            if (pa == pb)
+                return;
+            if (rank[pa] < rank[pb]) {
+                parent[pa] = pb;
+            } else {
+                parent[pb] = pa;
+                if (rank[pa] == rank[pb])
+                    rank[pa]++;
+            }
+        }
+    }
+
+    /**
      * #843
      * 
      * @param words

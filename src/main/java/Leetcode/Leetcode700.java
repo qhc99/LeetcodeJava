@@ -312,7 +312,7 @@ public class Leetcode700 {
         }
         PriorityQueue<Integer> queue = new PriorityQueue<Integer>(
                 (i, j) -> nums.get(i).get(idx.get(i))
-                - nums.get(j).get(idx.get(j)));
+                        - nums.get(j).get(idx.get(j)));
         for (int i = 0; i < nums.size(); i++) {
             queue.add(i);
         }
@@ -344,8 +344,8 @@ public class Leetcode700 {
         TreeMap<String, List<Integer>> map = new TreeMap<>();
         Map<String, Integer> idx = Map.of("Year", 1, "Month", 2, "Day", 3,
                 "Hour", 4, "Minute", 5, "Second", 6);
-        String[] min = new String[]{"2000", "01", "01", "00", "00", "00"};
-        String[] max = new String[]{"2017", "12", "31", "23", "59", "59"};
+        String[] min = new String[] { "2000", "01", "01", "00", "00", "00" };
+        String[] max = new String[] { "2017", "12", "31", "23", "59", "59" };
 
         public LogSystem() {
 
@@ -452,7 +452,7 @@ public class Leetcode700 {
                 if (new_need != null) {
                     min_spec_price = Math.min(min_spec_price,
                             min_offer_of(new_need, price, special, cache)
-                            + spec.get(spec.size() - 1));
+                                    + spec.get(spec.size() - 1));
                 }
             }
             var ans = Math.min(non_spec_price, min_spec_price);
@@ -518,6 +518,7 @@ public class Leetcode700 {
             }
 
         }
+
         Node root = new Node();
         Node ptr = root;
         StringBuilder builder = new StringBuilder();
@@ -736,8 +737,8 @@ public class Leetcode700 {
      * @return
      */
     public int[][] imageSmoother(int[][] img) {
-        int[] dx = new int[]{-1, -1, -1, 0, 0, 0, 1, 1, 1};
-        int[] dy = new int[]{-1, 0, 1, -1, 0, 1, -1, 0, 1};
+        int[] dx = new int[] { -1, -1, -1, 0, 0, 0, 1, 1, 1 };
+        int[] dy = new int[] { -1, 0, 1, -1, 0, 1, -1, 0, 1 };
         int m = img.length, n = img[0].length;
         int[][] res = new int[m][n];
         for (int i = 0; i < m; i++) {
@@ -840,6 +841,16 @@ public class Leetcode700 {
             res += arr.get(i);
         }
         return res;
+    }
+
+    /**
+     * #673
+     * 
+     * @param nums
+     * @return
+     */
+    public int findNumberOfLIS(int[] nums) {
+        return 0;
     }
 
     /**
@@ -1090,8 +1101,8 @@ public class Leetcode700 {
     public double knightProbability(int n, int k, int row, int column) {
         double[][][] dp = new double[k + 1][n][n];
         dp[0][row][column] = 1;
-        int[] dx = new int[]{1, 2, 1, 2, -1, -2, -1, -2};
-        int[] dy = new int[]{2, 1, -2, -1, 2, 1, -2, -1};
+        int[] dx = new int[] { 1, 2, 1, 2, -1, -2, -1, -2 };
+        int[] dy = new int[] { 2, 1, -2, -1, 2, 1, -2, -1 };
         for (int i = 1; i <= k; i++) {
             for (int x = 0; x < n; x++) {
                 for (int y = 0; y < n; y++) {
@@ -1126,8 +1137,8 @@ public class Leetcode700 {
         }
         int max_1 = w_sum_1, max_2 = max_1 + w_sum_2, max_3 = max_2 + w_sum_3;
         int max_pos_1 = 0;
-        int[] max_pos_2 = new int[]{0, k};
-        int[] max_pos_3 = new int[]{0, k, 2 * k};
+        int[] max_pos_2 = new int[] { 0, k };
+        int[] max_pos_3 = new int[] { 0, k, 2 * k };
         for (int i = 0; i + 3 * k < nums.length; i++) {
             w_sum_1 -= nums[i];
             w_sum_1 += nums[i + k];
@@ -1192,8 +1203,8 @@ public class Leetcode700 {
     public int numDistinctIslands(int[][] grid) {
         int m = grid.length, n = grid[0].length;
         var set = new DisjointSet(m * n);
-        int[] dx = new int[]{0, 0, 1, -1};
-        int[] dy = new int[]{1, -1, 0, 0};
+        int[] dx = new int[] { 0, 0, 1, -1 };
+        int[] dy = new int[] { 1, -1, 0, 0 };
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] != 1) {
@@ -1215,14 +1226,17 @@ public class Leetcode700 {
                     continue;
                 }
                 var p = new Pos(i, j);
-                islands.computeIfAbsent(set.parent(i * n + j), k -> new ArrayList<>()).add(p);
+                islands.computeIfAbsent(set.parent(i * n + j),
+                        k -> new ArrayList<>()).add(p);
             }
         }
         TriePos root = new TriePos();
         int res = 0;
         for (var l : islands.values()) {
-            var offset = l.stream().reduce(new Pos(m, n), (a, b) -> new Pos(Math.min(a.i, b.i), Math.min(a.j, b.j)));
-            var t = l.stream().map(p -> new Pos(p.i - offset.i, p.j - offset.j)).sorted().toList();
+            var offset = l.stream().reduce(new Pos(m, n),
+                    (a, b) -> new Pos(Math.min(a.i, b.i), Math.min(a.j, b.j)));
+            var t = l.stream().map(p -> new Pos(p.i - offset.i, p.j - offset.j))
+                    .sorted().toList();
             l.clear();
             l.addAll(t);
         }
