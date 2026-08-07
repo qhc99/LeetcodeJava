@@ -74,4 +74,32 @@ public class Leetcode2800 {
         }
         return res;
     }
+
+    /**
+     * #2799
+     * 
+     * @param nums
+     * @return
+     */
+    public int countCompleteSubarrays(int[] nums) {
+        Set<Integer> totalCount = new HashSet<>();
+        for (var n : nums)
+            totalCount.add(n);
+        Map<Integer, Integer> currentCount = new HashMap<>();
+        int l = 0, res = 0;
+        for (int r = 0; r < nums.length; r++) {
+            currentCount.put(nums[r],
+                    1 + currentCount.getOrDefault(nums[r], 0));
+            while (l <= r && currentCount.size() == totalCount.size()) {
+                res += nums.length - r;
+                var leftNum = nums[l++];
+                var prevLeftCount = currentCount.put(leftNum,
+                        currentCount.get(leftNum) - 1);
+                if (prevLeftCount == 1)
+                    currentCount.remove(leftNum);
+            }
+
+        }
+        return res;
+    }
 }
