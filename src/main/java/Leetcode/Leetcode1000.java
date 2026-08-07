@@ -488,6 +488,28 @@ public class Leetcode1000 {
     }
 
     /**
+     * #974
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraysDivByK(int[] nums, int k) {
+        int res = 0;
+        Map<Integer, Integer> valCount = new HashMap<>();
+        valCount.put(0, 1);
+        for (int i = 0; i < nums.length; i++) {
+            if (i - 1 >= 0) {
+                nums[i] += nums[i - 1];
+            }
+            nums[i] = ((nums[i] % k) + k) % k;
+            res += valCount.getOrDefault(nums[i], 0);
+            valCount.put(nums[i], 1 + valCount.getOrDefault(nums[i], 0));
+        }
+        return res;
+    }
+
+    /**
      * #996
      * 
      * @param nums
