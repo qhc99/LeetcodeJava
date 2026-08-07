@@ -850,7 +850,48 @@ public class Leetcode700 {
      * @return
      */
     public int findNumberOfLIS(int[] nums) {
-        return 0;
+        List<List<Integer>> dp = new ArrayList<>();
+        List<List<Integer>> count = new ArrayList<>();
+        for (var n : nums) {
+            int i = 0;
+            if (dp.isEmpty() || n > dp.getLast().getLast()) {
+                dp.add(new ArrayList<>());
+                dp.getLast().add(n);
+                count.add(new ArrayList<>());
+                i = dp.size() - 1;
+            } else {
+                int l = 0, r = dp.size() - 1;
+                while (r - l > 0) {
+                    int mid = l + (r - l) / 2;
+                    var last = dp.get(mid).getLast();
+                    if (last < n)
+                        l = mid + 1;
+                    else
+                        r = mid;
+                }
+                dp.get(l).add(n);
+                i = l;
+            }
+            if (i == 0)
+                count.get(i).add(1 + (count.get(i).isEmpty() ? 0
+                        : count.get(i).getLast()));
+            else {
+                int s = 0, e = count.get(i - 1).size() - 1;
+                while (e - s > 0) {
+                    int mid = s + (e - s) / 2;
+                    if (dp.get(i - 1).get(mid) < n) {
+                        e = mid;
+                    } else {
+                        s = mid + 1;
+                    }
+                }
+                var c = count.get(i - 1).getLast()
+                        - (s - 1 >= 0 ? count.get(i - 1).get(s - 1) : 0);
+                count.get(i).add(c + (count.get(i).isEmpty() ? 0
+                        : count.get(i).getLast()));
+            }
+        }
+        return count.getLast().getLast();
     }
 
     /**
@@ -1272,7 +1313,6 @@ public class Leetcode700 {
         }
 
     }
-
 
     /**
      * #695
