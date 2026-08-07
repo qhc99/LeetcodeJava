@@ -272,6 +272,53 @@ public class Leetcode1000 {
     }
 
     /**
+     * #924
+     * 
+     * @param graph
+     * @param initial
+     * @return
+     */
+    public int minMalwareSpread(int[][] graph, int[] initial) {
+        Arrays.sort(initial);
+        var n = graph.length;
+        var set = new Disjointset(n);
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (graph[i][j] == 1)
+                    set.union(i, j);
+            }
+        }
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            var p = set.parent(i);
+            count.put(p, 1 + count.getOrDefault(p, 0));
+        }
+        Map<Integer, Integer> seen = new HashMap<>();
+        Set<Integer> candidates = new HashSet<>(
+                Arrays.stream(initial).boxed().toList());
+        for (var i : initial) {
+            var p = set.parent(i);
+            if (!seen.containsKey(p)) {
+                seen.put(p, i);
+            } else {
+                candidates.remove(i);
+                candidates.remove(seen.get(p));
+            }
+        }
+        int max = 0;
+        int res = initial[0];
+        for (var i : initial) {
+            var p = set.parent(i);
+            if (candidates.contains(i) && count.get(p) > max) {
+                res = i;
+                max = count.get(p);
+            }
+        }
+
+        return res;
+    }
+
+    /**
      * #925
      * 
      * @param nums
