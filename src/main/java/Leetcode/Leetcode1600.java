@@ -67,11 +67,11 @@ public class Leetcode1600 {
             }
         }
 
-        DisjointSet set = new DisjointSet(points.length);
+        Disjointset set = new Disjointset(points.length);
         int res = 0;
         while (!queue.isEmpty()) {
             var e = queue.poll();
-            if (!set.isLinked(e.i, e.j)) {
+            if (set.parent(e.i) != set.parent(e.j)) {
                 set.union(e.i, e.j);
                 res += e.len;
             }
@@ -80,44 +80,6 @@ public class Leetcode1600 {
     }
 
     static record Edge(int i, int j, int len) {
-    }
-
-    static class DisjointSet {
-        int[] parent;
-        int[] rank;
-
-        DisjointSet(int len) {
-            parent = new int[len];
-            rank = new int[len];
-            for (int i = 0; i < len; i++) {
-                parent[i] = i;
-            }
-        }
-
-        int find(int i) {
-            if (parent[i] != i) {
-                parent[i] = find(parent[i]);
-            }
-            return parent[i];
-        }
-
-        boolean isLinked(int a, int b) {
-            return find(a) == find(b);
-        }
-
-        void union(int a, int b) {
-            var pa = find(a);
-            var pb = find(b);
-            if (pa == pb)
-                return;
-            if (rank[pa] < rank[pb]) {
-                parent[pa] = pb;
-            } else {
-                parent[pb] = pa;
-                if (rank[pa] == rank[pb])
-                    rank[pa]++;
-            }
-        }
     }
 
 }

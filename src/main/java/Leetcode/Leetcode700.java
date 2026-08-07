@@ -1053,9 +1053,9 @@ public class Leetcode700 {
      * @return
      */
     public int[] findRedundantConnection(int[][] edges) {
-        DisjointSet set = new DisjointSet(edges.length + 1);
+        Disjointset set = new Disjointset(edges.length + 1);
         for (var e : edges) {
-            if (set.isLinked(e[0], e[1])) {
+            if (set.parent(e[0]) == set.parent(e[1])) {
                 return e;
             }
             set.union(e[0], e[1]);
@@ -1202,7 +1202,7 @@ public class Leetcode700 {
      */
     public int numDistinctIslands(int[][] grid) {
         int m = grid.length, n = grid[0].length;
-        var set = new DisjointSet(m * n);
+        var set = new Disjointset(m * n);
         int[] dx = new int[] { 0, 0, 1, -1 };
         int[] dy = new int[] { 1, -1, 0, 0 };
         for (int i = 0; i < m; i++) {
@@ -1273,46 +1273,6 @@ public class Leetcode700 {
 
     }
 
-    static class DisjointSet {
-
-        public int[] parent;
-        int[] rank;
-
-        DisjointSet(int len) {
-            parent = new int[len];
-            rank = new int[len];
-            for (int i = 0; i < len; i++) {
-                parent[i] = i;
-            }
-        }
-
-        int parent(int i) {
-            if (parent[i] != i) {
-                parent[i] = parent(parent[i]);
-            }
-            return parent[i];
-        }
-
-        boolean isLinked(int a, int b) {
-            return parent(a) == parent(b);
-        }
-
-        void union(int a, int b) {
-            var pa = parent(a);
-            var pb = parent(b);
-            if (pa == pb) {
-                return;
-            }
-            if (rank[pa] < rank[pb]) {
-                parent[pa] = pb;
-            } else {
-                parent[pb] = pa;
-                if (rank[pa] == rank[pb]) {
-                    rank[pa]++;
-                }
-            }
-        }
-    }
 
     /**
      * #695
@@ -1322,7 +1282,7 @@ public class Leetcode700 {
      */
     public int maxAreaOfIsland(int[][] grid) {
         int m = grid.length, n = grid[0].length;
-        DisjointSet set = new DisjointSet(m * n);
+        Disjointset set = new Disjointset(m * n);
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 0) {

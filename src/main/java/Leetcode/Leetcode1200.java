@@ -128,7 +128,7 @@ public class Leetcode1200 {
             queue.add(new Pipe(0, i + 1, wells[i]));
         for (var p : pipes)
             queue.add(new Pipe(p[0], p[1], p[2]));
-        var set = new DisjointSet(n + 1);
+        var set = new Disjointset(n + 1);
         int cost = 0;
         while (!queue.isEmpty()) {
             var p = queue.poll();
@@ -141,39 +141,6 @@ public class Leetcode1200 {
     }
 
     static record Pipe(int s, int e, int cost) {
-    }
-
-    static class DisjointSet {
-
-        int[] set;
-        int[] rank;
-
-        DisjointSet(int n) {
-            set = new int[n];
-            for (int i = 0; i < n; i++)
-                set[i] = i;
-            rank = new int[n];
-        }
-
-        int parent(int i) {
-            if (set[i] == i)
-                return i;
-            set[i] = parent(set[i]);
-            return set[i];
-        }
-
-        void union(int i, int j) {
-            var pi = parent(i);
-            var pj = parent(j);
-            if (pi == pj)
-                return;
-            if (rank[pi] <= rank[pj])
-                set[pj] = pi;
-            else
-                set[pi] = pj;
-            if (rank[pi] == rank[pj])
-                rank[pi]++;
-        }
     }
 
     /**

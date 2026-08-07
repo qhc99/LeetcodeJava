@@ -785,7 +785,7 @@ public class Leetcode400 {
      * @return
      */
     public int countComponents(int n, int[][] edges) {
-        DisjointSet set = new DisjointSet(n);
+        Disjointset set = new Disjointset(n);
         for (var e : edges) {
             set.union(e[0], e[1]);
         }

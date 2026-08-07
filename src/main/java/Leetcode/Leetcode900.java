@@ -527,7 +527,7 @@ public class Leetcode900 {
      */
     public int largestIsland(int[][] grid) {
         int n = grid.length;
-        var set = new DisjointSet2(n * n);
+        var set = new Disjointset(n * n);
         int res = 0;
         int[] dx = new int[] { 0, 0, 1, -1 };
         int[] dy = new int[] { 1, -1, 0, 0 };
@@ -574,45 +574,6 @@ public class Leetcode900 {
         res =  Math.max(res, count.values().stream().mapToInt(v->v).max().orElse(0));
         return res;
     }
-
-    static class DisjointSet2 {
-        public int[] parent;
-        int[] rank;
-
-        DisjointSet2(int len) {
-            parent = new int[len];
-            rank = new int[len];
-            for (int i = 0; i < len; i++) {
-                parent[i] = i;
-            }
-        }
-
-        int parent(int i) {
-            if (parent[i] != i) {
-                parent[i] = parent(parent[i]);
-            }
-            return parent[i];
-        }
-
-        boolean isLinked(int a, int b) {
-            return parent(a) == parent(b);
-        }
-
-        void union(int a, int b) {
-            var pa = parent(a);
-            var pb = parent(b);
-            if (pa == pb)
-                return;
-            if (rank[pa] < rank[pb]) {
-                parent[pa] = pb;
-            } else {
-                parent[pb] = pa;
-                if (rank[pa] == rank[pb])
-                    rank[pa]++;
-            }
-        }
-    }
-
     /**
      * #843
      * 

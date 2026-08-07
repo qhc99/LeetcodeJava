@@ -836,7 +836,7 @@ public class Leetcode800 {
                 }
             }
         }
-        DisjointSet2 set = new DisjointSet2(str2id.size());
+        Disjointset set = new Disjointset(str2id.size());
         for (var p : similarPairs) {
             set.union(str2id.get(p.get(0)), str2id.get(p.get(1)));
         }
@@ -851,47 +851,6 @@ public class Leetcode800 {
             }
         }
         return true;
-    }
-
-    static class DisjointSet2 {
-
-        public int[] parent;
-        int[] rank;
-
-        DisjointSet2(int len) {
-            parent = new int[len];
-            rank = new int[len];
-            for (int i = 0; i < len; i++) {
-                parent[i] = i;
-            }
-        }
-
-        int parent(int i) {
-            if (parent[i] != i) {
-                parent[i] = parent(parent[i]);
-            }
-            return parent[i];
-        }
-
-        boolean isLinked(int a, int b) {
-            return parent(a) == parent(b);
-        }
-
-        void union(int a, int b) {
-            var pa = parent(a);
-            var pb = parent(b);
-            if (pa == pb) {
-                return;
-            }
-            if (rank[pa] < rank[pb]) {
-                parent[pa] = pb;
-            } else {
-                parent[pb] = pa;
-                if (rank[pa] == rank[pb]) {
-                    rank[pa]++;
-                }
-            }
-        }
     }
 
     /**
@@ -1269,43 +1228,6 @@ public class Leetcode800 {
         return res;
     }
 
-    public static final class DisjointSet {
-
-        private int rank = 0;
-        private DisjointSet parent = this;
-
-        /**
-         * find identifier of the set of an element
-         *
-         * @param x element
-         * @return identifier
-         */
-        private static DisjointSet findGroupId(DisjointSet x) {
-            if (x != x.parent) {
-                x.parent = findGroupId(x.parent);
-            }
-            return x.parent;
-        }
-
-        public static boolean inSameSet(DisjointSet a, DisjointSet b) {
-            return findGroupId(a) == findGroupId(b);
-        }
-
-        public static void union(DisjointSet a, DisjointSet b) {
-            link(findGroupId(a), findGroupId(b));
-        }
-
-        private static void link(DisjointSet x, DisjointSet y) {
-            if (x.rank > y.rank) {
-                y.parent = x;
-            } else {
-                x.parent = y;
-                if (x.rank == y.rank) {
-                    y.rank = y.rank + 1;
-                }
-            }
-        }
-    }
 
     /**
      * #765
@@ -1315,18 +1237,16 @@ public class Leetcode800 {
      */
     public static int minSwapsCouples(int[] row) {
         int N = row.length / 2;
-        DisjointSet[] unions = new DisjointSet[N];
-        for (int i = 0; i < unions.length; i++) {
-            unions[i] = new DisjointSet();
-        }
+        Disjointset unions = new Disjointset(N);
+
         for (int i = 0; i < row.length; i += 2) {
             int couple1 = row[i] / 2;
             int couple2 = row[i + 1] / 2;
-            DisjointSet.union(unions[couple1], unions[couple2]);
+            unions.union(couple1, couple2);
         }
         int count = 0;
-        for (var d : unions) {
-            if (d == d.parent) {
+        for (int d = 0; d < unions.parent.length; d++) {
+            if (d == unions.parent(d)) {
                 count++;
             }
         }
@@ -1843,7 +1763,7 @@ public class Leetcode800 {
      */
     public static boolean isBipartite(int[][] graph) {
         int n = graph.length;
-        DisjointSet2 set = new DisjointSet2(n);
+        Disjointset set = new Disjointset(n);
         for (var nbs : graph) {
             for (int i = 0; i < nbs.length - 1; i++) {
                 set.union(nbs[i], nbs[i + 1]);

@@ -1207,9 +1207,9 @@ public class Leetcode300 {
      * @return
      */
     public boolean validTree(int n, int[][] edges) {
-        DisjointSet set = new DisjointSet(n);
+        Disjointset set = new Disjointset(n);
         for (var e : edges) {
-            if (set.isLinked(e[0], e[1]))
+            if (set.parent(e[0]) == set.parent(e[1]))
                 return false;
             set.union(e[0], e[1]);
         }

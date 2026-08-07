@@ -1,10 +1,10 @@
 package Leetcode;
 
-public class DisjointSet {
+public class Disjointset {
     public int[] parent;
     int[] rank;
 
-    DisjointSet(int len) {
+    Disjointset(int len) {
         parent = new int[len];
         rank = new int[len];
         for (int i = 0; i < len; i++) {
@@ -19,9 +19,6 @@ public class DisjointSet {
         return parent[i];
     }
 
-    boolean isLinked(int a, int b) {
-        return parent(a) == parent(b);
-    }
 
     void union(int a, int b) {
         var pa = parent(a);
