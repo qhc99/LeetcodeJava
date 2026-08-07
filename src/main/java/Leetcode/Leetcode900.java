@@ -553,11 +553,11 @@ public class Leetcode900 {
                 }
             }
         }
+        Map<Integer, Integer> size = new HashMap<>(4);
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] != 0)
                     continue;
-                Map<Integer, Integer> size = new HashMap<>();
                 for (int t = 0; t < 4; t++) {
                     var x = i + dx[t];
                     var y = j + dy[t];
@@ -568,6 +568,7 @@ public class Leetcode900 {
                     }
                 }
                 res = Math.max(res, size.values().stream().mapToInt(v->v).sum() + 1);
+                size.clear();
             }
         }
         res =  Math.max(res, count.values().stream().mapToInt(v->v).max().orElse(0));
