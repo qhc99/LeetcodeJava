@@ -272,6 +272,27 @@ public class Leetcode1000 {
     }
 
     /**
+     * #925
+     * 
+     * @param nums
+     * @return
+     */
+    public int minIncrementForUnique(int[] nums) {
+        Arrays.sort(nums);
+        int res = 0;
+        int min = -1;
+        for (var n : nums) {
+            if (n > min) {
+                min = n;
+            } else {
+                min++;
+                res += min - n;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #953
      * 
      * @param words
