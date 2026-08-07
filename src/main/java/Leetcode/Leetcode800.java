@@ -15,7 +15,7 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
-@SuppressWarnings({"unused", "JavaDoc"})
+@SuppressWarnings({ "unused", "JavaDoc" })
 public class Leetcode800 {
 
     /**
@@ -906,13 +906,13 @@ public class Leetcode800 {
         for (int i = 0; i < temperatures.length; i++) {
             var t = temperatures[i];
             if (stack.size() == 0 || stack.getLast()[0] >= t) {
-                stack.addLast(new int[]{t, i});
+                stack.addLast(new int[] { t, i });
             } else {
                 while (stack.size() > 0 && stack.getLast()[0] < t) {
                     var idx = stack.pollLast()[1];
                     ans[idx] = i - idx;
                 }
-                stack.addLast(new int[]{t, i});
+                stack.addLast(new int[] { t, i });
             }
         }
         return ans;
@@ -1039,6 +1039,48 @@ public class Leetcode800 {
         }
 
         return res;
+    }
+
+    /**
+     * #752
+     */
+    public int openLock(String[] deadends, String target) {
+        Set<String> locks = new HashSet<>();
+        locks.addAll(Arrays.asList(deadends));
+        if (locks.contains("0000"))
+            return -1;
+        if (target.equals("0000"))
+            return 0;
+
+        Queue<String> queue = new ArrayDeque<>();
+        Map<String, Integer> visited = new HashMap<>();
+        visited.put("0000", 0);
+        queue.add("0000");
+        int[] dir = new int[] { -1, 1 };
+        while (!queue.isEmpty()) {
+            var str = queue.poll();
+            var num = str.toCharArray();
+            var step = visited.get(str);
+            for (int i = 0; i < 4; i++) {
+                var save = num[i];
+                for (var d : dir) {
+                    var n = save - '0';
+                    n += d + 10;
+                    n %= 10;
+                    num[i] = (char) ('0' + n);
+                    var s = new String(num);
+                    if (s.equals(target))
+                        return step + 1;
+                    if (!locks.contains(s) && !visited.containsKey(s)) {
+                        queue.add(s);
+                        visited.put(s, step + 1);
+                    }
+
+                }
+                num[i] = save;
+            }
+        }
+        return -1;
     }
 
     /**
@@ -1300,7 +1342,8 @@ public class Leetcode800 {
         for (var c : s.toCharArray()) {
             count[c - 'a']++;
         }
-        Queue<Character> queue = new PriorityQueue<>((a, b) -> Integer.compare(count[b - 'a'], count[a - 'a']));
+        Queue<Character> queue = new PriorityQueue<>(
+                (a, b) -> Integer.compare(count[b - 'a'], count[a - 'a']));
         Queue<CharPos> stash = new ArrayDeque<>();
         for (int i = 0; i < 'z' - 'a' + 1; i++) {
             if (count[i] != 0) {
@@ -1504,15 +1547,15 @@ public class Leetcode800 {
         System.arraycopy(board[0], 0, target, 0, 3);
         System.arraycopy(board[1], 0, target, 3, 3);
         Set<Board2x3> visited = new HashSet<>();
-        Board2x3 init = new Board2x3(new int[]{1, 2, 3, 4, 5, 0}, 1, 2, 0);
+        Board2x3 init = new Board2x3(new int[] { 1, 2, 3, 4, 5, 0 }, 1, 2, 0);
         if (Arrays.equals(target, init.board)) {
             return 0;
         }
         visited.add(init);
         Queue<Board2x3> queue = new ArrayDeque<>();
         queue.add(init);
-        int[] dx = new int[]{-1, 1, 0, 0};
-        int[] dy = new int[]{0, 0, -1, 1};
+        int[] dx = new int[] { -1, 1, 0, 0 };
+        int[] dy = new int[] { 0, 0, -1, 1 };
         while (!queue.isEmpty()) {
             var b = queue.poll();
             var idx0 = b.i0 * 3 + b.j0;
@@ -1831,16 +1874,16 @@ public class Leetcode800 {
         PriorityQueue<int[]> pq = new PriorityQueue<>(
                 (x, y) -> arr[x[0]] * arr[y[1]] - arr[y[0]] * arr[x[1]]);
         for (int j = 1; j < n; ++j) {
-            pq.offer(new int[]{0, j});
+            pq.offer(new int[] { 0, j });
         }
         for (int i = 1; i < k; ++i) {
             int[] frac = pq.remove();
             int x = frac[0], y = frac[1];
             if (x + 1 < y) {
-                pq.offer(new int[]{x + 1, y});
+                pq.offer(new int[] { x + 1, y });
             }
         }
-        return new int[]{arr[pq.peek()[0]], arr[pq.peek()[1]]};
+        return new int[] { arr[pq.peek()[0]], arr[pq.peek()[1]] };
     }
 
     private record DigitDp(int pos, boolean bound, boolean diff) {
@@ -1870,7 +1913,7 @@ public class Leetcode800 {
 
     private static int[][][] memo = new int[5][2][2];
     private static List<Integer> digits = null;
-    private static int[] check = {0, 0, 1, -1, -1, 1, 1, -1, 0, 1};
+    private static int[] check = { 0, 0, 1, -1, -1, 1, 1, -1, 0, 1 };
 
     private static int digitDp(int pos, int bound, int diff) {
         if (pos == digits.size()) {
