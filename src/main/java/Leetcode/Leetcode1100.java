@@ -13,40 +13,55 @@ public class Leetcode1100 {
      * @return
      */
     public int longestOnes(int[] nums, int k) {
+        for (int i = 1; i < nums.length; i++) {
+            nums[i] += nums[i - 1];
+        }
+        int l = 0;
         int res = 0;
-        int n = nums.length;
-        int[] left2right = new int[n];
-        for (int i = 0; i < n; i++) {
-            left2right[i] = nums[i];
-            if (i - 1 >= 0 && nums[i - 1] > 0 && nums[i] == 1) {
-                left2right[i] += left2right[i - 1];
+        for (int r = 0; r < nums.length; r++) {
+            // var zeros = (r + 1 - l) - (nums[r] - (l-1>=0 ? nums[l-1] : 0));
+            while (l <= r && (r + 1 - l)
+                    - (nums[r] - (l - 1 >= 0 ? nums[l - 1] : 0)) > k) {
+                l++;
             }
-            res = Math.max(res, left2right[i]);
-        }
-        int[] right2left = new int[n];
-        for (int i = n - 1; i >= 0; i--) {
-            right2left[i] = nums[i];
-            if (i + 1 < n && nums[i + 1] > 0 && nums[i] == 1) {
-                right2left[i] += right2left[i + 1];
-            }
-        }
-        Deque<Integer> deque = new ArrayDeque<>();
-        for (int i = 0; i < n; i++) {
-            if (nums[i] == 0) {
-                deque.addLast(i);
-                while (deque.size() > k) {
-                    deque.pollFirst();
-                }
-                if (!deque.isEmpty()) {
-                    var head = deque.peekFirst();
-                    var tail = deque.peekLast();
-                    res = Math.max(res, (tail + 1 - head)
-                            + (head - 1 >= 0 ? left2right[head - 1] : 0)
-                            + (tail + 1 < n ? right2left[tail + 1] : 0));
-                }
-            }
+            res = Math.max(res, r + 1 - l);
+
         }
         return res;
+        // int res = 0;
+        // int n = nums.length;
+        // int[] left2right = new int[n];
+        // for (int i = 0; i < n; i++) {
+        // left2right[i] = nums[i];
+        // if (i - 1 >= 0 && nums[i - 1] > 0 && nums[i] == 1) {
+        // left2right[i] += left2right[i - 1];
+        // }
+        // res = Math.max(res, left2right[i]);
+        // }
+        // int[] right2left = new int[n];
+        // for (int i = n - 1; i >= 0; i--) {
+        // right2left[i] = nums[i];
+        // if (i + 1 < n && nums[i + 1] > 0 && nums[i] == 1) {
+        // right2left[i] += right2left[i + 1];
+        // }
+        // }
+        // Deque<Integer> deque = new ArrayDeque<>();
+        // for (int i = 0; i < n; i++) {
+        // if (nums[i] == 0) {
+        // deque.addLast(i);
+        // while (deque.size() > k) {
+        // deque.pollFirst();
+        // }
+        // if (!deque.isEmpty()) {
+        // var head = deque.peekFirst();
+        // var tail = deque.peekLast();
+        // res = Math.max(res, (tail + 1 - head)
+        // + (head - 1 >= 0 ? left2right[head - 1] : 0)
+        // + (tail + 1 < n ? right2left[tail + 1] : 0));
+        // }
+        // }
+        // }
+        // return res;
     }
 
     /**
