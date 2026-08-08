@@ -66,6 +66,38 @@ public class Leetcode1300 {
     }
 
     /**
+     * #1209
+     * 
+     * @param s
+     * @param k
+     * @return
+     */
+    public String removeDuplicates(String s, int k) {
+        StringBuilder res = new StringBuilder();
+        Deque<Character> deque = new ArrayDeque<>();
+        Map<Character, Stack<Integer>> endCount = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            var c = s.charAt(i);
+            if (!deque.isEmpty() && deque.peekLast().equals(c)) {
+                var stack = endCount.get(c);
+                stack.add(stack.pop() + 1);
+            } else
+                endCount.computeIfAbsent(c, key -> new Stack<>()).add(1);
+            deque.addLast(c);
+            var stack = endCount.get(c);
+            if (stack.peek().equals(k)) {
+                stack.pop();
+                for (int j = 0; j < k; j++)
+                    deque.pollLast();
+            }
+        }
+        while (!deque.isEmpty()) {
+            res.append(deque.pollFirst());
+        }
+        return res.toString();
+    }
+
+    /**
      * #1213
      * 
      * @param arr1
