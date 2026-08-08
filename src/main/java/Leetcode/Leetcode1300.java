@@ -269,6 +269,47 @@ public class Leetcode1300 {
     }
 
     /**
+     * #1268
+     * 
+     * @param products
+     * @param searchWord
+     * @return
+     */
+    public List<List<String>> suggestedProducts(String[] products,
+            String searchWord) {
+        List<List<String>> res = new ArrayList<>();
+        var root = new TrieNode();
+        for (var product : products) {
+            var ptr = root;
+            for (var c : product.toCharArray()) {
+                ptr = ptr.children.computeIfAbsent(c, k -> new TrieNode());
+                ptr.strs.add(product);
+            }
+        }
+        var ptr = root;
+        for (var c : searchWord.toCharArray()) {
+            ptr = ptr != null ? ptr.children.get(c) : null;
+            if (ptr == null) {
+                res.add(List.of());
+                continue;
+            }
+            Queue<String> queue = new PriorityQueue<>();
+            queue.addAll(ptr.strs);
+            List<String> suggest = new ArrayList<>();
+            for (int i = 0; i < 3 && !queue.isEmpty(); i++) {
+                suggest.add(queue.poll());
+            }
+            res.add(suggest);
+        }
+        return res;
+    }
+
+    static class TrieNode {
+        Map<Character, TrieNode> children = new HashMap<>();
+        List<String> strs = new ArrayList<>();
+    }
+
+    /**
      * #1275
      * 
      * @param moves
