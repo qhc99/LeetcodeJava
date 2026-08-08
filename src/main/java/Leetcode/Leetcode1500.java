@@ -1,9 +1,52 @@
 package Leetcode;
 
-import java.util.Stack;
+import java.util.*;
 
 @SuppressWarnings({ "JavaDoc" })
 public class Leetcode1500 {
+
+    /**
+     * #1405
+     * 
+     * @param a
+     * @param b
+     * @param c
+     * @return
+     */
+    public String longestDiverseString(int a, int b, int c) {
+        int[] count = new int[] { a, b, c };
+        StringBuilder res = new StringBuilder();
+        Queue<Character> queue = new PriorityQueue<>(
+                (l, r) -> Integer.compare(count[r - 'a'], count[l - 'a']));
+        if (a > 0)
+            queue.add('a');
+        if (b > 0)
+            queue.add('b');
+        if (c > 0)
+            queue.add('c');
+        Stack<Character> stack = new Stack<>();
+        while (!queue.isEmpty()) {
+            var chr = queue.poll();
+            var len = res.length();
+            if (!(len >= 2 && res.charAt(len - 1) == chr
+                    && res.charAt(len - 2) == chr)) {
+                count[chr - 'a']--;
+                res.append(chr);
+                if (count[chr - 'a'] > 0)
+                    queue.add(chr);
+                while (!stack.isEmpty()) {
+                    queue.add(stack.pop());
+                }
+            } else
+                stack.add(chr);
+
+        }
+        return res.toString();
+    }
+
+    static record StrPos(String str, int pos) {
+    }
+
     /**
      * #1446
      *
