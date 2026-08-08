@@ -1228,7 +1228,6 @@ public class Leetcode800 {
         return res;
     }
 
-
     /**
      * #765
      *
@@ -1935,5 +1934,34 @@ public class Leetcode800 {
             trainsition_idx = next;
         }
         return true;
+    }
+
+    /**
+     * #799
+     * 
+     * @param poured
+     * @param query_row
+     * @param query_glass
+     * @return
+     */
+    public double champagneTower(int poured, int query_row, int query_glass) {
+        double[][] rows = new double[query_row + 1][];
+        for (int i = 1; i <= rows.length; i++) {
+            rows[i - 1] = new double[i];
+        }
+        rows[0][0] = poured;
+        for (int i = 0; i < rows.length; i++) {
+            for (int j = 0; j < rows[i].length; j++) {
+                if (rows[i][j] > 1) {
+                    var overflow = rows[i][j] - 1;
+                    rows[i][j] = 1;
+                    if (i < query_row) {
+                        rows[i + 1][j] += overflow / 2;
+                        rows[i + 1][j + 1] += overflow / 2;
+                    }
+                }
+            }
+        }
+        return rows[query_row][query_glass];
     }
 }
