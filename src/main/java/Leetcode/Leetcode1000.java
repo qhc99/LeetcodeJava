@@ -510,6 +510,45 @@ public class Leetcode1000 {
     }
 
     /**
+     * #992
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int subarraysWithKDistinct(int[] nums, int k) {
+        int res = 0;
+        int lk = 0, lk_1 = 0;
+        Map<Integer, Integer> countK = new HashMap<>();
+        Map<Integer, Integer> countK_1 = new HashMap<>();
+        for (int r = 0; r < nums.length; r++) {
+            var n = nums[r];
+            countK.put(n, 1 + countK.getOrDefault(n, 0));
+            countK_1.put(n, 1 + countK_1.getOrDefault(n, 0));
+            while (lk <= r && countK.size() > k) {
+                var head = nums[lk++];
+                var count = countK.get(head);
+                if (count == 1)
+                    countK.remove(head);
+                else
+                    countK.put(head, count - 1);
+            }
+            while (lk_1 <= r && countK_1.size() > k - 1) {
+                var head = nums[lk_1++];
+                var count = countK_1.get(head);
+                if (count == 1)
+                    countK_1.remove(head);
+                else
+                    countK_1.put(head, count - 1);
+            }
+            if(countK.size() == k){
+                res += lk_1 - lk;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #996
      * 
      * @param nums
