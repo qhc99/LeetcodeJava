@@ -294,4 +294,16 @@ public class Leetcode3100 {
         }
         return res;
     }
+
+    /**
+     * #3086
+     * 
+     * @param nums
+     * @param k
+     * @param maxChanges
+     * @return
+     */
+    public long minimumMoves(int[] nums, int k, int maxChanges) {
+        return 0;
+    }
 }

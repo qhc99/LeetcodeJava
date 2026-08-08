@@ -1209,6 +1209,45 @@ public class Leetcode700 {
     }
 
     /**
+     * #691
+     * 
+     * @param stickers
+     * @param target
+     * @return
+     */
+    public int minStickers(String[] stickers, String target) {
+        int mask = (1 << target.length()) - 1;
+        int[] cache = new int[mask + 1];
+        Arrays.fill(cache, -1);
+        cache[0] = 0;
+        var res = dp(stickers, mask, target, cache);
+        return res < Integer.MAX_VALUE / 2 ? res : -1;
+    }
+
+    int dp(String[] stickers, int mask, String target, int[] cache) {
+        if (cache[mask] >= 0)
+            return cache[mask];
+        int res = Integer.MAX_VALUE / 2;
+        for (var sticker : stickers) {
+            var nextMask = mask;
+            int[] stickerCount = new int['z' - 'a' + 1];
+            for (var c : sticker.toCharArray())
+                stickerCount[c - 'a']++;
+            for (int i = 0; i < target.length(); i++) {
+                var c = target.charAt(i);
+                if ((mask & (1 << i)) > 0 && stickerCount[c - 'a'] > 0) {
+                    stickerCount[c - 'a']--;
+                    nextMask ^= (1 << i);
+                }
+            }
+            if (nextMask != mask)
+                res = Math.min(res, 1 + dp(stickers, nextMask, target, cache));
+        }
+        cache[mask] = res;
+        return res;
+    }
+
+    /**
      * #692
      *
      * @param words
