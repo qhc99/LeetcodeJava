@@ -149,6 +149,37 @@ public class Leetcode1700 {
     }
 
     /**
+     * #1642
+     */
+    public int furthestBuilding(int[] heights, int bricks, int ladders) {
+        Queue<Integer> used = new PriorityQueue<>(
+                (a, b) -> Integer.compare(b, a));
+        for (int i = 1; i < heights.length; i++) {
+            var h = heights[i] - heights[i - 1];
+            if (h > 0) {
+                if (bricks >= h) {
+                    bricks -= h;
+                    used.add(h);
+                } else {
+                    while (bricks < h && ladders > 0 && !used.isEmpty()
+                            && h < used.peek()) {
+                        bricks += used.poll();
+                        ladders--;
+                    }
+                    if (bricks >= h) {
+                        bricks -= h;
+                        used.add(h);
+                    } else if (ladders > 0)
+                        ladders--;
+                    else
+                        return i - 1;
+                }
+            }
+        }
+        return heights.length - 1;
+    }
+
+    /**
      * #1650
      * 
      * @param p
