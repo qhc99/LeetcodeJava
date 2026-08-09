@@ -2,6 +2,8 @@ package Leetcode;
 
 import java.util.*;
 
+import Leetcode.Leetcode1300.PosBudget;
+
 @SuppressWarnings("JavaDoc")
 public class Leetcode1300 {
 
@@ -393,6 +395,54 @@ public class Leetcode1300 {
             head = head.next;
         } while (head != null);
         return ans;
+    }
+
+    /**
+     * #1293
+     * 
+     * @param grid
+     * @param k
+     * @return
+     */
+    public int shortestPath(int[][] grid, int k) {
+        int m = grid.length, n = grid[0].length;
+        if (m == 1 && n == 1) {
+            if (grid[0][0] == 1 || k >= grid[0][0])
+                return 0;
+            else
+                return -1;
+        }
+        int[][] maxK = new int[m][n];
+        for (var r : maxK)
+            Arrays.fill(r, -1);
+        Queue<PosBudget> queue = new ArrayDeque<>();
+        queue.add(new PosBudget(0, 0, k - grid[0][0], 0));
+        int[] dx = new int[] { 0, 0, 1, -1 };
+        int[] dy = new int[] { 1, -1, 0, 0 };
+        while (!queue.isEmpty()) {
+            var pair = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                var x = pair.i + dx[i];
+                var y = pair.j + dy[i];
+                if (x >= 0 && x < m && y >= 0 && y < n) {
+                    var nextBuget = pair.budget - grid[x][y];
+                    if (nextBuget >= 0
+                            && (maxK[x][y] < 0 || nextBuget > maxK[x][y])) {
+                        maxK[x][y] = nextBuget;
+                        var next = new PosBudget(x, y, nextBuget,
+                                pair.steps + 1);
+                        if (x == m - 1 && y == n - 1) {
+                            return next.steps;
+                        }
+                        queue.add(next);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    static record PosBudget(int i, int j, int budget, int steps) {
     }
 
 }
