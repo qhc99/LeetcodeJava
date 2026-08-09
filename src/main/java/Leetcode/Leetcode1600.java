@@ -26,6 +26,29 @@ public class Leetcode1600 {
     }
 
     /**
+     * #1539
+     * 
+     * @param arr
+     * @param k
+     * @return
+     */
+    public int findKthPositive(int[] arr, int k) {
+        var initMiss = arr[0] - 1;
+        if (initMiss >= k)
+            return k;
+        int l = 0, r = arr.length;
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            var miss = arr[mid] - mid - 1;
+            if (miss < k)
+                l = mid;
+            else
+                r = mid;
+        }
+        return arr[l] + (k - (arr[l] - l - 1));
+    }
+
+    /**
      * #1570 SparseVector
      */
     class SparseVector {
