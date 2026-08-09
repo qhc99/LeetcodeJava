@@ -1,7 +1,6 @@
 package Leetcode;
 
-import java.util.ArrayDeque;
-import java.util.Queue;
+import java.util.*;
 
 public class Leetcode2900 {
     /**
@@ -11,34 +10,52 @@ public class Leetcode2900 {
      * @return
      */
     public int minimumMoves(int[][] grid) {
-        int res = 0;
-        Queue<int[]> queue = new ArrayDeque<>();
-
+        List<Integer> less = new ArrayList<>();
+        List<Integer> more = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
-                if (grid[i][j] > 1) {
-                    queue.add(new int[] { i, j, i, j });
-                }
-            }
-        }
-        int[] dx = new int[] { 0, 0, 1, -1 };
-        int[] dy = new int[] { 1, -1, 0, 0 };
-        while (!queue.isEmpty()) {
-            var arr = queue.poll(); // x,y,sx,sy;
-            for (int i = 0; i < 4; i++) {
-                var x = arr[0] + dx[i];
-                var y = arr[1] + dy[i];
-                if (x >= 0 && x < 3 && y >= 0 && y < 3) {
-                    if (grid[x][y] == 0 && grid[arr[2]][arr[3]] > 1) {
-                        grid[arr[2]][arr[3]]--;
-                        res += Math.abs(x - arr[2]) + Math.abs(y - arr[3]);
-                    }
-                    if (grid[arr[2]][arr[3]] > 1) {
-                        queue.add(new int[] { x, y, arr[2], arr[3] });
+                if (grid[i][j] == 0) {
+                    less.add(i * 3 + j);
+                } else if (grid[i][j] > 1) {
+                    for (int k = 2; k <= grid[i][j]; k++) {
+                        more.add(i * 3 + j);
                     }
                 }
             }
         }
+
+        return minimumMoves(-1, new boolean[more.size()], new ArrayList<>(),
+                more, less);
+    }
+
+    int minimumMoves(int prevIdx, boolean[] selected, List<Integer> currentMore,
+            List<Integer> more, List<Integer> less) {
+        int res = Integer.MAX_VALUE;
+        boolean end = true;
+        for (var b : selected)
+            end &= b;
+        if (end) {
+            res = 0;
+            for (int j = 0; j < currentMore.size(); j++) {
+                int idx1 = currentMore.get(j), idx2 = less.get(j);
+                int x1 = idx1 / 3, y1 = idx1 % 3, x2 = idx2 / 3, y2 = idx2 % 3;
+                res += Math.abs(x1 - x2) + Math.abs(y1 - y2);
+            }
+            return res;
+
+        }
+        for (int i = 0; i < selected.length; i++) {
+            if (!selected[i] && !(prevIdx >= 0 && selected[prevIdx]
+                    && more.get(prevIdx).equals(more.get(i)) && i < prevIdx)) {
+                selected[i] = true;
+                currentMore.add(more.get(i));
+                res = Math.min(res,
+                        minimumMoves(i, selected, currentMore, more, less));
+                currentMore.removeLast();
+                selected[i] = false;
+            }
+        }
+
         return res;
     }
 }
