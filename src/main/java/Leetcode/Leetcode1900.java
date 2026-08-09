@@ -1,10 +1,47 @@
 package Leetcode;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class Leetcode1900 {
+
+    /**
+     * #1802
+     * 
+     * @param n
+     * @param index
+     * @param maxSum
+     * @return
+     */
+    public int maxValue(int n, int index, int maxSum) {
+        int l = 1, r = maxSum + 1;
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            var sum = sumOfSeq(mid, n, index);
+            if (sum <= maxSum) {
+                l = mid;
+            } else {
+                r = mid;
+            }
+        }
+        return l;
+    }
+
+    long sumOfSeq(long last, int n, int idx) {
+        var len = Math.min(idx + 1, last);
+        var first = Math.max(1, last - idx);
+        var s = len * (first + last) / 2;
+        s += idx + 1 - len; // fill 1
+
+        len = (Math.min(n - idx, last));
+        first = Math.max(1, last - (n - 1 - idx));
+        s += len * (first + last) / 2;
+        s += n - (idx + len);
+
+        s -= last; // remove duplicate
+
+        return s;
+    }
+
     /**
      * #1851
      * 
