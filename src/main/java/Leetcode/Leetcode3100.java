@@ -151,6 +151,48 @@ public class Leetcode3100 {
 
     }
 
+    /**
+     * #3043
+     * 
+     * @param arr1
+     * @param arr2
+     * @return
+     */
+    public int longestCommonPrefix(int[] arr1, int[] arr2) {
+        int res = 0;
+        if (arr2.length > arr1.length) {
+            var t = arr1;
+            arr1 = arr2;
+            arr2 = t;
+        }
+        var root = new IntTrieNode();
+        for (var n : arr1) {
+            var s = String.valueOf(n);
+            var ptr = root;
+            for (var c : s.toCharArray()) {
+                ptr = ptr.children.computeIfAbsent(c, k -> new IntTrieNode());
+            }
+        }
+        for (var n : arr2) {
+            var s = String.valueOf(n);
+            var ptr = root;
+            int len = 0;
+            for (var c : s.toCharArray()) {
+                ptr = ptr.children.get(c);
+                if (ptr != null) {
+                    len++;
+                    res = Math.max(len, res);
+                } else
+                    break;
+            }
+        }
+        return res;
+    }
+
+    static class IntTrieNode {
+        Map<Character, IntTrieNode> children = new HashMap<>();
+    }
+
     static record Pair(char s, char e) {
         @Override
         public final int hashCode() {
