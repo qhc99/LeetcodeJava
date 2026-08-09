@@ -48,6 +48,31 @@ public class Leetcode1500 {
     }
 
     /**
+     * # 1423
+     * 
+     * @param cardPoints
+     * @param k
+     * @return
+     */
+    public int maxScore(int[] cardPoints, int k) {
+        int[] left = new int[k + 1];
+        int[] right = new int[k + 1];
+        for (int i = 1; i <= k; i++) {
+            left[i] = cardPoints[i - 1] + left[i - 1];
+        }
+
+        for (int i = 1; i <= k; i++) {
+            right[i] = cardPoints[cardPoints.length - i] + right[i - 1];
+        }
+        int res = -1;
+        for (int i = 0; i <= k; i++) {
+            res = Math.max(res, left[i] + right[k - i]);
+        }
+
+        return res;
+    }
+
+    /**
      * #1446
      *
      * @param s
