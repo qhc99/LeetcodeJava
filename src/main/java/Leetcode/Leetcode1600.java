@@ -26,6 +26,81 @@ public class Leetcode1600 {
     }
 
     /**
+     * #1530
+     * 
+     * @param root
+     * @param distance
+     * @return
+     */
+    public int countPairs(TreeNode root, int distance) {
+        if (root == null)
+            return 0;
+        int[] res = new int[1];
+        visitLeaf(root, res, distance);
+        return res[0];
+    }
+
+    List<Integer> visitLeaf(TreeNode n, int[] res, int maxDist) {
+        if (n.left == null && n.right == null) {
+            return List.of(0);
+        }
+        List<Integer> leafDist = new ArrayList<>();
+        List<Integer> left = new ArrayList<>();
+        List<Integer> right = new ArrayList<>();
+        if (n.left != null) {
+            left = visitLeaf(n.left, res, maxDist);
+        }
+        if (n.right != null) {
+            right = visitLeaf(n.right, res, maxDist);
+        }
+        if (!left.isEmpty() && !right.isEmpty()) {
+            for (var l : left) {
+                int s = 0, e = right.size() - 1;
+                while (e - s > 0) {
+                    int mid = s + (e - s) / 2;
+                    if (right.get(mid) + 1 + l + 1 > maxDist) {
+                        s = mid + 1;
+                    } else {
+                        e = mid;
+                    }
+                }
+                if (right.get(s) + 1 + l + 1 <= maxDist)
+                    res[0] += right.size() - s;
+            }
+        }
+        int i = 0, j = 0;
+        while (i < left.size() || j < right.size()) {
+            var l = i < left.size() ? left.get(i) : null;
+            var r = j < right.size() ? right.get(j) : null;
+            if (l != null && l + 1 >= maxDist) {
+                i++;
+                continue;
+            }
+            if (r != null && r + 1 >= maxDist) {
+                j++;
+                continue;
+            }
+            if (l == null && r != null) {
+                leafDist.add(r + 1);
+                j++;
+            } else if (r == null && l != null) {
+                leafDist.add(l + 1);
+                i++;
+            } else if (l != null && r != null) {
+                if (l >= r) {
+                    leafDist.add(l + 1);
+                    i++;
+                } else {
+                    leafDist.add(r + 1);
+                    j++;
+                }
+            }
+        }
+
+        return leafDist;
+    }
+
+    /**
      * #1539
      * 
      * @param arr
