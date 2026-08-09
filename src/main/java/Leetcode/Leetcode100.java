@@ -2565,6 +2565,34 @@ public class Leetcode100 {
     }
 
     /**
+     * #77
+     * 
+     * @param n
+     * @param k
+     * @return
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        List<List<Integer>> res = new ArrayList<>();
+        combine(1, n, k, new ArrayList<>(), res);
+        return res;
+    }
+
+    void combine(int s, int n, int k, List<Integer> current,
+            List<List<Integer>> res) {
+        if (k == 0) {
+            res.add(current.stream().toList());
+            return;
+        }
+        if (s + k - 1 > n)
+            return;
+        for (int i = s; i <= n; i++) {
+            current.add(i);
+            combine(i + 1, n, k - 1, current, res);
+            current.removeLast();
+        }
+    }
+
+    /**
      * #78 <br/>
      * 子集
      * 
