@@ -239,6 +239,43 @@ public class Leetcode1300 {
     }
 
     /**
+     * #1245
+     * 
+     * @param edges
+     * @return
+     */
+    public int treeDiameter(int[][] edges) {
+        int n = edges.length + 1;
+        if (n == 1)
+            return 0;
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (var edge : edges) {
+            graph.computeIfAbsent(edge[0], k -> new ArrayList<>()).add(edge[1]);
+            graph.computeIfAbsent(edge[1], k -> new ArrayList<>()).add(edge[0]);
+        }
+        boolean[] visited = new boolean[n];
+        var s = dfsNode(0, graph, visited);
+        Arrays.fill(visited, false);
+        var e = dfsNode(s[1], graph, visited);
+        return e[0];
+    }
+
+    int[] dfsNode(int i, Map<Integer, List<Integer>> graph, boolean[] visited) {
+        visited[i] = true;
+        int[] res = new int[] { 0, i };
+        for (var nb : graph.get(i)) {
+            if (!visited[nb]) {
+                var depthNode = dfsNode(nb, graph, visited);
+                if (depthNode[0] + 1 > res[0]) {
+                    res[0] = depthNode[0] + 1;
+                    res[1] = depthNode[1];
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      * #1249
      * 
      * @param s
