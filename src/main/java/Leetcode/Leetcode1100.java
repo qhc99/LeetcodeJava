@@ -450,6 +450,16 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1151
+     * 
+     * @param data
+     * @return
+     */
+    public int minSwaps(int[] data) {
+        return 0;
+    }
+
+    /**
      * #1053
      * 
      * @param arr

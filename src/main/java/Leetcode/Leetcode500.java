@@ -1426,6 +1426,53 @@ public class Leetcode500 {
     }
 
     /**
+     * #408
+     * 
+     * @param word
+     * @param abbr
+     * @return
+     */
+    public boolean validWordAbbreviation(String word, String abbr) {
+        int i = 0;
+        int totalLen = 0;
+        for (var part : splitAbbr(abbr)) {
+            if (Character.isDigit(part.charAt(0))) {
+                if (part.startsWith("0"))
+                    return false;
+                var len = Integer.valueOf(part);
+                i += len;
+                totalLen += len;
+            } else {
+                if (i + part.length() > word.length()
+                        || !word.substring(i, i + part.length()).equals(part)) {
+                    return false;
+                }
+                i += part.length();
+                totalLen += part.length();
+            }
+        }
+        return totalLen == word.length();
+    }
+
+    List<String> splitAbbr(String abbr) {
+        StringBuilder sb = new StringBuilder();
+        boolean sbIsDigit = false;
+        List<String> res = new ArrayList<>();
+        for (var c : abbr.toCharArray()) {
+            var isDigit = Character.isDigit(c);
+            if (!sb.isEmpty() && sbIsDigit != isDigit) {
+                res.add(sb.toString());
+                sb.delete(0, sb.length());
+            }
+            sb.append(c);
+            sbIsDigit = isDigit;
+        }
+        if (!sb.isEmpty())
+            res.add(sb.toString());
+        return res;
+    }
+
+    /**
      * #409
      *
      * @param s
