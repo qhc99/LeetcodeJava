@@ -456,7 +456,21 @@ public class Leetcode1100 {
      * @return
      */
     public int minSwaps(int[] data) {
-        return 0;
+        int numOf1 = 0;
+        for (int i = 0; i < data.length; i++) {
+            if (data[i] == 1)
+                numOf1++;
+            if (i - 1 >= 0)
+                data[i] += data[i - 1];
+        }
+        if (numOf1 == 0)
+            return 0;
+        int res = Integer.MAX_VALUE;
+        for (int r = numOf1 - 1; r < data.length; r++) {
+            int l = r - numOf1;
+            res = Math.min(res, numOf1 - (data[r] - (l >= 0 ? data[l] : 0)));
+        }
+        return res;
     }
 
     /**
