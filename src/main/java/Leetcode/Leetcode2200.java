@@ -69,6 +69,31 @@ public class Leetcode2200 {
     }
 
     /**
+     * #2134
+     * 
+     * @param nums
+     * @return
+     */
+    public int minSwaps(int[] nums) {
+        int[] prefixSum = new int[nums.length * 2 + 1];
+        int res = Integer.MAX_VALUE;
+        int countOf1 = 0;
+        for (int i = 1; i < prefixSum.length; i++) {
+            int idx = (i - 1) % nums.length;
+            if (i - 1 < nums.length && nums[i - 1] == 1)
+                countOf1++;
+            prefixSum[i] = nums[idx] + prefixSum[i - 1];
+        }
+        if (countOf1 == 0)
+            return 0;
+        for (int r = countOf1; r < prefixSum.length; r++) {
+            var l = r - countOf1;
+            res = Math.min(res, countOf1 - (prefixSum[r] - prefixSum[l]));
+        }
+        return res;
+    }
+
+    /**
      * #2145
      * 
      * @param differences
