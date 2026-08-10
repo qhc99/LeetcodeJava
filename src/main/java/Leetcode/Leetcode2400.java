@@ -25,7 +25,39 @@ public class Leetcode2400 {
     }
 
     /**
-     * #2435
+     * #2334
+     * 
+     * @param nums
+     * @param threshold
+     * @return
+     */
+    public int validSubarraySize(int[] nums, int threshold) {
+        int[] left = new int[nums.length];
+        Stack<Integer> stack = new Stack<>();
+        for (int i = 0; i < nums.length; i++) {
+            while (!stack.isEmpty() && nums[i] <= nums[stack.peek()]) {
+                var n = stack.pop();
+                var len = i - left[n];
+                if (nums[n] > threshold / len) {
+                    return len;
+                }
+            }
+            if (!stack.isEmpty())
+                left[i] = stack.peek() + 1;
+            stack.add(i);
+        }
+        while (!stack.isEmpty()) {
+            var n = stack.pop();
+            var len = nums.length - left[n];
+            if (nums[n] > threshold / len) {
+                return len;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * #2335
      * 
      * @param grid
      * @param k
