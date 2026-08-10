@@ -346,6 +346,47 @@ public class Leetcode3100 {
      * @return
      */
     public long minimumMoves(int[] nums, int k, int maxChanges) {
-        return 0;
+        int continuous = 0;
+        List<Long> posOf1 = new ArrayList<>();
+
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 1)
+                posOf1.add((long) i);
+            if (nums[i] == 1) {
+                continuous = Math.max(1, continuous);
+                if (i - 1 >= 0 && nums[i - 1] == 1) {
+                    continuous = Math.max(2, continuous);
+                    if (i - 2 >= 0 && nums[i - 2] == 1)
+                        continuous = Math.max(3, continuous);
+                }
+
+            }
+        }
+        if (continuous >= k) {
+            return k - 1;
+        }
+        if (continuous + maxChanges >= k) {
+            int changes = k - continuous;
+            return Math.max(continuous - 1, 0) + changes * 2;
+        }
+        int len = k - maxChanges;
+        long[] prefixPosOf1 = new long[posOf1.size() + 1];
+        for (int i = 1; i < prefixPosOf1.length; i++) {
+            prefixPosOf1[i] = posOf1.get(i - 1) + prefixPosOf1[i - 1];
+        }
+        long minDist = Long.MAX_VALUE;
+        for (int e = len - 1; e < posOf1.size(); e++) {
+            int s = e + 1 - len;
+            int mid = s + (e - s) / 2;
+            long midPos = posOf1.get(mid);
+            long dist = 0;
+            dist += (mid + 1 - s) * midPos
+                    - (prefixPosOf1[mid + 1] - prefixPosOf1[s]);
+            dist += (prefixPosOf1[e + 1] - prefixPosOf1[mid])
+                    - (e + 1 - mid) * midPos;
+
+            minDist = Math.min(minDist, dist);
+        }
+        return minDist + maxChanges * 2;
     }
 }
