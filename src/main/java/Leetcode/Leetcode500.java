@@ -2417,6 +2417,22 @@ public class Leetcode500 {
         return current.getOrDefault(c, 0) + 1 <= chars.get(c);
     }
 
+    public List<Integer> findDuplicates(int[] nums) {
+        List<Integer> res = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++) {
+            while (nums[i] != nums[nums[i] - 1]) {
+                var t = nums[nums[i] - 1];
+                nums[nums[i] - 1] = nums[i];
+                nums[i] = t;
+            }
+        }
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] != i + 1)
+                res.add(nums[i]);
+        }
+        return res;
+    }
+
     /**
      * #443
      *
