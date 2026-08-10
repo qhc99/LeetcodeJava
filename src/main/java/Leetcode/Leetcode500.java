@@ -403,7 +403,7 @@ public class Leetcode500 {
          * Adds a new element to the list.
          *
          * @param index the index to add before
-         * @param obj the element to add
+         * @param obj   the element to add
          */
         @Override
         public void add(final int index, final E obj) {
@@ -445,7 +445,7 @@ public class Leetcode500 {
          * Sets the element at the specified index.
          *
          * @param index the index to set
-         * @param obj the object to store at the specified index
+         * @param obj   the object to store at the specified index
          * @return the previous object at that index
          * @throws IndexOutOfBoundsException if the index is invalid
          */
@@ -488,9 +488,9 @@ public class Leetcode500 {
         /**
          * Checks whether the index is valid.
          *
-         * @param index the index to check
+         * @param index      the index to check
          * @param startIndex the first allowed index
-         * @param endIndex the last allowed index
+         * @param endIndex   the last allowed index
          * @throws IndexOutOfBoundsException if the index is invalid
          */
         private void checkInterval(final int index, final int startIndex,
@@ -553,9 +553,10 @@ public class Leetcode500 {
              * Constructs a new node with a relative position.
              *
              * @param relativePosition the relative position of the node
-             * @param obj the value for the node
-             * @param rightFollower the node with the value following this one
-             * @param leftFollower the node with the value leading this one
+             * @param obj              the value for the node
+             * @param rightFollower    the node with the value following this
+             *                         one
+             * @param leftFollower     the node with the value leading this one
              */
             private AVLNode(final int relativePosition, final E obj,
                     final AVLNode<E> rightFollower,
@@ -587,20 +588,26 @@ public class Leetcode500 {
              * {@code start} through {@code end} of the collection, assuming the
              * iterator {@code e} already points at element {@code start}.
              *
-             * @param iterator an iterator over the collection, which should
-             * already point to the element at index {@code start} within the
-             * collection
-             * @param start the index of the first element in the collection
-             * that should be in this subtree
-             * @param end the index of the last element in the collection that
-             * should be in this subtree
+             * @param iterator                 an iterator over the collection,
+             *                                 which should already point to the
+             *                                 element at index {@code start}
+             *                                 within the collection
+             * @param start                    the index of the first element in
+             *                                 the collection that should be in
+             *                                 this subtree
+             * @param end                      the index of the last element in
+             *                                 the collection that should be in
+             *                                 this subtree
              * @param absolutePositionOfParent absolute position of this node's
-             * parent, or 0 if this node is the root
-             * @param prev the {@code AVLNode} corresponding to element (start -
-             * 1) of the collection, or null if start is 0
-             * @param next the {@code AVLNode} corresponding to element (end +
-             * 1) of the collection, or null if end is the last element of the
-             * collection
+             *                                 parent, or 0 if this node is the
+             *                                 root
+             * @param prev                     the {@code AVLNode} corresponding
+             *                                 to element (start - 1) of the
+             *                                 collection, or null if start is 0
+             * @param next                     the {@code AVLNode} corresponding
+             *                                 to element (end + 1) of the
+             *                                 collection, or null if end is the
+             *                                 last element of the collection
              */
             private AVLNode(final Iterator<? extends E> iterator,
                     final int start, final int end,
@@ -729,8 +736,8 @@ public class Leetcode500 {
              * Inserts a node at the position index.
              *
              * @param index is the index of the position relative to the
-             * position of the parent node.
-             * @param obj is the object to be stored in the position.
+             *              position of the parent node.
+             * @param obj   is the object to be stored in the position.
              */
             AVLNode<E> insert(final int index, final E obj) {
                 final int indexRelativeToMe = index - relativePosition;
@@ -809,7 +816,8 @@ public class Leetcode500 {
              * Removes the node at a given position.
              *
              * @param index is the index of the element to be removed relative
-             * to the position of the parent node of the current node.
+             *              to the position of the parent node of the current
+             *              node.
              */
             AVLNode<E> remove(final int index) {
                 final int indexRelativeToMe = index - relativePosition;
@@ -920,22 +928,22 @@ public class Leetcode500 {
              */
             private AVLNode<E> balance() {
                 switch (heightRightMinusLeft()) {
-                    case 1:
-                    case 0:
-                    case -1:
-                        return this;
-                    case -2:
-                        if (left.heightRightMinusLeft() > 0) {
-                            setLeft(left.rotateLeft(), null);
-                        }
-                        return rotateRight();
-                    case 2:
-                        if (right.heightRightMinusLeft() < 0) {
-                            setRight(right.rotateRight(), null);
-                        }
-                        return rotateLeft();
-                    default:
-                        throw new RuntimeException("tree inconsistent!");
+                case 1:
+                case 0:
+                case -1:
+                    return this;
+                case -2:
+                    if (left.heightRightMinusLeft() > 0) {
+                        setLeft(left.rotateLeft(), null);
+                    }
+                    return rotateRight();
+                case 2:
+                    if (right.heightRightMinusLeft() < 0) {
+                        setRight(right.rotateRight(), null);
+                    }
+                    return rotateLeft();
+                default:
+                    throw new RuntimeException("tree inconsistent!");
                 }
             }
 
@@ -1027,7 +1035,7 @@ public class Leetcode500 {
              * Sets the left field to the node, or the previous node if that is
              * null
              *
-             * @param node the new left subtree node
+             * @param node     the new left subtree node
              * @param previous the previous node in the linked list
              */
             private void setLeft(final AVLNode<E> node,
@@ -1056,7 +1064,8 @@ public class Leetcode500 {
              * efficiently merging the two AVL trees. This operation is
              * destructive to both trees and runs in O(log(m + n)) time.
              *
-             * @param otherTree the root of the AVL tree to merge with this one
+             * @param otherTree   the root of the AVL tree to merge with this
+             *                    one
              * @param currentSize the number of elements in this AVL tree
              * @return the root of the new, merged AVL tree
              */
@@ -1217,7 +1226,7 @@ public class Leetcode500 {
             /**
              * Create a ListIterator for a list.
              *
-             * @param parent the parent list
+             * @param parent    the parent list
              * @param fromIndex the index to start at
              */
             protected TreeListIterator(final TreeList<E> parent,
@@ -1236,7 +1245,9 @@ public class Leetcode500 {
              * object expects.
              *
              * @throws ConcurrentModificationException If the list's
-             * modification count isn't the value that was expected.
+             *                                         modification count isn't
+             *                                         the value that was
+             *                                         expected.
              */
             protected void checkModCount() {
                 if (parent.modCount != expectedModCount) {
@@ -1457,7 +1468,7 @@ public class Leetcode500 {
      * 因为此时这两个子数组各自的和的最大值为18，在所有情况中最小。
      *
      * @param nums array
-     * @param m number of group
+     * @param m    number of group
      * @return min group sum
      */
     public static int splitArray(int[] nums, int m) {
@@ -1871,12 +1882,9 @@ public class Leetcode500 {
             if (!n.contain && n.left == null && n.mid == null && n.right == null
                     && p != null) {
                 switch (direct) {
-                    case MID ->
-                        p.mid = null;
-                    case LEFT ->
-                        p.left = null;
-                    case RIGHT ->
-                        p.right = null;
+                case MID -> p.mid = null;
+                case LEFT -> p.left = null;
+                case RIGHT -> p.right = null;
                 }
             }
             if (p == null && !n.contain && n.left == null && n.mid == null
@@ -2855,8 +2863,8 @@ public class Leetcode500 {
      * @return perimeter
      */
     public static int islandPerimeter(int[][] grid) {
-        int[] dx = {0, 1, 0, -1};
-        int[] dy = {1, 0, -1, 0};
+        int[] dx = { 0, 1, 0, -1 };
+        int[] dy = { 1, 0, -1, 0 };
         int n = grid.length, m = grid[0].length;
         int ans = 0;
         for (int i = 0; i < n; ++i) {
@@ -2942,14 +2950,60 @@ public class Leetcode500 {
             for (var c : p.toCharArray()) {
                 if (!Character.isDigit(c)
                         && (((Character.isUpperCase(c) && c > 'F')
-                        || (Character.isLowerCase(c) && c > 'f')
-                        || (!Character.isUpperCase(c)
-                        && !Character.isLowerCase(c))))) {
+                                || (Character.isLowerCase(c) && c > 'f')
+                                || (!Character.isUpperCase(c)
+                                        && !Character.isLowerCase(c))))) {
                     return "Neither";
                 }
             }
         }
         return "IPv6";
+    }
+
+    /**
+     * #472
+     * 
+     * @param words
+     * @return
+     */
+    public List<String> findAllConcatenatedWordsInADict(String[] words) {
+        Arrays.sort(words, (a, b) -> Integer.compare(a.length(), b.length()));
+        List<String> res = new ArrayList<>();
+        var root = new TrieNode();
+        for (var word : words) {
+            if (!isConcat(0, word, root, new boolean[word.length()])) {
+                var ptr = root;
+                for (var c : word.toCharArray()) {
+                    ptr = ptr.children.computeIfAbsent(c, k -> new TrieNode());
+                }
+                ptr.contain = true;
+            } else
+                res.add(word);
+        }
+        return res;
+    }
+
+    static class TrieNode {
+        boolean contain = false;
+        Map<Character, TrieNode> children = new HashMap<>();
+    }
+
+    boolean isConcat(int idx, String word, TrieNode root, boolean[] searched) {
+        if (idx >= searched.length)
+            return true;
+        if (searched[idx])
+            return false;
+        searched[idx] = true;
+        var ptr = root;
+        while (ptr != null && idx < word.length()) {
+            ptr = ptr.children.get(word.charAt(idx++));
+            if (ptr != null && ptr.contain
+                    && isConcat(idx, word, root, searched)) {
+                return true;
+            }
+        }
+
+        return ptr != null && ptr.contain && idx == word.length();
     }
 
     /**
