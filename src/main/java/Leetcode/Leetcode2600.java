@@ -139,6 +139,27 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2530
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public long maxKelements(int[] nums, int k) {
+        long res = 0;
+        Queue<Integer> queue = new PriorityQueue<>(
+                (a, b) -> Integer.compare(b, a));
+        for (var n : nums)
+            queue.add(n);
+        for (int i = 0; i < k; i++) {
+            var n = queue.poll();
+            res += n;
+            queue.add(Math.ceilDiv(n, 3));
+        }
+        return res;
+    }
+
+    /**
      * #2539
      * 
      * @param s
