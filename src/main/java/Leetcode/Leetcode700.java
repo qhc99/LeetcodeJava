@@ -645,6 +645,44 @@ public class Leetcode700 {
     }
 
     /**
+     * #648
+     * 
+     * @param dictionary
+     * @param sentence
+     * @return
+     */
+    public String replaceWords(List<String> dictionary, String sentence) {
+        List<String> res = new ArrayList<>();
+        var words = sentence.split(" ");
+        var root = new TrieNode();
+        for (var d : dictionary) {
+            var ptr = root;
+            for (var c : d.toCharArray())
+                ptr = ptr.children.computeIfAbsent(c, k -> new TrieNode());
+            ptr.contain = true;
+        }
+        for (var word : words) {
+            var ptr = root;
+            int len = 0;
+            while (ptr != null && len < word.length()) {
+                ptr = ptr.children.get(word.charAt(len++));
+                if (ptr != null && ptr.contain)
+                    break;
+            }
+            if (ptr != null && ptr.contain)
+                res.add(word.substring(0, len));
+            else
+                res.add(word);
+        }
+        return String.join(" ", res);
+    }
+
+    static class TrieNode {
+        boolean contain = false;
+        Map<Character, TrieNode> children = new HashMap<>();
+    }
+
+    /**
      * #650
      * 
      * @param n
