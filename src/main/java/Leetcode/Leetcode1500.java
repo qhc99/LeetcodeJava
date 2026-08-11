@@ -111,6 +111,42 @@ public class Leetcode1500 {
     }
 
     /**
+     * #1466
+     * 
+     * @param n
+     * @param connections
+     * @return
+     */
+    public int minReorder(int n, int[][] connections) {
+        Map<Integer, Set<Integer>> source = new HashMap<>();
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        Queue<Integer> queue = new ArrayDeque<>();
+        for (var c : connections) {
+            source.computeIfAbsent(c[0], k->new HashSet<>()).add(c[1]);
+            graph.computeIfAbsent(c[0], k -> new ArrayList<>()).add(c[1]);
+            graph.computeIfAbsent(c[1], k -> new ArrayList<>()).add(c[0]);
+        }
+        int res = 0;
+        Set<Integer> inQueue = new HashSet<>();
+        inQueue.add(0);
+        queue.add(0);
+        while (!queue.isEmpty()) {
+            var node = queue.poll();
+            for (var nb : graph.get(node)) {
+                if (inQueue.contains(nb))
+                    continue;
+                inQueue.add(nb);
+                if (!source.containsKey(nb) || !source.get(nb).contains(node))
+                    res++;
+
+                queue.add(nb);
+            }
+        }
+
+        return res;
+    }
+
+    /**
      * #1472 BrowserHistory
      */
     class BrowserHistory {
