@@ -3070,6 +3070,36 @@ public class Leetcode500 {
     }
 
     /**
+     * #473
+     * 
+     * @param matchsticks
+     * @return
+     */
+    public boolean makesquare(int[] matchsticks) {
+        var len = Arrays.stream(matchsticks).sum();
+        if (len % 4 != 0)
+            return false;
+        len /= 4;
+        var n = matchsticks.length;
+        int[] dp = new int[1 << n];
+        Arrays.fill(dp, -1);
+        dp[0] = 0;
+        for (int s = 1; s < 1 << n; s++) {
+            for (int i = 0; i < n; i++) {
+                if ((s & (1 << i)) == 0) {
+                    continue;
+                }
+                var prevS = s ^ (1 << i);
+                if (dp[prevS] >= 0 && dp[prevS] + matchsticks[i] <= len) {
+                    dp[s] = (dp[prevS] + matchsticks[i]) % len;
+                    break;
+                }
+            }
+        }
+        return dp[(1 << n) - 1] == 0;
+    }
+
+    /**
      * #474
      *
      * @param strs
