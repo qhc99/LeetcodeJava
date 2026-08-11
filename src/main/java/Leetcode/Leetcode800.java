@@ -224,6 +224,73 @@ public class Leetcode800 {
     }
 
     /**
+     * #708
+     * 
+     * @param head
+     * @param insertVal
+     * @return
+     */
+
+    static class Next708 {
+        static class Node {
+            public int val;
+            public Node next;
+
+            public Node() {
+            }
+
+            public Node(int _val) {
+                val = _val;
+            }
+
+            public Node(int _val, Node _next) {
+                val = _val;
+                next = _next;
+            }
+        };
+
+        public Node insert(Node head, int insertVal) {
+            var n = new Node(insertVal);
+            if (head == null) {
+                n.next = n;
+                return n;
+            }
+            if (head.next == head) {
+                head.next = n;
+                n.next = head;
+                return head;
+            }
+            var ptr = head;
+            while (true) {
+                if (ptr.val < ptr.next.val) {
+                    if (insertVal >= ptr.val && insertVal <= ptr.next.val) {
+                        var next = ptr.next;
+                        ptr.next = n;
+                        n.next = next;
+                        break;
+                    }
+                } else if (ptr.val > ptr.next.val) {
+                    if (insertVal >= ptr.val || insertVal <= ptr.next.val) {
+                        var next = ptr.next;
+                        ptr.next = n;
+                        n.next = next;
+                        break;
+                    }
+                } else {
+                    if (ptr.next == head) {
+                        var next = ptr.next;
+                        ptr.next = n;
+                        n.next = next;
+                        break;
+                    }
+                }
+                ptr = ptr.next;
+            }
+            return head;
+        }
+    }
+
+    /**
      * #713
      *
      * @param nums
