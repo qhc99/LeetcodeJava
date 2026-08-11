@@ -702,6 +702,51 @@ public class Leetcode200 {
     }
 
     /**
+     * #135
+     * 
+     * @param ratings
+     * @return
+     */
+    public int candy(int[] ratings) {
+        int[] candy = new int[ratings.length];
+        Arrays.fill(candy, -1);
+        Stack<Integer> decStack = new Stack<>();
+        for (int i = 0; i < ratings.length; i++) {
+            if (decStack.isEmpty() || ratings[i] <= ratings[decStack.peek()]) {
+                decStack.add(i);
+            } else {
+                int tail = decStack.pop();
+                candy[tail] = Math.max(candy[tail], 1);
+                candy[i] = Math.max(candy[i], candy[tail] + 1);
+                while (!decStack.isEmpty()) {
+                    var pop = decStack.pop();
+                    if (ratings[pop] > ratings[tail])
+                        candy[pop] = Math.max(candy[pop], candy[tail] + 1);
+                    else
+                        candy[pop] = Math.max(candy[pop], 1);
+
+                    tail = pop;
+                }
+                decStack.add(i);
+            }
+        }
+        if (!decStack.isEmpty()) {
+            int tail = decStack.pop();
+            candy[tail] = Math.max(candy[tail], 1);
+            while (!decStack.isEmpty()) {
+                var pop = decStack.pop();
+                if (ratings[pop] > ratings[tail])
+                    candy[pop] = Math.max(candy[pop], candy[tail] + 1);
+                else
+                    candy[pop] = Math.max(candy[pop], 1);
+
+                tail = pop;
+            }
+        }
+        return Arrays.stream(candy).sum();
+    }
+
+    /**
      * #139
      *
      * @param s
