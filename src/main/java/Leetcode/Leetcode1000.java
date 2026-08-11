@@ -253,25 +253,6 @@ public class Leetcode1000 {
     }
 
     /**
-     * #933 RecentCounter
-     */
-    class RecentCounter {
-        Queue<Integer> queue = new ArrayDeque<>();
-
-        public RecentCounter() {
-
-        }
-
-        public int ping(int t) {
-            while (!queue.isEmpty() && queue.peek() < t - 3000) {
-                queue.poll();
-            }
-            queue.add(t);
-            return queue.size();
-        }
-    }
-
-    /**
      * #924
      * 
      * @param graph
@@ -337,6 +318,103 @@ public class Leetcode1000 {
             }
         }
         return res;
+    }
+
+    /**
+     * #933 RecentCounter
+     */
+    class RecentCounter {
+        Queue<Integer> queue = new ArrayDeque<>();
+
+        public RecentCounter() {
+
+        }
+
+        public int ping(int t) {
+            while (!queue.isEmpty() && queue.peek() < t - 3000) {
+                queue.poll();
+            }
+            queue.add(t);
+            return queue.size();
+        }
+    }
+
+    /**
+     * #934
+     * 
+     * @param grid
+     * @return
+     */
+    public int shortestBridge(int[][] grid) {
+        Queue<Pos> queueFirst = new ArrayDeque<>();
+        Queue<Pos> queueSecond = new ArrayDeque<>();
+
+        int n = grid.length;
+        List<Pos> islandFirst = new ArrayList<>();
+        List<Pos> islandSecond = new ArrayList<>();
+
+        boolean[][] visited = new boolean[n][n];
+        boolean searchedFirst = false;
+        boolean searchedSeccond = false;
+        int res = Integer.MAX_VALUE;
+        int[] dx = new int[] { 0, 0, 1, -1 };
+        int[] dy = new int[] { 1, -1, 0, 0 };
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1 && !visited[i][j]) {
+                    if (!searchedFirst) {
+                        searchedFirst = true;
+                        queueFirst.add(new Pos(i, j));
+                        visited[i][j] = true;
+                        islandFirst.add(new Pos(i, j));
+                        while (!queueFirst.isEmpty()) {
+                            var p = queueFirst.poll();
+                            for (int k = 0; k < 4; k++) {
+                                var x = p.x + dx[k];
+                                var y = p.y + dy[k];
+                                if (x >= 0 && x < n && y >= 0 && y < n
+                                        && !visited[x][y] && grid[x][y] == 1) {
+                                    visited[x][y] = true;
+                                    islandFirst.add(new Pos(x, y));
+                                    queueFirst.add(new Pos(x, y));
+                                }
+                            }
+                        }
+
+                    } else if (!searchedSeccond) {
+                        searchedSeccond = true;
+                        queueSecond.add(new Pos(i, j));
+                        visited[i][j] = true;
+                        islandSecond.add(new Pos(i, j));
+                        while (!queueSecond.isEmpty()) {
+                            var p = queueSecond.poll();
+                            for (int k = 0; k < 4; k++) {
+                                var x = p.x + dx[k];
+                                var y = p.y + dy[k];
+                                if (x >= 0 && x < n && y >= 0 && y < n
+                                        && !visited[x][y] && grid[x][y] == 1) {
+                                    visited[x][y] = true;
+                                    islandSecond.add(new Pos(x, y));
+                                    queueSecond.add(new Pos(x, y));
+                                }
+                            }
+                        }
+                    } else
+                        break;
+
+                }
+            }
+        }
+        for (var p1 : islandFirst) {
+            for (var p2 : islandSecond) {
+                res = Math.min(res,
+                        Math.abs(p1.x - p2.x) + Math.abs(p1.y - p2.y));
+            }
+        }
+        return res - 1;
+    }
+
+    static record Pos(int x, int y) {
     }
 
     /**
@@ -541,7 +619,7 @@ public class Leetcode1000 {
                 else
                     countK_1.put(head, count - 1);
             }
-            if(countK.size() == k){
+            if (countK.size() == k) {
                 res += lk_1 - lk;
             }
         }
