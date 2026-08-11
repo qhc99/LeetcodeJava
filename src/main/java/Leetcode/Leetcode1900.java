@@ -43,6 +43,31 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1813
+     */
+    public boolean areSentencesSimilar(String sentence1, String sentence2) {
+        var arrFirst = sentence1.split(" ");
+        var arrSecond = sentence2.split(" ");
+        if (arrSecond.length > arrFirst.length) {
+            var t = arrFirst;
+            arrFirst = arrSecond;
+            arrSecond = t;
+        }
+        int i = 0;
+        for (; i < arrFirst.length && i < arrSecond.length
+                && arrFirst[i].equals(arrSecond[i]); i++) {
+        }
+
+        int j = 1;
+        for (; arrFirst.length - j >= 0 && arrSecond.length - j >= 0
+                && arrFirst[arrFirst.length - j]
+                        .equals(arrSecond[arrSecond.length - j]); j++) {
+        }
+
+        return i + j - 1 == arrSecond.length;
+    }
+
+    /**
      * #1851
      * 
      * @param intervals
