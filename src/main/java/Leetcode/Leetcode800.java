@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.TreeMap;
 
 @SuppressWarnings({ "unused", "JavaDoc" })
 public class Leetcode800 {
@@ -942,6 +943,38 @@ public class Leetcode800 {
             }
         }
         return ans;
+    }
+
+    /**
+     * #740
+     * 
+     * @param nums
+     * @return
+     */
+    public int deleteAndEarn(int[] nums) {
+        Map<Integer, Integer> count = new HashMap<>();
+        for (var n : nums)
+            count.put(n, 1 + count.getOrDefault(n, 0));
+
+        int[] dp = new int[count.size()]; // 0/1 no/yes
+        var sortedCount = new TreeMap<Integer, Integer>();
+        for (var e : count.entrySet()) {
+            sortedCount.put(e.getKey(), e.getValue());
+        }
+        int i = 0;
+        for (var e : sortedCount.entrySet()) {
+            var n = e.getKey();
+            var c = e.getValue();
+            var prev = count.getOrDefault(n - 1, 0);
+            if (prev == 0) {
+                dp[i] = (i - 1 >= 0 ? dp[i - 1] : 0) + c * n;
+            } else {
+                dp[i] = (i - 2 >= 0 ? dp[i - 2] : 0) + c * n;
+                dp[i] = Math.max(dp[i], dp[i-1]);
+            }
+            i++;
+        }
+        return dp[count.size() - 1];
     }
 
     /**

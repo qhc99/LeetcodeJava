@@ -98,6 +98,19 @@ public class Leetcode600 {
     }
 
     /**
+     * #505
+     * 
+     * @param maze
+     * @param start
+     * @param destination
+     * @return
+     */
+    public int shortestDistance(int[][] maze, int[] start, int[] destination) {
+
+        return 0;
+    }
+
+    /**
      * #509
      * 
      * @param n
