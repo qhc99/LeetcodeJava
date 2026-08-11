@@ -44,6 +44,39 @@ public class Leetcode1800 {
     }
 
     /**
+     * #1769
+     * 
+     * @param boxes
+     * @return
+     */
+    public int[] minOperations(String boxes) {
+        int[] res = new int[boxes.length()];
+        int countOf1 = 0;
+        int dist = 0;
+        for (int i = 0; i < boxes.length(); i++) {
+            var c = boxes.charAt(i);
+            if (c == '1') {
+                countOf1++;
+                dist += i;
+            }
+        }
+        int right1count = countOf1 - (boxes.charAt(0) == '1' ? 1 : 0);
+        int left1count = 0;
+        for (int i = 0; i < boxes.length(); i++) {
+            var c = boxes.charAt(i);
+            res[i] = dist;
+            dist -= right1count;
+            if (i + 1 < boxes.length() && boxes.charAt(i + 1) == '1')
+                right1count--;
+            if (c == '1')
+                left1count++;
+            dist += left1count;
+        }
+
+        return res;
+    }
+
+    /**
      * #1797 AuthenticationManager
      */
     class AuthenticationManager {
