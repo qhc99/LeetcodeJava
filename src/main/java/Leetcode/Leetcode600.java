@@ -106,8 +106,39 @@ public class Leetcode600 {
      * @return
      */
     public int shortestDistance(int[][] maze, int[] start, int[] destination) {
+        Queue<int[]> queue = new ArrayDeque<>();
+        int[] dx = new int[] { 0, 0, 1, -1 };
+        int[] dy = new int[] { 1, -1, 0, 0 };
+        int m = maze.length, n = maze[0].length;
+        boolean[][] visited = new boolean[m][n];
+        for (int i = 0; i < 4; i++) {
+            int x = start[0] + dx[i], y = start[1] + dy[i];
+            if (x >= 0 && x < m && y >= 0 && y < n && maze[x][y] == 0) {
+                queue.add(new int[] { start[0], start[1], i, 0 });
+                visited[start[0]][start[1]] = true;
+            }
+        }
+        while (!queue.isEmpty()) {
+            var arr = queue.poll();
+            int x = arr[0] + dx[arr[2]], y = arr[1] + dy[arr[2]];
+            if (x >= 0 && x < m && y >= 0 && y < n && maze[x][y] == 0) {
+                queue.add(new int[] { x, y, arr[2], arr[3] + 1 });
+                continue;
+            }
+            if (visited[arr[0]][arr[1]])
+                continue;
+            visited[arr[0]][arr[1]] = true;
+            if (arr[0] == destination[0] && arr[1] == destination[1])
+                return arr[3];
+            for (int i = 0; i < 4; i++) {
+                int p = arr[0] + dx[i], q = arr[1] + dy[i];
+                if (p >= 0 && p < m && q >= 0 && q < n && maze[p][q] == 0) {
+                    queue.add(new int[] { p, q, i, arr[3] + 1 });
+                }
+            }
 
-        return 0;
+        }
+        return -1;
     }
 
     /**
