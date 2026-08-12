@@ -29,6 +29,47 @@ public class Leetcode1400 {
     }
 
     /**
+     * #1335
+     * 
+     * @param jobDifficulty
+     * @param d
+     * @return
+     */
+    public int minDifficulty(int[] jobDifficulty, int d) {
+        if (d > jobDifficulty.length)
+            return -1;
+
+        int[][] dp = new int[2][jobDifficulty.length];
+        for (int i = 0,
+                max = Integer.MIN_VALUE; i < jobDifficulty.length; i++) {
+            max = Math.max(max, jobDifficulty[i]);
+            dp[0][i] = max;
+        }
+
+        for (int i = 1; i < d; i++) {
+            Stack<int[]> stack = new Stack<>();
+            for (int j = i; j < jobDifficulty.length; j++) {
+                int min = dp[0][j - 1];
+                while (!stack.isEmpty()
+                        && jobDifficulty[stack.peek()[0]] < jobDifficulty[j]) {
+                    min = Math.min(min, stack.pop()[1]);
+                }
+                if (stack.isEmpty())
+                    dp[1][j] = min + jobDifficulty[j];
+                else
+                    dp[1][j] = Math.min(min + jobDifficulty[j],
+                            dp[1][stack.peek()[0]]);
+                stack.add(new int[] { j, dp[1][j] });
+            }
+            var t = dp[0];
+            dp[0] = dp[1];
+            dp[1] = t;
+        }
+
+        return dp[0][jobDifficulty.length - 1];
+    }
+
+    /**
      * #1352 ProductOfNumbers
      */
     class ProductOfNumbers {
