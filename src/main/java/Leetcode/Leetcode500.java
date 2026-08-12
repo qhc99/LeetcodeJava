@@ -1577,6 +1577,26 @@ public class Leetcode500 {
         return res;
     }
 
+    public int numberOfArithmeticSlices(int[] nums) {
+        int l = 0;
+        int d = 0;
+        int res = 0;
+        for (int r = 0; r < nums.length; r++) {
+            if (r - l <= 1) {
+                d = nums[r] - nums[l];
+            } else {
+                var tailDist = nums[r] - nums[r - 1];
+                if (tailDist == d) {
+                    res += (r - l - 1);
+                } else {
+                    l = r - 1;
+                    d = nums[r] - nums[l];
+                }
+            }
+        }
+        return res;
+    }
+
     /**
      * #414
      *
