@@ -453,6 +453,32 @@ public class Leetcode1000 {
     }
 
     /**
+     * #962
+     * 
+     * @param nums
+     * @return
+     */
+    public int maxWidthRamp(int[] nums) {
+        Stack<Integer> idxDecVal = new Stack<>();
+        for (int i = 0; i < nums.length; i++) {
+            if (idxDecVal.isEmpty() || nums[i] < nums[idxDecVal.peek()]) {
+                idxDecVal.add(i);
+            }
+        }
+        int res = 0;
+        for (int i = nums.length - 1; i >= 0 && !idxDecVal.isEmpty(); i--) {
+            while (!idxDecVal.isEmpty() && idxDecVal.peek() >= i) {
+                idxDecVal.pop();
+            }
+            while (!idxDecVal.isEmpty() && nums[idxDecVal.peek()] <= nums[i]) {
+                res = Math.max(res, i - idxDecVal.pop());
+            }
+        }
+
+        return res;
+    }
+
+    /**
      * #968 <br/>
      * 监控二叉树 grady algorithm
      *
