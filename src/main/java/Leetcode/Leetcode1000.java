@@ -459,19 +459,20 @@ public class Leetcode1000 {
      * @return
      */
     public int maxWidthRamp(int[] nums) {
-        Stack<Integer> idxDecVal = new Stack<>();
+        Deque<Integer> idxDecVal = new ArrayDeque<>();
         for (int i = 0; i < nums.length; i++) {
-            if (idxDecVal.isEmpty() || nums[i] < nums[idxDecVal.peek()]) {
-                idxDecVal.add(i);
+            if (idxDecVal.isEmpty() || nums[i] < nums[idxDecVal.peekLast()]) {
+                idxDecVal.addLast(i);
             }
         }
         int res = 0;
         for (int i = nums.length - 1; i >= 0 && !idxDecVal.isEmpty(); i--) {
-            while (!idxDecVal.isEmpty() && idxDecVal.peek() >= i) {
-                idxDecVal.pop();
+            while (!idxDecVal.isEmpty() && idxDecVal.peekLast() >= i) {
+                idxDecVal.removeLast();
             }
-            while (!idxDecVal.isEmpty() && nums[idxDecVal.peek()] <= nums[i]) {
-                res = Math.max(res, i - idxDecVal.pop());
+            while (!idxDecVal.isEmpty()
+                    && nums[idxDecVal.peekLast()] <= nums[i]) {
+                res = Math.max(res, i - idxDecVal.removeLast());
             }
         }
 
