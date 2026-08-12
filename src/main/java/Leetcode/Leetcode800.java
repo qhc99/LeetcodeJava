@@ -14,6 +14,7 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
+import java.util.Stack;
 import java.util.TreeMap;
 
 @SuppressWarnings({ "unused", "JavaDoc" })
@@ -343,6 +344,69 @@ public class Leetcode800 {
             sell[0] = sell[1];
         }
         return sell[0];
+    }
+
+    static class Nest716 {
+        /**
+         * #716 MaxStack
+         */
+        class MaxStack {
+
+            static record IntId(int val, int id) {
+            }
+
+            int id = 0;
+            Stack<IntId> stack = new Stack<>();
+            Set<Integer> deleteIds = new HashSet<>();
+            TreeMap<Integer, Stack<Integer>> numIds = new TreeMap<>();
+
+            public MaxStack() {
+
+            }
+
+            public void push(int x) {
+                stack.add(new IntId(x, id));
+                numIds.computeIfAbsent(x, k -> new Stack<>()).add(id);
+                id++;
+            }
+
+            int removeNumId(int n) {
+                var s = numIds.get(n);
+                var id = s.pop();
+                if (s.isEmpty())
+                    numIds.remove(n);
+                return id;
+            }
+
+            public int pop() {
+                var n = stack.pop();
+                removeNumId(n.val);
+                clearStackTop();
+                return n.val;
+            }
+
+            void clearStackTop() {
+                while (!stack.isEmpty() && !deleteIds.isEmpty()
+                        && deleteIds.contains(stack.peek().id)) {
+                    deleteIds.remove(stack.pop().id);
+                }
+            }
+
+            public int top() {
+                return stack.peek().val;
+            }
+
+            public int peekMax() {
+                return numIds.lastKey();
+            }
+
+            public int popMax() {
+                var n = peekMax();
+                deleteIds.add(removeNumId(n));
+                clearStackTop();
+                return n;
+            }
+        }
     }
 
     /**
@@ -970,7 +1034,7 @@ public class Leetcode800 {
                 dp[i] = (i - 1 >= 0 ? dp[i - 1] : 0) + c * n;
             } else {
                 dp[i] = (i - 2 >= 0 ? dp[i - 2] : 0) + c * n;
-                dp[i] = Math.max(dp[i], dp[i-1]);
+                dp[i] = Math.max(dp[i], dp[i - 1]);
             }
             i++;
         }
