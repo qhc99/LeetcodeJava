@@ -37,6 +37,52 @@ public class Leetcode1200 {
     }
 
     /**
+     * #1136
+     * 
+     * @param n
+     * @param relations
+     * @return
+     */
+    public int minimumSemesters(int n, int[][] relations) {
+        Set<Integer> currentSet = new HashSet<>();
+        Queue<Integer> current = new ArrayDeque<>();
+        Queue<Integer> next = new ArrayDeque<>();
+        Map<Integer, Integer> lock = new HashMap<>();
+        Map<Integer, List<Integer>> unlock = new HashMap<>();
+        for (int i = 1; i <= n; i++)
+            currentSet.add(i);
+        for (var link : relations) {
+            currentSet.remove(link[1]);
+            lock.put(link[1], 1 + lock.getOrDefault(link[1], 0));
+            unlock.computeIfAbsent(link[0], k -> new ArrayList<>())
+                    .add(link[1]);
+        }
+        current.addAll(currentSet);
+        int res = 0;
+        while (!current.isEmpty()) {
+            res++;
+            while (!current.isEmpty()) {
+                var course = current.poll();
+                for (var ub : unlock.getOrDefault(course, List.of())) {
+                    var count = lock.get(ub);
+                    if (count != null) {
+                        if (count == 1) {
+                            next.add(ub);
+                            lock.remove(ub);
+                        } else
+                            lock.put(ub, count - 1);
+                    }
+                }
+            }
+            var t = next;
+            next = current;
+            current = t;
+        }
+
+        return lock.isEmpty() ? res : -1;
+    }
+
+    /**
      * #1143
      * 
      * @param text1
