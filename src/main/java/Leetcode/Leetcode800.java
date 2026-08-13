@@ -1918,6 +1918,37 @@ public class Leetcode800 {
     }
 
     /**
+     * #784
+     * 
+     * @param s
+     * @return
+     */
+    public List<String> letterCasePermutation(String s) {
+        List<String> res = new ArrayList<>();
+        permute(0, s.toCharArray(), res);
+        return res;
+    }
+
+    void permute(int i, char[] s, List<String> res) {
+        if (i >= s.length) {
+            res.add(new String(s));
+            return;
+        }
+        permute(i + 1, s, res);
+        if (Character.isAlphabetic(s[i])) {
+            if (Character.isUpperCase(s[i]))
+                s[i] = Character.toLowerCase(s[i]);
+            else
+                s[i] = Character.toUpperCase(s[i]);
+            permute(i + 1, s, res);
+            if (Character.isUpperCase(s[i]))
+                s[i] = Character.toLowerCase(s[i]);
+            else
+                s[i] = Character.toUpperCase(s[i]);
+        }
+    }
+
+    /**
      * #785 <br>
      * bipartite graph: vertex and its neighbors has different color
      *
