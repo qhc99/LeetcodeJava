@@ -127,6 +127,25 @@ public class Leetcode1300 {
         return res;
     }
 
+    public boolean isValidPalindrome(String s, int k) {
+        int[] dp = new int[s.length()];
+        for (int i = s.length() - 2; i >= 0; i--) {
+            int prev = 0;// dp[i+1][j]
+            int t;
+            for (int j = i + 1; j < s.length(); j++) {
+                t = dp[j];
+                if (s.charAt(i) == s.charAt(j)) {
+                    dp[j] = prev; // dp[i+1][j-1]
+                } else {
+                    dp[j] = 1 + Math.min(dp[j], dp[j - 1]);// dp[i+1][j],
+                                                           // dp[i][j-1]
+                }
+                prev = t;
+            }
+        }
+        return dp[s.length() - 1] <= k;
+    }
+
     /**
      * #1217
      *
