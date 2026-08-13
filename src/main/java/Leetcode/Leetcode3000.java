@@ -1,5 +1,8 @@
 package Leetcode;
 
+import java.util.PriorityQueue;
+import java.util.Queue;
+
 public class Leetcode3000 {
     /**
      * #2970,2972
@@ -30,5 +33,30 @@ public class Leetcode3000 {
             l++;
         }
         return (int) res;
+    }
+
+    /**
+     * #2931
+     * 
+     * @param values
+     * @return
+     */
+    public long maxSpending(int[][] values) {
+        Queue<int[]> queue = new PriorityQueue<>((a, b) -> Integer
+                .compare(values[a[0]][a[1]], values[b[0]][b[1]]));
+        long res = 0;
+        long d = 1;
+        int n = values[0].length;
+        for (int s = 0; s < values.length; s++) {
+            queue.add(new int[] { s, n - 1 });
+        }
+        while (!queue.isEmpty()) {
+            var shopItem = queue.poll();
+            res += values[shopItem[0]][shopItem[1]] * d++;
+            shopItem[1]--;
+            if (shopItem[1] >= 0)
+                queue.add(shopItem);
+        }
+        return res;
     }
 }
