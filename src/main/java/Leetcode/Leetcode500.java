@@ -2454,6 +2454,47 @@ public class Leetcode500 {
     }
 
     /**
+     * #440
+     * 
+     * @param n
+     * @param k
+     * @return
+     */
+    public int findKthNumber(int n, int k) {
+        var solver = new LexIter(k, n);
+        for (int i = 1; !solver.visit(i); i++) {
+        }
+        return (int) solver.res;
+    }
+
+    class LexIter {
+        int k;
+        int n;
+        long res;
+
+        LexIter(int k, int n) {
+            this.k = k;
+            this.n = n;
+        }
+
+        boolean visit(long num) {
+            k--;
+            if (k == 0) {
+                res = num;
+                return true;
+            }
+            if (num * 10 <= n && visit(num * 10)) {
+                return true;
+            }
+            if ((num + 1) % 10 != 0 && num + 1 <= n) {
+                if (visit(num + 1))
+                    return true;
+            }
+            return false;
+        }
+    }
+
+    /**
      * #443
      *
      * @param chars
