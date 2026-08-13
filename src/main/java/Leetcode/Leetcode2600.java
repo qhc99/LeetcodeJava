@@ -229,6 +229,46 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2561
+     * 
+     * @param basket1
+     * @param basket2
+     * @return
+     */
+    public long minCost(int[] basket1, int[] basket2) {
+        Map<Integer, Integer> countFirst = new HashMap<>();
+        Map<Integer, Integer> countSecond = new HashMap<>();
+        for (var v : basket1)
+            countFirst.put(v, 1 + countFirst.getOrDefault(v, 0));
+        for (var v : basket2)
+            countSecond.put(v, 1 + countSecond.getOrDefault(v, 0));
+
+        Set<Integer> allKeys = new HashSet<>();
+        allKeys.addAll(countFirst.keySet());
+        allKeys.addAll(countSecond.keySet());
+
+        List<Integer> notMatch = new ArrayList<>();
+        for (var k : allKeys) {
+            var v1 = countFirst.getOrDefault(k, 0);
+            var v2 = countSecond.getOrDefault(k, 0);
+            if(v1 != v2) notMatch.add(k);
+            if ((v1 + v2) % 2 == 1)
+                return -1;
+        }
+        notMatch.sort(Integer::compare);
+        Deque<Integer> deque = new ArrayDeque<>();
+        deque.addAll(notMatch);
+
+        long res = 0;
+        while (!deque.isEmpty()) {
+            var front = deque.peekFirst();
+            var tail = deque.peekLast();
+            
+        }
+        return res;
+    }
+
+    /**
      * #2571
      * 
      * @param n

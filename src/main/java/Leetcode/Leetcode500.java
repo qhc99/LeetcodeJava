@@ -2461,37 +2461,34 @@ public class Leetcode500 {
      * @return
      */
     public int findKthNumber(int n, int k) {
-        var solver = new LexIter(k, n);
-        for (int i = 1; !solver.visit(i); i++) {
+        int i = 1;
+        while (k > 0) {
+            var s = treeSize(i, n);
+            if (s < k) {
+                i++;
+                k -= s;
+            } else {
+                k--;
+                if (k == 0)
+                    break;
+                i *= 10;
+            }
         }
-        return (int) solver.res;
+        return i;
     }
 
-    class LexIter {
-        int k;
-        int n;
-        long res;
-
-        LexIter(int k, int n) {
-            this.k = k;
-            this.n = n;
+    long treeSize(int i, int n) {
+        long first = i;
+        long second = i;
+        long size = 0;
+        while (first <= n) {
+            size += Math.min(second, n) + 1 - first;
+            first *= 10;
+            second *= 10;
+            second += 9;
         }
 
-        boolean visit(long num) {
-            k--;
-            if (k == 0) {
-                res = num;
-                return true;
-            }
-            if (num * 10 <= n && visit(num * 10)) {
-                return true;
-            }
-            if ((num + 1) % 10 != 0 && num + 1 <= n) {
-                if (visit(num + 1))
-                    return true;
-            }
-            return false;
-        }
+        return size;
     }
 
     /**
