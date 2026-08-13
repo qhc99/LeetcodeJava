@@ -529,40 +529,6 @@ public class Leetcode1000 {
     }
 
     /**
-     * #986
-     * 
-     * @param firstList
-     * @param secondList
-     * @return
-     */
-    public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
-        int i = 0, j = 0;
-        List<int[]> res = new ArrayList<>();
-        while (i < firstList.length && j < secondList.length) {
-            var a = firstList[i];
-            var b = secondList[j];
-            if (a[1] <= b[1]) {
-                if (a[1] >= b[0]) {
-                    res.add(new int[] { Math.max(a[0], b[0]),
-                            Math.min(a[1], b[1]) });
-                }
-                i++;
-            } else {
-                if (b[1] >= a[0]) {
-                    res.add(new int[] { Math.max(a[0], b[0]),
-                            Math.min(a[1], b[1]) });
-                }
-                j++;
-            }
-        }
-
-        int[][] ans = new int[res.size()][];
-        for (int t = 0; t < res.size(); t++)
-            ans[t] = res.get(t);
-        return ans;
-    }
-
-    /**
      * #973
      *
      * @param points
@@ -612,6 +578,78 @@ public class Leetcode1000 {
             valCount.put(nums[i], 1 + valCount.getOrDefault(nums[i], 0));
         }
         return res;
+    }
+
+    /**
+     * #983
+     * 
+     * @param days
+     * @param costs
+     * @return
+     */
+    public int mincostTickets(int[] days, int[] costs) {
+        int[][] dp = new int[days.length][30];
+        int[] buy = new int[30];
+        Arrays.fill(buy, Integer.MAX_VALUE);
+        buy[0] = costs[0];
+        for (int i = 0; i < 7; i++) {
+            buy[i] = Math.min(buy[i], costs[1]);
+        }
+        for (int i = 0; i < 30; i++) {
+            buy[i] = Math.min(buy[i], costs[2]);
+        }
+        System.arraycopy(buy, 0, dp[0], 0, 30);
+        for (int i = 1; i < days.length; i++) {
+            int currentDay = days[i];
+            int prevDay = days[i - 1];
+            System.arraycopy(buy, 0, dp[i], 0, 30);
+            var min = Arrays.stream(dp[i - 1]).min().getAsInt();
+            for (int j = 0; j < 30; j++)
+                dp[i][j] += min;
+            for (int j = 29; j >= 0; j--) {
+                if (prevDay + j >= currentDay) {
+                    var k = prevDay + j - currentDay;
+                    dp[i][k] = Math.min(dp[i][k], dp[i - 1][j]);
+                } else
+                    break;
+            }
+
+        }
+        return Arrays.stream(dp[days.length - 1]).min().getAsInt();
+    }
+
+    /**
+     * #986
+     * 
+     * @param firstList
+     * @param secondList
+     * @return
+     */
+    public int[][] intervalIntersection(int[][] firstList, int[][] secondList) {
+        int i = 0, j = 0;
+        List<int[]> res = new ArrayList<>();
+        while (i < firstList.length && j < secondList.length) {
+            var a = firstList[i];
+            var b = secondList[j];
+            if (a[1] <= b[1]) {
+                if (a[1] >= b[0]) {
+                    res.add(new int[] { Math.max(a[0], b[0]),
+                            Math.min(a[1], b[1]) });
+                }
+                i++;
+            } else {
+                if (b[1] >= a[0]) {
+                    res.add(new int[] { Math.max(a[0], b[0]),
+                            Math.min(a[1], b[1]) });
+                }
+                j++;
+            }
+        }
+
+        int[][] ans = new int[res.size()][];
+        for (int t = 0; t < res.size(); t++)
+            ans[t] = res.get(t);
+        return ans;
     }
 
     /**
