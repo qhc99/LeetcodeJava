@@ -418,6 +418,30 @@ public class Leetcode1000 {
     }
 
     /**
+     * #941
+     * 
+     * @param arr
+     * @return
+     */
+    public boolean validMountainArray(int[] arr) {
+        if (arr.length < 3 || arr[0] >= arr[1])
+            return false;
+        boolean inc = true;
+        for (int i = 2; i < arr.length; i++) {
+            if (arr[i - 1] == arr[i])
+                return false;
+            if (inc) {
+                if (arr[i - 1] > arr[i]) {
+                    inc = false;
+                }
+            } else if (arr[i - 1] < arr[i]) {
+                return false;
+            }
+        }
+        return !inc;
+    }
+
+    /**
      * #953
      * 
      * @param words
