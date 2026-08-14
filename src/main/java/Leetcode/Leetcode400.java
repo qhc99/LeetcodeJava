@@ -272,6 +272,43 @@ public class Leetcode400 {
     }
 
     /**
+     * #311
+     * 
+     * @param mat1
+     * @param mat2
+     * @return
+     */
+    public int[][] multiply(int[][] mat1, int[][] mat2) {
+        int i = mat1.length, j = mat2.length, k = mat2[0].length;
+        int[][] res = new int[i][k];
+        Map<Integer, Map<Integer, Integer>> sparseMat1 = new HashMap<>();
+        Map<Integer, Map<Integer, Integer>> sparseMat2 = new HashMap<>();
+        for (int x = 0; x < i; x++) {
+            for (int y = 0; y < j; y++)
+                if (mat1[x][y] != 0)
+                    sparseMat1.computeIfAbsent(x, key -> new HashMap<>()).put(y,
+                            mat1[x][y]);
+        }
+        for (int x = 0; x < j; x++) {
+            for (int y = 0; y < k; y++)
+                if (mat2[x][y] != 0)
+                    sparseMat2.computeIfAbsent(y, key -> new HashMap<>()).put(x,
+                            mat2[x][y]);
+        }
+        for (var x : sparseMat1.keySet()) {
+            var row = sparseMat1.get(x);
+            for (var y : sparseMat2.keySet()) {
+                for (var idx : row.keySet()) {
+                    res[x][y] += row.get(idx)
+                            * sparseMat2.get(y).getOrDefault(idx, 0);
+                }
+            }
+        }
+
+        return res;
+    }
+
+    /**
      * #312
      *
      * @param nums
