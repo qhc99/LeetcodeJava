@@ -74,6 +74,62 @@ public class Leetcode700 {
     }
 
     /**
+     * #616
+     * 
+     * @param s
+     * @param words
+     * @return
+     */
+    public String addBoldTag(String s, String[] words) {
+        boolean[] bold = new boolean[s.length()];
+        StringBuilder sb = new StringBuilder();
+        for (var w : words)
+            makeBold(s, w, bold);
+        for (int i = 0; i < s.length(); i++) {
+            if (bold[i] && (i - 1 >= 0 ? !bold[i - 1] : true)) {
+                sb.append("<b>");
+            }
+            sb.append(s.charAt(i));
+            if (bold[i] && (i + 1 < s.length() ? !bold[i + 1] : true)) {
+                sb.append("</b>");
+            }
+
+        }
+        return sb.toString();
+    }
+
+    void makeBold(String s, String word, boolean[] bold) {
+        var kmp = kmpArray(word);
+        var ptr = 0;
+        for (int i = 0; i < s.length(); i++) {
+            while (ptr > 0 && s.charAt(i) != word.charAt(ptr)) {
+                ptr = kmp[ptr - 1];
+            }
+            if (s.charAt(i) == word.charAt(ptr))
+                ptr++;
+            if (ptr == kmp.length) {
+                ptr = kmp[ptr - 1];
+                for (int j = i; j >= i + 1 - word.length(); j--)
+                    bold[j] = true;
+            }
+        }
+    }
+
+    int[] kmpArray(String word) {
+        int[] res = new int[word.length()];
+        int ptr = 0;
+        for (int i = 1; i < res.length; i++) {
+            while (ptr > 0 && word.charAt(ptr) != word.charAt(i)) {
+                ptr = res[ptr - 1];
+            }
+            if (word.charAt(ptr) == word.charAt(i))
+                ptr++;
+            res[i] = ptr;
+        }
+        return res;
+    }
+
+    /**
      * #621
      *
      * @param tasks
