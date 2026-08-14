@@ -154,6 +154,41 @@ public class Leetcode1400 {
     }
 
     /**
+     * #1383
+     * 
+     * @param n
+     * @param speed
+     * @param efficiency
+     * @param k
+     * @return
+     */
+    public int maxPerformance(int n, int[] speed, int[] efficiency, int k) {
+        long max = Long.MIN_VALUE;
+        int[][] sortedEff = new int[n][2];
+        for (int i = 0; i < n; i++) {
+            sortedEff[i][0] = efficiency[i];
+            sortedEff[i][1] = i;
+        }
+        int mod = 1_000_000_007;
+        Arrays.sort(sortedEff, (a, b) -> Integer.compare(b[0], a[0]));
+        Queue<Long> maxSpeed = new PriorityQueue<>();
+        long speedSum = 0;
+        for (var staff : sortedEff) {
+            if (maxSpeed.size() >= k) {
+                speedSum -= maxSpeed.poll();
+            }
+            long eff = staff[0];
+            long s = speed[staff[1]];
+            maxSpeed.add(s);
+            speedSum += s;
+
+            max = Math.max((eff * speedSum), max);
+
+        }
+        return (int) (max % mod);
+    }
+
+    /**
      * #1392
      * 
      * @param s
