@@ -2060,4 +2060,34 @@ public class Leetcode300 {
             return memory.get((short) 1);
         }
     }
+
+    /**
+     * #298
+     * 
+     * @param root
+     * @return
+     */
+    public int longestConsecutive(TreeNode root) {
+        int[] res = new int[1];
+        longestConsecutiveVisit(root, res);
+        return res[0];
+    }
+
+    int longestConsecutiveVisit(TreeNode node, int[] res) {
+        var leftLen = node.left != null
+                ? longestConsecutiveVisit(node.left, res)
+                : 0;
+        var rightLen = node.right != null
+                ? longestConsecutiveVisit(node.right, res)
+                : 0;
+        int ret = 1;
+        if (node.left != null && node.val + 1 == node.left.val) {
+            ret = Math.max(leftLen + 1, ret);
+        }
+        if (node.right != null && node.val + 1 == node.right.val) {
+            ret = Math.max(rightLen + 1, ret);
+        }
+        res[0] = Math.max(res[0], ret);
+        return ret;
+    }
 }
