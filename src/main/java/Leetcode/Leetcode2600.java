@@ -229,6 +229,34 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2551
+     * 
+     * @param weights
+     * @param k
+     * @return
+     */
+    public long putMarbles(int[] weights, int k) {
+        long max = weights[0] + weights[weights.length - 1];
+        long min = max;
+        int[] sum = new int[weights.length - 1];
+        for (int i = 0; i < sum.length; i++) {
+            sum[i] = weights[i] + weights[i + 1];
+        }
+        Queue<Integer> maxQueue = new PriorityQueue<>(
+                (a, b) -> Integer.compare(b, a));
+        Queue<Integer> minQueue = new PriorityQueue<>();
+        for (var s : sum) {
+            maxQueue.add(s);
+            minQueue.add(s);
+        }
+        for (; k > 1; k--) {
+            max += maxQueue.poll();
+            min += minQueue.poll();
+        }
+        return max - min;
+    }
+
+    /**
      * #2561
      * 
      * @param basket1
