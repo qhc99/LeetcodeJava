@@ -45,6 +45,35 @@ public class Leetcode700 {
     }
 
     /**
+     * #606
+     * 
+     * @param root
+     * @return
+     */
+    public String tree2str(TreeNode root) {
+        if (root == null)
+            return "";
+        StringBuilder sb = new StringBuilder();
+        var left = tree2str(root.left);
+        var right = tree2str(root.right);
+        sb.append(root.val);
+
+        if (!left.isEmpty() || !right.isEmpty()) {
+            sb.append("(");
+            sb.append(left);
+            sb.append(")");
+        }
+        if (!right.isEmpty()) {
+
+            sb.append("(");
+            sb.append(right);
+            sb.append(")");
+        }
+
+        return sb.toString();
+    }
+
+    /**
      * #621
      *
      * @param tasks
