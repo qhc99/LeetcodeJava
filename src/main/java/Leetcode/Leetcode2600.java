@@ -236,34 +236,30 @@ public class Leetcode2600 {
      * @return
      */
     public long minCost(int[] basket1, int[] basket2) {
-        Map<Integer, Integer> countFirst = new HashMap<>();
-        Map<Integer, Integer> countSecond = new HashMap<>();
-        for (var v : basket1)
-            countFirst.put(v, 1 + countFirst.getOrDefault(v, 0));
-        for (var v : basket2)
-            countSecond.put(v, 1 + countSecond.getOrDefault(v, 0));
-
-        Set<Integer> allKeys = new HashSet<>();
-        allKeys.addAll(countFirst.keySet());
-        allKeys.addAll(countSecond.keySet());
+        Map<Integer, Integer> count = new HashMap<>();
+        int min = Integer.MAX_VALUE;
+        for (var v : basket1) {
+            count.put(v, 1 + count.getOrDefault(v, 0));
+            min = Math.min(v, min);
+        }
+        for (var v : basket2) {
+            count.put(v, count.getOrDefault(v, 0) - 1);
+            min = Math.min(v, min);
+        }
 
         List<Integer> notMatch = new ArrayList<>();
-        for (var k : allKeys) {
-            var v1 = countFirst.getOrDefault(k, 0);
-            var v2 = countSecond.getOrDefault(k, 0);
-            if(v1 != v2) notMatch.add(k);
-            if ((v1 + v2) % 2 == 1)
+        for (var k : count.keySet()) {
+            var v = count.get(k);
+            if (v % 2 != 0)
                 return -1;
+            for (int i = 0; i < Math.abs(v) / 2; i++) {
+                notMatch.add(k);
+            }
         }
         notMatch.sort(Integer::compare);
-        Deque<Integer> deque = new ArrayDeque<>();
-        deque.addAll(notMatch);
-
         long res = 0;
-        while (!deque.isEmpty()) {
-            var front = deque.peekFirst();
-            var tail = deque.peekLast();
-            
+        for (int i = 0; i < notMatch.size() / 2; i++) {
+            res += Math.min(2 * min, notMatch.get(i));
         }
         return res;
     }
