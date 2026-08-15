@@ -3,6 +3,36 @@ package Leetcode;
 import java.util.*;
 
 public class Leetcode1400 {
+
+    /**
+     * #1302
+     * 
+     * @param root
+     * @return
+     */
+    public int deepestLeavesSum(TreeNode root) {
+        int res = 0;
+        Queue<TreeNode> current = new ArrayDeque<>();
+        Queue<TreeNode> next = new ArrayDeque<>();
+        current.add(root);
+        while (!current.isEmpty()) {
+            int s = 0;
+            while (!current.isEmpty()) {
+                var n = current.poll();
+                s += n.val;
+                if (n.left != null)
+                    next.add(n.left);
+                if (n.right != null)
+                    next.add(n.right);
+            }
+            res = s;
+            var t = current;
+            current = next;
+            next = t;
+        }
+        return res;
+    }
+
     /**
      * #1328
      * 
