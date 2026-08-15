@@ -636,7 +636,7 @@ public class Leetcode600 {
                     int x = p[0] + dx[k], y = p[1] + dy[k];
                     if (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]) {
                         visited[x][y] = true;
-                        queue.add(new int[]{x,y});
+                        queue.add(new int[] { x, y });
                     }
 
                 }
