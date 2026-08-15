@@ -1243,4 +1243,30 @@ public class Leetcode600 {
             return ptr;
         }
     }
+
+    /**
+     * #593
+     * 
+     * @param p1
+     * @param p2
+     * @param p3
+     * @param p4
+     * @return
+     */
+    public boolean validSquare(int[] p1, int[] p2, int[] p3, int[] p4) {
+        long[][] vecs = new long[3][];
+        vecs[0] = new long[] { p2[0] - p1[0], p2[1] - p1[1] };
+        vecs[1] = new long[] { p3[0] - p1[0], p3[1] - p1[1] };
+        vecs[2] = new long[] { p4[0] - p1[0], p4[1] - p1[1] };
+        Arrays.sort(vecs,
+                (a, b) -> Double.compare(Math.sqrt(a[0] * a[0] + a[1] * a[1]),
+                        Math.sqrt(b[0] * b[0] + b[1] * b[1])));
+        long[] a = vecs[0], b = vecs[1], c = vecs[2];
+        var len1 = a[0] * a[0] + a[1] * a[1];
+        var len2 = b[0] * b[0] + b[1] * b[1];
+        if (len1 == 0 || len1 != len2)
+            return false;
+        return a[0] * b[0] + a[1] * b[1] == 0 && a[0] + b[0] == c[0]
+                && a[1] + b[1] == c[1];
+    }
 }
