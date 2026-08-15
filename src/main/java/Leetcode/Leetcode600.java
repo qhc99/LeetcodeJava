@@ -142,126 +142,6 @@ public class Leetcode600 {
     }
 
     /**
-     * #509
-     * 
-     * @param n
-     * @return
-     */
-    public int fib(int n) {
-        if (n <= 1)
-            return n;
-        int a = 0, b = 1;
-        for (; n > 1; n--) {
-            a += b;
-            var t = a;
-            a = b;
-            b = t;
-        }
-        return b;
-    }
-
-    /**
-     * #515
-     * 
-     * @param root
-     * @return
-     */
-    public List<Integer> largestValues(TreeNode root) {
-        Map<Integer, Integer> levelMaxVal = new HashMap<>();
-        int maxLevel = 0;
-        List<Integer> res = new ArrayList<>();
-        Queue<NodeLevel> queue = new ArrayDeque<>();
-        if (root != null)
-            queue.add(new NodeLevel(root, 0));
-        while (!queue.isEmpty()) {
-            var nl = queue.poll();
-            maxLevel = Math.max(maxLevel, nl.level);
-            levelMaxVal.put(nl.level, Math.max(
-                    levelMaxVal.getOrDefault(nl.level, Integer.MIN_VALUE),
-                    nl.n.val));
-            if (nl.n.left != null)
-                queue.add(new NodeLevel(nl.n.left, nl.level + 1));
-            if (nl.n.right != null)
-                queue.add(new NodeLevel(nl.n.right, nl.level + 1));
-        }
-        if (!levelMaxVal.isEmpty()) {
-            for (int i = 0; i <= maxLevel; i++)
-                res.add(levelMaxVal.get(i));
-        }
-        return res;
-    }
-
-    static record NodeLevel(TreeNode n, int level) {
-    }
-
-    /**
-     * #523
-     * 
-     * @param nums
-     * @param k
-     * @return
-     */
-    public boolean checkSubarraySum(int[] nums, int k) {
-        nums[0] %= k;
-        Map<Integer, Integer> valIdx = new HashMap<>();
-        valIdx.put(nums[0], 0);
-        for (int i = 0; i < nums.length; i++) {
-            if (i - 1 >= 0)
-                nums[i] += nums[i - 1];
-            nums[i] %= k;
-            if ((nums[i] == 0 && i >= 1))
-                return true;
-            var idx = valIdx.get(nums[i]);
-            if (idx != null && i - idx > 1)
-                return true;
-            if (!valIdx.containsKey(nums[i]))
-                valIdx.put(nums[i], i);
-        }
-
-        return false;
-    }
-
-    /**
-     * #525 <br>
-     * 连续数组 <br>
-     * 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
-     *
-     * @param nums nums
-     * @return len
-     */
-    public static int findMaxLength(int[] nums) {
-        int len = nums.length;
-        Map<Integer, Integer> map = new HashMap<>();
-        int max = 0;
-        for (int i = 0; i == 0; i++) {
-            if (nums[i] == 0) {
-                nums[i] = -1;
-            }
-            if (!map.containsKey(nums[i])) {
-                map.put(nums[i], i);
-            } else {
-                max = Math.max(i - map.get(nums[i]), max);
-            }
-        }
-        for (int i = 1; i < len; i++) {
-            if (nums[i] == 0) {
-                nums[i] = -1;
-            }
-            nums[i] += nums[i - 1];
-            if (nums[i] == 0) {
-                max = Math.max(i + 1, max);
-            }
-            if (!map.containsKey(nums[i])) {
-                map.put(nums[i], i);
-            } else {
-                max = Math.max(i - map.get(nums[i]), max);
-            }
-        }
-
-        return max;
-    }
-
-    /**
      * # 506
      */
     public static String[] findRelativeRanks(int[] score) {
@@ -337,6 +217,59 @@ public class Leetcode600 {
             merge(array, idx, start, left_cache, right_cache, left_cache_i,
                     right_cache_i);
         }
+    }
+
+    /**
+     * #509
+     * 
+     * @param n
+     * @return
+     */
+    public int fib(int n) {
+        if (n <= 1)
+            return n;
+        int a = 0, b = 1;
+        for (; n > 1; n--) {
+            a += b;
+            var t = a;
+            a = b;
+            b = t;
+        }
+        return b;
+    }
+
+    /**
+     * #515
+     * 
+     * @param root
+     * @return
+     */
+    public List<Integer> largestValues(TreeNode root) {
+        Map<Integer, Integer> levelMaxVal = new HashMap<>();
+        int maxLevel = 0;
+        List<Integer> res = new ArrayList<>();
+        Queue<NodeLevel> queue = new ArrayDeque<>();
+        if (root != null)
+            queue.add(new NodeLevel(root, 0));
+        while (!queue.isEmpty()) {
+            var nl = queue.poll();
+            maxLevel = Math.max(maxLevel, nl.level);
+            levelMaxVal.put(nl.level, Math.max(
+                    levelMaxVal.getOrDefault(nl.level, Integer.MIN_VALUE),
+                    nl.n.val));
+            if (nl.n.left != null)
+                queue.add(new NodeLevel(nl.n.left, nl.level + 1));
+            if (nl.n.right != null)
+                queue.add(new NodeLevel(nl.n.right, nl.level + 1));
+        }
+        if (!levelMaxVal.isEmpty()) {
+            for (int i = 0; i <= maxLevel; i++)
+                res.add(levelMaxVal.get(i));
+        }
+        return res;
+    }
+
+    static record NodeLevel(TreeNode n, int level) {
     }
 
     /**
@@ -483,6 +416,33 @@ public class Leetcode600 {
     }
 
     /**
+     * #523
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public boolean checkSubarraySum(int[] nums, int k) {
+        nums[0] %= k;
+        Map<Integer, Integer> valIdx = new HashMap<>();
+        valIdx.put(nums[0], 0);
+        for (int i = 0; i < nums.length; i++) {
+            if (i - 1 >= 0)
+                nums[i] += nums[i - 1];
+            nums[i] %= k;
+            if ((nums[i] == 0 && i >= 1))
+                return true;
+            var idx = valIdx.get(nums[i]);
+            if (idx != null && i - idx > 1)
+                return true;
+            if (!valIdx.containsKey(nums[i]))
+                valIdx.put(nums[i], i);
+        }
+
+        return false;
+    }
+
+    /**
      * #524
      *
      * @param s
@@ -546,6 +506,46 @@ public class Leetcode600 {
     }
 
     /**
+     * #525 <br>
+     * 连续数组 <br>
+     * 给定一个二进制数组 nums , 找到含有相同数量的 0 和 1 的最长连续子数组，并返回该子数组的长度。
+     *
+     * @param nums nums
+     * @return len
+     */
+    public static int findMaxLength(int[] nums) {
+        int len = nums.length;
+        Map<Integer, Integer> map = new HashMap<>();
+        int max = 0;
+        for (int i = 0; i == 0; i++) {
+            if (nums[i] == 0) {
+                nums[i] = -1;
+            }
+            if (!map.containsKey(nums[i])) {
+                map.put(nums[i], i);
+            } else {
+                max = Math.max(i - map.get(nums[i]), max);
+            }
+        }
+        for (int i = 1; i < len; i++) {
+            if (nums[i] == 0) {
+                nums[i] = -1;
+            }
+            nums[i] += nums[i - 1];
+            if (nums[i] == 0) {
+                max = Math.max(i + 1, max);
+            }
+            if (!map.containsKey(nums[i])) {
+                map.put(nums[i], i);
+            } else {
+                max = Math.max(i - map.get(nums[i]), max);
+            }
+        }
+
+        return max;
+    }
+
+    /**
      * #526
      *
      * @param n
@@ -586,6 +586,64 @@ public class Leetcode600 {
                 b.clear(j);
             }
         }
+    }
+
+    /**
+     * #529
+     * 
+     * @param board
+     * @param click
+     * @return
+     */
+    public char[][] updateBoard(char[][] board, int[] click) {
+        int m = board.length, n = board[0].length;
+        char[][] digits = new char[m][n];
+        for (var r : digits)
+            Arrays.fill(r, '0');
+        int[] dx = new int[] { -1, -1, -1, 0, 0, 1, 1, 1 },
+                dy = new int[] { -1, 0, 1, -1, 1, -1, 0, 1 };
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (board[i][j] == 'M') {
+                    for (int k = 0; k < 8; k++) {
+                        int x = i + dx[k], y = j + dy[k];
+                        if (x >= 0 && x < m && y >= 0 && y < n)
+                            digits[x][y]++;
+                    }
+                }
+            }
+        }
+        if (board[click[0]][click[1]] == 'M') {
+            board[click[0]][click[1]] = 'X';
+            return board;
+        }
+        boolean[][] visited = new boolean[m][n];
+        visited[click[0]][click[1]] = true;
+        if (digits[click[0]][click[1]] > '0') {
+            board[click[0]][click[1]] = digits[click[0]][click[1]];
+            return board;
+        } else
+            board[click[0]][click[1]] = 'B';
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.add(click);
+        while (!queue.isEmpty()) {
+            var p = queue.poll();
+            if (digits[p[0]][p[1]] > '0') {
+                board[p[0]][p[1]] = digits[p[0]][p[1]];
+            } else {
+                board[p[0]][p[1]] = 'B';
+                for (int k = 0; k < 8; k++) {
+                    int x = p[0] + dx[k], y = p[1] + dy[k];
+                    if (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]) {
+                        visited[x][y] = true;
+                        queue.add(new int[]{x,y});
+                    }
+
+                }
+            }
+        }
+
+        return board;
     }
 
     private static int bitsetToInt(BitSet bits) {
