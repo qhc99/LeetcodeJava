@@ -334,6 +334,30 @@ public class Leetcode1300 {
     }
 
     /**
+     * #1248
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int numberOfSubarrays(int[] nums, int k) {
+        int lk = 0, lk_1 = 0, countK = 0, countK_1 = 0;
+        int res = 0;
+        for (int r = 0; r < nums.length; r++) {
+            countK += nums[r] % 2;
+            countK_1 += nums[r] % 2;
+            while (countK > k) {
+                countK -= nums[lk++] % 2;
+            }
+            while (countK_1 > k - 1) {
+                countK_1 -= nums[lk_1++] % 2;
+            }
+            res += lk_1 - lk;
+        }
+        return res;
+    }
+
+    /**
      * #1249
      * 
      * @param s

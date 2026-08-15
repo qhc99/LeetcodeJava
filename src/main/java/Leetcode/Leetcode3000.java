@@ -1,5 +1,7 @@
 package Leetcode;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.PriorityQueue;
 import java.util.Queue;
 
@@ -58,5 +60,40 @@ public class Leetcode3000 {
                 queue.add(shopItem);
         }
         return res;
+    }
+
+    /**
+     * #2954
+     * 
+     * @param nums
+     * @return
+     */
+    public int findMaximumLength(int[] nums) {
+        Deque<Integer> deque = new ArrayDeque<>();
+        int len = nums.length;
+        for (var n : nums) {
+            if (deque.isEmpty()) {
+                deque.add(n);
+            } else if (deque.size() == 1) {
+                deque.add(n);
+                if (deque.peekFirst() <= deque.peekLast())
+                    deque.pollFirst();
+            } else if (deque.size() == 2) {
+                if (deque.peekFirst() + deque.peekLast() <= n) {
+                    deque.pollFirst();
+                    deque.pollFirst();
+                    deque.add(n);
+                    len--;
+                } else if (deque.peekLast() + n >= deque.peekFirst()) {
+                    deque.pollFirst();
+                    deque.add(n + deque.pollFirst());
+                    len--;
+                } else {
+                    deque.add(deque.pollLast() + n);
+                    len--;
+                }
+            }
+        }
+        return len - (deque.size() - 1);
     }
 }
