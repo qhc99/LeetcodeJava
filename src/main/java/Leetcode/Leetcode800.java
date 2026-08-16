@@ -16,6 +16,7 @@ import java.util.Queue;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
+import java.util.TreeSet;
 
 @SuppressWarnings({ "unused", "JavaDoc" })
 public class Leetcode800 {
@@ -407,6 +408,92 @@ public class Leetcode800 {
                 return n;
             }
         }
+    }
+
+    /**
+     * #723
+     * 
+     * @param board
+     * @return
+     */
+    public int[][] candyCrush(int[][] board) {
+        var rm = remove(board);
+        while (!rm.isEmpty()) {
+            for (var e : rm.entrySet()) {
+                var j = e.getKey();
+                List<Integer> col = new ArrayList<>();
+                for (int i = 0; i < board.length; i++) {
+                    if (!e.getValue().contains(i))
+                        col.add(board[i][j]);
+                }
+                for (int i = 0, k = 0; i < board.length; i++) {
+                    if (i + col.size() >= board.length) {
+                        board[i][j] = col.get(k++);
+                    } else
+                        board[i][j] = 0;
+                }
+            }
+            rm = remove(board);
+            int t = rm.size();
+        }
+        return board;
+    }
+
+    Map<Integer, Set<Integer>> remove(int[][] board) {
+        Map<Integer, Map<Integer, List<Integer>>> cols = new HashMap<>();
+        Map<Integer, Map<Integer, List<Integer>>> rows = new HashMap<>();
+        int m = board.length, n = board[0].length;
+        Map<Integer, Set<Integer>> remove = new HashMap<>();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                var v = board[i][j];
+                if (v == 0)
+                    continue;
+                var col = cols.computeIfAbsent(v, l -> new HashMap<>())
+                        .computeIfAbsent(j, key -> new ArrayList<>());
+                if (!col.isEmpty() && !col.getLast().equals(i - 1)) {
+                    if (col.size() >= 3)
+                        remove.computeIfAbsent(j, key -> new HashSet<>())
+                                .addAll(col);
+                    col.clear();
+                }
+                col.add(i);
+
+                var row = rows.computeIfAbsent(v, l -> new HashMap<>())
+                        .computeIfAbsent(i, key -> new ArrayList<>());
+                if (!row.isEmpty() && !row.getLast().equals(j - 1)) {
+                    if (row.size() >= 3)
+                        for (var t : row) {
+                            remove.computeIfAbsent(t, key -> new HashSet<>())
+                                    .add(i);
+                        }
+                    row.clear();
+                }
+                row.add(j);
+
+            }
+        }
+        for (var e : cols.values()) {
+            for (var ee : e.entrySet()) {
+                var j = ee.getKey();
+                var col = ee.getValue();
+                if (col.size() >= 3)
+                    remove.computeIfAbsent(j, key -> new HashSet<>())
+                            .addAll(col);
+            }
+        }
+        for (var e : rows.values()) {
+            for (var ee : e.entrySet()) {
+                var i = ee.getKey();
+                var row = ee.getValue();
+                if (row.size() >= 3)
+                    for (var t : row) {
+                        remove.computeIfAbsent(t, key -> new HashSet<>())
+                                .add(i);
+                    }
+            }
+        }
+        return remove;
     }
 
     /**
