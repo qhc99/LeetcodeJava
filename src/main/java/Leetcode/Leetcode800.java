@@ -417,7 +417,7 @@ public class Leetcode800 {
      * @return
      */
     public int[][] candyCrush(int[][] board) {
-        var rm = remove(board);
+        var rm = mark(board);
         while (!rm.isEmpty()) {
             for (var e : rm.entrySet()) {
                 var j = e.getKey();
@@ -433,64 +433,47 @@ public class Leetcode800 {
                         board[i][j] = 0;
                 }
             }
-            rm = remove(board);
+            rm = mark(board);
             int t = rm.size();
         }
         return board;
     }
 
-    Map<Integer, Set<Integer>> remove(int[][] board) {
-        Map<Integer, Map<Integer, List<Integer>>> cols = new HashMap<>();
-        Map<Integer, Map<Integer, List<Integer>>> rows = new HashMap<>();
+    Map<Integer, Set<Integer>> mark(int[][] board) {
         int m = board.length, n = board[0].length;
-        Map<Integer, Set<Integer>> remove = new HashMap<>();
+        Map<Integer, Set<Integer>> remove = new HashMap<>(m);
         for (int i = 0; i < m; i++) {
+            int l = 0;
             for (int j = 0; j < n; j++) {
-                var v = board[i][j];
-                if (v == 0)
-                    continue;
-                var col = cols.computeIfAbsent(v, l -> new HashMap<>())
-                        .computeIfAbsent(j, key -> new ArrayList<>());
-                if (!col.isEmpty() && !col.getLast().equals(i - 1)) {
-                    if (col.size() >= 3)
-                        remove.computeIfAbsent(j, key -> new HashSet<>())
-                                .addAll(col);
-                    col.clear();
-                }
-                col.add(i);
-
-                var row = rows.computeIfAbsent(v, l -> new HashMap<>())
-                        .computeIfAbsent(i, key -> new ArrayList<>());
-                if (!row.isEmpty() && !row.getLast().equals(j - 1)) {
-                    if (row.size() >= 3)
-                        for (var t : row) {
-                            remove.computeIfAbsent(t, key -> new HashSet<>())
+                if (board[i][l] != board[i][j]) {
+                    if (j - l >= 3 && board[i][l] != 0) {
+                        while (l < j)
+                            remove.computeIfAbsent(l++, k -> new HashSet<>())
                                     .add(i);
-                        }
-                    row.clear();
-                }
-                row.add(j);
-
-            }
-        }
-        for (var e : cols.values()) {
-            for (var ee : e.entrySet()) {
-                var j = ee.getKey();
-                var col = ee.getValue();
-                if (col.size() >= 3)
-                    remove.computeIfAbsent(j, key -> new HashSet<>())
-                            .addAll(col);
-            }
-        }
-        for (var e : rows.values()) {
-            for (var ee : e.entrySet()) {
-                var i = ee.getKey();
-                var row = ee.getValue();
-                if (row.size() >= 3)
-                    for (var t : row) {
-                        remove.computeIfAbsent(t, key -> new HashSet<>())
-                                .add(i);
                     }
+                    l = j;
+                }
+            }
+            if (n - l >= 3 && board[i][l] != 0) {
+                while (l < n)
+                    remove.computeIfAbsent(l++, k -> new HashSet<>()).add(i);
+            }
+        }
+        for (int j = 0; j < n; j++) {
+            int l = 0;
+            for (int i = 0; i < m; i++) {
+                if (board[l][j] != board[i][j]) {
+                    if (i - l >= 3 && board[l][j] != 0) {
+                        while (l < i)
+                            remove.computeIfAbsent(j, k -> new HashSet<>())
+                                    .add(l++);
+                    }
+                    l = i;
+                }
+            }
+            if (m - l >= 3 && board[l][j] != 0) {
+                while (l < m)
+                    remove.computeIfAbsent(j, k -> new HashSet<>()).add(l++);
             }
         }
         return remove;
