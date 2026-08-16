@@ -155,40 +155,26 @@ public class Leetcode1600 {
      * @return
      */
     public int findLengthOfShortestSubarray(int[] arr) {
-        int head = 0, tail = -1;
-        List<Integer> list = new ArrayList<>();
+        Deque<Integer> stack = new ArrayDeque<>();
         for (int i = 0; i < arr.length; i++) {
             if (i == 0 || arr[i] >= arr[i - 1]) {
-                head = i;
-                list.add(arr[i]);
+                stack.addLast(i);
             } else
                 break;
         }
+        int min = arr.length - stack.size();
 
-        for (int i = arr.length - 1; i >= 0 && i > head; i--) {
-            if (i == arr.length - 1 || arr[i] <= arr[i + 1])
-                tail = i;
-            else
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (i == arr.length - 1 || arr[i] <= arr[i + 1]) {
+                while (!stack.isEmpty() && (stack.peekLast() >= i
+                        || arr[stack.peekLast()] > arr[i])) {
+                    stack.poll();
+                }
+                min = Math.min(min, i - stack.size());
+            } else
                 break;
         }
-        if (tail == -1)
-            return 0;
-        int min = arr.length - list.size();
-        for (int i = tail; i < arr.length; i++) {
-            int l = 0, r = list.size() - 1;
-            while (r - l > 0) {
-                int mid = l + (r - l) / 2;
-                if (list.get(mid) <= arr[i])
-                    l = mid + 1;
-                else
-                    r = mid;
-            }
-            if (arr[i] >= arr[l])
-                l++;
-            min = Math.min(min, i - l);
-        }
         return min;
-
     }
 
     /**
