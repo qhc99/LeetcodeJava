@@ -3471,6 +3471,86 @@ public class Leetcode500 {
         return max;
     }
 
+    interface Robot {
+        // Returns true if the cell in front is open and robot moves into the
+        // cell.
+        // Returns false if the cell in front is blocked and robot stays in the
+        // current cell.
+        public boolean move();
+
+        // Robot will stay in the same cell after calling turnLeft/turnRight.
+        // Each turn will be 90 degrees.
+        public void turnLeft();
+
+        public void turnRight();
+
+        // Clean the current cell.
+        public void clean();
+    }
+
+    /**
+     * #489
+     * 
+     * @param robot
+     */
+    public void cleanRoom(Robot robot) {
+        dfs(0, 0, new HashSet<>(), robot, 0);
+    }
+
+    static record Pos(int x, int y) {
+    }
+
+    void rotateRobot(int state, int next, Robot robot) {
+        if (state == next)
+            return;
+        if (Math.abs(state - next) == 2) {
+            robot.turnRight();
+            robot.turnRight();
+        } else if (next - state == 1 || next - state == -3)
+            robot.turnRight();
+        else
+            robot.turnLeft();
+
+    }
+
+    static int[] dx = new int[] { 0, 1, 0, -1 };
+    static int[] dy = new int[] { 1, 0, -1, 0 };
+
+    int nextState(int x, int y, int nx, int ny) {
+        int diffx = nx - x, diffy = ny - y;
+        if (diffx == 0 && diffy == 1) {
+            return 0;
+        } else if (diffx == 1 && diffy == 0) {
+            return 1;
+        } else if (diffx == -0 && diffy == -1) {
+            return 2;
+        } else
+            return 3;
+    }
+
+    int dfs(int x, int y, Set<Pos> visited, Robot robot, int state) {
+        robot.clean();
+        visited.add(new Pos(x, y));
+        int backState = (state + 2) % 4;
+        for (int i = 0; i < 4; i++) {
+            int nx = dx[i] + x, ny = dy[i] + y;
+            if (!visited.contains(new Pos(nx, ny))) {
+                var nextState = nextState(x, y, nx, ny);
+                rotateRobot(state, nextState, robot);
+                state = nextState;
+                if (robot.move())
+                    state = dfs(nx, ny, visited, robot, state);
+                else
+                    visited.add(new Pos(nx, ny));
+            }
+        }
+        if (!(x == 0 && y == 0)) {
+            rotateRobot(state, backState, robot);
+            robot.move();
+        }
+        return backState;
+    }
+
     /**
      * #490
      *
