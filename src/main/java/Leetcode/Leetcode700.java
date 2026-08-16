@@ -1559,7 +1559,6 @@ public class Leetcode700 {
                 }
             } else if (deque.size() == 3) {
                 res++;
-
                 deque.pollFirst();
             }
 
