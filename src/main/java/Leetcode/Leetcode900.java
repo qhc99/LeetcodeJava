@@ -578,6 +578,23 @@ public class Leetcode900 {
     }
 
     /**
+     * #829
+     * 
+     * @param n
+     * @return
+     */
+    public int consecutiveNumbersSum(int n) {
+        // k*a_1 + k*(k-1)/2 == n, k >= 2
+        int res = 1;
+        for (int k = 2; n - (k * (k - 1) / 2) > 0; k++) {
+            var k_mult_a_1 = n - (k * (k - 1) / 2);
+            if (k_mult_a_1 % k == 0 && k_mult_a_1 / k >= 1)
+                res++;
+        }
+        return res;
+    }
+
+    /**
      * #843
      * 
      * @param words
