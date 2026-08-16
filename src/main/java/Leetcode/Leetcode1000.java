@@ -477,6 +477,47 @@ public class Leetcode1000 {
     }
 
     /**
+     * #959
+     * 
+     * @param grid
+     * @return
+     */
+    public int regionsBySlashes(String[] grid) {
+        int n = grid.length;
+        var set = new Disjointset(n * n * 4);
+        for (int i = 0; i < n; i++) {
+            var row = grid[i].toCharArray();
+            for (int j = 0; j < n; j++) {
+                var offset = (i * n + j) * 4;
+                var upOffset = ((i - 1) * n + j) * 4;
+                var leftOffset = (i * n + j - 1) * 4;
+                if (row[j] == ' ') {
+                    set.union(offset, offset + 1);
+                    set.union(offset + 1, offset + 2);
+                    set.union(offset + 2, offset + 3);
+                } else if (row[j] == '/') {
+                    set.union(offset + 1, offset + 2);
+                    set.union(offset, offset + 3);
+                } else {
+                    set.union(offset, offset + 1);
+                    set.union(offset + 2, offset + 3);
+                }
+                if (i - 1 >= 0) {
+                    set.union(offset, upOffset + 2);
+                }
+                if (j - 1 >= 0) {
+                    set.union(offset + 3, leftOffset + 1);
+                }
+            }
+        }
+        Set<Integer> parents = new HashSet<>();
+        for (int i = 0; i < n * n * 4; i++) {
+            parents.add(set.parent(i));
+        }
+        return parents.size();
+    }
+
+    /**
      * #962
      * 
      * @param nums
