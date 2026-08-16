@@ -56,6 +56,55 @@ public class Leetcode3500 {
     }
 
     /**
+     * #3474
+     * 
+     * @param str1
+     * @param str2
+     * @return
+     */
+    public String generateString(String str1, String str2) {
+        int m = str1.length(), n = str2.length();
+        char[] res = new char[m + n - 1];
+        boolean[] fixed = new boolean[m + n - 1];
+        for (int i = 0; i < m; i++) {
+            if (str1.charAt(i) == 'T') {
+                for (int j = 0; j < n; j++) {
+                    if (fixed[i + j] && res[i + j] != str2.charAt(j))
+                        return "";
+                    res[i + j] = str2.charAt(j);
+                    fixed[i + j] = true;
+                }
+            }
+        }
+        for (int i = 0; i < m + n - 1; i++) {
+            if (!fixed[i])
+                res[i] = 'a';
+        }
+        for (int i = 0; i < m; i++) {
+            if (str1.charAt(i) == 'F') {
+                boolean eq = true;
+                for (int j = 0; j < n; j++) {
+                    if (res[i + j] != str2.charAt(j)) {
+                        eq = false;
+                        break;
+                    }
+                }
+                if (eq) {
+                    int j = n - 1;
+                    while (fixed[i + j] && j >= 0) {
+                        j--;
+                    }
+                    if (j < 0)
+                        return "";
+                    res[i + j] = 'b';
+                }
+            }
+        }
+
+        return String.valueOf(res);
+    }
+
+    /**
      * #3484 Spreadsheet
      */
     class Spreadsheet {
