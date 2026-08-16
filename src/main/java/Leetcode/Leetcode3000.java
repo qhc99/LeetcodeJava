@@ -63,37 +63,35 @@ public class Leetcode3000 {
     }
 
     /**
-     * #2954
+     * #2945
      * 
      * @param nums
      * @return
      */
     public int findMaximumLength(int[] nums) {
         Deque<Integer> deque = new ArrayDeque<>();
-        int len = nums.length;
-        for (var n : nums) {
-            if (deque.isEmpty()) {
-                deque.add(n);
-            } else if (deque.size() == 1) {
-                deque.add(n);
-                if (deque.peekFirst() <= deque.peekLast())
-                    deque.pollFirst();
-            } else if (deque.size() == 2) {
-                if (deque.peekFirst() + deque.peekLast() <= n) {
-                    deque.pollFirst();
-                    deque.pollFirst();
-                    deque.add(n);
-                    len--;
-                } else if (deque.peekLast() + n >= deque.peekFirst()) {
-                    deque.pollFirst();
-                    deque.add(n + deque.pollFirst());
-                    len--;
-                } else {
-                    deque.add(deque.pollLast() + n);
-                    len--;
-                }
+        long[] sum = new long[nums.length + 1];
+        long[] last = new long[nums.length + 1];
+        int[] dp = new int[nums.length + 1];
+        for (int i = 1; i <= nums.length; i++)
+            sum[i] = nums[i - 1] + sum[i - 1];
+        deque.add(0);
+        for (int i = 1; i <= nums.length; i++) {
+            int j = deque.peekFirst();
+            while (!deque.isEmpty() && sum[i] >= sum[deque.peekFirst()]
+                    + last[deque.peekFirst()]) {
+                j = deque.pollFirst();
             }
+            deque.addFirst(j);
+            dp[i] = dp[j] + 1;
+            last[i] = sum[i] - sum[j];
+            while (!deque.isEmpty() && sum[i] + last[i] <= sum[deque.peekLast()]
+                    + last[deque.peekLast()]) {
+                deque.pollLast();
+            }
+            deque.add(i);
+
         }
-        return len - (deque.size() - 1);
+        return dp[nums.length];
     }
 }
