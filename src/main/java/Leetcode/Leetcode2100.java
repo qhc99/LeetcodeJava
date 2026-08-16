@@ -133,15 +133,32 @@ public class Leetcode2100 {
      * @return
      */
     public int brightestPosition(int[][] lights) {
-        SegmentTree.maxLightness = 0;
-        SegmentTree.maxLightPos = 0;
+        // SegmentTree.maxLightness = 0;
+        // SegmentTree.maxLightPos = 0;
 
-        var root = new SegmentTree(-2_00_000_000, 2_00_000_000);
+        // var root = new SegmentTree(-2_00_000_000, 2_00_000_000);
+        // for (var light : lights) {
+        // root.add(light[0] - light[1], light[0] + light[1], 1);
+        // }
+        // root.clearCache();
+        // return SegmentTree.maxLightPos;
+
+        Map<Integer, Integer> diff = new TreeMap<>();
         for (var light : lights) {
-            root.add(light[0] - light[1], light[0] + light[1], 1);
+            diff.put(light[0] - light[1], diff.getOrDefault(light[0] - light[1], 0) + 1);
+            diff.put(light[0] + light[1] + 1, diff.getOrDefault(light[0] + light[1] + 1, 0) - 1);
         }
-        root.clearCache();
-        return SegmentTree.maxLightPos;
+        int height = 0;
+        int maxHeight = 0;
+        int pos = 0;
+        for (var i : diff.keySet()) {
+            height += diff.getOrDefault(i, 0);
+            if (height > maxHeight) {
+                maxHeight = height;
+                pos = i;
+            }
+        }
+        return pos;
     }
 
     static class SegmentTree {
