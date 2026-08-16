@@ -68,6 +68,26 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1827
+     * 
+     * @param nums
+     * @return
+     */
+    public int minOperations(int[] nums) {
+        int max = -1;
+        int ops = 0;
+        for (var n : nums) {
+            if (n > max) {
+                max = n;
+            } else {
+                max++;
+                ops += max - n;
+            }
+        }
+        return ops;
+    }
+
+    /**
      * #1851
      * 
      * @param intervals
