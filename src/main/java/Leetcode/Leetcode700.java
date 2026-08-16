@@ -1533,4 +1533,37 @@ public class Leetcode700 {
         return res;
     }
 
+    /**
+     * #696
+     * 
+     * @param s
+     * @return
+     */
+    public int countBinarySubstrings(String s) {
+        Deque<int[]> deque = new ArrayDeque<>();
+        int res = 0;
+        for (var c : s.toCharArray()) {
+            int n = c - '0';
+            if (deque.isEmpty()) {
+                deque.addLast(new int[] { n, 1 });
+            } else if (deque.peekLast()[0] == n) {
+                deque.peekLast()[1]++;
+            } else {
+                deque.add(new int[] { n, 1 });
+            }
+            if (deque.size() == 2) {
+                if (deque.peekFirst()[1] >= deque.peekLast()[1]) {
+                    res++;
+                } else {
+                    deque.pollFirst();
+                }
+            } else if (deque.size() == 3) {
+                res++;
+
+                deque.pollFirst();
+            }
+
+        }
+        return res;
+    }
 }
