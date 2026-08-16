@@ -168,7 +168,7 @@ public class Leetcode1600 {
             if (i == arr.length - 1 || arr[i] <= arr[i + 1]) {
                 while (!stack.isEmpty() && (stack.peekLast() >= i
                         || arr[stack.peekLast()] > arr[i])) {
-                    stack.poll();
+                    stack.pollLast();
                 }
                 min = Math.min(min, i - stack.size());
             } else
