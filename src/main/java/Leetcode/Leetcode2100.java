@@ -127,6 +127,93 @@ public class Leetcode2100 {
     }
 
     /**
+     * #2021
+     * 
+     * @param lights
+     * @return
+     */
+    public int brightestPosition(int[][] lights) {
+        SegmentTree.maxLightness = 0;
+        SegmentTree.maxLightPos = 0;
+
+        var root = new SegmentTree(-2_00_000_000, 2_00_000_000);
+        for (var light : lights) {
+            root.add(light[0] - light[1], light[0] + light[1], 1);
+        }
+        root.clearCache();
+        return SegmentTree.maxLightPos;
+    }
+
+    static class SegmentTree {
+        int nodeRangeLeft, nodeRangeRight, cache = 0;
+        SegmentTree leftChild = null, rightChild = null;
+        static int maxLightness = 0;
+        static int maxLightPos = 0;
+
+        SegmentTree(int rangeLeft, int rangeRight) {
+            nodeRangeLeft = rangeLeft;
+            nodeRangeRight = rangeRight;
+        }
+
+        void clearCache() {
+            int nodeRangeMid = nodeRangeLeft
+                    + (nodeRangeRight - nodeRangeLeft) / 2;
+            if (cache > 0 && (leftChild != null || rightChild != null)) {
+                if (rightChild == null)
+                    rightChild = new SegmentTree(nodeRangeMid + 1,
+                            nodeRangeRight);
+                if (leftChild == null)
+                    leftChild = new SegmentTree(nodeRangeLeft, nodeRangeMid);
+                leftChild.add(nodeRangeLeft, nodeRangeMid, cache);
+                rightChild.add(nodeRangeMid + 1, nodeRangeRight, cache);
+                cache = 0;
+            }
+            if (leftChild != null)
+                leftChild.clearCache();
+            if (rightChild != null)
+                rightChild.clearCache();
+        }
+
+        void add(int l, int r, int v) {
+            if (l == nodeRangeLeft && r == nodeRangeRight) {
+                cache += v;
+                if (cache > maxLightness) {
+                    maxLightPos = nodeRangeLeft;
+                    maxLightness = cache;
+                } else if (cache == maxLightness
+                        && nodeRangeLeft < maxLightPos) {
+                    maxLightPos = nodeRangeLeft;
+                }
+                return;
+            }
+            int nodeRangeMid = nodeRangeLeft
+                    + (nodeRangeRight - nodeRangeLeft) / 2;
+            if (cache > 0) {
+                if (rightChild == null)
+                    rightChild = new SegmentTree(nodeRangeMid + 1,
+                            nodeRangeRight);
+                if (leftChild == null)
+                    leftChild = new SegmentTree(nodeRangeLeft, nodeRangeMid);
+                leftChild.add(nodeRangeLeft, nodeRangeMid, cache);
+                rightChild.add(nodeRangeMid + 1, nodeRangeRight, cache);
+                cache = 0;
+            }
+            if (r >= nodeRangeMid + 1) {
+                if (rightChild == null)
+                    rightChild = new SegmentTree(nodeRangeMid + 1,
+                            nodeRangeRight);
+                rightChild.add(Math.max(l, nodeRangeMid + 1), r, v);
+            }
+            if (l <= nodeRangeMid) {
+                if (leftChild == null)
+                    leftChild = new SegmentTree(nodeRangeLeft, nodeRangeMid);
+                leftChild.add(l, Math.min(r, nodeRangeMid), v);
+            }
+        }
+
+    }
+
+    /**
      * #2023
      * 
      * @param nums
