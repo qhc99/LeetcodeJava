@@ -1015,6 +1015,39 @@ public class Leetcode600 {
     }
 
     /**
+     * #581
+     * 
+     * @param nums
+     * @return
+     */
+
+    public int findUnsortedSubarray(int[] nums) {
+        boolean[] isMax = new boolean[nums.length];
+        boolean[] isMin = new boolean[nums.length];
+        int max = Integer.MIN_VALUE, min = Integer.MAX_VALUE;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] >= max) {
+                isMax[i] = true;
+            }
+            max = Math.max(max, nums[i]);
+        }
+        for (int i = nums.length - 1; i >= 0; i--) {
+            if (nums[i] <= min) {
+                isMin[i] = true;
+            }
+            min = Math.min(min, nums[i]);
+        }
+        int i = 0;
+        for (; i < nums.length && isMin[i]; i++) {
+        }
+        int j = nums.length - 1;
+        for (; j >= 0 && isMax[j]; j--) {
+        }
+
+        return Math.max(j + 1 - i, 0);
+    }
+
+    /**
      * #583
      *
      * @param word1
