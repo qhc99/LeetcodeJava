@@ -137,6 +137,48 @@ public class Leetcode1000 {
     }
 
     /**
+     * #912
+     * 
+     * @param nums
+     * @return
+     */
+    public int[] sortArray(int[] nums) {
+        qSort3(nums, 0, nums.length);
+        return nums;
+    }
+
+    static Random rand = new Random();
+
+    void swap(int[] nums, int a, int b) {
+        var t = nums[a];
+        nums[a] = nums[b];
+        nums[b] = t;
+    }
+
+    void qSort3(int[] nums, int l, int r) {
+        if (r - l <= 1)
+            return;
+        if (r - l <= 2) {
+            if (nums[l] > nums[r - 1])
+                swap(nums, l, r - 1);
+            return;
+        }
+        var rnd = rand.nextInt(l, r);
+        swap(nums, l, rnd);
+        int head = l, tail = head, ptr = r - 1;
+        while (head < ptr) {
+            if (nums[head] == nums[head + 1])
+                head++;
+            else if (nums[head] > nums[head + 1])
+                swap(nums, ++head, tail++);
+            else
+                swap(nums, head + 1, ptr--);
+        }
+        qSort3(nums, l, tail);
+        qSort3(nums, head + 1, r);
+    }
+
+    /**
      * #918
      * 
      * @param nums

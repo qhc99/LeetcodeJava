@@ -1227,6 +1227,17 @@ public class Leetcode900 {
     }
 
     /**
+     * #887
+     * 
+     * @param k
+     * @param n
+     * @return
+     */
+    public int superEggDrop(int k, int n) {
+        return 0;
+    }
+
+    /**
      * #894
      * 
      * @param n
