@@ -160,6 +160,37 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2537
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public long countGood(int[] nums, int k) {
+        long res = 0;
+        long good = 0;
+        Map<Integer, Integer> count = new HashMap<>();
+        int l = 0;
+        for (int r = 0; r < nums.length; r++) {
+            var n = nums[r];
+            var cnt = count.getOrDefault(n, 0);
+            good += cnt;
+            count.put(n, 1 + cnt);
+            while (good >= k && l <= r) {
+                res += nums.length - r;
+                var lNum = nums[l++];
+                var lCnt = count.get(lNum);
+                if (lCnt > 1)
+                    count.put(lNum, lCnt - 1);
+                else
+                    count.remove(lNum);
+                good -= lCnt - 1;
+            }
+        }
+        return res;
+    }
+
+    /**
      * #2539
      * 
      * @param s
