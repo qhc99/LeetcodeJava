@@ -238,6 +238,54 @@ public class Leetcode3100 {
     }
 
     /**
+     * #3071
+     * 
+     * @param grid
+     * @return
+     */
+    public int minimumOperationsToWriteY(int[][] grid) {
+        int min = Integer.MAX_VALUE, n = grid.length;
+        Map<Integer, Integer> yCount = new HashMap<>(),
+                backgoundCount = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (i <= n / 2) {
+                    if (i == j || i + j == n - 1)
+                        yCount.put(grid[i][j],
+                                1 + yCount.getOrDefault(grid[i][j], 0));
+                    else
+                        backgoundCount.put(grid[i][j],
+                                1 + backgoundCount.getOrDefault(grid[i][j], 0));
+                } else {
+                    if (j == n / 2)
+                        yCount.put(grid[i][j],
+                                1 + yCount.getOrDefault(grid[i][j], 0));
+                    else
+                        backgoundCount.put(grid[i][j],
+                                1 + backgoundCount.getOrDefault(grid[i][j], 0));
+                }
+            }
+        }
+        int yTotal = yCount.values().stream().mapToInt(i -> i).sum(),
+                bTotal = backgoundCount.values().stream().mapToInt(i -> i)
+                        .sum();
+        int[] yOps = new int[] { yTotal - yCount.getOrDefault(0, 0),
+                yTotal - yCount.getOrDefault(1, 0),
+                yTotal - yCount.getOrDefault(2, 0) };
+        int[] bOps = new int[] { bTotal - backgoundCount.getOrDefault(0, 0),
+                bTotal - backgoundCount.getOrDefault(1, 0),
+                bTotal - backgoundCount.getOrDefault(2, 0) };
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i != j) {
+                    min = Math.min(yOps[i] + bOps[j], min);
+                }
+            }
+        }
+        return min;
+    }
+
+    /**
      * #3072
      * 
      * @param nums
