@@ -1488,6 +1488,29 @@ public class Leetcode300 {
     }
 
     /**
+     * #280
+     * 
+     * @param nums
+     */
+    public void wiggleSort(int[] nums) {
+        for (int i = 0; i < nums.length - 1; i++) {
+            if (i % 2 == 0) {
+                if (nums[i] > nums[i + 1]) {
+                    var t = nums[i];
+                    nums[i] = nums[i + 1];
+                    nums[i + 1] = t;
+                }
+            } else {
+                if (nums[i] < nums[i + 1]) {
+                    var t = nums[i];
+                    nums[i] = nums[i + 1];
+                    nums[i + 1] = t;
+                }
+            }
+        }
+    }
+
+    /**
      * #282
      *
      * @param num
