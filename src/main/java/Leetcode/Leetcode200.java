@@ -27,7 +27,7 @@ public class Leetcode200 {
      * @param inorder  inorder int array
      * @return origin tree
      */
-    public static TreeNode buildTree(int[] preorder, int[] inorder) {
+    public static TreeNode buildTree1(int[] preorder, int[] inorder) {
         if (preorder.length == 0) {
             return null;
         }
@@ -54,6 +54,35 @@ public class Leetcode200 {
                     i_start + l_len + 1, m);
             return root;
         }
+    }
+
+    /**
+     * #106
+     * 
+     * @param inorder
+     * @param postorder
+     * @return
+     */
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
+        Deque<Integer> post = new ArrayDeque<>();
+        Map<Integer, Integer> val2idx = new HashMap<>();
+        for (int i = 0; i < inorder.length; i++) {
+            val2idx.put(inorder[i], i);
+        }
+        for (var v : postorder)
+            post.addLast(v);
+        return buildip(inorder, 0, inorder.length, post, val2idx);
+    }
+
+    TreeNode buildip(int[] inorder, int l, int r, Deque<Integer> postorder,
+            Map<Integer, Integer> val2idx) {
+        var n = new TreeNode(postorder.pollLast());
+        int mid = val2idx.get(n.val);
+        if (r - mid - 1 > 0)
+            n.right = buildip(inorder,  mid + 1, r, postorder, val2idx);
+        if (mid - l > 0)
+            n.left = buildip(inorder, l, mid, postorder, val2idx);
+        return n;
     }
 
     /**
