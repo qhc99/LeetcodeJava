@@ -342,6 +342,7 @@ public class Leetcode1700 {
     static class LCA {
 
         Set<Integer> targets = new HashSet<>();
+        int totalFound = 0;
         TreeNode res = null;
 
         LCA(TreeNode[] nodes) {
@@ -353,10 +354,11 @@ public class Leetcode1700 {
             int treeFound = 0;
             if (targets.contains(node.val)) {
                 treeFound++;
+                totalFound++;
             }
-            if (node.left != null)
+            if (node.left != null && totalFound < targets.size())
                 treeFound += visit(node.left);
-            if (node.right != null)
+            if (node.right != null && totalFound < targets.size())
                 treeFound += visit(node.right);
             if (res == null && treeFound == targets.size()) {
                 res = node;
