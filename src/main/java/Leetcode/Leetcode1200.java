@@ -160,6 +160,45 @@ public class Leetcode1200 {
     }
 
     /**
+     * #1162
+     * 
+     * @param grid
+     * @return
+     */
+    public int maxDistance(int[][] grid) {
+        int res = -1, n = grid.length;
+        Queue<int[]> queue = new ArrayDeque<>(), next = new ArrayDeque<>();
+        boolean[][] visited = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    queue.add(new int[] { i, j });
+                    visited[i][j] = true;
+                }
+            }
+        }
+        int[] dx = { 0, 0, 1, -1 }, dy = { 1, -1, 0, 0 };
+        while (!queue.isEmpty()) {
+            res++;
+            while (!queue.isEmpty()) {
+
+                var p = queue.poll();
+                for (int i = 0; i < 4; i++) {
+                    int x = p[0] + dx[i], y = p[1] + dy[i];
+                    if (x >= 0 && x < n && y >= 0 && y < n && !visited[x][y]) {
+                        visited[x][y] = true;
+                        next.add(new int[] { x, y });
+                    }
+                }
+            }
+            var t = queue;
+            queue = next;
+            next = t;
+        }
+        return res > 0 ? res : -1;
+    }
+
+    /**
      * #1168
      * 
      * @param n
