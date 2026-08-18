@@ -3,6 +3,30 @@ package Leetcode;
 import java.util.*;
 
 public class Leetcode2900 {
+
+    /**
+     * #2817
+     * 
+     * @param nums
+     * @param x
+     * @return
+     */
+    public int minAbsoluteDifference(List<Integer> nums, int x) {
+        TreeSet<Integer> set = new TreeSet<>();
+        int min = Integer.MAX_VALUE;
+        for (int i = x; i < nums.size(); i++) {
+            set.add(nums.get(i - x));
+            var ceil = set.ceiling(nums.get(i));
+            if (ceil != null)
+                min = Math.min(min, ceil - nums.get(i));
+            var floor = set.floor(nums.get(i));
+            if (floor != null)
+                min = Math.min(min, nums.get(i) - floor);
+
+        }
+        return min;
+    }
+
     /**
      * #2850
      * 
