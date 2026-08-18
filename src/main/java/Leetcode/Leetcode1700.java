@@ -325,4 +325,43 @@ public class Leetcode1700 {
         list2Tail.next = tail;
         return handle.next;
     }
+
+    /**
+     * #1676
+     * 
+     * @param root
+     * @param nodes
+     * @return
+     */
+    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode[] nodes) {
+        var solver = new LCA(nodes);
+        solver.visit(root);
+        return solver.res;
+    }
+
+    static class LCA {
+
+        Set<Integer> targets = new HashSet<>();
+        TreeNode res = null;
+
+        LCA(TreeNode[] nodes) {
+            for (var n : nodes)
+                targets.add(n.val);
+        }
+
+        int visit(TreeNode node) {
+            int treeFound = 0;
+            if (targets.contains(node.val)) {
+                treeFound++;
+            }
+            if (node.left != null)
+                treeFound += visit(node.left);
+            if (node.right != null)
+                treeFound += visit(node.right);
+            if (res == null && treeFound == targets.size()) {
+                res = node;
+            }
+            return treeFound;
+        }
+    }
 }
