@@ -3081,6 +3081,25 @@ public class Leetcode500 {
         return "IPv6";
     }
 
+    public int rand7() {
+        return 0;
+    }
+
+    /**
+     * #470
+     * 
+     * @return
+     */
+    public int rand10() {
+        var a = rand7();
+        var b = rand7();
+        while ((a - 1) * 7 + b > 40) {
+            a = rand7();
+            b = rand7();
+        }
+        return ((a - 1) * 7 + b - 1) / 4 + 1;
+    }
+
     /**
      * #472
      * 
