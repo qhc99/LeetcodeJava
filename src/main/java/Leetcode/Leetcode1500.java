@@ -111,6 +111,49 @@ public class Leetcode1500 {
     }
 
     /**
+     * #1462
+     * 
+     * @param numCourses
+     * @param prerequisites
+     * @param queries
+     * @return
+     */
+    public List<Boolean> checkIfPrerequisite(int numCourses,
+            int[][] prerequisites, int[][] queries) {
+        Map<Integer, Set<Integer>> graph = new HashMap<>(numCourses);
+        List<Boolean> res = new ArrayList<>();
+        for (var req : prerequisites) {
+            graph.computeIfAbsent(req[0], k -> new HashSet<>()).add(req[1]);
+        }
+        boolean[] visited = new boolean[numCourses];
+        for (int i = 0; i < numCourses; i++) {
+            dfs(i, graph, visited);
+        }
+        for (var query : queries) {
+            if (graph.get(query[0]).contains(query[1]))
+                res.add(true);
+            else
+                res.add(false);
+        }
+        return res;
+    }
+
+    Set<Integer> dfs(int idx, Map<Integer, Set<Integer>> graph,
+            boolean[] visited) {
+        visited[idx] = true;
+        Set<Integer> set = new HashSet<>(graph.getOrDefault(idx, Set.of()));
+
+        for (var nb : graph.getOrDefault(idx, Set.of())) {
+            if (!visited[nb])
+                set.addAll(dfs(nb, graph, visited));
+            else
+                set.addAll(graph.getOrDefault(nb, Set.of()));
+        }
+        graph.put(idx, set);
+        return set;
+    }
+
+    /**
      * #1466
      * 
      * @param n
@@ -122,7 +165,7 @@ public class Leetcode1500 {
         Map<Integer, List<Integer>> graph = new HashMap<>();
         Queue<Integer> queue = new ArrayDeque<>();
         for (var c : connections) {
-            source.computeIfAbsent(c[0], k->new HashSet<>()).add(c[1]);
+            source.computeIfAbsent(c[0], k -> new HashSet<>()).add(c[1]);
             graph.computeIfAbsent(c[0], k -> new ArrayList<>()).add(c[1]);
             graph.computeIfAbsent(c[1], k -> new ArrayList<>()).add(c[0]);
         }
