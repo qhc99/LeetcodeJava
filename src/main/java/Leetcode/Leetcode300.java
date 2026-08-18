@@ -1988,24 +1988,24 @@ public class Leetcode300 {
         for (var c : pattern.toCharArray())
             count.put(c, 1 + count.getOrDefault(c, 0));
         List<Character> chrs = count.keySet().stream().toList();
-        return wordPatternMatch(0, chrs, new HashMap<>(), count, s, pattern);
+        return wordPatternMatch(0, chrs, 0, new HashMap<>(), count, s, pattern);
     }
 
-    boolean wordPatternMatch(int pos, List<Character> chrs,
+    boolean wordPatternMatch(int pos, List<Character> chrs, int patternLength,
             Map<Character, Integer> lenMap,
             Map<Character, Integer> patternCount, String s, String pattern) {
         if (pos == chrs.size()) {
-            if (totalLength(lenMap, patternCount) == s.length()
-                    && tryMatch(lenMap, s, pattern))
+            if (patternLength == s.length() && tryMatch(lenMap, s, pattern))
                 return true;
             return false;
         }
         var c = chrs.get(pos);
         for (int i = 1; i <= s.length(); i++) {
             lenMap.put(c, i);
-            if (totalLength(lenMap, patternCount) <= s.length()) {
-                if (wordPatternMatch(pos + 1, chrs, lenMap, patternCount, s,
-                        pattern))
+            var nextPatternLength = patternLength + i * patternCount.get(c);
+            if (nextPatternLength <= s.length()) {
+                if (wordPatternMatch(pos + 1, chrs, nextPatternLength, lenMap,
+                        patternCount, s, pattern))
                     return true;
             } else
                 break;
@@ -2031,15 +2031,6 @@ public class Leetcode300 {
         }
         return map.values().stream().collect(Collectors.toSet()).size() == map
                 .size();
-    }
-
-    int totalLength(Map<Character, Integer> lenMap,
-            Map<Character, Integer> patternCount) {
-        int len = 0;
-        for (var c : patternCount.keySet()) {
-            len += lenMap.getOrDefault(c, 1) * patternCount.get(c);
-        }
-        return len;
     }
 
     /**
