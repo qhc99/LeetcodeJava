@@ -1,9 +1,6 @@
 package Leetcode;
 
-import java.util.ArrayDeque;
-import java.util.Deque;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class Leetcode3000 {
     /**
@@ -93,5 +90,31 @@ public class Leetcode3000 {
 
         }
         return dp[nums.length];
+    }
+
+    /**
+     * #2958
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int maxSubarrayLength(int[] nums, int k) {
+        Map<Integer, Integer> count = new HashMap<>();
+        int l = 0, res = 0;
+        for (int r = 0; r < nums.length; r++) {
+            var v = nums[r];
+            count.put(v, 1 + count.getOrDefault(v, 0));
+            while (count.get(v) > k && l <= r) {
+                var numL = nums[l++];
+                var cnt = count.get(numL);
+                if (cnt == 1)
+                    count.remove(numL);
+                else
+                    count.put(numL, cnt - 1);
+            }
+            res = Math.max(res, r + 1 - l);
+        }
+        return res;
     }
 }
