@@ -901,6 +901,27 @@ public class Leetcode400 {
     }
 
     /**
+     * #325
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int maxSubArrayLen(int[] nums, int k) {
+        int max = 0;
+        Map<Integer, Integer> val2idx = new HashMap<>();
+        val2idx.put(0, -1);
+        for (int i = 0; i < nums.length; i++) {
+            nums[i] = nums[i] + (i - 1 >= 0 ? nums[i - 1] : 0);
+            // nums[i] - val == k
+            if (val2idx.containsKey(nums[i] - k))
+                max = Math.max(max, i - val2idx.get(nums[i] - k));
+            val2idx.putIfAbsent(nums[i], i);
+        }
+        return max;
+    }
+
+    /**
      * #327
      *
      * @param num

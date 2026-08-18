@@ -2065,6 +2065,16 @@ public class Leetcode300 {
     }
 
     /**
+     * #294
+     * 
+     * @param currentState
+     * @return
+     */
+    public boolean canWin(String currentState) {
+        return false;
+    }
+
+    /**
      * #295
      */
     static class MedianFinder {
