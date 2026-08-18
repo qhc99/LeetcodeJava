@@ -655,6 +655,34 @@ public class Leetcode900 {
     }
 
     /**
+     * #845
+     * 
+     * @param arr
+     * @return
+     */
+    public int longestMountain(int[] arr) {
+        int[] up = new int[arr.length];
+        int[] down = new int[arr.length];
+        int max = 0;
+        for (int i = 1; i < arr.length; i++) {
+            if (arr[i] > arr[i - 1]) {
+                up[i] = up[i - 1] + 1;
+            }
+        }
+        for (int i = arr.length - 2; i >= 0; i--) {
+            if (arr[i] > arr[i + 1]) {
+                down[i] = down[i + 1] + 1;
+            }
+        }
+        for (int i = 1; i < arr.length - 1; i++) {
+            if (up[i] > 0 && down[i] > 0) {
+                max = Math.max(max, up[i] + down[i] + 1);
+            }
+        }
+        return max;
+    }
+
+    /**
      * #846
      * 
      * @param hand
