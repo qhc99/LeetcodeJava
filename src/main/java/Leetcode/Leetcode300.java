@@ -1134,6 +1134,37 @@ public class Leetcode300 {
     }
 
     /**
+     * #255
+     * 
+     * @param preorder
+     * @return
+     */
+    public boolean verifyPreorder(int[] preorder) {
+        Queue<Integer> pre = new ArrayDeque<>();
+        for (var v : preorder)
+            pre.add(v);
+        verifyPreorder(pre, new ArrayDeque<>(), new ArrayDeque<>());
+        return pre.isEmpty();
+    }
+
+    public void verifyPreorder(Queue<Integer> pre, Deque<Integer> left,
+            Deque<Integer> right) {
+        var n = pre.poll();
+        right.addFirst(n);
+        if (!pre.isEmpty()
+                && (right.isEmpty() || pre.peek() < right.peekFirst())
+                && (left.isEmpty() || pre.peek() > left.peekLast())) {
+            verifyPreorder(pre, left, right);
+        }
+        left.addLast(right.pollFirst());
+        if (!pre.isEmpty()
+                && (right.isEmpty() || pre.peek() < right.peekFirst())
+                && (left.isEmpty() || pre.peek() > left.peekLast())) {
+            verifyPreorder(pre, left, right);
+        }
+    }
+
+    /**
      * #257
      *
      * @param root
