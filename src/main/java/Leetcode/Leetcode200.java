@@ -79,7 +79,7 @@ public class Leetcode200 {
         var n = new TreeNode(postorder.pollLast());
         int mid = val2idx.get(n.val);
         if (r - mid - 1 > 0)
-            n.right = buildip(inorder,  mid + 1, r, postorder, val2idx);
+            n.right = buildip(inorder, mid + 1, r, postorder, val2idx);
         if (mid - l > 0)
             n.left = buildip(inorder, l, mid, postorder, val2idx);
         return n;
