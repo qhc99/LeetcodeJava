@@ -1565,4 +1565,47 @@ public class Leetcode700 {
         }
         return res;
     }
+
+    /**
+     * #698
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public boolean canPartitionKSubsets(int[] nums, int k) {
+        int sum = Arrays.stream(nums).sum(), targetSum = sum / k;
+        var list = new ArrayList<>(
+                Arrays.stream(nums).sorted().boxed().toList());
+        if (sum % k != 0)
+            return false;
+        if (list.getLast() > targetSum)
+            return false;
+        while (!list.isEmpty() && list.getLast().equals(targetSum)) {
+            list.removeLast();
+        }
+        if (list.isEmpty())
+            return true;
+        int[] dp = new int[1 << list.size()];
+        Arrays.fill(dp, -1);
+        for (int i = 0; i < list.size(); i++) {
+            dp[1 << i] = list.get(i);
+        }
+        for (int s = 1; s < list.size(); s++) {
+            int mask = (1 << s) - 1;
+            while (mask < (1 << list.size())) {
+                for (int i = 0; i < list.size(); i++) {
+                    if ((mask & (1 << i)) == 0 && dp[mask] != -1
+                            && dp[mask] + list.get(i) <= targetSum) {
+                        dp[mask | (1 << i)] = (dp[mask] + list.get(i))
+                                % targetSum;
+                    }
+                }
+                var c = mask & -mask;
+                var r = mask + c;
+                mask = (((r ^ mask) >>> 2) / c) | r;
+            }
+        }
+        return dp[(1 << list.size()) - 1] == 0;
+    }
 }
