@@ -34,6 +34,30 @@ public class Leetcode1000 {
     }
 
     /**
+     * #904
+     * 
+     * @param fruits
+     * @return
+     */
+    public int totalFruit(int[] fruits) {
+        int l = 0, max = 0;
+        Map<Integer, Integer> count = new HashMap<>();
+        for (int r = 0; r < fruits.length; r++) {
+            count.put(fruits[r], 1 + count.getOrDefault(fruits[r], 0));
+            while (l <= r && count.size() > 2) {
+                var f = fruits[l++];
+                var cnt = count.get(f);
+                if (cnt == 1)
+                    count.remove(f);
+                else
+                    count.put(f, cnt - 1);
+            }
+            max = Math.max(max, r + 1 - l);
+        }
+        return max;
+    }
+
+    /**
      * #907
      * 
      * @param arr
