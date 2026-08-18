@@ -5,6 +5,8 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @SuppressWarnings("JavaDoc")
@@ -1972,6 +1974,72 @@ public class Leetcode300 {
                 return false;
         }
         return true;
+    }
+
+    /**
+     * #291
+     * 
+     * @param pattern
+     * @param s
+     * @return
+     */
+    public boolean wordPatternMatch(String pattern, String s) {
+        Map<Character, Integer> count = new HashMap<>();
+        for (var c : pattern.toCharArray())
+            count.put(c, 1 + count.getOrDefault(c, 0));
+        List<Character> chrs = count.keySet().stream().toList();
+        return wordPatternMatch(0, chrs, new HashMap<>(), count, s, pattern);
+    }
+
+    boolean wordPatternMatch(int pos, List<Character> chrs,
+            Map<Character, Integer> lenMap,
+            Map<Character, Integer> patternCount, String s, String pattern) {
+        if (pos == chrs.size()) {
+            if (totalLength(lenMap, patternCount) == s.length()
+                    && tryMatch(lenMap, s, pattern))
+                return true;
+            return false;
+        }
+        var c = chrs.get(pos);
+        for (int i = 1; i <= s.length(); i++) {
+            lenMap.put(c, i);
+            if (totalLength(lenMap, patternCount) <= s.length()) {
+                if (wordPatternMatch(pos + 1, chrs, lenMap, patternCount, s,
+                        pattern))
+                    return true;
+            } else
+                break;
+        }
+        lenMap.put(c, 1);
+        return false;
+    }
+
+    boolean tryMatch(Map<Character, Integer> lenMap, String s, String pattern) {
+        Map<Character, String> map = new HashMap<>();
+        int i = 0, ptr = 0;
+        while (i < pattern.length()) {
+            var p = pattern.charAt(i);
+            var l = lenMap.get(p);
+            var sub = s.substring(ptr, ptr + l);
+            ptr += l;
+            if (map.containsKey(p)) {
+                if (!map.get(p).equals(sub))
+                    return false;
+            } else
+                map.put(p, sub);
+            i++;
+        }
+        return map.values().stream().collect(Collectors.toSet()).size() == map
+                .size();
+    }
+
+    int totalLength(Map<Character, Integer> lenMap,
+            Map<Character, Integer> patternCount) {
+        int len = 0;
+        for (var c : patternCount.keySet()) {
+            len += lenMap.getOrDefault(c, 1) * patternCount.get(c);
+        }
+        return len;
     }
 
     /**
