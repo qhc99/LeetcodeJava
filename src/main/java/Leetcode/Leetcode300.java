@@ -2071,7 +2071,48 @@ public class Leetcode300 {
      * @return
      */
     public boolean canWin(String currentState) {
-        return false;
+        int l = -1;
+        List<Integer> state = new ArrayList<>();
+        for (int r = 0; r < currentState.length(); r++) {
+            if (currentState.charAt(r) == '-') {
+                if (l != -1 && r - l >= 2) {
+                    state.add(r - l);
+                }
+                l = -1;
+            } else if (l == -1)
+                l = r;
+        }
+        if (l != -1 && currentState.length() - l >= 2) {
+            state.add(currentState.length() - l);
+        }
+        state.sort(Integer::compareTo);
+
+        return canWin(state, new HashMap<>());
+    }
+
+    boolean canWin(List<Integer> state, Map<List<Integer>, Boolean> cache) {
+        if (state.isEmpty()) {
+            return false;
+        }
+        var cachedRes = cache.get(state);
+        if (cachedRes != null)
+            return cachedRes;
+        boolean guaranteeNextLose = false;
+        for (int i = 0; i < state.size(); i++) {
+            var v = state.get(i);
+            for (int j = 0; j + 2 <= v; j++) {
+                List<Integer> next = new ArrayList<>(state);
+                next.set(i, j);
+                next.add(v - j - 2);
+                next = next.stream().filter(val -> val >= 2).sorted().toList();
+                if (!canWin(next, cache)) {
+                    guaranteeNextLose = true;
+                    break;
+                }
+            }
+        }
+        cache.put(state, guaranteeNextLose);
+        return guaranteeNextLose;
     }
 
     /**
