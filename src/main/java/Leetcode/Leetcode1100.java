@@ -433,6 +433,87 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1044
+     * 
+     * @param s
+     * @return
+     */
+    public String longestDupSubstring(String s) {
+        Random random = new Random();
+        // 生成两个进制
+        int a1 = random.nextInt(75) + 26;
+        int a2 = random.nextInt(75) + 26;
+        // 生成两个模
+        int mod1 = random.nextInt(Integer.MAX_VALUE - 1000000007 + 1)
+                + 1000000007;
+        int mod2 = random.nextInt(Integer.MAX_VALUE - 1000000007 + 1)
+                + 1000000007;
+        int[] arr = new int[s.length()];
+        for (int i = 0; i < arr.length; i++)
+            arr[i] = s.charAt(i) - 'a';
+        int l = 1, r = arr.length - 1, start = -1, len = 0;
+        while (r - l >= 0) {
+            int mid = l + (r - l + 1) / 2;
+            int idx = findDup(arr, mid, a1, a2, mod1, mod2);
+            if (idx == -1)
+                r = mid - 1;
+            else {
+                l = mid + 1;
+                start = idx;
+                len = mid;
+            }
+        }
+        return start != -1 ? s.substring(start, start + len) : "";
+    }
+
+    int findDup(int[] arr, int len, int a1, int a2, int mod1, int mod2) {
+        Set<Long> seen = new HashSet<>();
+        long h1 = 0, h2 = 0, a1_len = qpow(a1, len, mod1),
+                a2_len = qpow(a2, len, mod2);
+        for (int i = 0; i < len; i++) {
+            h1 = (h1 * a1 % mod1 + arr[i]) % mod1;
+            h2 = (h2 * a2 % mod2 + arr[i]) % mod2;
+            if (h1 < 0)
+                h1 += mod1;
+            if (h2 < 0)
+                h2 += mod2;
+        }
+        seen.add(h1 * mod2 + h2);
+        for (int i = 1; i < arr.length - len + 1; i++) {
+            h1 = (h1 * a1 % mod1 - a1_len * arr[i - 1] % mod1
+                    + arr[i + len - 1]) % mod1;
+            h2 = (h2 * a2 % mod2 - a2_len * arr[i - 1] % mod2
+                    + arr[i + len - 1]) % mod2;
+            if (h1 < 0)
+                h1 += mod1;
+            if (h2 < 0)
+                h2 += mod2;
+            long num = h1 * mod2 + h2;
+            if (!seen.add(num)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    long qpow(long a, int b, int mod) {
+        long res = 1;
+        a %= mod;
+        while (b > 0) {
+            if ((b & 1) == 1) {
+                res = res * a % mod;
+                if (res < 0)
+                    res += mod;
+            }
+            a = a * a % mod;
+            if (a < 0)
+                a += mod;
+            b >>= 1;
+        }
+        return res;
+    }
+
+    /**
      * #1047
      * 
      * @param s
