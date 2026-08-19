@@ -496,7 +496,7 @@ public class Leetcode1100 {
         return -1;
     }
 
-    long qpow(long a, int b, int mod) {
+    long qpow(long a, long b, int mod) {
         long res = 1;
         a %= mod;
         while (b > 0) {
