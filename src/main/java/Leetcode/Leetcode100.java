@@ -2929,8 +2929,35 @@ public class Leetcode100 {
      * @param root
      */
     public void recoverTree(TreeNode root) {
-
+        var recover = new Recover();
+        recover.visit(root);
+        recover.recover();
     }
 
-    
+    static class Recover {
+        TreeNode x, y, pred;
+
+        void visit(TreeNode n) {
+            if (n.left != null)
+                visit(n.left);
+            if (pred != null) {
+                if (pred.val > n.val) {
+                    y = n;
+                    if (x == null)
+                        x = pred;
+                    else
+                        return;
+                }
+            }
+            pred = n;
+            if (n.right != null)
+                visit(n.right);
+        }
+
+        void recover() {
+            var t = x.val;
+            x.val = y.val;
+            y.val = t;
+        }
+    }
 }
