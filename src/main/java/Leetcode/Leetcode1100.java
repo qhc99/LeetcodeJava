@@ -440,17 +440,17 @@ public class Leetcode1100 {
      * @return
      */
     public int maxSumAfterPartitioning(int[] arr, int k) {
-        int[] dp = new int[arr.length];
-        Arrays.fill(dp, Arrays.stream(arr).max().getAsInt());
-        for (int j = 1; j < k; j++) {
-            int max = Integer.MIN_VALUE;
-            for (int i = arr.length - 1; i >= j; i--) {
-                max = Math.max(max, i);
-
+        int[] dp = new int[arr.length + 1];
+        for (int i = 1; i <= arr.length; i++) {
+            int max = arr[i - 1];
+            for (int j = i - 1; j >= 0 && i - j <= k; j--) {
+                dp[i] = Math.max(dp[i], dp[j] + max * (i - j));
+                if (j - 1 >= 0)
+                    max = Math.max(max, arr[j - 1]);
             }
         }
 
-        return dp[arr.length - 1];
+        return dp[arr.length];
     }
 
     /**
