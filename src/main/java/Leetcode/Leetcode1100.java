@@ -433,6 +433,27 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1043
+     * 
+     * @param arr
+     * @param k
+     * @return
+     */
+    public int maxSumAfterPartitioning(int[] arr, int k) {
+        int[] dp = new int[arr.length];
+        Arrays.fill(dp, Arrays.stream(arr).max().getAsInt());
+        for (int j = 1; j < k; j++) {
+            int max = Integer.MIN_VALUE;
+            for (int i = arr.length - 1; i >= j; i--) {
+                max = Math.max(max, i);
+
+            }
+        }
+
+        return dp[arr.length - 1];
+    }
+
+    /**
      * #1044
      * 
      * @param s

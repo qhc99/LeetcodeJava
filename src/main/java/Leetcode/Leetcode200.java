@@ -1585,6 +1585,14 @@ public class Leetcode200 {
         }
     }
 
+    // 186
+    /*
+     * with t as ( SELECT , DENSE_RANK() OVER ( PARTITION BY departmentId ORDER
+     * BY salary DESC ) AS rank_number FROM Employee ) select d.name as
+     * "Department", t.name as "Employee" , t.salary as "Salary" from t join
+     * Department d on d.id = t.departmentId where rank_number <= 3;
+     */
+
     /**
      * #188
      * 
