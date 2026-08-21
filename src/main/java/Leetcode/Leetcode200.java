@@ -1643,6 +1643,41 @@ public class Leetcode200 {
      */
 
     /**
+     * #186?
+     * 
+     * @param s
+     */
+    public void reverseWords(char[] s) {
+        for (int i = 0, j = s.length - 1; i < j; i++, j--) {
+            var t = s[i];
+            s[i] = s[j];
+            s[j] = t;
+        }
+
+        int l = -1;
+        for (int r = 0; r < s.length; r++) {
+            if (s[r] != ' ') {
+                if (l == -1)
+                    l = r;
+            } else if (l != -1) {
+                for (int i = l, j = r - 1; i < j; i++, j--) {
+                    var t = s[i];
+                    s[i] = s[j];
+                    s[j] = t;
+                }
+                l = -1;
+            }
+        }
+        if (l != -1) {
+            for (int i = l, j = s.length - 1; i < j; i++, j--) {
+                var t = s[i];
+                s[i] = s[j];
+                s[j] = t;
+            }
+        }
+    }
+
+    /**
      * #188
      * 
      * @param k
