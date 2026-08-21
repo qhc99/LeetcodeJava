@@ -1090,7 +1090,22 @@ public class Leetcode300 {
      */
     public List<List<String>> groupStrings(String[] strings) {
         List<List<String>> res = new ArrayList<>();
-
+        var root = new TrieNode();
+        for (var str : strings) {
+            var offset = str.charAt(0) - 'a';
+            var ptr = root;
+            for (var c : str.toCharArray()) {
+                c -= offset;
+                if (c < 'a')
+                    c += 'z' - 'a' + 1;
+                ptr = ptr.children.computeIfAbsent(c, k -> new TrieNode());
+            }
+            if (ptr.group == null) {
+                ptr.group = new ArrayList<>();
+                res.add(ptr.group);
+            }
+            ptr.group.add(str);
+        }
         return res;
     }
 
