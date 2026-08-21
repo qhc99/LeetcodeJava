@@ -2623,6 +2623,87 @@ public class Leetcode500 {
     }
 
     /**
+     * #450
+     * 
+     * @param root
+     * @param key
+     * @return
+     */
+    public TreeNode deleteNode(TreeNode root, int key) {
+        if (root == null)
+            return null;
+        var find = new FindNode();
+        find.visit(root, key);
+        if (find.target == null)
+            return root;
+        TreeNode pred = null, succ = null;
+        if (find.target.left != null) {
+            pred = find.target.left;
+            while (pred.right != null) {
+                pred = pred.right;
+            }
+        }
+
+        if (find.target.right != null) {
+            succ = find.target.right;
+            while (succ.left != null) {
+                succ = succ.left;
+            }
+        }
+        if (pred != null) {
+            find.target.val = pred.val;
+            if (pred == find.target.left)
+                find.target.left = pred.left;
+            else {
+                var ptr = find.target.left;
+                while (ptr.right != pred) {
+                    ptr = ptr.right;
+                }
+                ptr.right = pred.left;
+            }
+        } else if (succ != null) {
+            find.target.val = succ.val;
+            if (succ == find.target.right)
+                find.target.right = succ.right;
+            else {
+                var ptr = find.target.right;
+                while (ptr.left != succ) {
+                    ptr = ptr.left;
+                }
+                ptr.left = succ.right;
+            }
+        } else {
+            if (find.parent != null) {
+                if (find.parent.left == find.target)
+                    find.parent.left = null;
+                else
+                    find.parent.right = null;
+            } else {
+                return null;
+            }
+        }
+
+        return root;
+    }
+
+    static class FindNode {
+        TreeNode target;
+        TreeNode parent;
+
+        void visit(TreeNode n, int key) {
+            if (n.val == key) {
+                target = n;
+                return;
+            }
+            parent = n;
+            if (key < parent.val && n.left != null)
+                visit(n.left, key);
+            else if (key > parent.val && parent.right != null)
+                visit(n.right, key);
+        }
+    }
+
+    /**
      * #451
      *
      * @param s
