@@ -1083,6 +1083,23 @@ public class Leetcode300 {
     }
 
     /**
+     * #249
+     * 
+     * @param strings
+     * @return
+     */
+    public List<List<String>> groupStrings(String[] strings) {
+        List<List<String>> res = new ArrayList<>();
+
+        return res;
+    }
+
+    static class TrieNode {
+        List<String> group = null;
+        Map<Character, TrieNode> children = new HashMap<>();
+    }
+
+    /**
      * #252
      * 
      * @param intervals
@@ -1256,17 +1273,20 @@ public class Leetcode300 {
 
     /**
      * #262 <code>
-     with res as (
-        select 
-        t.request_at as day, 
-        count(t.id) filter (where t.status != 'completed') over (partition by t.request_at) as cancel_count, 
-        count(t.id) over (partition by t.request_at) as day_count
-        from 
+    with res as (
+    select 
+    t.request_at as day, 
+    count(t.id) filter (where t.status != 'completed') as cancel_count, 
+    count(t.id) as day_count
+    from 
     Trips t join Users c on t.client_id = c.users_id 
     join Users d on t.driver_id = d.users_id 
-    where d.banned = 'No' and c.banned = 'No' and t.request_at between '2013-10-01' and '2013-10-03'
+    where d.banned = 'No' and c.banned = 'No' and t.request_at between '2013-10-01' and '2013-10-03' 
+    group by t.request_at
     )
-    select distinct res.day as "Day", ROUND((CAST(res.cancel_count as numeric) / CAST(res.day_count as numeric)), 2) as "Cancellation Rate" from res where res.day_count > 0;
+    select res.day as "Day", 
+    ROUND((CAST(res.cancel_count as numeric) / CAST(res.day_count as numeric)), 2) as "Cancellation Rate" 
+    from res where res.day_count > 0;
     </code>
      * 
      */
