@@ -1255,6 +1255,19 @@ public class Leetcode300 {
     }
 
     /**
+     * #266
+     * 
+     * @param s
+     * @return
+     */
+    public boolean canPermutePalindrome(String s) {
+        int[] count = new int['z' - 'a' + 1];
+        for (var c : s.toCharArray())
+            count[c - 'a']++;
+        return Arrays.stream(count).filter(v -> v % 2 == 1).count() <= 1;
+    }
+
+    /**
      * #269
      * 
      * @param words
