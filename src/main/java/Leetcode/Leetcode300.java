@@ -1255,6 +1255,23 @@ public class Leetcode300 {
     }
 
     /**
+     * #262 <code>
+     with res as (
+        select 
+        t.request_at as day, 
+        count(t.id) filter (where t.status != 'completed') over (partition by t.request_at) as cancel_count, 
+        count(t.id) over (partition by t.request_at) as day_count
+        from 
+    Trips t join Users c on t.client_id = c.users_id 
+    join Users d on t.driver_id = d.users_id 
+    where d.banned = 'No' and c.banned = 'No' and t.request_at between '2013-10-01' and '2013-10-03'
+    )
+    select distinct res.day as "Day", ROUND((CAST(res.cancel_count as numeric) / CAST(res.day_count as numeric)), 2) as "Cancellation Rate" from res where res.day_count > 0;
+    </code>
+     * 
+     */
+
+    /**
      * #266
      * 
      * @param s
