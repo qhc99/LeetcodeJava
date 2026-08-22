@@ -19,7 +19,6 @@ public class Disjointset {
         return parent[i];
     }
 
-
     void union(int a, int b) {
         var pa = parent(a);
         var pb = parent(b);

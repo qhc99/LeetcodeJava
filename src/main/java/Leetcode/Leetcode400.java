@@ -168,6 +168,42 @@ public class Leetcode400 {
     }
 
     /**
+     * #305
+     * 
+     * @param m
+     * @param n
+     * @param positions
+     * @return
+     */
+    public List<Integer> numIslands2(int m, int n, int[][] positions) {
+        int count = 0;
+        List<Integer> res = new ArrayList<>();
+        Disjointset set = new Disjointset(m * n);
+        int[] dx = { 0, 0, 1, -1 }, dy = { 1, -1, 0, 0 };
+        boolean[][] island = new boolean[m][n];
+        for (var p : positions) {
+            if (island[p[0]][p[1]]) {
+                res.add(count);
+                continue;
+            }
+            count++;
+            island[p[0]][p[1]] = true;
+            for (int i = 0; i < 4; i++) {
+                int x = p[0] + dx[i], y = p[1] + dy[i];
+                if (x >= 0 && x < m && y >= 0 && y < n && island[x][y]) {
+                    if (set.parent(p[0] * n + p[1]) != set.parent(x * n + y)) {
+                        count--;
+                        set.union(p[0] * n + p[1], x * n + y);
+                    }
+                }
+            }
+            res.add(count);
+
+        }
+        return res;
+    }
+
+    /**
      * #309
      *
      * @param prices
