@@ -56,6 +56,68 @@ public class Leetcode3500 {
     }
 
     /**
+     * #3441
+     * 
+     * @param caption
+     * @return
+     */
+    public String minCostGoodCaption(String caption) {
+        if (caption.length() < 3)
+            return "";
+        int[] dp = new int[caption.length() + 1];
+        char[] selected = new char[caption.length() + 1];
+        int[] size = new int[caption.length() + 1];
+        dp[caption.length()] = 0;
+        dp[caption.length() - 1] = dp[caption.length() - 2] = Integer.MAX_VALUE
+                / 2;
+        for (int i = caption.length() - 3; i >= 0; i--) {
+            var subStr3 = caption.substring(i, i + 3).toCharArray();
+            Arrays.sort(subStr3);
+            char c3 = subStr3[1];
+            int cost3 = subStr3[2] - subStr3[0];
+            var cmp3 = new int[] { dp[i + 3] + cost3, c3, selected[i + 3],
+                    selected[i + 3], selected[i + 3] };
+            size[i] = 3;
+            selected[i] = c3;
+
+            var cmp = cmp3;
+            if (i + 4 <= caption.length()) {
+                var subStr4 = caption.substring(i, i + 4).toCharArray();
+                Arrays.sort(subStr4);
+                char c4 = subStr4[1];
+                int cost4 = subStr4[2] + subStr4[3] - subStr4[0] - subStr4[1];
+                var cmp4 = new int[] { dp[i + 4] + cost4, c4, c4,
+                        selected[i + 4], selected[i + 4] };
+                if (Arrays.compare(cmp4, cmp) < 0) {
+                    cmp = cmp4;
+                    selected[i] = c4;
+                    size[i] = 4;
+                }
+            }
+            if (i + 5 <= caption.length()) {
+                var subStr5 = caption.substring(i, i + 5).toCharArray();
+                Arrays.sort(subStr5);
+                char c5 = subStr5[2];
+                int cost5 = subStr5[3] + subStr5[4] - subStr5[0] - subStr5[1];
+                var cmp5 = new int[] { dp[i + 5] + cost5, c5, c5, c5,
+                        selected[i + 5] };
+                if (Arrays.compare(cmp5, cmp) < 0) {
+                    cmp = cmp5;
+                    selected[i] = c5;
+                    size[i] = 5;
+                }
+            }
+            dp[i] = cmp[0];
+        }
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < caption.length();) {
+            sb.append(String.valueOf(selected[i]).repeat(size[i]));
+            i += size[i];
+        }
+        return sb.toString();
+    }
+
+    /**
      * #3474
      * 
      * @param str1
