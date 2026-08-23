@@ -1352,6 +1352,36 @@ public class Leetcode700 {
 
     }
 
+    static class Employee {
+        public int id;
+        public int importance;
+        public List<Integer> subordinates;
+    };
+
+    /**
+     * #690
+     * 
+     * @param employees
+     * @param id
+     * @return
+     */
+    public int getImportance(List<Employee> employees, int id) {
+        int res = 0;
+        Map<Integer, Employee> graph = new HashMap<>();
+        for (var e : employees)
+            graph.put(e.id, e);
+        Queue<Employee> queue = new ArrayDeque<>();
+        queue.add(graph.get(id));
+        while (!queue.isEmpty()) {
+            var e = queue.poll();
+            res += e.importance;
+            for (var sub : e.subordinates) {
+                queue.add(graph.get(sub));
+            }
+        }
+        return res;
+    }
+
     /**
      * #691
      * 
