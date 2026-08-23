@@ -239,40 +239,6 @@ public class Leetcode600 {
     }
 
     /**
-     * #515
-     * 
-     * @param root
-     * @return
-     */
-    public List<Integer> largestValues(TreeNode root) {
-        Map<Integer, Integer> levelMaxVal = new HashMap<>();
-        int maxLevel = 0;
-        List<Integer> res = new ArrayList<>();
-        Queue<NodeLevel> queue = new ArrayDeque<>();
-        if (root != null)
-            queue.add(new NodeLevel(root, 0));
-        while (!queue.isEmpty()) {
-            var nl = queue.poll();
-            maxLevel = Math.max(maxLevel, nl.level);
-            levelMaxVal.put(nl.level, Math.max(
-                    levelMaxVal.getOrDefault(nl.level, Integer.MIN_VALUE),
-                    nl.n.val));
-            if (nl.n.left != null)
-                queue.add(new NodeLevel(nl.n.left, nl.level + 1));
-            if (nl.n.right != null)
-                queue.add(new NodeLevel(nl.n.right, nl.level + 1));
-        }
-        if (!levelMaxVal.isEmpty()) {
-            for (int i = 0; i <= maxLevel; i++)
-                res.add(levelMaxVal.get(i));
-        }
-        return res;
-    }
-
-    static record NodeLevel(TreeNode n, int level) {
-    }
-
-    /**
      * #514
      */
     public static int findRotateSteps(String ring, String key) {
@@ -343,6 +309,40 @@ public class Leetcode600 {
             idx_ring = i_r;
             rotates = r;
         }
+    }
+
+    /**
+     * #515
+     * 
+     * @param root
+     * @return
+     */
+    public List<Integer> largestValues(TreeNode root) {
+        Map<Integer, Integer> levelMaxVal = new HashMap<>();
+        int maxLevel = 0;
+        List<Integer> res = new ArrayList<>();
+        Queue<NodeLevel> queue = new ArrayDeque<>();
+        if (root != null)
+            queue.add(new NodeLevel(root, 0));
+        while (!queue.isEmpty()) {
+            var nl = queue.poll();
+            maxLevel = Math.max(maxLevel, nl.level);
+            levelMaxVal.put(nl.level, Math.max(
+                    levelMaxVal.getOrDefault(nl.level, Integer.MIN_VALUE),
+                    nl.n.val));
+            if (nl.n.left != null)
+                queue.add(new NodeLevel(nl.n.left, nl.level + 1));
+            if (nl.n.right != null)
+                queue.add(new NodeLevel(nl.n.right, nl.level + 1));
+        }
+        if (!levelMaxVal.isEmpty()) {
+            for (int i = 0; i <= maxLevel; i++)
+                res.add(levelMaxVal.get(i));
+        }
+        return res;
+    }
+
+    static record NodeLevel(TreeNode n, int level) {
     }
 
     /**
