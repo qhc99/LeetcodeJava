@@ -346,6 +346,31 @@ public class Leetcode600 {
     }
 
     /**
+     * #516
+     * 
+     * @param s
+     * @return
+     */
+    public int longestPalindromeSubseq(String s) {
+        // dp[i,j] = (i != j ? 2 : 1) + dp[i+1][j-1], s[i] == s[j]
+        // dp[i,j] = max(dp[i+1,j],dp[i,j-1]), s[i] != s[j]
+        int[] dp = new int[s.length()];
+        for (int i = s.length() - 1; i >= 0; i--) {
+            int prev = 0, temp = 0;
+            for (int j = i; j < s.length(); j++) {
+                temp = dp[j];
+                if (s.charAt(i) == s.charAt(j)) {
+                    dp[j] = (i != j ? 2 : 1) + (j - 1 >= i + 1 ? prev : 0);
+                } else {
+                    dp[j] = Math.max(dp[j], dp[j - 1]);
+                }
+                prev = temp;
+            }
+        }
+        return dp[s.length() - 1];
+    }
+
+    /**
      * #518
      * 
      * @param amount
