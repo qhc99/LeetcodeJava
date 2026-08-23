@@ -3089,6 +3089,31 @@ public class Leetcode500 {
     }
 
     /**
+     * #465
+     * 
+     * @param transactions
+     * @return
+     */
+    public int minTransfers(int[][] transactions) {
+        int[] count = new int[12];
+        for (var transc : transactions) {
+            count[transc[0]] -= transc[2];
+            count[transc[1]] += transc[2];
+        }
+        Queue<Integer> min = new PriorityQueue<>(),
+                max = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+        for (var c : count) {
+            if (c > 0)
+                max.add(c);
+            else if (c < 0)
+                min.add(c);
+        }
+        int res = 0;
+
+        return res;
+    }
+
+    /**
      * #468
      *
      * @param queryIP
@@ -3569,6 +3594,46 @@ public class Leetcode500 {
         }
         max = Math.max(max, count);
         return max;
+    }
+
+    /**
+     * #486
+     * 
+     * @param nums
+     * @return
+     */
+    public boolean predictTheWinner(int[] nums) {
+        Map<Range, long[]> cache = new HashMap<>();
+        var score = scoreOfGame(nums, 0, nums.length, cache);
+        return score[0] >= score[1];
+    }
+
+    static record Range(int l, int r) {
+    }
+
+    long[] scoreOfGame(int[] nums, int l, int r, Map<Range, long[]> cache) {
+        if (r - l == 1) {
+            return new long[] { nums[l], 0 };
+        }
+        var range = new Range(l, r);
+        var res = cache.get(range);
+        if (res != null)
+            return new long[] { res[0], res[1] };
+        var s1 = scoreOfGame(nums, l, r - 1, cache);
+        var s2 = scoreOfGame(nums, l + 1, r, cache);
+        s1[1] += nums[r - 1];
+        s2[1] += nums[l];
+        var d1 = s1[1] - s1[0];
+        var d2 = s2[1] - s2[0];
+        if (d1 >= d2)
+            res = s1;
+        else
+            res = s2;
+        var t = res[0];
+        res[0] = res[1];
+        res[1] = t;
+        cache.put(range, res);
+        return new long[] { res[0], res[1] };
     }
 
     interface Robot {
