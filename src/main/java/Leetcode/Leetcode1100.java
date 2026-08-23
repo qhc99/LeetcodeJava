@@ -627,6 +627,27 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1064
+     * 
+     * @param arr
+     * @return
+     */
+    public int fixedPoint(int[] arr) {
+        int l = 0, r = arr.length - 1;
+        while (r - l > 0) {
+            int mid = l + (r - l) / 2;
+            if (arr[mid] - mid >= 0) {
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        if (arr[l] - l == 0)
+            return l;
+        return -1;
+    }
+
+    /**
      * #1087
      * 
      * @param s
