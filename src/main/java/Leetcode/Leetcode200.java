@@ -1600,38 +1600,24 @@ public class Leetcode200 {
      */
     public int calculateMinimumHP(int[][] dungeon) {
         int m = dungeon.length, n = dungeon[0].length;
-        boolean[][] visited = new boolean[m][n];
-        Queue<Adeventure> queue = new PriorityQueue<>(
-                (a, b) -> Integer.compare(b.health, a.health));
-        visited[0][0] = true;
-        if (m == 1 && n == 1)
-            return Math.min(1, 1 - dungeon[0][0]);
-        queue.add(new Adeventure(0, 0, dungeon[0][0], dungeon[0][0]));
-        int[] dx = { 0, 1 };
-        int[] dy = { 1, 0 };
-        int res = 1;
-        while (!queue.isEmpty()) {
-            var p = queue.poll();
-            int i = p.i, j = p.j;
-            for (int t = 0; t < 2; t++) {
-                int x = i + dx[t];
-                int y = j + dy[t];
-                if (x < m && y < n && !visited[x][y]) {
-                    visited[x][y] = true;
-                    int h = dungeon[x][y] + p.health;
-                    var next = new Adeventure(x, y, h,
-                            Math.min(h, p.min_health));
-                    if (x == m - 1 && y == n - 1) {
-                        return Math.max(1, 1 - next.min_health);
-                    }
-                    queue.add(next);
+        int[][] dp = new int[m][n];
+        // x + v >= 1
+        // x >= 1
+        // x + v >= min
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = n - 1; j >= 0; j--) {
+                var d = i + 1 < m ? dp[i + 1][j] : Integer.MAX_VALUE;
+                var r = j + 1 < n ? dp[i][j + 1] : Integer.MAX_VALUE;
+                var min = Math.min(d, r);
+                if (min != Integer.MAX_VALUE) {
+                    dp[i][j] = Math.max(1, min - dungeon[i][j]);
+                } else {
+                    dp[i][j] = Math.max(1, 1 - dungeon[i][j]);
+                    ;
                 }
             }
         }
-        return res;
-    }
-
-    static record Adeventure(int i, int j, int health, int min_health) {
+        return dp[0][0];
     }
 
     // 186
