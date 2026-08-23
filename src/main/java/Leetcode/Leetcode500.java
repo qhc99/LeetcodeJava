@@ -2172,6 +2172,71 @@ public class Leetcode500 {
         }
     }
 
+    static class Nest427 {
+        /**
+        * #427
+        * @param grid
+        * @return
+        */
+        public Node construct(int[][] grid) {
+            int m = grid.length;
+            return build(grid, new int[] { 0, 0 }, m);
+        }
+
+        Node build(int[][] grid, int[] p, int size) {
+            if (size == 1)
+                return new Node(grid[p[0]][p[1]] == 1, true);
+            size /= 2;
+            var tl = build(grid, p, size);
+            var tr = build(grid, new int[] { p[0], p[1] + size }, size);
+            var bl = build(grid, new int[] { p[0] + size, p[1] }, size);
+            var br = build(grid, new int[] { p[0] + size, p[1] + size }, size);
+            if (tl.isLeaf && tr.isLeaf && bl.isLeaf && br.isLeaf
+                    && tl.val == tr.val && tr.val == bl.val
+                    && bl.val == br.val) {
+                return new Node(tl.val, true);
+            }
+            return new Node(false, false, tl, tr, bl, br);
+        }
+
+        static class Node {
+            public boolean val;
+            public boolean isLeaf;
+            public Node topLeft;
+            public Node topRight;
+            public Node bottomLeft;
+            public Node bottomRight;
+
+            public Node() {
+                this.val = false;
+                this.isLeaf = false;
+                this.topLeft = null;
+                this.topRight = null;
+                this.bottomLeft = null;
+                this.bottomRight = null;
+            }
+
+            public Node(boolean val, boolean isLeaf) {
+                this.val = val;
+                this.isLeaf = isLeaf;
+                this.topLeft = null;
+                this.topRight = null;
+                this.bottomLeft = null;
+                this.bottomRight = null;
+            }
+
+            public Node(boolean val, boolean isLeaf, Node topLeft,
+                    Node topRight, Node bottomLeft, Node bottomRight) {
+                this.val = val;
+                this.isLeaf = isLeaf;
+                this.topLeft = topLeft;
+                this.topRight = topRight;
+                this.bottomLeft = bottomLeft;
+                this.bottomRight = bottomRight;
+            }
+        }
+    }
+
     /**
      * #428 Codec
      */
