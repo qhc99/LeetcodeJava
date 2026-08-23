@@ -3100,17 +3100,35 @@ public class Leetcode500 {
             count[transc[0]] -= transc[2];
             count[transc[1]] += transc[2];
         }
-        Queue<Integer> min = new PriorityQueue<>(),
-                max = new PriorityQueue<>((a, b) -> Integer.compare(b, a));
+        List<Integer> debt = new ArrayList<>();
         for (var c : count) {
-            if (c > 0)
-                max.add(c);
-            else if (c < 0)
-                min.add(c);
+            if (c != 0)
+                debt.add(c);
         }
-        int res = 0;
+        if (debt.isEmpty())
+            return 0;
+        debt.sort(Integer::compareTo);
+        int[] groups = new int[1 << debt.size()];
+        Arrays.fill(groups, -1);
+        return debt.size() - maxGroups((1 << debt.size()) - 1, groups, 0, debt);
+    }
 
-        return res;
+    int maxGroups(int state, int[] groups, int sum, List<Integer> debt) {
+        if (state == 0)
+            return 0;
+        if (groups[state] != -1)
+            return groups[state];
+        int group = 0;
+        for (int i = 0; i < debt.size(); i++) {
+            if ((state & (1 << i)) != 0) {
+                var nextState = state ^ (1 << i);
+                var nextSum = sum - debt.get(i);
+                group = Math.max(group,
+                        maxGroups(nextState, groups, nextSum, debt));
+            }
+        }
+        groups[state] = group + (sum == 0 ? 1 : 0);
+        return groups[state];
     }
 
     /**
