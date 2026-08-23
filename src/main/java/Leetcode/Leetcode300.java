@@ -1166,6 +1166,39 @@ public class Leetcode300 {
     }
 
     /**
+     * #254
+     * @param n
+     * @return
+     */
+    public List<List<Integer>> getFactors(int n) {
+        List<List<Integer>> res = new ArrayList<>();
+        for (int i = 2; i <= Math.sqrt(n); i++) {
+            if (n % i == 0) {
+                List<Integer> l = new ArrayList<>();
+                l.add(i);
+                l.add(n / i);
+                dfsFactors(l, res);
+            }
+        }
+        return res;
+    }
+
+    void dfsFactors(List<Integer> current, List<List<Integer>> res) {
+        res.add(new ArrayList<>(current));
+        var last = current.removeLast();
+        for (int i = current.getLast(); i <= Math.sqrt(last); i++) {
+            if (last % i == 0) {
+                current.add(i);
+                current.add(last / i);
+                dfsFactors(current, res);
+                current.removeLast();
+                current.removeLast();
+            }
+        }
+        current.add(last);
+    }
+
+    /**
      * #255
      * 
      * @param preorder
