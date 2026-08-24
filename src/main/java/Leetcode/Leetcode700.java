@@ -1638,4 +1638,86 @@ public class Leetcode700 {
         }
         return dp[(1 << list.size()) - 1] == 0;
     }
+
+    /**
+     * #699
+     * @param positions
+     * @return
+     */
+    public List<Integer> fallingSquares(int[][] positions) {
+        List<Integer> res = new ArrayList<>();
+        var seg = new SegTree(1, 101_000_000);
+        for (var p : positions) {
+            int l = p[0], r = l + p[1];
+            var h = seg.queryMaxHeight(l, r) + p[1];
+            seg.insert(l, r, h);
+            res.add(seg.maxHeight);
+        }
+        return res;
+    }
+
+    static class SegTree {
+        int maxHeightCache, maxHeight, rangeLeft, rangeRight; // [left,right)
+        SegTree left = null, right = null;
+
+        SegTree(int l, int r) {
+            rangeLeft = l;
+            rangeRight = r;
+        }
+
+        int queryMaxHeight(int l, int r) {
+            if (l == rangeLeft && r == rangeRight) {
+                return maxHeight;
+            }
+            clearCache();
+            int rangeMid = rangeLeft + (rangeRight - rangeLeft) / 2;
+            int res = 0;
+            if (r > rangeMid && right != null) {
+                res = Math.max(res,
+                        right.queryMaxHeight(Math.max(rangeMid, l), r));
+            }
+            if (l < rangeMid && left != null) {
+                res = Math.max(res,
+                        left.queryMaxHeight(l, Math.min(rangeMid, r)));
+            }
+            return res;
+        }
+
+        void clearCache() {
+            if (maxHeightCache > 0) {
+                int rangeMid = rangeLeft + (rangeRight - rangeLeft) / 2;
+                if (right == null)
+                    right = new SegTree(rangeMid, rangeRight);
+                if (left == null)
+                    left = new SegTree(rangeLeft, rangeMid);
+                left.maxHeightCache = Math.max(left.maxHeightCache,
+                        maxHeightCache);
+                right.maxHeightCache = Math.max(right.maxHeightCache,
+                        maxHeightCache);
+                left.maxHeight = Math.max(left.maxHeight, maxHeightCache);
+                right.maxHeight = Math.max(right.maxHeight, maxHeightCache);
+                maxHeightCache = 0;
+            }
+        }
+
+        void insert(int l, int r, int h) {
+            maxHeight = Math.max(h, maxHeight);
+            if (l == rangeLeft && r == rangeRight) {
+                maxHeightCache = Math.max(h, maxHeightCache);
+                return;
+            }
+            clearCache();
+            int rangeMid = rangeLeft + (rangeRight - rangeLeft) / 2;
+            if (r > rangeMid) {
+                if (right == null)
+                    right = new SegTree(rangeMid, rangeRight);
+                right.insert(Math.max(rangeMid, l), r, h);
+            }
+            if (l < rangeMid) {
+                if (left == null)
+                    left = new SegTree(rangeLeft, rangeMid);
+                left.insert(l, Math.min(rangeMid, r), h);
+            }
+        }
+    }
 }
