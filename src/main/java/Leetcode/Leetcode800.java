@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
 import java.util.TreeMap;
@@ -290,6 +291,36 @@ public class Leetcode800 {
                 ptr = ptr.next;
             }
             return head;
+        }
+    }
+
+    static class Nest710 {
+        class Solution {
+            TreeMap<Integer, Integer> list = new TreeMap<>();
+            int size;
+            Random rand = new Random();
+
+            public Solution(int n, int[] blacklist) {
+                Arrays.sort(blacklist);
+                int l = -1;
+                for (var b : blacklist) {
+                    if (b - (l + 1) >= 1) {
+                        list.put(size, l + 1);
+                        size += b - (l + 1);
+                    }
+                    l = b;
+                }
+                if (n - (l + 1) >= 1) {
+                    list.put(size, l + 1);
+                    size += n - (l + 1);
+                }
+            }
+
+            public int pick() {
+                var idx = rand.nextInt(size);
+                var floor = list.floorKey(idx);
+                return list.get(floor) + (idx - floor);
+            }
         }
     }
 
