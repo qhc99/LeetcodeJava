@@ -296,11 +296,45 @@ public class Leetcode800 {
 
     static class Nest710 {
         class Solution {
-            TreeMap<Integer, Integer> list = new TreeMap<>();
+            Map<Integer, Integer> b2w;
             int size;
             Random rand = new Random();
 
             public Solution(int n, int[] blacklist) {
+                size = n - blacklist.length;
+                int w = size;
+                Arrays.sort(blacklist);
+                int bw2Size = 0;
+                Set<Integer> black = new HashSet<>(blacklist.length);
+                for (var b : blacklist) {
+                    black.add(b);
+                    if (b < size)
+                        bw2Size++;
+                }
+                b2w = new HashMap<>(bw2Size);
+                for (var b : blacklist) {
+                    if (b >= size)
+                        break;
+                    while (black.contains(w)) {
+                        w++;
+                    }
+                    b2w.put(b, w++);
+
+                }
+            }
+
+            public int pick() {
+                var idx = rand.nextInt(size);
+                return b2w.getOrDefault(idx, idx);
+            }
+        }
+
+        class Solution2 {
+            TreeMap<Integer, Integer> list = new TreeMap<>();
+            int size;
+            Random rand = new Random();
+
+            public Solution2(int n, int[] blacklist) {
                 Arrays.sort(blacklist);
                 int l = -1;
                 for (var b : blacklist) {
