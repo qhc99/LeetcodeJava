@@ -1683,19 +1683,25 @@ public class Leetcode700 {
             return res;
         }
 
+        SegTree getLeft() {
+            int rangeMid = rangeLeft + (rangeRight - rangeLeft) / 2;
+            if (left == null)
+                left = new SegTree(rangeLeft, rangeMid);
+            return left;
+        }
+
+        SegTree getRight() {
+            int rangeMid = rangeLeft + (rangeRight - rangeLeft) / 2;
+            if (right == null)
+                right = new SegTree(rangeMid, rangeRight);
+            return right;
+        }
+
         void clearCache() {
             if (maxHeightCache > 0) {
                 int rangeMid = rangeLeft + (rangeRight - rangeLeft) / 2;
-                if (right == null)
-                    right = new SegTree(rangeMid, rangeRight);
-                if (left == null)
-                    left = new SegTree(rangeLeft, rangeMid);
-                left.maxHeightCache = Math.max(left.maxHeightCache,
-                        maxHeightCache);
-                right.maxHeightCache = Math.max(right.maxHeightCache,
-                        maxHeightCache);
-                left.maxHeight = Math.max(left.maxHeight, maxHeightCache);
-                right.maxHeight = Math.max(right.maxHeight, maxHeightCache);
+                getLeft().insert(rangeLeft, rangeMid, maxHeightCache);
+                getRight().insert(rangeMid, rangeRight, maxHeightCache);
                 maxHeightCache = 0;
             }
         }
@@ -1708,16 +1714,11 @@ public class Leetcode700 {
             }
             clearCache();
             int rangeMid = rangeLeft + (rangeRight - rangeLeft) / 2;
-            if (r > rangeMid) {
-                if (right == null)
-                    right = new SegTree(rangeMid, rangeRight);
-                right.insert(Math.max(rangeMid, l), r, h);
-            }
-            if (l < rangeMid) {
-                if (left == null)
-                    left = new SegTree(rangeLeft, rangeMid);
-                left.insert(l, Math.min(rangeMid, r), h);
-            }
+            if (r > rangeMid)
+                getRight().insert(Math.max(rangeMid, l), r, h);
+
+            if (l < rangeMid)
+                getLeft().insert(l, Math.min(rangeMid, r), h);
         }
     }
 }
