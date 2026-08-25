@@ -72,6 +72,36 @@ public class Leetcode1500 {
         return res;
     }
 
+    interface BinaryMatrix {
+        public int get(int row, int col);
+
+        public List<Integer> dimensions();
+    }
+
+    /**
+     * #1428
+     * @param binaryMatrix
+     * @return
+     */
+    public int leftMostColumnWithOne(BinaryMatrix binaryMatrix) {
+        var dim = binaryMatrix.dimensions();
+        int row = dim.get(0), col = dim.get(1);
+        int res = col;
+        for (int i = 0; i < row; i++) {
+            int l = 0, r = res;
+            while (r - l > 0) {
+                int mid = l + (r - l) / 2;
+                if (binaryMatrix.get(i, mid) == 1) {
+                    r = mid;
+                } else {
+                    l = mid + 1;
+                }
+            }
+            res = l;
+        }
+        return res < col ? res : -1;
+    }
+
     /**
      * #1446
      *
