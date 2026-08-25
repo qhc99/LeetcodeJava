@@ -160,6 +160,52 @@ public class Leetcode1200 {
     }
 
     /**
+     * #1152
+     * @param username
+     * @param timestamp
+     * @param website
+     * @return
+     */
+    public List<String> mostVisitedPattern(String[] username, int[] timestamp,
+            String[] website) {
+        String[] res = null;
+        int max = 0;
+        List<int[]> idx = new ArrayList<>();
+        for (int i = 0; i < timestamp.length; i++) {
+            idx.add(new int[] { i, timestamp[i] });
+        }
+        idx.sort((a, b) -> Integer.compare(a[1], b[1]));
+        Map<List<String>, Set<String>> totalPatternCount = new HashMap<>();
+        Map<String, List<Set<List<String>>>> use2patternCount = new HashMap<>();
+        for (var id : idx) {
+            var i = id[0];
+            var pattern = use2patternCount.computeIfAbsent(username[i],
+                    k -> List.of(new HashSet<>(), new HashSet<>()));
+            var site = website[i];
+            for (var prefix : pattern.get(1)) {
+                var p = List.of(prefix.get(0), prefix.get(1), site);
+                totalPatternCount.computeIfAbsent(p, k -> new HashSet<>())
+                        .add(username[i]);
+                if (totalPatternCount.get(p).size() > max) {
+                    max = totalPatternCount.get(p).size();
+                    res = p.toArray(new String[] {});
+                } else if (totalPatternCount.get(p).size() == max && Arrays
+                        .compare(p.toArray(new String[] {}), res) < 0) {
+                    res = p.toArray(new String[] {});
+                }
+            }
+            for (var prefix : pattern.get(0)) {
+                var p = List.of(prefix.get(0), site);
+                pattern.get(1).add(p);
+            }
+            var p = List.of(site);
+            pattern.get(0).add(p);
+
+        }
+        return List.of(res[0], res[1], res[2]);
+    }
+
+    /**
      * #1162
      * 
      * @param grid
