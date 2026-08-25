@@ -962,6 +962,40 @@ public class Leetcode600 {
     }
 
     /**
+     * #564
+     * @param n
+     * @return
+     */
+    public String nearestPalindromic(String n) {
+        String prefix = n.substring(0, (n.length() + 1) / 2);
+        List<Long> candidates = new ArrayList<>();
+        if (n.length() - 1 >= 0)
+            candidates
+                    .add(Long.valueOf("1" + "0".repeat(n.length() - 1) + "1"));
+        candidates.add(1l);
+        candidates.add(0l);
+        if (n.length() > 1)
+            candidates.add(Long.valueOf("9".repeat(n.length() - 1)));
+        var val = Long.valueOf(prefix);
+        long res = 0, dist = Long.MAX_VALUE;
+        for (var d : List.of(-1, 0, 1)) {
+            var v = d + val;
+            var strV = String.valueOf(v);
+            candidates.add(Long.valueOf(strV + new StringBuilder(strV).reverse()
+                    .substring(n.length() & 1)));
+        }
+        long nv = Long.valueOf(n);
+        for (long c : candidates) {
+            if (c != nv && (Math.abs(c - nv) < dist
+                    || (Math.abs(c - nv) == dist && c < res))) {
+                res = c;
+                dist = Math.abs(c - nv);
+            }
+        }
+        return String.valueOf(res);
+    }
+
+    /**
      * #565
      * 
      * @param nums
