@@ -124,6 +124,41 @@ public class Leetcode1500 {
     }
 
     /**
+     * #1438
+     * @param nums
+     * @param limit
+     * @return
+     */
+    public int longestSubarray(int[] nums, int limit) {
+        // desc max
+        // asec min
+        int l = 0, res = 0;
+        Deque<Integer> max = new ArrayDeque<>(), min = new ArrayDeque<>();
+        for (int r = 0; r < nums.length; r++) {
+            while (!max.isEmpty() && nums[r] >= nums[max.peekLast()]) {
+                max.pollLast();
+            }
+            max.addLast(r);
+            while (!min.isEmpty() && nums[r] <= nums[min.peekLast()]) {
+                min.pollLast();
+            }
+            min.addLast(r);
+            while (l <= r
+                    && nums[max.peekFirst()] - nums[min.peekFirst()] > limit) {
+                while (!max.isEmpty() && max.peekFirst() <= l) {
+                    max.pollFirst();
+                }
+                while (!min.isEmpty() && min.peekFirst() <= l) {
+                    min.pollFirst();
+                }
+                l++;
+            }
+            res = Math.max(res, r + 1 - l);
+        }
+        return res;
+    }
+
+    /**
      * #1446
      *
      * @param s
