@@ -1176,6 +1176,45 @@ public class Leetcode800 {
         return dp[count.size() - 1];
     }
 
+    public int cherryPickup(int[][] grid) {
+        int m = grid.length;
+        int[][] dp = new int[m][m];
+        for (var r : dp) {
+            Arrays.fill(r, Integer.MIN_VALUE);
+        }
+        dp[0][0] = grid[0][0];
+        for (int k = 1; k <= 2 * (m - 1); k++) {
+            for (int x1 = Math.min(k, m - 1); x1 >= Math.max(0,
+                    k - m + 1); x1--) {
+                for (int x2 = Math.min(k, m - 1); x2 >= x1; x2--) {
+                    if (grid[x1][k - x1] == -1 || grid[x2][k - x2] == -1) {
+                        dp[x1][x2] = Integer.MIN_VALUE;
+                        continue;
+                    }
+                    int max = Integer.MIN_VALUE;
+                    max = Math.max(max, dp[x1][x2]);
+                    if (x1 - 1 >= 0)
+                        max = Math.max(max, dp[x1 - 1][x2]);
+                    if (x2 - 1 >= 0)
+                        max = Math.max(max, dp[x1][x2 - 1]);
+                    if (x1 - 1 >= 0 && x2 - 1 >= 0)
+                        max = Math.max(max, dp[x1 - 1][x2 - 1]);
+                    if (max == Integer.MIN_VALUE) {
+                        dp[x1][x2] = Integer.MIN_VALUE;
+                        continue;
+                    }
+                    if (x1 != x2) {
+                        max += grid[x1][k - x1];
+                        max += grid[x2][k - x2];
+                    } else
+                        max += grid[x1][k - x1];
+                    dp[x1][x2] = max;
+                }
+            }
+        }
+        return Math.max(dp[m - 1][m - 1], 0);
+    }
+
     /**
      * #743
      *
