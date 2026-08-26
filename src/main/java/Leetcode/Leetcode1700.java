@@ -4,6 +4,25 @@ import java.util.*;
 
 @SuppressWarnings({ "Unused", "JavadocDeclaration" })
 public class Leetcode1700 {
+
+    static class Q1603 {
+        class ParkingSystem {
+            int[] space;
+
+            public ParkingSystem(int big, int medium, int small) {
+                space = new int[] { big, medium, small };
+            }
+
+            public boolean addCar(int carType) {
+                if (space[carType - 1] > 0) {
+                    space[carType - 1]--;
+                    return true;
+                }
+                return false;
+            }
+        }
+    }
+
     /**
      * #1604
      * 

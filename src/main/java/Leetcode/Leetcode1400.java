@@ -59,6 +59,17 @@ public class Leetcode1400 {
     }
 
     /**
+     * #1334
+     * @param n
+     * @param edges
+     * @param distanceThreshold
+     * @return
+     */
+    public int findTheCity(int n, int[][] edges, int distanceThreshold) {
+        return 0;
+    }
+
+    /**
      * #1335
      * 
      * @param jobDifficulty
