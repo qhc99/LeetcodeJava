@@ -219,6 +219,37 @@ public class Leetcode1400 {
     }
 
     /**
+     * #1385
+     * @param arr1
+     * @param arr2
+     * @param d
+     * @return
+     */
+    public int findTheDistanceValue(int[] arr1, int[] arr2, int d) {
+        Arrays.sort(arr2);
+        int res = 0;
+        for (var v : arr1) {
+            var idx = Arrays.binarySearch(arr2, v);
+            if (idx < 0) {
+                idx = -(idx + 1);
+                if (idx >= arr2.length) {
+                    if (Math.abs(arr2[arr2.length - 1] - v) > d)
+                        res++;
+                } else {
+                    if (idx - 1 >= 0) {
+                        if (Math.abs(arr2[idx] - v) > d
+                                && Math.abs(arr2[idx - 1] - v) > d)
+                            res++;
+                    } else if (Math.abs(arr2[idx] - v) > d) {
+                        res++;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    /**
      * #1392
      * 
      * @param s
