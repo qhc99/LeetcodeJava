@@ -6,6 +6,27 @@ import java.util.*;
 public class Leetcode1500 {
 
     /**
+     * #1400
+     * @param s
+     * @param k
+     * @return
+     */
+    public boolean canConstruct(String s, int k) {
+        int[] count = new int['z' - 'a' + 1];
+        for (var c : s.toCharArray())
+            count[c - 'a']++;
+        int evenGroups = 0;
+        int oddGroups = 0;
+        for (var c : count) {
+            if (c != 0) {
+                evenGroups += c / 2;
+                oddGroups += c % 2;
+            }
+        }
+        return k >= oddGroups && oddGroups + evenGroups * 2 >= k;
+    }
+
+    /**
      * #1405
      * 
      * @param a
