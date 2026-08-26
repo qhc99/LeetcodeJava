@@ -1262,7 +1262,32 @@ public class Leetcode900 {
      * @return
      */
     public int superEggDrop(int k, int n) {
-        return 0;
+        Map<DropState, Integer> cache = new HashMap<>();
+        return eggDrop(k, n + 1, cache);
+    }
+
+    int eggDrop(int k, int n, Map<DropState, Integer> cache) {
+        var state = new DropState(k, n);
+        var res = cache.get(state);
+        if (res != null)
+            return res;
+        if (k == 1 || n <= 1)
+            return n - 1;
+        int l = 1, r = n;
+        while (r - l > 1) {
+            int mid = l + (r - l) / 2;
+            if (eggDrop(k - 1, mid, cache) <= eggDrop(k, n - mid, cache)) {
+                l = mid;
+            } else {
+                r = mid;
+            }
+        }
+        res = 1 + Math.max(eggDrop(k - 1, l, cache), eggDrop(k, n - l, cache));
+        cache.put(state, res);
+        return res;
+    }
+
+    static record DropState(int k, int n) {
     }
 
     /**
