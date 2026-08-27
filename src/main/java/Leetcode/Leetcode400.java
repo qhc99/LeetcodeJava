@@ -865,7 +865,7 @@ public class Leetcode400 {
         for (int i = 0; i < n; i++) {
             set.parent(i);
         }
-        return (int) Arrays.stream(set.parent).distinct().count();
+        return (int) Arrays.stream(set.prev).distinct().count();
     }
 
     /**

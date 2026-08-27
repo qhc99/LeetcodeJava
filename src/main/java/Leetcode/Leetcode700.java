@@ -1539,7 +1539,7 @@ public class Leetcode700 {
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
                 if (grid[i][j] == 0) {
-                    set.parent[i * n + j] = -1;
+                    set.prev[i * n + j] = -1;
                 } else {
                     if (j + 1 < n && grid[i][j + 1] == 1) {
                         set.union(i * n + j, i * n + j + 1);
@@ -1553,7 +1553,7 @@ public class Leetcode700 {
         Map<Integer, Integer> count = new HashMap<>();
         int res = 0;
         for (int i = 0; i < m * n; i++) {
-            if (set.parent[i] != -1) {
+            if (set.prev[i] != -1) {
                 var p = set.parent(i);
                 var v = count.getOrDefault(p, 0) + 1;
                 count.put(p, v);

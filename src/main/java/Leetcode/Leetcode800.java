@@ -1582,7 +1582,7 @@ public class Leetcode800 {
             unions.union(couple1, couple2);
         }
         int count = 0;
-        for (int d = 0; d < unions.parent.length; d++) {
+        for (int d = 0; d < unions.prev.length; d++) {
             if (d == unions.parent(d)) {
                 count++;
             }

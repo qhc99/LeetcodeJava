@@ -1,22 +1,29 @@
 package Leetcode;
 
 public class Disjointset {
-    public int[] parent;
+    public int[] prev;
     int[] rank;
 
+    Disjointset(Disjointset d) {
+        prev = new int[d.prev.length];
+        rank = new int[d.rank.length];
+        System.arraycopy(d.prev, 0, prev, 0, prev.length);
+        System.arraycopy(d.rank, 0, rank, 0, rank.length);
+    }
+
     Disjointset(int len) {
-        parent = new int[len];
+        prev = new int[len];
         rank = new int[len];
         for (int i = 0; i < len; i++) {
-            parent[i] = i;
+            prev[i] = i;
         }
     }
 
     int parent(int i) {
-        if (parent[i] != i) {
-            parent[i] = parent(parent[i]);
+        if (prev[i] != i) {
+            prev[i] = parent(prev[i]);
         }
-        return parent[i];
+        return prev[i];
     }
 
     void union(int a, int b) {
@@ -25,9 +32,9 @@ public class Disjointset {
         if (pa == pb)
             return;
         if (rank[pa] < rank[pb]) {
-            parent[pa] = pb;
+            prev[pa] = pb;
         } else {
-            parent[pb] = pa;
+            prev[pb] = pa;
             if (rank[pa] == rank[pb])
                 rank[pa]++;
         }

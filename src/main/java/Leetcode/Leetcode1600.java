@@ -178,6 +178,16 @@ public class Leetcode1600 {
     }
 
     /**
+     * #1579
+     * @param n
+     * @param edges
+     * @return
+     */
+    public int maxNumEdgesToRemove(int n, int[][] edges) {
+        return 0;
+    }
+
+    /**
      * #1584
      * 
      * @param points
