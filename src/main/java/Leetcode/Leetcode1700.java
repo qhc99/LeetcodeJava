@@ -304,6 +304,37 @@ public class Leetcode1700 {
         }
     }
 
+    /* #1651
+    with monthly_total as (
+    select
+    extract(month from requested_at ) as month,
+    sum(ride_distance) as total_dist,
+    sum(ride_duration) as total_duration
+    from Rides natural join AcceptedRides 
+    where extract(year from requested_at) = 2020 
+    group by month
+    ),
+    months as (
+    select * from generate_series(1,12,1) as month
+    ),
+    all_res as (
+    select 
+    months.month,
+    round(
+        (sum(
+            coalesce(total_dist,0)) 
+            over (order by months.month range between current row and 2 following)) / 3
+    ,2) as average_ride_distance,
+    round(
+    (sum(
+            coalesce(total_duration,0)) 
+            over (order by months.month range between current row and 2 following)) / 3
+    ,2) as average_ride_duration  
+    from months left join monthly_total on monthly_total.month=months.month 
+    order by months.month
+    )
+    select * from all_res where month <= 10
+    */
     /**
      * #1657
      * 
