@@ -3,6 +3,59 @@ package Leetcode;
 import java.util.*;
 
 public class Leetcode1600 {
+
+    /**
+     * #1519
+     * @param n
+     * @param edges
+     * @param labels
+     * @return
+     */
+    public int[] countSubTrees(int n, int[][] edges, String labels) {
+        int[] res = new int[n];
+        Map<Integer, List<Integer>> graph = new HashMap<>();
+        for (var e : edges) {
+            graph.computeIfAbsent(e[0], k -> new ArrayList<>()).add(e[1]);
+            graph.computeIfAbsent(e[1], k -> new ArrayList<>()).add(e[0]);
+        }
+        Set<Integer> seen = new HashSet<>();
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(0);
+        seen.add(0);
+        while (!queue.isEmpty()) {
+            var node = queue.poll();
+            var nbs = graph.getOrDefault(node, List.of());
+            for (var nb : nbs) {
+                if (!seen.contains(nb)) {
+                    seen.add(nb);
+                    queue.add(nb);
+                }
+            }
+        }
+        seen.clear();
+        visitTree(0, graph, seen, labels, res);
+        return res;
+    }
+
+    Map<Character, Integer> visitTree(int i, Map<Integer, List<Integer>> graph,
+            Set<Integer> seen, String labels, int[] res) {
+        seen.add(i);
+        var c = labels.charAt(i);
+        Map<Character, Integer> count = new HashMap<>();
+        for (var nb : graph.getOrDefault(i, List.of())) {
+            if (seen.contains(nb))
+                continue;
+            var countChild = visitTree(nb, graph, seen, labels, res);
+            for (var entry : countChild.entrySet()) {
+                count.put(entry.getKey(), entry.getValue()
+                        + count.getOrDefault(entry.getKey(), 0));
+            }
+        }
+        count.put(c, count.getOrDefault(c, 0) + 1);
+        res[i] = count.get(c);
+        return count;
+    }
+
     /**
      * #1529
      * 
