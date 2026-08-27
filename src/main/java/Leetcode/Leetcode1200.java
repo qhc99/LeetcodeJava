@@ -335,6 +335,29 @@ public class Leetcode1200 {
     }
 
     /**
+     * #1171
+     * @param head
+     * @return
+     */
+    public ListNode removeZeroSumSublists(ListNode head) {
+        ListNode handle = new ListNode();
+        handle.next = head;
+        Map<Integer, ListNode> prefixSum = new HashMap<>();
+        int sum = 0;
+        for (var ptr = handle; ptr != null; ptr = ptr.next) {
+            sum += ptr.val;
+            prefixSum.put(sum, ptr);
+        }
+        sum = 0;
+        for (var ptr = handle; ptr != null; ptr = ptr.next) {
+            sum += ptr.val;
+            ptr.next = prefixSum.get(sum).next;
+        }
+
+        return handle.next;
+    }
+
+    /**
      * #1195 FizzBuzz
      */
     class FizzBuzz {
