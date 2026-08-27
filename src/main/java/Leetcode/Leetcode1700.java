@@ -228,6 +228,45 @@ public class Leetcode1700 {
         }
         return heights.length - 1;
     }
+    /* #1645
+    with months as (
+    select * from generate_series(1,12,1) as month
+    ),
+    new_rider as (
+    select 
+    extract(year from join_date) as year,
+    extract(month from join_date) as month,
+    count(driver_id) as cnt
+    from Drivers 
+    group by year, month
+    ),
+    init_riders as (
+    select coalesce(sum(cnt),0) as init_cnt from new_rider where year < 2020
+    ),
+    monthly_new_rider as (
+    select * from new_rider where year = 2020
+    ),
+    monthly_working_drivers as (
+    select
+    extract(month from requested_at) as month,
+    count(distinct driver_id) as working_drivers
+    from Rides join AcceptedRides on AcceptedRides.ride_id=Rides.ride_id
+    where extract(year from requested_at) = 2020
+    group by month
+    )
+    select 
+    months.month, 
+    case when coalesce(working_drivers,0) = 0 then round(0,2) 
+    else round(coalesce(working_drivers,0) * 100/
+    (init_cnt + 
+    sum(coalesce(cnt,0)) over (order by months.month)
+    )
+    ,2)
+    end as working_percentage 
+    from months left join monthly_new_rider on monthly_new_rider.month=months.month
+    left join monthly_working_drivers on monthly_working_drivers.month=months.month
+    cross join init_riders
+    */
 
     /**
      * #1650
