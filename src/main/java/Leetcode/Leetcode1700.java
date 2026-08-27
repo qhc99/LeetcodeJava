@@ -166,6 +166,37 @@ public class Leetcode1700 {
 
     static record AnglePos(int idx, double angle) {
     }
+    /* #1635
+    with m as (
+    SELECT * FROM generate_series(1, 12, 1)  as month
+    ), 
+    d as (
+    select 
+    extract(year from join_date) as year,
+    extract(month from join_date) as month, 
+    count(*) as month_active_drivers 
+    from Drivers
+    group by year, month
+    ), 
+    dd as (select month,month_active_drivers from d where year=2020), 
+    base as (select coalesce(sum(month_active_drivers),0) as initial from d where year<2020),
+    r as (
+    select 
+    extract(month from requested_at ) as month, 
+    count(*) as accepted_rides 
+    from Rides join AcceptedRides on AcceptedRides.ride_id=Rides.ride_id
+    where extract(year from requested_at ) = 2020 group by month
+    ),
+    t as (
+    select m.month, 
+    COALESCE(month_active_drivers,0) as month_active_drivers, 
+    COALESCE(accepted_rides,0) as accepted_rides 
+    from m left join dd on m.month=dd.month  left join r on m.month=r.month  order by m.month
+    )
+    select month,
+    (initial + sum(month_active_drivers) over(order by month)) as active_drivers, 
+    accepted_rides from  t cross join base
+    */
 
     /**
      * #1642
