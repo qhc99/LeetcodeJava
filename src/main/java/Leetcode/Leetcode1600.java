@@ -191,27 +191,10 @@ public class Leetcode1600 {
         Disjointset bob = null, alice = null;
         for (int i = 0; i < edges.length; i++) {
             var edge = edges[i];
-            if (edge[0] == 3) {
-                if (common.parent(edge[1]) != common.parent(edge[2])) {
-                    count++;
-                    common.union(edge[1], edge[2]);
-                }
-            } else if (edge[0] == 2) {
-                if (bob == null) {
-                    bob = new Disjointset(common);
-                }
-                if (bob.parent(edge[1]) != bob.parent(edge[2])) {
-                    count++;
-                    bob.union(edge[1], edge[2]);
-                }
-            } else {
-                if (alice == null) {
-                    alice = new Disjointset(common);
-                }
-                if (alice.parent(edge[1]) != alice.parent(edge[2])) {
-                    count++;
-                    alice.union(edge[1], edge[2]);
-                }
+            if (edge[0] == 3
+                    && common.parent(edge[1]) != common.parent(edge[2])) {
+                count++;
+                common.union(edge[1], edge[2]);
             }
         }
         if (bob == null) {
@@ -220,6 +203,22 @@ public class Leetcode1600 {
         if (alice == null) {
             alice = new Disjointset(common);
         }
+        for (int i = 0; i < edges.length; i++) {
+            var edge = edges[i];
+            if (edge[0] == 2 && bob.parent(edge[1]) != bob.parent(edge[2])) {
+                count++;
+                bob.union(edge[1], edge[2]);
+            }
+        }
+        for (int i = 0; i < edges.length; i++) {
+            var edge = edges[i];
+            if (edge[0] == 1
+                    && alice.parent(edge[1]) != alice.parent(edge[2])) {
+                count++;
+                alice.union(edge[1], edge[2]);
+            }
+        }
+
         int p = bob.parent(1);
         for (int i = 2; i <= n; i++) {
             if (bob.parent(i) != p)

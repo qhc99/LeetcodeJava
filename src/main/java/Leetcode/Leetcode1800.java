@@ -44,6 +44,30 @@ public class Leetcode1800 {
     }
 
     /**
+     * #1768
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public String mergeAlternately(String word1, String word2) {
+        StringBuilder sb = new StringBuilder();
+        int i = 0, j = 0;
+        while (i < word1.length() || j < word2.length()) {
+            if (i < word1.length() && j < word2.length()) {
+                if (sb.length() % 2 == 0)
+                    sb.append(word1.charAt(i++));
+                else
+                    sb.append(word2.charAt(j++));
+            } else if (i < word1.length())
+                sb.append(word1.charAt(i++));
+
+            else
+                sb.append(word2.charAt(j++));
+        }
+        return sb.toString();
+    }
+
+    /**
      * #1769
      * 
      * @param boxes
