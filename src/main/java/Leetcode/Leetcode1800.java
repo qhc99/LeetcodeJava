@@ -3,6 +3,33 @@ package Leetcode;
 import java.util.*;
 
 public class Leetcode1800 {
+
+    /**
+     * #1705
+     * @param apples
+     * @param days
+     * @return
+     */
+    public int eatenApples(int[] apples, int[] days) {
+        int res = 0;
+        Queue<int[]> queue = new PriorityQueue<>(
+                Comparator.comparing(a -> a[0]));
+        int i = 0;
+        for (; i < apples.length || !queue.isEmpty(); i++) {
+            if (i < apples.length)
+                queue.add(new int[] { days[i] + i, apples[i] });
+            while (!queue.isEmpty()
+                    && (queue.peek()[0] <= i || queue.peek()[1] <= 0)) {
+                queue.poll();
+            }
+            if (!queue.isEmpty()) {
+                queue.peek()[1]--;
+                res++;
+            }
+        }
+        return res;
+    }
+
     /**
      * #1740
      * 
