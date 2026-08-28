@@ -88,6 +88,28 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1829
+     * @param nums
+     * @param maximumBit
+     * @return
+     */
+    public int[] getMaximumXor(int[] nums, int maximumBit) {
+        int sum = nums[0];
+        for (int i = 1; i < nums.length; i++) {
+            sum ^= nums[i];
+        }
+        int[] res = new int[nums.length];
+        for (int i = 0; i < res.length; i++) {
+            if (nums.length - i < nums.length) {
+                sum ^= nums[nums.length - i];
+            }
+            res[i] = (~(sum & ((1 << maximumBit) - 1)))
+                    & ((1 << maximumBit) - 1);
+        }
+        return res;
+    }
+
+    /**
      * #1851
      * 
      * @param intervals
