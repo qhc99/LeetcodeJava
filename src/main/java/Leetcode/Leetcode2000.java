@@ -137,7 +137,26 @@ public class Leetcode2000 {
     }
 
     /**
-     * #1961
+    * #1961
+    * @param s
+    * @param words
+    * @return
+    */
+    public boolean isPrefixString(String s, String[] words) {
+        int j = 0, k = 0;
+        for (int i = 0; i < s.length(); i++, k++) {
+            if (k >= words[j].length()) {
+                j++;
+                k = 0;
+            }
+            if (j >= words.length || s.charAt(i) != words[j].charAt(k))
+                return false;
+        }
+        return k == words[j].length();
+    }
+
+    /**
+     * #1962
      * 
      * @param piles
      * @param k
@@ -153,4 +172,5 @@ public class Leetcode2000 {
         }
         return queue.stream().mapToInt(i -> i).sum();
     }
+
 }
