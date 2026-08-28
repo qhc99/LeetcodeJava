@@ -68,9 +68,9 @@ public class Leetcode1400 {
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
         Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
         for (var edge : edges) {
-            graph.computeIfAbsent(edge[0], k -> new HashMap<>()).put(edge[1],
+            graph.computeIfAbsent(edge[0], k -> new HashMap<>(n)).put(edge[1],
                     edge[2]);
-            graph.computeIfAbsent(edge[1], k -> new HashMap<>()).put(edge[0],
+            graph.computeIfAbsent(edge[1], k -> new HashMap<>(n)).put(edge[0],
                     edge[2]);
         }
         int min = Integer.MAX_VALUE, res = 0;
@@ -79,7 +79,7 @@ public class Leetcode1400 {
         Map<Integer, Map<Integer, Integer>> dist = new HashMap<>();
         for (int i = 0; i < n; i++) {
             queue.clear();
-            dist.computeIfAbsent(i, k -> new HashMap<>()).put(i, 0);
+            dist.computeIfAbsent(i, k -> new HashMap<>(n)).put(i, 0);
             for (var node : dist.get(i).keySet()) {
                 int finalI = i;
                 queue.addAll(graph.getOrDefault(node, Map.of()).entrySet()
@@ -94,8 +94,8 @@ public class Leetcode1400 {
                 if (dest.dist < dist.get(i).getOrDefault(dest.node,
                         Integer.MAX_VALUE) && dest.dist <= distanceThreshold) {
                     dist.get(i).put(dest.node, dest.dist);
-                    dist.computeIfAbsent(dest.node, k -> new HashMap<>()).put(i,
-                            dest.dist);
+                    dist.computeIfAbsent(dest.node, k -> new HashMap<>(n))
+                            .put(i, dest.dist);
                     for (var nb : graph.getOrDefault(dest.node, Map.of())
                             .entrySet()) {
                         queue.add(new Dest(nb.getKey(),
