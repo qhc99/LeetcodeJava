@@ -68,6 +68,34 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1814
+     * @param nums
+     * @return
+     */
+    public int countNicePairs(int[] nums) {
+        Map<Integer, Integer> count = new HashMap<>();
+        int res = 0;
+        for (var n : nums) {
+            var v = n - rev(n);
+            var c = count.getOrDefault(v, 0);
+            res = (c + res) % 1_000_000_007;
+            count.put(v, 1 + c);
+        }
+        return res;
+    }
+
+    int rev(int n) {
+        StringBuilder sb = new StringBuilder();
+        while (n > 0) {
+            sb.append(n % 10);
+            n /= 10;
+        }
+        if (sb.isEmpty())
+            return 0;
+        return Integer.valueOf(sb.toString());
+    }
+
+    /**
      * #1827
      * 
      * @param nums
