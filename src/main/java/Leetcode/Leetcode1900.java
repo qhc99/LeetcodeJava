@@ -94,6 +94,34 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1818
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int minAbsoluteSumDiff(int[] nums1, int[] nums2) {
+        int total = 0, mod = 1_000_000_007;
+        TreeSet<Integer> list = new TreeSet<>();
+        for (int i = 0; i < nums1.length; i++) {
+            list.add(nums1[i]);
+            total = (total + Math.abs(nums1[i] - nums2[i])) % mod;
+        }
+        int min = Integer.MAX_VALUE;
+        for (int i = 0; i < nums1.length; i++) {
+            int v = -Math.abs(nums1[i] - nums2[i]);
+            var ceil = list.ceiling(nums2[i]);
+            var floor = list.floor(nums2[i]);
+            if (ceil != null) {
+                min = Math.min(min, (v + Math.abs(ceil - nums2[i])));
+            }
+            if (floor != null) {
+                min = Math.min(min, (v + Math.abs(floor - nums2[i])));
+            }
+        }
+        return ((total + min) % mod + mod) % mod;
+    }
+
+    /**
      * #1827
      * 
      * @param nums

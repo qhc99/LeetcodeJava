@@ -1,11 +1,19 @@
 package Leetcode;
 
-import java.nio.file.Path;
 import java.util.*;
 
-import Leetcode.Leetcode2000.PathNode;
-
 public class Leetcode2000 {
+
+    /**
+     * #1926
+     * @param maze
+     * @param entrance
+     * @return
+     */
+    public int nearestExit(char[][] maze, int[] entrance) {
+        return 0;
+    }
+
     /**
      * #1944
      * 
