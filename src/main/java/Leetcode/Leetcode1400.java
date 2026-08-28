@@ -98,8 +98,12 @@ public class Leetcode1400 {
                             .put(i, dest.dist);
                     for (var nb : graph.getOrDefault(dest.node, Map.of())
                             .entrySet()) {
-                        queue.add(new Dest(nb.getKey(),
-                                dest.dist + nb.getValue()));
+                        if (dest.dist + nb.getValue() < dist.get(i)
+                                .getOrDefault(nb.getKey(), Integer.MAX_VALUE)
+                                && dest.dist
+                                        + nb.getValue() <= distanceThreshold)
+                            queue.add(new Dest(nb.getKey(),
+                                    dest.dist + nb.getValue()));
                     }
                 }
             }
