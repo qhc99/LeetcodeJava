@@ -85,14 +85,12 @@ public class Leetcode1900 {
     }
 
     int rev(int n) {
-        StringBuilder sb = new StringBuilder();
+        int res = 0;
         while (n > 0) {
-            sb.append(n % 10);
+            res = res * 10 + n % 10;
             n /= 10;
         }
-        if (sb.isEmpty())
-            return 0;
-        return Integer.valueOf(sb.toString());
+        return res;
     }
 
     /**
