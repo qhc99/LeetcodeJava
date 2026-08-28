@@ -395,6 +395,38 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1039
+     * @param values
+     * @return
+     */
+    public int minScoreTriangulation(int[] values) {
+        return triDp(0, values.length - 1, values, new HashMap<>());
+    }
+
+    static record DpState(int i, int j) {
+    }
+
+    int triDp(int i, int j, int[] values, Map<DpState, Integer> cache) {
+        if (j + 1 - i <= 2)
+            return 0;
+        if (j + 1 - i == 3)
+            return values[i] * values[i + 1] * values[i + 2];
+        var state = new DpState(i, j);
+        var res = cache.get(state);
+        if (res != null)
+            return res;
+        res = Integer.MAX_VALUE;
+        for (int k = i + 1; k <= j - 1; k++) {
+            var l = triDp(i, k, values, cache);
+            var r = triDp(k, j, values, cache);
+            var v = values[i] * values[j] * values[k];
+            res = Math.min(l + r + v, res);
+        }
+        cache.put(state, res);
+        return res;
+    }
+
+    /**
      * #1041
      * 
      * @param instructions
