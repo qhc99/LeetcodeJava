@@ -11,7 +11,33 @@ public class Leetcode2000 {
      * @return
      */
     public int nearestExit(char[][] maze, int[] entrance) {
-        return 0;
+        int steps = 0, m = maze.length, n = maze[0].length;
+        int[] dx = { 0, 0, 1, -1 }, dy = { 1, -1, 0, 0 };
+        Queue<int[]> queue = new ArrayDeque<>(), next = new ArrayDeque<>();
+        queue.add(entrance);
+        boolean[][] visited = new boolean[m][n];
+        visited[entrance[0]][entrance[1]] = true;
+        while (!queue.isEmpty()) {
+
+            while (!queue.isEmpty()) {
+                var p = queue.poll();
+                for (int i = 0; i < 4; i++) {
+                    int x = p[0] + dx[i], y = p[1] + dy[i];
+                    if (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]
+                            && maze[x][y] == '.') {
+                        visited[x][y] = true;
+                        if (x == 0 || x == m - 1 || y == 0 || y == n - 1)
+                            return steps + 1;
+                        next.add(new int[] { x, y });
+                    }
+                }
+            }
+            var t = queue;
+            queue = next;
+            next = t;
+            steps++;
+        }
+        return -1;
     }
 
     /**
