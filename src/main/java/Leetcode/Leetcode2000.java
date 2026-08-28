@@ -173,4 +173,17 @@ public class Leetcode2000 {
         return queue.stream().mapToInt(i -> i).sum();
     }
 
+    /**
+     * #1967
+     * @param patterns
+     * @param word
+     * @return
+     */
+    public int numOfStrings(String[] patterns, String word) {
+        int res = 0;
+        for (var p : patterns)
+            if (p.length() <= word.length() && word.contains(p))
+                res++;
+        return res;
+    }
 }
