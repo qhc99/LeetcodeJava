@@ -66,7 +66,52 @@ public class Leetcode1400 {
      * @return
      */
     public int findTheCity(int n, int[][] edges, int distanceThreshold) {
-        return 0;
+        Map<Integer, Map<Integer, Integer>> graph = new HashMap<>();
+        for (var edge : edges) {
+            graph.computeIfAbsent(edge[0], k -> new HashMap<>()).put(edge[1],
+                    edge[2]);
+            graph.computeIfAbsent(edge[1], k -> new HashMap<>()).put(edge[0],
+                    edge[2]);
+        }
+        int min = Integer.MAX_VALUE, res = 0;
+        Queue<Dest> queue = new PriorityQueue<>(
+                Comparator.comparing(d -> d.dist));
+        Map<Integer, Map<Integer, Integer>> dist = new HashMap<>();
+        for (int i = 0; i < n; i++) {
+            queue.clear();
+            dist.computeIfAbsent(i, k -> new HashMap<>()).put(i, 0);
+            for (var node : dist.get(i).keySet()) {
+                int finalI = i;
+                queue.addAll(graph.getOrDefault(node, Map.of()).entrySet()
+                        .stream()
+                        .map(e -> new Dest(e.getKey(),
+                                e.getValue() + dist.get(finalI).get(node)))
+                        .toList());
+            }
+
+            while (!queue.isEmpty()) {
+                var dest = queue.poll();
+                if (dest.dist < dist.get(i).getOrDefault(dest.node,
+                        Integer.MAX_VALUE) && dest.dist <= distanceThreshold) {
+                    dist.get(i).put(dest.node, dest.dist);
+                    dist.computeIfAbsent(dest.node, k -> new HashMap<>()).put(i,
+                            dest.dist);
+                    for (var nb : graph.getOrDefault(dest.node, Map.of())
+                            .entrySet()) {
+                        queue.add(new Dest(nb.getKey(),
+                                dest.dist + nb.getValue()));
+                    }
+                }
+            }
+            if (dist.get(i).size() - 1 <= min) {
+                min = dist.get(i).size() - 1;
+                res = i;
+            }
+        }
+        return res;
+    }
+
+    static record Dest(int node, int dist) {
     }
 
     /**
