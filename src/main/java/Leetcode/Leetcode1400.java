@@ -34,6 +34,32 @@ public class Leetcode1400 {
     }
 
     /**
+     * #1326
+     * @param n
+     * @param ranges
+     * @return
+     */
+    public int minTaps(int n, int[] ranges) {
+        int[] rightMost = new int[n + 1];
+        for (int i = 0; i < ranges.length; i++) {
+            int s = Math.max(0, i - ranges[i]), e = Math.min(n, i + ranges[i]);
+            rightMost[s] = Math.max(rightMost[s], e);
+        }
+
+        int last = 0, cnt = 0, prev = 0;
+        for (int i = 0; i < n; i++) {
+            last = Math.max(last, rightMost[i]);
+            if (i >= last)
+                return -1;
+            if (i >= prev) {
+                cnt++;
+                prev = last;
+            }
+        }
+        return cnt;
+    }
+
+    /**
      * #1328
      * 
      * @param palindrome
