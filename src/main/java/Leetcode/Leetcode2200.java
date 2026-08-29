@@ -141,4 +141,34 @@ public class Leetcode2200 {
         return res;
 
     }
+
+    /**
+     * #2187
+     * @param time
+     * @param totalTrips
+     * @return
+     */
+    public long minimumTime(int[] time, int totalTrips) {
+        if (time.length == 1)
+            return (long) totalTrips * time[0];
+        int min = Integer.MAX_VALUE, max = -1;
+        for (var t : time) {
+            min = Math.min(min, t);
+            max = Math.max(t, max);
+        }
+        long r = (long) totalTrips * max , l = (long) totalTrips / time.length;
+        while (r - l > 0) {
+            var mid = l + (r - l) / 2;
+            long total = 0;
+            for (var t : time)
+                total += mid / t;
+            if(total >= totalTrips){
+                r = mid;
+            } else {
+                l = mid + 1;
+            }
+        }
+        return l;
+    }
+
 }
