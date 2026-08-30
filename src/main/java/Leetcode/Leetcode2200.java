@@ -156,13 +156,13 @@ public class Leetcode2200 {
             min = Math.min(min, t);
             max = Math.max(t, max);
         }
-        long r = (long) totalTrips * max , l = (long) totalTrips / time.length;
+        long r = (long) totalTrips * max, l = (long) totalTrips / time.length;
         while (r - l > 0) {
             var mid = l + (r - l) / 2;
             long total = 0;
             for (var t : time)
                 total += mid / t;
-            if(total >= totalTrips){
+            if (total >= totalTrips) {
                 r = mid;
             } else {
                 l = mid + 1;
@@ -171,4 +171,27 @@ public class Leetcode2200 {
         return l;
     }
 
+    /**
+     * #2196
+     * @param descriptions
+     * @return
+     */
+    public TreeNode createBinaryTree(int[][] descriptions) {
+        Map<Integer, TreeNode> map = new HashMap<>();
+        Map<Integer, Boolean> isRoot = new HashMap<>();
+        for (var des : descriptions) {
+            var p = map.computeIfAbsent(des[0], k -> new TreeNode(des[0]));
+            var c = map.computeIfAbsent(des[1], k -> new TreeNode(des[1]));
+            isRoot.put(des[1], false);
+            if (des[2] == 1)
+                p.left = c;
+            else
+                p.right = c;
+        }
+        for (var e : map.entrySet()) {
+            if (isRoot.getOrDefault(e.getKey(), true))
+                return e.getValue();
+        }
+        return null;
+    }
 }
