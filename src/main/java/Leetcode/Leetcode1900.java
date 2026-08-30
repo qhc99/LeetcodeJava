@@ -164,6 +164,30 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1838
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int maxFrequency(int[] nums, int k) {
+        Arrays.sort(nums);
+        int max = 1;
+        // [l,r] = n_r - n_l + n_r - n_l+1 ... = (r  -l) * n_r - sum(n_l .. n_r-1)
+        // [l, r+1] = n_r+1 - n_l + ... = (r + 1 -l) * n_r+1 - sum(n_l ... n _r)
+        // [l,r+1] = [l,r] - (r+1-l)*n_r + (r+1-l) *n_r+1
+        int l = 0;
+        long ops = 0;
+        for (int r = 1; r < nums.length; r++) {
+            ops += (r - l) * ((long) nums[r] - nums[r - 1]);
+            while (ops > k) {
+                ops -= (nums[r] - nums[l++]);
+            }
+            max = Math.max(max, r + 1 - l);
+        }
+        return max;
+    }
+
+    /**
      * #1851
      * 
      * @param intervals
