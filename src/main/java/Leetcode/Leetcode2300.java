@@ -42,6 +42,88 @@ public class Leetcode2300 {
     }
 
     /**
+     * #2251
+     * @param flowers
+     * @param people
+     * @return
+     */
+    public int[] fullBloomFlowers(int[][] flowers, int[] people) {
+        int[] res = new int[people.length];
+        var root = new SegTree(1, 1_000_000_000);
+        for (var f : flowers)
+            root.insert(f[0], f[1], 1);
+        for (int i = 0; i < people.length; i++)
+            res[i] = root.query(people[i]);
+        return res;
+    }
+
+    static class SegTree {
+        int count, cache, rangeLeft, rangeRight;
+        SegTree leftTree, rightTree;
+
+        SegTree(int l, int r) {
+            rangeLeft = l;
+            rangeRight = r;
+        }
+
+        int rangeMid() {
+            return rangeLeft + (rangeRight - rangeLeft) / 2;
+        }
+
+        SegTree getLeftTree() {
+            if (leftTree == null)
+                leftTree = new SegTree(rangeLeft, rangeMid());
+            return leftTree;
+        }
+
+        SegTree getRighTree() {
+            if (rightTree == null)
+                rightTree = new SegTree(rangeMid() + 1, rangeRight);
+            return rightTree;
+        }
+
+        int query(int i) {
+            if (rangeLeft == rangeRight)
+                return count;
+            clearCache();
+            var rangeMid = rangeMid();
+            if (i <= rangeMid && leftTree != null)
+                return leftTree.query(i);
+            else if (i >= rangeMid + 1 && rightTree != null)
+                return rightTree.query(i);
+            return 0;
+        }
+
+        void clearCache() {
+            if (cache > 0) {
+                var rangeMid = rangeMid();
+                getLeftTree().insert(rangeLeft, rangeMid, cache);
+                getRighTree().insert(rangeMid + 1, rangeRight, cache);
+                cache = 0;
+            }
+        }
+
+        void insert(int l, int r, int v) {
+            if (rangeLeft == rangeRight) {
+                count += v;
+                return;
+            }
+            if (l == rangeLeft && r == rangeRight) {
+                cache += v;
+                return;
+            }
+            clearCache();
+            var rangeMid = rangeMid();
+            if (r >= rangeMid + 1) {
+                getRighTree().insert(Math.max(rangeMid + 1, l), r, v);
+            }
+            if (l <= rangeMid) {
+                getLeftTree().insert(l, Math.min(rangeMid, r), v);
+            }
+        }
+    }
+
+    /**
      * #2261
      * @param nums
      * @param k
