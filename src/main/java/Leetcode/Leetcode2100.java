@@ -53,6 +53,38 @@ public class Leetcode2100 {
     }
 
     /**
+     * #2008
+     * @param n
+     * @param rides
+     * @return
+     */
+    public long maxTaxiEarnings(int n, int[][] rides) {
+        Map<Integer, List<Integer>> pick = new HashMap<>(), drop = new HashMap<>();
+        Set<Integer> points = new HashSet<>();
+        for (int i = 0; i < rides.length; i++) {
+            pick.computeIfAbsent(rides[i][0], k->new ArrayList<>()).add(i);
+            drop.computeIfAbsent(rides[i][1], k->new ArrayList<>()).add(i);
+            points.add(rides[i][0]);
+            points.add(rides[i][1]);
+        }
+        var stops = points.stream().sorted().toList();
+        Map<Integer, Long> state = new HashMap<>();
+        state.put(-1, 0l);
+        for(var stop : stops){
+            var dropCustomers = drop.getOrDefault(stop, List.of());
+            for(var id : dropCustomers){
+                var m = state.remove(id) + rides[id][2] + rides[id][1] - rides[id][0];
+                state.put(-1, Math.max(state.get(-1), m));
+            }
+            var pickCustomers = pick.getOrDefault(stop, List.of());
+            for(var id : pickCustomers){
+                state.put(id, state.get(-1));
+            }
+        }
+        return state.get(-1);
+    }
+
+    /**
      * #2013 DetectSquares
      */
     class DetectSquares {
@@ -145,8 +177,10 @@ public class Leetcode2100 {
 
         Map<Integer, Integer> diff = new TreeMap<>();
         for (var light : lights) {
-            diff.put(light[0] - light[1], diff.getOrDefault(light[0] - light[1], 0) + 1);
-            diff.put(light[0] + light[1] + 1, diff.getOrDefault(light[0] + light[1] + 1, 0) - 1);
+            diff.put(light[0] - light[1],
+                    diff.getOrDefault(light[0] - light[1], 0) + 1);
+            diff.put(light[0] + light[1] + 1,
+                    diff.getOrDefault(light[0] + light[1] + 1, 0) - 1);
         }
         int height = 0;
         int maxHeight = 0;
