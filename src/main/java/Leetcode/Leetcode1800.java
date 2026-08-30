@@ -31,6 +31,55 @@ public class Leetcode1800 {
     }
 
     /**
+     * #1719
+     * @param pairs
+     * @return
+     */
+    public int checkWays(int[][] pairs) {
+        Map<Integer, Set<Integer>> neighbor = new HashMap<>();
+        for (var p : pairs) {
+
+            neighbor.computeIfAbsent(p[0], k -> new HashSet<>()).add(p[1]);
+            neighbor.computeIfAbsent(p[1], k -> new HashSet<>()).add(p[0]);
+        }
+        int n = neighbor.size(), root = -1;
+        for (var i : neighbor.keySet()) {
+            if (neighbor.get(i).size() == n - 1) {
+                root = i;
+                break;
+            }
+        }
+        if (root == -1)
+            return 0;
+        int ans = 1;
+        for (var i : neighbor.keySet()) {
+            if (i.equals(root))
+                continue;
+            int min = Integer.MAX_VALUE, parent = -1;
+            for (var nb : neighbor.get(i)) {
+                if (neighbor.get(nb).size() >= neighbor.get(i).size()
+                        && neighbor.get(nb).size() < min) {
+                    parent = nb;
+                    min = neighbor.get(nb).size();
+                }
+            }
+            if (parent == -1)
+                return 0;
+            var adj = neighbor.get(i);
+            var superSet = neighbor.get(parent);
+            for (var node : adj) {
+                if (node.equals(parent))
+                    continue;
+                if (!superSet.contains(node))
+                    return 0;
+            }
+            if (neighbor.get(parent).size() == neighbor.get(i).size())
+                ans = 2;
+        }
+        return ans;
+    }
+
+    /**
      * #1740
      * 
      * @param root
