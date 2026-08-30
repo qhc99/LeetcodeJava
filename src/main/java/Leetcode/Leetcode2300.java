@@ -42,6 +42,34 @@ public class Leetcode2300 {
     }
 
     /**
+     * #2261
+     * @param nums
+     * @param k
+     * @param p
+     * @return
+     */
+    public int countDistinct(int[] nums, int k, int p) {
+        var root = new PrefixNode();
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            var ptr = root;
+            for (int c = 0, j = i; j < nums.length && (nums[j] % p == 0 ? 1 : 0)
+                    + c <= k; c += (nums[j] % p == 0 ? 1 : 0), j++) {
+                var n = nums[j];
+                if (!ptr.children.containsKey(n)) {
+                    res++;
+                }
+                ptr = ptr.children.computeIfAbsent(n, key -> new PrefixNode());
+            }
+        }
+        return res;
+    }
+
+    static class PrefixNode {
+        Map<Integer, PrefixNode> children = new HashMap<>();
+    }
+
+    /**
      * #2270
      * 
      * @param nums
