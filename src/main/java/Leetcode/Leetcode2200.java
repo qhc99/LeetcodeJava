@@ -143,6 +143,71 @@ public class Leetcode2200 {
     }
 
     /**
+     * #2158
+     * @param paint
+     * @return
+     */
+    public int[] amountPainted(int[][] paint) {
+        int[] res = new int[paint.length];
+        var tree = new SegTree(0, 5_0000);
+        for (int i = 0; i < paint.length; i++) {
+            res[i] = tree.insert(paint[i][0], paint[i][1]);
+        }
+        return res;
+    }
+
+    static class SegTree {
+        boolean isFullCovered = false;
+        int rangeLeft, rangeRight;
+        SegTree leftTree, rightTree;
+
+        SegTree(int l, int r) {
+            rangeLeft = l;
+            rangeRight = r;
+        }
+
+        int rangeMid() {
+            return rangeLeft + (rangeRight - rangeLeft) / 2;
+        }
+
+        int insert(int l, int r) {
+            if (isFullCovered)
+                return 0;
+            if (l == rangeLeft && r == rangeRight && leftTree == null && rightTree == null) {
+                isFullCovered = true;
+                return r - l;
+            }
+            var mid = rangeMid();
+            var res = 0;
+            if (r > mid) {
+                res += getRight().insert(Math.max(mid, l), r);
+            }
+            if (l < mid) {
+                res += getLeft().insert(l, Math.min(mid, r));
+            }
+            if (leftTree != null && rightTree != null && leftTree.isFullCovered
+                    && rightTree.isFullCovered) {
+                isFullCovered = true;
+                leftTree = null;
+                rightTree = null;
+            }
+            return res;
+        }
+
+        SegTree getLeft() {
+            if (leftTree == null)
+                leftTree = new SegTree(rangeLeft, rangeMid());
+            return leftTree;
+        }
+
+        SegTree getRight() {
+            if (rightTree == null)
+                rightTree = new SegTree(rangeMid(), rangeRight);
+            return rightTree;
+        }
+    }
+
+    /**
      * #2187
      * @param time
      * @param totalTrips
