@@ -1,6 +1,23 @@
 package Leetcode;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
 public class Leetcode2300 {
+
+    /**
+     * #2248
+     * @param nums
+     * @return
+     */
+    public List<Integer> intersection(int[][] nums) {
+        var res = Arrays.stream(nums[0]).boxed().collect(Collectors.toSet());
+        for (int i = 1; i < nums.length; i++)
+            res.retainAll(
+                    Arrays.stream(nums[i]).boxed().collect(Collectors.toSet()));
+        return res.stream().sorted().toList();
+    }
+
     /**
      * #2270
      * 
