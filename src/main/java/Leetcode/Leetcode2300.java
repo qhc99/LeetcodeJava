@@ -6,6 +6,29 @@ import java.util.stream.Collectors;
 public class Leetcode2300 {
 
     /**
+     * #2243
+     * @param s
+     * @param k
+     * @return
+     */
+    public String digitSum(String s, int k) {
+        while (s.length() > k) {
+            int sum = 0;
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < s.length(); i++) {
+                if (i % k == 0 && i != 0) {
+                    sb.append(sum);
+                    sum = 0;
+                }
+                sum += s.charAt(i) - '0';
+            }
+            sb.append(sum);
+            s = sb.toString();
+        }
+        return s;
+    }
+
+    /**
      * #2248
      * @param nums
      * @return
