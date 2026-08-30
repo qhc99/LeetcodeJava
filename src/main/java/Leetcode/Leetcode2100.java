@@ -59,25 +59,27 @@ public class Leetcode2100 {
      * @return
      */
     public long maxTaxiEarnings(int n, int[][] rides) {
-        Map<Integer, List<Integer>> pick = new HashMap<>(), drop = new HashMap<>();
+        Map<Integer, List<Integer>> pick = new HashMap<>(),
+                drop = new HashMap<>();
         Set<Integer> points = new HashSet<>();
         for (int i = 0; i < rides.length; i++) {
-            pick.computeIfAbsent(rides[i][0], k->new ArrayList<>()).add(i);
-            drop.computeIfAbsent(rides[i][1], k->new ArrayList<>()).add(i);
+            pick.computeIfAbsent(rides[i][0], k -> new ArrayList<>()).add(i);
+            drop.computeIfAbsent(rides[i][1], k -> new ArrayList<>()).add(i);
             points.add(rides[i][0]);
             points.add(rides[i][1]);
         }
         var stops = points.stream().sorted().toList();
         Map<Integer, Long> state = new HashMap<>();
         state.put(-1, 0l);
-        for(var stop : stops){
+        for (var stop : stops) {
             var dropCustomers = drop.getOrDefault(stop, List.of());
-            for(var id : dropCustomers){
-                var m = state.remove(id) + rides[id][2] + rides[id][1] - rides[id][0];
+            for (var id : dropCustomers) {
+                var m = state.remove(id) + rides[id][2] + rides[id][1]
+                        - rides[id][0];
                 state.put(-1, Math.max(state.get(-1), m));
             }
             var pickCustomers = pick.getOrDefault(stop, List.of());
-            for(var id : pickCustomers){
+            for (var id : pickCustomers) {
                 state.put(id, state.get(-1));
             }
         }
