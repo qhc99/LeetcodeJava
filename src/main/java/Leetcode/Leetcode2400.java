@@ -38,17 +38,23 @@ public class Leetcode2400 {
             diff[i] = Math.abs(nums1[i] - nums2[i]);
         }
         Arrays.sort(diff);
-        long[] prefix = new long[diff.length + 1];
-        for (int i = 1; i < prefix.length; i++) {
-            prefix[i] = prefix[i - 1] + diff[i - 1];
-        }
-        int l = 0, r = diff.length;
         int k = k1 + k2;
-        while (r - l > 0) {
-            int mid = l + (r - l) / 2;
-            
+        int[] count = new int[1_00000 + 1];
+        for (var d : diff)
+            count[d]++;
+        for (int n = count.length - 1; n >= 1 && k > 0; n--) {
+            if (count[n] > 0) {
+                var d = Math.min(k, count[n]);
+                count[n] -= d;
+                count[n - 1] += d;
+                k -= d;
+            }
         }
-        return 0;
+        long res = 0;
+        for (int n = 1; n < count.length; n++) {
+            res += (long) n * n * count[n];
+        }
+        return res;
     }
 
     /**
