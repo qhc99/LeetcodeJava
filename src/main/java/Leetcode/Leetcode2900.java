@@ -28,6 +28,22 @@ public class Leetcode2900 {
     }
 
     /**
+     * #2828
+     * @param words
+     * @param s
+     * @return
+     */
+    public boolean isAcronym(List<String> words, String s) {
+        if (words.size() != s.length())
+            return false;
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != words.get(i).charAt(0))
+                return false;
+        }
+        return true;
+    }
+
+    /**
      * #2848
      * @param nums
      * @return
