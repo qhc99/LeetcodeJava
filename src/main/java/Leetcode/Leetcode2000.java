@@ -186,4 +186,22 @@ public class Leetcode2000 {
                 res++;
         return res;
     }
+
+    /**
+     * #1968
+     * @param nums
+     * @return
+     */
+    public int[] rearrangeArray(int[] nums) {
+        Arrays.sort(nums);
+        int[] res = new int[nums.length];
+        int mid = (res.length + 1) / 2;
+        int i = 0, j = mid;
+        for (int k = 0; i < mid;) {
+            res[k++] = nums[i++];
+            if (j < nums.length)
+                res[k++] = nums[j++];
+        }
+        return res;
+    }
 }
