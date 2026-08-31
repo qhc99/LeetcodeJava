@@ -25,6 +25,33 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2333
+     * @param nums1
+     * @param nums2
+     * @param k1
+     * @param k2
+     * @return
+     */
+    public long minSumSquareDiff(int[] nums1, int[] nums2, int k1, int k2) {
+        int[] diff = new int[nums1.length];
+        for (int i = 0; i < nums1.length; i++) {
+            diff[i] = Math.abs(nums1[i] - nums2[i]);
+        }
+        Arrays.sort(diff);
+        long[] prefix = new long[diff.length + 1];
+        for (int i = 1; i < prefix.length; i++) {
+            prefix[i] = prefix[i - 1] + diff[i - 1];
+        }
+        int l = 0, r = diff.length;
+        int k = k1 + k2;
+        while (r - l > 0) {
+            int mid = l + (r - l) / 2;
+            
+        }
+        return 0;
+    }
+
+    /**
      * #2334
      * 
      * @param nums

@@ -303,6 +303,45 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1856
+     * @param nums
+     * @return
+     */
+    public int maxSumMinProduct(int[] nums) {
+        Deque<Integer> incStack = new ArrayDeque<>();
+        int[] leftLen = new int[nums.length];
+        long[] prefixSum = new long[nums.length + 1];
+        for (int i = 1; i < prefixSum.length; i++) {
+            prefixSum[i] = prefixSum[i - 1] + nums[i - 1];
+        }
+        for (int i = 0; i < nums.length; i++) {
+            while (!incStack.isEmpty()
+                    && nums[incStack.peekLast()] >= nums[i]) {
+                incStack.pollLast();
+            }
+            leftLen[i] = i - (incStack.isEmpty() ? -1 : incStack.peekLast());
+            incStack.addLast(i);
+        }
+        incStack.clear();
+        int[] rightLen = new int[nums.length];
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!incStack.isEmpty()
+                    && nums[incStack.peekLast()] >= nums[i]) {
+                incStack.pollLast();
+            }
+            rightLen[i] = (incStack.isEmpty() ? nums.length
+                    : incStack.peekLast()) - i;
+            incStack.addLast(i);
+        }
+        long max = 0;
+        for (int i = 0; i < nums.length; i++) {
+            max = Math.max(max, nums[i] * (prefixSum[i + rightLen[i]]
+                    - prefixSum[i - leftLen[i] + 1]));
+        }
+        return (int) (max % 1_000_000_007);
+    }
+
+    /**
      * #1860
      * 
      * @param memory1
