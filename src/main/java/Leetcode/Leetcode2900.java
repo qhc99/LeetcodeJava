@@ -28,6 +28,28 @@ public class Leetcode2900 {
     }
 
     /**
+     * #2848
+     * @param nums
+     * @return
+     */
+    public int numberOfPoints(List<List<Integer>> nums) {
+        nums.sort(Comparator.comparing(l -> l.get(0)));
+        int l = 0, r = -1;
+        int res = 0;
+        for (var p : nums) {
+            if (p.get(0) > r) {
+                res += r + 1 - l;
+                l = p.get(0);
+                r = p.get(1);
+            } else {
+                r = Math.max(r, p.get(1));
+            }
+        }
+        res += r + 1 - l;
+        return res;
+    }
+
+    /**
      * #2850
      * 
      * @param grid
