@@ -216,6 +216,32 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2444
+     * @param nums
+     * @param minK
+     * @param maxK
+     * @return
+     */
+    public long countSubarrays(int[] nums, int minK, int maxK) {
+        long res = 0;
+        int minPos = -1, maxPos = -1, l = 0;
+        for (int r = 0; r < nums.length; r++) {
+            if (nums[r] < minK || nums[r] > maxK) {
+                l = r + 1;
+                minPos = maxPos = -1;
+                continue;
+            }
+            if (nums[r] == minK)
+                minPos = r;
+            if (nums[r] == maxK)
+                maxPos = r;
+            if (maxPos != -1 && minPos != -1)
+                res += Math.min(maxPos, minPos) + 1 - l;
+        }
+        return res;
+    }
+
+    /**
      * #2456
      * 
      * @param creators
