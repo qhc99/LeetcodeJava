@@ -87,6 +87,24 @@ public class Leetcode2100 {
     }
 
     /**
+     * #2009
+     * @param nums
+     * @return
+     */
+    public int minOperations(int[] nums) {
+        var arr = Arrays.stream(nums).sorted().distinct().toArray();
+        int n = nums.length, l = 0, min = n;
+
+        for (int r = 0; r < arr.length; r++) {
+            while (arr[r] > arr[l] + n - 1) {
+                l++;
+            }
+            min = Math.min(min, n - (r + 1 - l));
+        }
+        return min;
+    }
+
+    /**
      * #2013 DetectSquares
      */
     class DetectSquares {
