@@ -288,6 +288,28 @@ public class Leetcode2600 {
     }
 
     /**
+     * #2555
+     * @param prizePositions
+     * @param k
+     * @return
+     */
+    public int maximizeWin(int[] prizePositions, int k) {
+        int total = 0;
+        int l = 0;
+        int[] dp = new int[prizePositions.length];
+        for (int r = 0; r < prizePositions.length; r++) {
+            while (l <= r && prizePositions[r] - prizePositions[l] > k) {
+                l++;
+            }
+
+            dp[r] = Math.max((r - 1 >= 0 ? dp[r - 1] : 0), r + 1 - l);
+            total = Math.max(total, r + 1 - l + (l - 1 >= 0 ? dp[l - 1] : 0));
+        }
+
+        return total;
+    }
+
+    /**
      * #2561
      * 
      * @param basket1
