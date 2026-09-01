@@ -171,4 +171,50 @@ public class Leetcode2300 {
         }
         return res;
     }
+
+    /**
+     * #2282
+     * @param heights
+     * @return
+     */
+    public int[][] seePeople(int[][] heights) {
+        int m = heights.length, n = heights[0].length;
+        int[][] res = new int[m][n];
+        Deque<Integer> incStack = new ArrayDeque<>();
+        for (int i = 0; i < m; i++) {
+            incStack.clear();
+            for (int j = n - 1; j >= 0; j--) {
+                int seen = 0, maxBetween = -1;
+                while (!incStack.isEmpty()
+                        && heights[i][j] >= heights[i][incStack.peekLast()]) {
+                    maxBetween = Math.max(maxBetween,
+                            heights[i][incStack.pollLast()]);
+                    seen++;
+                }
+                res[i][j] += seen
+                        + (!incStack.isEmpty() && maxBetween < heights[i][j] ? 1
+                                : 0);
+                incStack.addLast(j);
+            }
+        }
+
+        for (int j = 0; j < n; j++) {
+            incStack.clear();
+            for (int i = m - 1; i >= 0; i--) {
+                int seen = 0, maxBetween = -1;
+                while (!incStack.isEmpty()
+                        && heights[i][j] >= heights[incStack.peekLast()][j]) {
+                    maxBetween = Math.max(maxBetween,
+                            heights[incStack.pollLast()][j]);
+                    seen++;
+                }
+                res[i][j] += seen
+                        + (!incStack.isEmpty() && maxBetween < heights[i][j] ? 1
+                                : 0);
+                incStack.addLast(i);
+            }
+        }
+
+        return res;
+    }
 }
