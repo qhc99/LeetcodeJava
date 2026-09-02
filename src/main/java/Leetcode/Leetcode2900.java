@@ -29,6 +29,7 @@ public class Leetcode2900 {
 
     /**
      * #2828
+     * 
      * @param words
      * @param s
      * @return
@@ -45,6 +46,7 @@ public class Leetcode2900 {
 
     /**
      * #2848
+     * 
      * @param nums
      * @return
      */
@@ -120,4 +122,62 @@ public class Leetcode2900 {
 
         return res;
     }
+
+    public int[] minEdgeReversals(int n, int[][] edges) {
+        var solver = new ReversalSover(edges, n);
+        solver.solve(n);
+        return solver.res;
+    }
+
+    static class ReversalSover {
+        Map<Integer, List<Integer>> forward = new HashMap<>(),
+                backward = new HashMap<>();
+        Set<Integer> visited = new HashSet<>();
+        int[] res;
+
+        ReversalSover(int[][] edges, int n) {
+            res = new int[n];
+            for (var e : edges) {
+                forward.computeIfAbsent(e[0], k -> new ArrayList<>()).add(e[1]);
+                backward.computeIfAbsent(e[1], k -> new ArrayList<>())
+                        .add(e[0]);
+            }
+        }
+
+        void reroot(int node, int v) {
+            visited.add(node);
+            res[node] = v;
+            for (var nb : forward.getOrDefault(node, List.of())) {
+                if (!visited.contains(nb))
+                    reroot(nb, res[node] + 1);
+            }
+            for (var nb : backward.getOrDefault(node, List.of())) {
+                if (!visited.contains(nb))
+                    reroot(nb, res[node] - 1);
+            }
+        }
+
+        int[] solve(int n) {
+            var v = dfsReversal(0);
+            visited.clear();
+            reroot(0, v);
+            return res;
+        }
+
+        int dfsReversal(int node) {
+            visited.add(node);
+
+            var res = 0;
+            for (var nb : forward.getOrDefault(node, List.of())) {
+                if (!visited.contains(nb))
+                    res += dfsReversal(nb);
+            }
+            for (var nb : backward.getOrDefault(node, List.of())) {
+                if (!visited.contains(nb))
+                    res += 1 + dfsReversal(nb);
+            }
+            return res;
+        }
+    }
+
 }
