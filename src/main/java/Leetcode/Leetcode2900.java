@@ -124,59 +124,64 @@ public class Leetcode2900 {
     }
 
     public int[] minEdgeReversals(int n, int[][] edges) {
-        var solver = new ReversalSover(edges, n);
-        solver.solve(n);
-        return solver.res;
+        var solver = new ReversalSover();
+        return solver.minEdgeReversals(n, edges);
     }
 
     static class ReversalSover {
-        Map<Integer, List<Integer>> forward = new HashMap<>(),
-                backward = new HashMap<>();
-        Set<Integer> visited = new HashSet<>();
-        int[] res;
+        List<int[]>[] graph;
+        int[] ans;
 
-        ReversalSover(int[][] edges, int n) {
-            res = new int[n];
-            for (var e : edges) {
-                forward.computeIfAbsent(e[0], k -> new ArrayList<>()).add(e[1]);
-                backward.computeIfAbsent(e[1], k -> new ArrayList<>())
-                        .add(e[0]);
+        public int[] minEdgeReversals(int n, int[][] edges) {
+            graph = new ArrayList[n];
+            for (int i = 0; i < n; i++)
+                graph[i] = new ArrayList<>();
+
+            for (int[] e : edges) {
+                int u = e[0], v = e[1];
+
+                // Original direction: u -> v
+                graph[u].add(new int[] { v, 0 });
+                graph[v].add(new int[] { u, 1 });
             }
+
+            ans = new int[n];
+
+            ans[0] = dfs(0, -1);
+
+            reroot(0, -1);
+
+            return ans;
         }
 
-        void reroot(int node, int v) {
-            visited.add(node);
-            res[node] = v;
-            for (var nb : forward.getOrDefault(node, List.of())) {
-                if (!visited.contains(nb))
-                    reroot(nb, res[node] + 1);
+        int dfs(int node, int parent) {
+            int reversals = 0;
+
+            for (int[] edge : graph[node]) {
+                int nb = edge[0];
+                int cost = edge[1];
+
+                if (nb == parent)
+                    continue;
+
+                reversals += cost + dfs(nb, node);
             }
-            for (var nb : backward.getOrDefault(node, List.of())) {
-                if (!visited.contains(nb))
-                    reroot(nb, res[node] - 1);
-            }
+
+            return reversals;
         }
 
-        int[] solve(int n) {
-            var v = dfsReversal(0);
-            visited.clear();
-            reroot(0, v);
-            return res;
-        }
+        void reroot(int node, int parent) {
+            for (int[] edge : graph[node]) {
+                int nb = edge[0];
+                int cost = edge[1];
 
-        int dfsReversal(int node) {
-            visited.add(node);
+                if (nb == parent)
+                    continue;
 
-            var res = 0;
-            for (var nb : forward.getOrDefault(node, List.of())) {
-                if (!visited.contains(nb))
-                    res += dfsReversal(nb);
+                ans[nb] = ans[node] + (cost == 0 ? 1 : -1);
+
+                reroot(nb, node);
             }
-            for (var nb : backward.getOrDefault(node, List.of())) {
-                if (!visited.contains(nb))
-                    res += 1 + dfsReversal(nb);
-            }
-            return res;
         }
     }
 
