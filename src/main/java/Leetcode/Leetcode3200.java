@@ -33,4 +33,24 @@ public class Leetcode3200 {
         }
         return sb.toString();
     }
+
+    /**
+     * #3191
+     * 
+     * @param nums
+     * @return
+     */
+    public int minOperations(int[] nums) {
+        int res = 0;
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (nums[i] == 0) {
+                res++;
+                for (int j = i; j < i + 3; j++)
+                    nums[j] = Math.abs(nums[j] - 1);
+            }
+        }
+        if (nums[nums.length - 1] != 1 || nums[nums.length - 2] != 1)
+            return -1;
+        return res;
+    }
 }
