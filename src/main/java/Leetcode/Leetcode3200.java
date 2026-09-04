@@ -53,4 +53,20 @@ public class Leetcode3200 {
             return -1;
         return res;
     }
+
+    /**
+     * #3192
+     * 
+     * @param nums
+     * @return
+     */
+    public int minOperations2(int[] nums) {
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            var v = Math.abs(nums[i] - res % 2);
+            if (v == 0)
+                res++;
+        }
+        return res;
+    }
 }
