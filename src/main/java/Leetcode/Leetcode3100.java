@@ -40,7 +40,33 @@ public class Leetcode3100 {
      * @return
      */
     public int findPattern(InfiniteStream infiniteStream, int[] pattern) {
-        return 0;
+        var jump = kmp(pattern);
+        int ptr = 0;
+        for (int i = 0, v = infiniteStream.next(); true; i++, v = infiniteStream
+                .next()) {
+            while (ptr > 0 && pattern[ptr] != v) {
+                ptr = jump[ptr - 1];
+            }
+
+            if (pattern[ptr] == v)
+                ptr++;
+            if (ptr == pattern.length)
+                return i + 1 - pattern.length;
+        }
+    }
+
+    int[] kmp(int[] pattern) {
+        int[] jump = new int[pattern.length];
+        int ptr = 0;
+        for (int i = 1; i < pattern.length; i++) {
+            while (ptr > 0 && pattern[ptr] != pattern[i]) {
+                ptr = jump[ptr - 1];
+            }
+            if (pattern[i] == pattern[ptr])
+                ptr++;
+            jump[i] = ptr;
+        }
+        return jump;
     }
 
     /**
