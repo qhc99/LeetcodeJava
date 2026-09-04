@@ -25,7 +25,86 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2307
+     * 
+     * @param equations
+     * @param values
+     * @return
+     */
+    public boolean checkContradictions(List<List<String>> equations,
+            double[] values) {
+        var set = new DSet();
+        for (var eq : equations)
+            for (var s : eq)
+                set.add(s);
+        set.init();
+        for (int i = 0; i < equations.size(); i++) {
+            var eq = equations.get(i);
+            if (!set.tryUnion(eq.get(0), eq.get(1), values[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static class DSet {
+
+        List<Integer> arr = new ArrayList<>();
+        List<Integer> rank = new ArrayList<>();
+        Map<String, Integer> id = new HashMap<>();
+        double[][] weight;
+
+        void add(String s) {
+            if (!id.containsKey(s)) {
+                id.put(s, arr.size());
+                arr.add(arr.size());
+                rank.add(0);
+            }
+        }
+
+        void init() {
+            weight = new double[arr.size()][arr.size()];
+            for (var r : weight)
+                Arrays.fill(r, 1);
+        }
+
+        int find(int i) {
+            if (arr.get(i).equals(i)) {
+                return i;
+            }
+            var p = arr.get(i);
+            var root = find(p);
+            weight[i][root] = weight[i][p] * weight[p][root];
+            arr.set(i, root);
+            return root;
+        }
+
+        boolean tryUnion(String a, String b, double v) {
+            int i = id.get(a), j = id.get(b);
+            int pi = find(i), pj = find(j);
+            if (pi != pj) {
+                if (rank.get(pi).compareTo(rank.get(pj)) >= 0) {
+                    arr.set(pj, pi);
+                    // a/r1 b/r2 a/b=v
+                    weight[pj][pi] = weight[i][pi] / (weight[j][pj] * v);
+                    if (rank.get(pi).equals(rank.get(pj)))
+                        rank.set(pi, rank.get(pi) + 1);
+                } else {
+                    arr.set(pi, pj);
+                    weight[pi][pj] = weight[j][pj] * v / weight[i][pi];
+                }
+
+                return true;
+            } else
+                return Math.abs(v - weight[i][pi] / weight[j][pi]) < Math
+                        .pow(10, -6);
+
+        }
+    }
+
+    /**
      * #2333
+     * 
      * @param nums1
      * @param nums2
      * @param k1
