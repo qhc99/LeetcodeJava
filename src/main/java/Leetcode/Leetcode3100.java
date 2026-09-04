@@ -23,6 +23,26 @@ public class Leetcode3100 {
         return res;
     }
 
+    static class InfiniteStream {
+        public InfiniteStream(int[] bits) {
+        }
+
+        public int next() {
+            return 0;
+        }
+    }
+
+    /**
+     * #3023/3037
+     * 
+     * @param infiniteStream
+     * @param pattern
+     * @return
+     */
+    public int findPattern(InfiniteStream infiniteStream, int[] pattern) {
+        return 0;
+    }
+
     /**
      * #3030
      * 

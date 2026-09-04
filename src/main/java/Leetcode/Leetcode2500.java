@@ -217,6 +217,7 @@ public class Leetcode2500 {
 
     /**
      * #2444
+     * 
      * @param nums
      * @param minK
      * @param maxK
@@ -430,4 +431,65 @@ public class Leetcode2500 {
 
         return res;
     }
+
+    /**
+     * #2493
+     * 
+     * @param n
+     * @param edges
+     * @return
+     */
+    public int magnificentSets(int n, int[][] edges) {
+        int[] color = new int[n + 1];
+        int[] subgraph = new int[n + 1];
+        Arrays.fill(subgraph, -1);
+        List<List<Integer>> graph = new ArrayList<>();
+        for (int i = 0; i <= n; i++)
+            graph.add(new ArrayList<>());
+        for (var e : edges) {
+            graph.get(e[0]).add(e[1]);
+            graph.get(e[1]).add(e[0]);
+        }
+        Queue<Integer> queue = new ArrayDeque<>();
+        List<Integer> groupMax = new ArrayList<>();
+        for (int i = 1; i <= n; i++) {
+            if (subgraph[i] == -1) {
+                var res = colorBfs(i, groupMax.size(), color, subgraph, graph,
+                        queue);
+                if (res == -1)
+                    return -1;
+                groupMax.add(res);
+            } else {
+                var gp = subgraph[i];
+                groupMax.set(gp, Math.max(groupMax.get(gp),
+                        colorBfs(i, gp, color, subgraph, graph, queue)));
+            }
+        }
+
+        return groupMax.stream().mapToInt(i -> i).sum();
+    }
+
+    int colorBfs(int root, int group, int[] color, int[] subgraph,
+            List<List<Integer>> graph, Queue<Integer> queue) {
+        int max = 1;
+        Arrays.fill(color, -1);
+        color[root] = 1;
+        subgraph[root] = group;
+        queue.add(root);
+        while (!queue.isEmpty()) {
+            var i = queue.poll();
+            var nbs = graph.get(i);
+            for (var nb : nbs) {
+                if (color[nb] == -1) {
+                    color[nb] = color[i] + 1;
+                    subgraph[nb] = group;
+                    queue.add(nb);
+                    max = Math.max(max, color[nb]);
+                } else if ((color[nb] % 2) == (color[i] % 2))
+                    return -1;
+            }
+        }
+        return max;
+    }
+
 }
