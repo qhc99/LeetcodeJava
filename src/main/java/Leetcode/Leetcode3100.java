@@ -432,6 +432,51 @@ public class Leetcode3100 {
     }
 
     /**
+     * #3073
+     * 
+     * @param nums
+     * @return
+     */
+    public int maximumTripletValue(int[] nums) {
+        TreeSet<Integer> list = new TreeSet<>();
+        list.add(nums[0]);
+        int[] left = new int[nums.length];
+        for (int j = 1; j < nums.length - 1; j++) {
+            var floor = list.floor(nums[j] - 1);
+            left[j] = floor != null ? floor : -1;
+            list.add(nums[j]);
+        }
+        int[] right = new int[nums.length];
+        list.clear();
+        list.add(nums[nums.length - 1]);
+        for (int j = nums.length - 2; j > 0; j--) {
+            var max = list.last();
+            right[j] = max != null && max > nums[j] ? max : -1;
+            list.add(nums[j]);
+        }
+        int res = -1;
+        for (int i = 1; i < nums.length - 1; i++) {
+            if (left[i] != -1 && right[i] != -1)
+                res = Math.max(res, right[i] + left[i] - nums[i]);
+        }
+        return res;
+    }
+
+    /**
+     * #3078
+     * 
+     * @param board
+     * @param pattern
+     * @return
+     */
+    public int[] findPattern(int[][] board, String[] pattern) {
+        int r = board.length, c = board[0].length, m = pattern.length,
+                n = pattern[0].length();
+
+        return new int[] { -1, -1 };
+    }
+
+    /**
      * #3086
      * 
      * @param nums
