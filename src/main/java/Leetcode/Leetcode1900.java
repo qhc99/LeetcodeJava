@@ -69,6 +69,7 @@ public class Leetcode1900 {
 
     /**
      * #1814
+     * 
      * @param nums
      * @return
      */
@@ -95,6 +96,7 @@ public class Leetcode1900 {
 
     /**
      * #1818
+     * 
      * @param nums1
      * @param nums2
      * @return
@@ -143,6 +145,7 @@ public class Leetcode1900 {
 
     /**
      * #1829
+     * 
      * @param nums
      * @param maximumBit
      * @return
@@ -165,6 +168,7 @@ public class Leetcode1900 {
 
     /**
      * #1838
+     * 
      * @param nums
      * @param k
      * @return
@@ -172,7 +176,8 @@ public class Leetcode1900 {
     public int maxFrequency(int[] nums, int k) {
         Arrays.sort(nums);
         int max = 1;
-        // [l,r] = n_r - n_l + n_r - n_l+1 ... = (r  -l) * n_r - sum(n_l .. n_r-1)
+        // [l,r] = n_r - n_l + n_r - n_l+1 ... = (r -l) * n_r - sum(n_l ..
+        // n_r-1)
         // [l, r+1] = n_r+1 - n_l + ... = (r + 1 -l) * n_r+1 - sum(n_l ... n _r)
         // [l,r+1] = [l,r] - (r+1-l)*n_r + (r+1-l) *n_r+1
         int l = 0;
@@ -304,6 +309,7 @@ public class Leetcode1900 {
 
     /**
      * #1856
+     * 
      * @param nums
      * @return
      */
@@ -392,6 +398,48 @@ public class Leetcode1900 {
         if (time > hour)
             return -1;
         return r;
+    }
+
+    /**
+     * #1878
+     * 
+     * @param grid
+     * @return
+     */
+    public int[] getBiggestThree(int[][] grid) {
+        int m = grid.length, n = grid[0].length,
+                maxDiam = Math.min((m - 1) / 2, (n - 1) / 2);
+        // 2i+1<=m,2*j+1<=n
+        TreeSet<Integer> queue = new TreeSet<>();
+
+        for (int d = 0; d <= maxDiam; d++) {
+            for (int i = d; i + d < m; i++) {
+                for (int j = d; j + d < n; j++) {
+                    if (d == 0)
+                        queue.add(grid[i][j]);
+                    else {
+                        int v = grid[i - d][j] + grid[i + d][j] + grid[i][j - d]
+                                + grid[i][j + d];
+                        for (int x = i - d + 1; x < i; x++) {
+                            int dd = x - (i - d);
+                            v += grid[x][j - dd] + grid[x][j + dd];
+                        }
+                        for (int x = i + d - 1; x > i; x--) {
+                            int dd = i + d - x;
+                            v += grid[x][j - dd] + grid[x][j + dd];
+                        }
+                        queue.add(v);
+                    }
+                    if (queue.size() > 3)
+                        queue.removeFirst();
+                }
+            }
+        }
+        int[] res = new int[queue.size()];
+        while (!queue.isEmpty()) {
+            res[queue.size() - 1] = queue.removeFirst();
+        }
+        return res;
     }
 
     /**

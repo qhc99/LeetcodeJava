@@ -64,8 +64,6 @@ public class Leetcode3000 {
         return (int) center;
     }
 
-    }
-
     /**
      * #2931
      * 
