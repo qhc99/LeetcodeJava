@@ -438,21 +438,32 @@ public class Leetcode3100 {
      * @return
      */
     public int maximumTripletValue(int[] nums) {
-        TreeSet<Integer> list = new TreeSet<>();
-        list.add(nums[0]);
+        List<Integer> idx = new ArrayList<>();
+        for (int i = 0; i < nums.length; i++)
+            idx.add(i);
+        idx.sort((a, b) -> {
+            var c = Integer.compare(nums[a], nums[b]);
+            return c != 0 ? c : Integer.compare(b, a);
+        });
         int[] left = new int[nums.length];
-        for (int j = 1; j < nums.length - 1; j++) {
-            var floor = list.floor(nums[j] - 1);
-            left[j] = floor != null ? floor : -1;
-            list.add(nums[j]);
+        Arrays.fill(left, -1);
+        Deque<Integer> ascStack = new ArrayDeque<>();
+        ascStack.add(idx.get(0));
+        for (int i = 1; i < idx.size() - 1; i++) {
+            while (!ascStack.isEmpty() && ascStack.peekLast() > idx.get(i)) {
+                ascStack.pollLast();
+            }
+            if (!ascStack.isEmpty()) {
+                left[idx.get(i)] = nums[ascStack.peekLast()];
+            }
+            ascStack.addLast(idx.get(i));
         }
+
         int[] right = new int[nums.length];
-        list.clear();
-        list.add(nums[nums.length - 1]);
+        var max = nums[nums.length - 1];
         for (int j = nums.length - 2; j > 0; j--) {
-            var max = list.last();
-            right[j] = max != null && max > nums[j] ? max : -1;
-            list.add(nums[j]);
+            right[j] = max > nums[j] ? max : -1;
+            max = Math.max(max, nums[j]);
         }
         int res = -1;
         for (int i = 1; i < nums.length - 1; i++) {
