@@ -483,8 +483,41 @@ public class Leetcode3100 {
     public int[] findPattern(int[][] board, String[] pattern) {
         int r = board.length, c = board[0].length, m = pattern.length,
                 n = pattern[0].length();
-
+        for (int i = 0; i + m <= r; i++) {
+            for (int j = 0; j + n <= c; j++) {
+                if (matchBoard(board, i, j, pattern))
+                    return new int[] { i, j };
+            }
+        }
         return new int[] { -1, -1 };
+    }
+
+    boolean matchBoard(int[][] board, int x, int y, String[] pattern) {
+        int[] char2int = new int['z' - 'a' + 1];
+        Arrays.fill(char2int, -1);
+        char[] int2char = new char[10];
+        int m = pattern.length, n = pattern[0].length();
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                var c = pattern[i].charAt(j);
+                var b = board[i + x][j + y];
+                if (Character.isDigit(c) && c - '0' != b)
+                    return false;
+                else if (Character.isAlphabetic(c)) {
+                    if (Character.isAlphabetic(int2char[b])
+                            && char2int[c - 'a'] != b)
+                        return false;
+                    else if (char2int[c - 'a'] >= 0 && int2char[b] != c)
+                        return false;
+                    else {
+                        char2int[c - 'a'] = b;
+                        int2char[b] = c;
+                    }
+                }
+            }
+        }
+
+        return true;
     }
 
     /**
