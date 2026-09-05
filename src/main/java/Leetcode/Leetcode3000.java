@@ -35,6 +35,38 @@ public class Leetcode3000 {
     }
 
     /**
+     * #2912
+     * 
+     * @param n
+     * @param m
+     * @param k
+     * @param source
+     * @param dest
+     * @return
+     */
+    public int numberOfWays(int n, int m, int k, int[] source, int[] dest) {
+        int mod = 1_000_000_007;
+        long center = Arrays.equals(source, dest) ? 1 : 0;
+        long row = source[0] == dest[0] && source[1] != dest[1] ? 1 : 0;
+        long col = source[1] == dest[1] && source[0] != dest[0] ? 1 : 0;
+        long other = (row == 0 && col == 0 && center == 0) ? 1 : 0;
+        for (int i = 1; i <= k; i++) {
+            long prev_center = center, prev_row = row, prev_col = col,
+                    prev_other = other;
+            center = (prev_row + prev_col) % mod;
+            row = ((prev_center * (m - 1) + prev_row * (m - 2)) % mod
+                    + prev_other) % mod;
+            col = ((prev_center * (n - 1) % mod + prev_col * (n - 2) % mod)
+                    % mod + prev_other) % mod;
+            other = ((prev_row * (n - 1) % mod + prev_col * (m - 1) % mod) % mod
+                    + prev_other * (m - 2 + n - 2) % mod) % mod;
+        }
+        return (int) center;
+    }
+
+    }
+
+    /**
      * #2931
      * 
      * @param values
