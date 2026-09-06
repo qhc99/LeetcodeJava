@@ -26,7 +26,31 @@ public class Leetcode1300 {
 
         }
         return res;
+    }
 
+    /**
+     * #1202
+     * 
+     * @param s
+     * @param pairs
+     * @return
+     */
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        var res = s.toCharArray();
+        var set = new Disjointset(s.length());
+        for (var pair : pairs)
+            set.union(pair.get(0), pair.get(1));
+        Map<Integer, Queue<Character>> groupChar = new HashMap<>();
+        for (int i = 0; i < set.prev.length; i++) {
+            var p = set.parent(i);
+            groupChar.computeIfAbsent(p, k -> new PriorityQueue<>())
+                    .add(res[i]);
+        }
+
+        for (int i = 0; i < res.length; i++) {
+            res[i] = groupChar.get(set.prev[i]).poll();
+        }
+        return new String(res);
     }
 
     /**
