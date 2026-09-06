@@ -1,6 +1,40 @@
 package Leetcode;
 
+import java.util.*;
+
 public class Leetcode3200 {
+
+    /**
+     * #3161
+     * 
+     * @param queries
+     * @return
+     */
+    public List<Boolean> getResults(int[][] queries) {
+        List<Boolean> res = new ArrayList<>();
+        TreeMap<Integer, Integer> list = new TreeMap<>();
+        list.put(0, 0);
+        for (var query : queries) {
+            var block = query[1];
+            if (query[0] == 1) {
+                var floorEntry = list.floorEntry(block);
+                var ceilEntry = list.ceilingEntry(block);
+                var v = Math.max(block - floorEntry.getKey(),
+                        floorEntry.getValue());
+                list.put(block, v);
+                if (ceilEntry != null)
+                    list.put(ceilEntry.getKey(), Math.max(ceilEntry.getKey() - block, v));
+                
+            } else {
+                var floorEntry = list.floorEntry(block);
+                var v = Math.max(block - floorEntry.getKey(),
+                        floorEntry.getValue());
+                res.add(v >= query[2]);
+            }
+        }
+        return res;
+    }
+
     /**
      * #3163
      * 

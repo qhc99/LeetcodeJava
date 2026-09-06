@@ -1167,6 +1167,7 @@ public class Leetcode300 {
 
     /**
      * #254
+     * 
      * @param n
      * @return
      */
@@ -1271,6 +1272,25 @@ public class Leetcode300 {
         };
         recurFunc.apply(root);
         return ans;
+    }
+
+    /**
+     * #258
+     * 
+     * @param num
+     * @return
+     */
+    public int addDigits(int num) {
+        while (num >= 10) {
+            int s = 0;
+            while (num > 0) {
+                s += num % 10;
+                num /= 10;
+            }
+            num = s;
+        }
+
+        return num;
     }
 
     /**
