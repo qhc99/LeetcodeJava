@@ -476,6 +476,66 @@ public class Leetcode800 {
     }
 
     /**
+     * #722
+     * 
+     * @param source
+     * @return
+     */
+    public List<String> removeComments(String[] source) {
+        var lexer = new Lexer();
+        for (int i = 0; i < source.length;) {
+            var line = source[i];
+            for (int j = 0; j < line.length(); j++) {
+                lexer.accept(line.charAt(j));
+            }
+            lexer.accept('\n');
+        }
+        return lexer.res;
+    }
+
+    static class Lexer {
+        List<String> res = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+        char prev = ' ';
+        int mode = 0; // normal, line, multi
+
+        void accept(char chr) {
+            if (mode == 0) {
+                if (!sb.isEmpty() && sb.charAt(sb.length() - 1) == '/'
+                        && chr == '/') {
+                    sb.delete(sb.length() - 1, sb.length());
+                    mode = 1;
+                } else if (!sb.isEmpty() && sb.charAt(sb.length() - 1) == '/'
+                        && chr == '*') {
+                    sb.delete(sb.length() - 1, sb.length());
+                    mode = 2;
+                } else if (chr == '\n') {
+                    if (!sb.isEmpty()) {
+                        res.add(sb.toString());
+                        sb.delete(0, sb.length());
+                    }
+                } else {
+                    sb.append(chr);
+                }
+            } else if (mode == 1) {
+                if (chr == '\n') {
+                    if (!sb.isEmpty()) {
+                        res.add(sb.toString());
+                        sb.delete(0, sb.length());
+                    }
+                    mode = 0;
+                }
+            } else {
+                if (prev == '*' && chr == '/') {
+                    mode = 0;
+                    prev = ' ';
+                } else
+                    prev = chr;
+            }
+        }
+    }
+
+    /**
      * #723
      * 
      * @param board
