@@ -369,6 +369,48 @@ public class Leetcode1900 {
     }
 
     /**
+     * #1861
+     * 
+     * @param boxGrid
+     * @return
+     */
+    public char[][] rotateTheBox(char[][] boxGrid) {
+        int m = boxGrid.length, n = boxGrid[0].length;
+        char[][] res = new char[n][m];
+        for (int i = 0; i < m; i++) {
+            var row = boxGrid[i];
+            int q = n - 1;
+            while (q > 0) {
+                var v = row[q];
+                if (v == '*' || v == '#') {
+                    q--;
+                    continue;
+                }
+                int p = q - 1;
+                while (p >= 0 && row[q] == '.') {
+                    var t = row[p];
+                    if (t == '.') {
+                        p--;
+                    } else if (t == '#') {
+                        row[q--] = '#';
+                        row[p--] = '.';
+                    } else {
+                        q = p - 1;
+                        break;
+                    }
+                }
+                if (p == -1)
+                    break;
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++)
+                res[i][j] = boxGrid[m-1-j][i];
+        }
+        return res;
+    }
+
+    /**
      * #1870
      * 
      * @param dist
