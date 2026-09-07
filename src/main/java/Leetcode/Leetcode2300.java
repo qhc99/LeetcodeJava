@@ -162,6 +162,72 @@ public class Leetcode2300 {
     }
 
     /**
+     * #2258
+     * 
+     * @param grid
+     * @return
+     */
+    public int maximumMinutes(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[] topFire = new int[1], leftFire = new int[1];
+        int inf = 1_000_000_000;
+        topFire[0] = leftFire[0] = inf;
+        var top = dfs(m - 2, n - 1, grid, topFire);
+        var left = dfs(m - 1, n - 2, grid, leftFire);
+
+        int fire = Math.min(topFire[0], leftFire[0]);
+        int safe = Math.min(top, left);
+
+        if (fire == inf && safe < inf)
+            return inf;
+        if (safe == inf || fire < safe)
+            return -1;
+        // top + x < topFire[0]
+        // top + x <= leftFire[0]
+
+        // left + x < leftFire[0]
+        // left + x <= topFire[0]
+
+        // Max(x,-1)
+
+        return Math.max(Math.min(leftFire[0] - top, topFire[0] - top - 1), Math
+                .max(Math.min(topFire[0] - left, leftFire[0] - left - 1), -1));
+
+    }
+
+    int dfs(int startX, int startY, int[][] grid, int[] fire) {
+        int m = grid.length, n = grid[0].length;
+        boolean[][] visited = new boolean[m][n];
+        visited[m - 1][n - 1] = true;
+        Queue<Pos> queue = new ArrayDeque<>();
+        int res = 1_000_000_000;
+        int[] dx = { 0, 0, 1, -1 }, dy = { 1, -1, 0, 0 };
+        if (grid[startX][startY] != 2)
+            queue.add(new Pos(startX, startY, 0));
+        while (!queue.isEmpty()) {
+            var pos = queue.poll();
+            if (grid[pos.x][pos.y] == 1)
+                fire[0] = Math.min(fire[0], pos.dist);
+            if (pos.x == 0 && pos.y == 0)
+                res = pos.dist;
+            for (int d = 0; d < 4; d++) {
+                int x = pos.x + dx[d], y = pos.y + dy[d];
+                if (x >= 0 && x < m && y >= 0 && y < n && grid[x][y] != 2
+                        && !visited[x][y]) {
+                    visited[x][y] = true;
+
+                    queue.add(new Pos(x, y, pos.dist + 1));
+                }
+            }
+        }
+
+        return res;
+    }
+
+    static record Pos(int x, int y, int dist) {
+    }
+
+    /**
      * #2261
      * 
      * @param nums
