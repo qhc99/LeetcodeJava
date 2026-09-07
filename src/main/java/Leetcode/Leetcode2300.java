@@ -182,13 +182,13 @@ public class Leetcode2300 {
             return inf;
         if (safe == inf || fire < safe)
             return -1;
-        // top + x < topFire[0]
-        // top + x <= leftFire[0]
+        // top + wait < topFire[0]
+        // top + wait <= leftFire[0]
 
-        // left + x < leftFire[0]
-        // left + x <= topFire[0]
+        // left + wait < leftFire[0]
+        // left + wait <= topFire[0]
 
-        // Max(x,-1)
+        // Max(wait,-1)
 
         return Math.max(Math.min(leftFire[0] - top, topFire[0] - top - 1), Math
                 .max(Math.min(topFire[0] - left, leftFire[0] - left - 1), -1));
