@@ -161,6 +161,7 @@ public class Leetcode1200 {
 
     /**
      * #1152
+     * 
      * @param username
      * @param timestamp
      * @param website
@@ -242,6 +243,51 @@ public class Leetcode1200 {
             next = t;
         }
         return res > 0 ? res : -1;
+    }
+
+    /**
+     * #1166 FileSystem
+     */
+    class FileSystem {
+
+        static class Node {
+            Map<String, Node> children = new HashMap<>();
+            int value = -1;
+
+            Node(int v) {
+                value = v;
+            }
+        }
+
+        Node root = new Node(-1);
+
+        public FileSystem() {
+
+        }
+
+        public boolean createPath(String path, int value) {
+            var ptr = root;
+            var parts = path.split("/");
+            for (int i = 1; i < parts.length - 1 && ptr != null; i++) {
+                ptr = ptr.children.get(parts[i]);
+            }
+            if (ptr == null
+                    || ptr.children.containsKey(parts[parts.length - 1]))
+                return false;
+            ptr.children.put(parts[parts.length - 1], new Node(value));
+            return true;
+        }
+
+        public int get(String path) {
+            var ptr = root;
+            var parts = path.split("/");
+            for (int i = 1; i < parts.length && ptr != null; i++) {
+                ptr = ptr.children.get(parts[i]);
+            }
+            if (ptr == null)
+                return -1;
+            return ptr.value;
+        }
     }
 
     /**
@@ -336,6 +382,7 @@ public class Leetcode1200 {
 
     /**
      * #1171
+     * 
      * @param head
      * @return
      */
