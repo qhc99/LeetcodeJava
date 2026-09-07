@@ -7,6 +7,7 @@ public class Leetcode2300 {
 
     /**
      * #2243
+     * 
      * @param s
      * @param k
      * @return
@@ -29,7 +30,43 @@ public class Leetcode2300 {
     }
 
     /**
+     * #2246
+     * 
+     * @param parent
+     * @param s
+     * @return
+     */
+    public int longestPath(int[] parent, String s) {
+        List<List<Integer>> graph = new ArrayList<>();
+        for (var i : parent)
+            graph.add(new ArrayList<>());
+        for (int i = 1; i < parent.length; i++) {
+            graph.get(parent[i]).add(i);
+        }
+        int[] max = new int[1];
+        dfsPath(0, graph, s, max);
+        return max[0];
+    }
+
+    int dfsPath(int i, List<List<Integer>> graph, String s, int[] max) {
+        Queue<Integer> len = new PriorityQueue<>();
+        for (var nb : graph.get(i)) {
+            var l = dfsPath(nb, graph, s, max);
+            if (s.charAt(i) != s.charAt(nb)) {
+                len.add(l);
+                if (len.size() > 2)
+                    len.poll();
+            }
+        }
+        int less = (len.size() > 1) ? len.poll() : 0,
+                more = (!len.isEmpty()) ? len.poll() : 0;
+        max[0] = Math.max(max[0], 1 + more + less);
+        return 1 + more;
+    }
+
+    /**
      * #2248
+     * 
      * @param nums
      * @return
      */
@@ -43,6 +80,7 @@ public class Leetcode2300 {
 
     /**
      * #2251
+     * 
      * @param flowers
      * @param people
      * @return
@@ -125,6 +163,7 @@ public class Leetcode2300 {
 
     /**
      * #2261
+     * 
      * @param nums
      * @param k
      * @param p
@@ -174,6 +213,7 @@ public class Leetcode2300 {
 
     /**
      * #2282
+     * 
      * @param heights
      * @return
      */
