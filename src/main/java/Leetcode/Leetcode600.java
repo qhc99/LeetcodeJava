@@ -878,6 +878,35 @@ public class Leetcode600 {
     }
 
     /**
+     * #545
+     * 
+     * @param root
+     * @return
+     */
+    public List<Integer> boundaryOfBinaryTree(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        res.add(root.val);
+        if (root.left != null)
+            visitBoundary(root.left, true, false, res);
+        if (root.right != null)
+            visitBoundary(root.right, false, true, res);
+        return res;
+    }
+
+    void visitBoundary(TreeNode n, boolean isLeft, boolean isRight,
+            List<Integer> res) {
+        var isLeaf = (n.left == null && n.right == null);
+        if (isLeaf || isLeft)
+            res.add(n.val);
+        if (n.left != null)
+            visitBoundary(n.left, isLeft, n.right == null && isRight, res);
+        if (n.right != null)
+            visitBoundary(n.right, n.left == null && isLeft, isRight, res);
+        if (!isLeaf && isRight && !isLeft)
+            res.add(n.val);
+    }
+
+    /**
      * #551
      *
      * @param s
@@ -963,6 +992,7 @@ public class Leetcode600 {
 
     /**
      * #564
+     * 
      * @param n
      * @return
      */
