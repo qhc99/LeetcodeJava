@@ -846,6 +846,38 @@ public class Leetcode800 {
     }
 
     /**
+     * #730
+     * 
+     * @param s
+     * @return
+     */
+    public int countPalindromicSubsequences(String s) {
+        if (s.length() == 1)
+            return 1;
+        int mod = 1_000_000_007;
+        long[][] dp = new long[2][s.length()];
+        // dp[i,j] = dp[i+1,j] + dp[i,j-1] - dp[i+1,j-1] + s[i]==s[j] * (1 +
+        // dp[i+1,j-1])
+        for (int i = s.length() - 1; i >= 0; i--) {
+            var current = dp[1];
+            var prev = dp[0];
+            for (int j = i; j < s.length(); j++) {
+                var a = i + 1 <= j ? prev[j] : 0;
+                var b = i <= j - 1 ? current[j - 1] : 0;
+                var c = i + 1 <= j - 1 ? prev[j - 1] : 0;
+                var d = (s.charAt(i) == s.charAt(j) ? 1 : 0);
+                current[j] = ((((a + b) % mod - c) % mod + mod) % mod
+                        + (d * (1 + c) % mod)) % mod;
+            }
+
+            var t = dp[0];
+            dp[0] = dp[1];
+            dp[1] = t;
+        }
+        return (int) dp[0][s.length() - 1];
+    }
+
+    /**
      * #731
      */
     class MyCalendarTwo {

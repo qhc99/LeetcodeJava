@@ -323,4 +323,56 @@ public class Leetcode2300 {
 
         return res;
     }
+
+    /**
+     * 2296 TextEditor
+     */
+    class TextEditor {
+        Deque<Character> left = new ArrayDeque<>();
+        Deque<Character> right = new ArrayDeque<>();
+
+        public TextEditor() {
+
+        }
+
+        public void addText(String text) {
+            for (var c : text.toCharArray())
+                left.addLast(c);
+        }
+
+        public int deleteText(int k) {
+            int del = Math.min(k, left.size());
+            for (int t = del; t > 0; t--)
+                left.pollLast();
+            return del;
+        }
+
+        public String cursorLeft(int k) {
+            int mov = Math.min(k, left.size());
+            for (int t = mov; t > 0; t--)
+                right.addFirst(left.pollLast());
+            return left10();
+        }
+
+        String left10() {
+            int len = Math.min(10, left.size());
+            StringBuilder sb = new StringBuilder();
+            Deque<Character> stack = new ArrayDeque<>();
+            for (int t = len; t > 0; t--) {
+                var c = left.pollLast();
+                stack.addFirst(c);
+                sb.append(c);
+            }
+            left.addAll(stack);
+            return sb.reverse().toString();
+        }
+
+        public String cursorRight(int k) {
+            int mov = Math.min(k, right.size());
+            for (int t = mov; t > 0; t--)
+                left.addLast(right.pollFirst());
+            return left10();
+        }
+    }
+
 }
