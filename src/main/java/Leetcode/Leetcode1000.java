@@ -268,6 +268,47 @@ public class Leetcode1000 {
     }
 
     /**
+     * #928
+     * 
+     * @param graph
+     * @param initial
+     * @return
+     */
+    public int minMalwareSpread2(int[][] graph, int[] initial) {
+        int n = graph.length;
+        Arrays.sort(initial);
+        boolean[] visited = new boolean[n];
+        int res = -1, min = Integer.MAX_VALUE;
+        for (var root : initial) {
+            Arrays.fill(visited, false);
+            Queue<Integer> queue = new ArrayDeque<>();
+            int count = 0;
+            for (var i : initial)
+                if (i != root) {
+                    queue.add(i);
+                    visited[i] = true;
+                    count++;
+                }
+            while (!queue.isEmpty()) {
+                var node = queue.poll();
+                for (int i = 0; i < n; i++) {
+                    if (!visited[i] && i != root && graph[node][i] == 1) {
+                        visited[i] = true;
+                        count++;
+                        queue.add(i);
+                    }
+                }
+            }
+            if (count < min) {
+                min = count;
+                res = root;
+            }
+        }
+
+        return res;
+    }
+
+    /**
      * #930
      * 
      * @param nums
