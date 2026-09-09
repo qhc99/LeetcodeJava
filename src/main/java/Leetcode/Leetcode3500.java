@@ -118,6 +118,33 @@ public class Leetcode3500 {
     }
 
     /**
+     * #3466
+     * 
+     * @param lane1
+     * @param lane2
+     * @return
+     */
+    public long maxCoins(int[] lane1, int[] lane2) {
+        int n = lane1.length;
+        long[][] dp = new long[2][3];
+        for (var r : dp)
+            Arrays.fill(r, Long.MIN_VALUE);
+        // leave
+        long max = Long.MIN_VALUE;
+        for (int i = 0; i < n; i++) {
+            dp[1][0] = Math.max(dp[0][0], 0) + lane1[i];
+            dp[1][1] = Math.max(Math.max(dp[0][0], dp[0][1]), 0) + lane2[i];
+            dp[1][2] = Math.max(dp[0][1], dp[0][2]) + lane1[i];
+            max = Math.max(max,
+                    Math.max(dp[1][0], Math.max(dp[1][1], dp[1][2])));
+            var t = dp[0];
+            dp[0] = dp[1];
+            dp[1] = t;
+        }
+        return max;
+    }
+
+    /**
      * #3474
      * 
      * @param str1
