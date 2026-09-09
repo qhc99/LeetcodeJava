@@ -96,8 +96,8 @@ public class Leetcode3400 {
                 day2 = getConversions(n, pairs2, moneyId, targetId, rates2);
         double max = 1;
         for (int i = 0; i < n; i++) {
-            if(day1[targetId][i] != 0 && day2[targetId][i] != 0){
-                max = Math.max(max, day1[targetId][i]/day2[targetId][i]);
+            if (day1[targetId][i] != 0 && day2[targetId][i] != 0) {
+                max = Math.max(max, day1[targetId][i] / day2[targetId][i]);
             }
         }
         return max;
