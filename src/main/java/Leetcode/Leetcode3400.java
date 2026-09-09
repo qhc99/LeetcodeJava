@@ -73,6 +73,68 @@ public class Leetcode3400 {
     }
 
     /**
+     * #3387
+     * 
+     * @param initialCurrency
+     * @param pairs1
+     * @param rates1
+     * @param pairs2
+     * @param rates2
+     * @return
+     */
+    public double maxAmount(String initialCurrency, List<List<String>> pairs1,
+            double[] rates1, List<List<String>> pairs2, double[] rates2) {
+        Map<String, Integer> moneyId = new HashMap<>();
+        for (var p : pairs1)
+            for (var s : p)
+                moneyId.putIfAbsent(s, moneyId.size());
+        for (var p : pairs2)
+            for (var s : p)
+                moneyId.putIfAbsent(s, moneyId.size());
+        int n = moneyId.size(), targetId = moneyId.get(initialCurrency);
+        double[][] day1 = getConversions(n, pairs1, moneyId, targetId, rates1),
+                day2 = getConversions(n, pairs2, moneyId, targetId, rates2);
+        double max = 1;
+        for (int i = 0; i < n; i++) {
+            if(day1[targetId][i] != 0 && day2[targetId][i] != 0){
+                max = Math.max(max, day1[targetId][i]/day2[targetId][i]);
+            }
+        }
+        return max;
+    }
+
+    double[][] getConversions(int n, List<List<String>> pairs,
+            Map<String, Integer> moneyId, int targetId, double[] rates) {
+        double[][] graph1 = new double[n][n];
+        for (int i = 0; i < pairs.size(); i++) {
+            var p = pairs.get(i);
+            graph1[moneyId.get(p.get(0))][moneyId.get(p.get(1))] = rates[i];
+            graph1[moneyId.get(p.get(1))][moneyId.get(p.get(0))] = 1.
+                    / rates[i];
+
+        }
+        double[][] convert = new double[n][n];
+        for (int i = 0; i < n; i++)
+            convert[i][i] = 1;
+        boolean[] visited = new boolean[n];
+        visited[targetId] = true;
+        Queue<Integer> queue = new ArrayDeque<>();
+        queue.add(targetId);
+        while (!queue.isEmpty()) {
+            var node = queue.poll();
+            for (int nb = 0; nb < n; nb++) {
+                if (!visited[nb] && graph1[node][nb] != 0) {
+                    visited[nb] = true;
+                    convert[targetId][nb] = convert[targetId][node]
+                            * graph1[node][nb];
+                    queue.add(nb);
+                }
+            }
+        }
+        return convert;
+    }
+
+    /**
      * #3389
      * 
      * @param s
