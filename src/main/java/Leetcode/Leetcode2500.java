@@ -295,6 +295,70 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2467
+     * 
+     * @param edges
+     * @param bob
+     * @param amount
+     * @return
+     */
+    public int mostProfitablePath(int[][] edges, int bob, int[] amount) {
+        int n = edges.length + 1;
+        ArrayList[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++)
+            graph[i] = new ArrayList<>();
+        for (var edge : edges) {
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
+        int[] step = new int[n];
+        Arrays.fill(step, Integer.MAX_VALUE);
+        preprocess(graph, bob, step, new boolean[n], 0);
+        return searchMax(0, step, 0, amount, graph, new boolean[n]);
+    }
+
+    int searchMax(int node, int[] step, int depth, int[] amount,
+            ArrayList[] graph, boolean[] visited) {
+        int v = 0;
+        visited[node] = true;
+        if (depth < step[node])
+            v += amount[node];
+        else if (depth == step[node])
+            v += amount[node] / 2;
+        int max = Integer.MIN_VALUE;
+        for (var nb : graph[node]) {
+            int inb = (int) nb;
+            if (!visited[inb]) {
+                max = Math.max(max, searchMax(inb, step, depth + 1, amount,
+                        graph, visited));
+            }
+        }
+        return v + (max != Integer.MIN_VALUE ? max : 0);
+    }
+
+    boolean preprocess(ArrayList[] graph, int node, int[] step,
+            boolean[] visited, int depth) {
+        visited[node] = true;
+        if (node == 0) {
+            step[node] = depth;
+            return true;
+        } else {
+            for (var nb : graph[node]) {
+                int inb = (int) nb;
+                if (!visited[inb]) {
+                    var find = preprocess(graph, inb, step, visited, depth + 1);
+                    if (find) {
+                        step[node] = depth;
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * #2461
      * 
      * @param nums
