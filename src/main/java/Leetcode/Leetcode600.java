@@ -907,6 +907,26 @@ public class Leetcode600 {
     }
 
     /**
+     * #547
+     * 
+     * @param isConnected
+     * @return
+     */
+    public int findCircleNum(int[][] isConnected) {
+        var set = new Disjointset(isConnected.length);
+        Set<Integer> source = new HashSet<>();
+        for (int i = 0; i < isConnected.length; i++) {
+            for (int j = i + 1; j < isConnected.length; j++) {
+                if (isConnected[i][j] == 1)
+                    set.union(i, j);
+            }
+        }
+        for (int i = 0; i < isConnected.length; i++)
+            source.add(set.parent(i));
+        return source.size();
+    }
+
+    /**
      * #551
      *
      * @param s
