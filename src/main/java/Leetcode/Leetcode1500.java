@@ -7,6 +7,7 @@ public class Leetcode1500 {
 
     /**
      * #1400
+     * 
      * @param s
      * @param k
      * @return
@@ -101,6 +102,7 @@ public class Leetcode1500 {
 
     /**
      * #1428
+     * 
      * @param binaryMatrix
      * @return
      */
@@ -124,7 +126,39 @@ public class Leetcode1500 {
     }
 
     /**
+     * #1429 FirstUnique
+     */
+    class FirstUnique {
+        Set<Integer> unique = new HashSet<>();
+        Set<Integer> dup = new HashSet<>();
+        Queue<Integer> queue = new ArrayDeque<>();
+
+        public FirstUnique(int[] nums) {
+            for (var i : nums)
+                add(i);
+        }
+
+        public int showFirstUnique() {
+            while (!queue.isEmpty() && dup.contains(queue.peek()))
+                queue.poll();
+
+            return queue.isEmpty() ? -1 : queue.peek();
+        }
+
+        public void add(int i) {
+            if (!unique.contains(i) && !dup.contains(i)) {
+                unique.add(i);
+                queue.add(i);
+            } else if (unique.contains(i)) {
+                unique.remove(i);
+                dup.add(i);
+            }
+        }
+    }
+
+    /**
      * #1438
+     * 
      * @param nums
      * @param limit
      * @return
