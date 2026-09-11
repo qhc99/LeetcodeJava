@@ -65,6 +65,36 @@ public class Leetcode1100 {
     }
 
     /**
+     * #1005
+     * 
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int largestSumAfterKNegations(int[] nums, int k) {
+        Queue<Integer> queue = new PriorityQueue<>();
+        for (var n : nums)
+            queue.add(n);
+        for (; k > 0; k--) {
+            var n = queue.poll();
+            if (n < 0) {
+                queue.add(-n);
+            } else if (n == 0)
+                k = 0;
+            else {
+                k %= 2;
+                if (k > 0) {
+                    queue.add(-n);
+                    k--;
+                } else
+                    queue.add(n);
+            }
+        }
+
+        return queue.stream().mapToInt(i -> i).sum();
+    }
+
+    /**
      * #1006 <br/>
      * 笨阶乘
      * 
@@ -396,6 +426,7 @@ public class Leetcode1100 {
 
     /**
      * #1039
+     * 
      * @param values
      * @return
      */
