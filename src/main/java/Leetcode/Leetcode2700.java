@@ -5,6 +5,54 @@ import java.util.*;
 public class Leetcode2700 {
 
     /**
+     * #2603
+     * 
+     * @param coins
+     * @param edges
+     * @return
+     */
+    public int collectTheCoins(int[] coins, int[][] edges) {
+        int n = coins.length, left = n;
+        HashSet<Integer>[] graph = new HashSet[n];
+        for (int i = 0; i < n; i++)
+            graph[i] = new HashSet<>();
+        for (var edge : edges) {
+            graph[edge[0]].add(edge[1]);
+            graph[edge[1]].add(edge[0]);
+        }
+        Queue<Integer> queue = new ArrayDeque<>();
+        for (int i = 0; i < n; i++) {
+            if (graph[i].size() == 1 && coins[i] == 0)
+                queue.add(i);
+        }
+        while (!queue.isEmpty()) {
+            var node = queue.poll();
+            for (var nb : graph[node]) {
+                graph[nb].remove(node);
+                if (graph[nb].size() == 1 && coins[nb] == 0)
+                    queue.add(nb);
+            }
+            graph[node].clear();
+            left--;
+        }
+        for (int i = 0; i < 2; i++) {
+            for (int j = 0; j < n; j++) {
+                if (graph[j].size() == 1)
+                    queue.add(j);
+            }
+            while (!queue.isEmpty()) {
+                var node = queue.poll();
+                for (var nb : graph[node])
+                    graph[nb].remove(node);
+                graph[node].clear();
+                left--;
+            }
+        }
+
+        return 2 * (Math.max(left, 1) - 1);
+    }
+
+    /**
      * #2672
      * 
      * @param n
