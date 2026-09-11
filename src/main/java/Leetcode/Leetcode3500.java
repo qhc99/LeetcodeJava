@@ -118,6 +118,36 @@ public class Leetcode3500 {
     }
 
     /**
+     * #3443
+     * 
+     * @param s
+     * @param k
+     * @return
+     */
+    public int maxDistance(String s, int k) {
+        int[] count = new int[4]; // N S E W;
+        int max = 0;
+        for (var c : s.toCharArray()) {
+            if (c == 'N')
+                count[0]++;
+            else if (c == 'S')
+                count[1]++;
+            else if (c == 'E')
+                count[2]++;
+            else
+                count[3]++;
+            // max over abs(N-S) + abs(E-W)
+            // c1 = min(n,s,k)
+            // c2 = min(e,w,k-c1)
+            int c1 = Math.min(k, Math.min(count[0], count[1])),
+                    c2 = Math.min(k - c1, Math.min(count[2], count[3]));
+            max = Math.max(max, Math.abs(count[0] - count[1]) + 2 * c1
+                    + Math.abs(count[2] - count[3]) + 2 * c2);
+        }
+        return max;
+    }
+
+    /**
      * #3466
      * 
      * @param lane1
