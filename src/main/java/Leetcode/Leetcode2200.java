@@ -3,6 +3,48 @@ package Leetcode;
 import java.util.*;
 
 public class Leetcode2200 {
+
+    /**
+     * #2101
+     * 
+     * @param bombs
+     * @return
+     */
+    public int maximumDetonation(int[][] bombs) {
+        ArrayList<Integer>[] graph = new ArrayList[bombs.length];
+        for (int i = 0; i < bombs.length; i++)
+            graph[i] = new ArrayList<>();
+        for (int i = 0; i < bombs.length; i++) {
+            for (int j = i + 1; j < bombs.length; j++) {
+                var d = Math.sqrt(Math.pow(bombs[i][0] - bombs[j][0], 2)
+                        + Math.pow(bombs[i][1] - bombs[j][1], 2));
+                if (bombs[i][2] >= d)
+                    graph[i].add(j);
+                if (bombs[j][2] >= d)
+                    graph[j].add(i);
+
+            }
+        }
+        int max = 0;
+        for (int i = 0; i < bombs.length; i++) {
+            max = Math.max(max,
+                    maxDeonate(i, new boolean[bombs.length], graph));
+        }
+        return max;
+    }
+
+    int maxDeonate(int i, boolean[] visited, ArrayList<Integer>[] graph) {
+        visited[i] = true;
+        int res = 1;
+        for (var nb : graph[i]) {
+            if (!visited[nb]) {
+                res += maxDeonate(nb, visited, graph);
+            }
+        }
+
+        return res;
+    }
+
     /**
      * #2104
      * 
@@ -10,17 +52,46 @@ public class Leetcode2200 {
      * @return
      */
     public long subArrayRanges(int[] nums) {
-        int[] min = new int[nums.length];
-        int[] max = new int[nums.length];
-        Stack<Integer> incStack = new Stack<>();
+        int[] minLeft = new int[nums.length];
+        int[] minRight = new int[nums.length];
+        Stack<Integer> stack = new Stack<>();
         for (int i = 0; i < nums.length; i++) {
-            while (!incStack.isEmpty() || nums[i] < incStack.peek()) {
-                min[incStack.pop()] = i;
-            }
-            incStack.add(i);
-
+            while (!stack.isEmpty() && nums[stack.peek()] > nums[i])
+                stack.pop();
+            minLeft[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.add(i);
         }
-        return 0;
+        stack.clear();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && nums[stack.peek()] >= nums[i])
+                stack.pop();
+            minRight[i] = stack.isEmpty() ? nums.length : stack.peek();
+            stack.add(i);
+        }
+        stack.clear();
+        int[] maxLeft = new int[nums.length];
+        int[] maxRight = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            while (!stack.isEmpty() && nums[stack.peek()] <= nums[i])
+                stack.pop();
+            maxLeft[i] = stack.isEmpty() ? -1 : stack.peek();
+            stack.add(i);
+        }
+        stack.clear();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i])
+                stack.pop();
+            maxRight[i] = stack.isEmpty() ? nums.length : stack.peek();
+            stack.add(i);
+        }
+        long res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            long n = nums[i];
+            res += n * ((i - maxLeft[i]) * (maxRight[i] - i)
+                    - (i - minLeft[i]) * (minRight[i] - i));
+        }
+
+        return res;
     }
 
     /**
@@ -144,6 +215,7 @@ public class Leetcode2200 {
 
     /**
      * #2158
+     * 
      * @param paint
      * @return
      */
@@ -173,7 +245,8 @@ public class Leetcode2200 {
         int insert(int l, int r) {
             if (isFullCovered)
                 return 0;
-            if (l == rangeLeft && r == rangeRight && leftTree == null && rightTree == null) {
+            if (l == rangeLeft && r == rangeRight && leftTree == null
+                    && rightTree == null) {
                 isFullCovered = true;
                 return r - l;
             }
@@ -209,6 +282,7 @@ public class Leetcode2200 {
 
     /**
      * #2187
+     * 
      * @param time
      * @param totalTrips
      * @return
@@ -238,6 +312,7 @@ public class Leetcode2200 {
 
     /**
      * #2196
+     * 
      * @param descriptions
      * @return
      */
