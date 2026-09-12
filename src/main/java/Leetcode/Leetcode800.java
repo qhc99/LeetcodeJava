@@ -2398,6 +2398,44 @@ public class Leetcode800 {
     }
 
     /**
+     * #795
+     * 
+     * @param nums
+     * @param left
+     * @param right
+     * @return
+     */
+    public int numSubarrayBoundedMax(int[] nums, int left, int right) {
+        Deque<Integer> descStack = new ArrayDeque<>();
+        int[] l = new int[nums.length], r = new int[nums.length];
+        for (int i = 0; i < nums.length; i++) {
+            while (!descStack.isEmpty()
+                    && nums[descStack.peekLast()] <= nums[i]) {
+                descStack.pollLast();
+            }
+            l[i] = i - (descStack.isEmpty() ? -1 : descStack.peekLast());
+            descStack.addLast(i);
+        }
+        descStack.clear();
+        for (int i = nums.length - 1; i >= 0; i--) {
+            while (!descStack.isEmpty()
+                    && nums[descStack.peekLast()] < nums[i]) {
+                descStack.pollLast();
+            }
+            r[i] = (descStack.isEmpty() ? nums.length : descStack.peekLast())
+                    - i;
+            descStack.addLast(i);
+        }
+        int res = 0;
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] >= left && nums[i] <= right) {
+                res += l[i] * r[i];
+            }
+        }
+        return res;
+    }
+
+    /**
      * #799
      * 
      * @param poured
