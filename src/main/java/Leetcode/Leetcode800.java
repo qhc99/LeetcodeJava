@@ -2420,7 +2420,7 @@ public class Leetcode800 {
         int res = 0;
         for (int i = nums.length - 1; i >= 0; i--) {
             while (!descStack.isEmpty()
-                    && nums[descStack.peekLast()] < nums[i]) {
+                    && nums[descStack.peekLast()] < nums[i]) { // de-duplicate
                 descStack.pollLast();
             }
             var r_i = (descStack.isEmpty() ? nums.length : descStack.peekLast())
