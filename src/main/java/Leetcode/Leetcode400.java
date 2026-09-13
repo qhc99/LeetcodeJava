@@ -1527,6 +1527,59 @@ public class Leetcode400 {
         return res.stream().mapToInt(i -> i).toArray();
     }
 
+    static class Q353 {
+        class SnakeGame {
+            static record Pos(int x, int y) {
+            }
+
+            Deque<Pos> snake = new ArrayDeque<>();
+            Queue<Pos> food = new ArrayDeque<>();
+            Set<Pos> body = new HashSet<>();
+            int m, n;
+
+            public SnakeGame(int width, int height, int[][] food) {
+                snake.add(new Pos(0, 0));
+                m = height;
+                n = width;
+                for (var f : food)
+                    this.food.add(new Pos(f[0], f[1]));
+            }
+
+            boolean isOver(Pos head) {
+                if (head.x < 0 || head.x >= m || head.y < 0 || head.y >= n)
+                    return true;
+                if (body.contains(head))
+                    return true;
+                return false;
+            }
+
+            public int move(String direction) {
+                var head = snake.peekFirst();
+                var tail = snake.pollLast();
+                body.remove(tail);
+                Pos next = null;
+                if (direction.equals("U"))
+                    next = new Pos(head.x - 1, head.y);
+                else if (direction.equals("D"))
+                    next = new Pos(head.x + 1, head.y);
+                else if (direction.equals("L"))
+                    next = new Pos(head.x, head.y - 1);
+                else
+                    next = new Pos(head.x, head.y + 1);
+                if (isOver(next))
+                    return -1;
+                if (!food.isEmpty() && food.peek().equals(next)) {
+                    snake.addLast(tail);
+                    body.add(tail);
+                    food.poll();
+                }
+                snake.addFirst(next);
+                body.add(next);
+                return snake.size() - 1;
+            }
+        }
+    }
+
     /**
      * #354
      *
