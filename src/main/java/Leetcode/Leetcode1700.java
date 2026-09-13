@@ -166,6 +166,30 @@ public class Leetcode1700 {
 
     static record AnglePos(int idx, double angle) {
     }
+
+    /**
+     * #1627
+     * @param n
+     * @param threshold
+     * @param queries
+     * @return
+     */
+    public List<Boolean> areConnected(int n, int threshold, int[][] queries) {
+        List<Boolean> res = new ArrayList<>();
+        var set = new Disjointset(n);
+        boolean[] visited = new boolean[n];
+        for (int i = threshold + 1; i <= n; i++) {
+            if (visited[i - 1])
+                continue;
+            for (int j = 1; j * i <= n; j++) {
+                visited[j * i - 1] = true;
+                set.union(i - 1, j * i - 1);
+            }
+        }
+        for (var q : queries)
+            res.add(set.parent(q[0] - 1) == set.parent(q[1] - 1));
+        return res;
+    }
     /* #1635
     with m as (
     SELECT * FROM generate_series(1, 12, 1)  as month
