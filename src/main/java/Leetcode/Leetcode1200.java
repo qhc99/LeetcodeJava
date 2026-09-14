@@ -110,7 +110,7 @@ public class Leetcode1200 {
                 for (int k = maxLen; k > 0; k--) {
                     if (len[i + 1 - k][j][1] >= k
                             && len[i][j + 1 - k][0] >= k) {
-                        max = Math.max(k*k, max);
+                        max = Math.max(k * k, max);
                         break;
                     }
                 }
