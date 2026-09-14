@@ -83,6 +83,43 @@ public class Leetcode1200 {
     }
 
     /**
+     * #1139
+     * @param grid
+     * @return
+     */
+    public int largest1BorderedSquare(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        int[][][] len = new int[m][n][2];
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 1) {
+                    len[i][j][0] = len[i][j][1] = 1;
+                    if (i - 1 >= 0 && grid[i - 1][j] == 1)
+                        len[i][j][0] += len[i - 1][j][0];
+                    if (j - 1 >= 0 && grid[i][j - 1] == 1)
+                        len[i][j][1] += len[i][j - 1][1];
+                }
+            }
+        }
+        int max = 0;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid[i][j] == 0)
+                    continue;
+                int maxLen = Math.min(len[i][j][0], len[i][j][1]);
+                for (int k = maxLen; k > 0; k--) {
+                    if (len[i + 1 - k][j][1] >= k
+                            && len[i][j + 1 - k][0] >= k) {
+                        max = Math.max(k*k, max);
+                        break;
+                    }
+                }
+            }
+        }
+        return max;
+    }
+
+    /**
      * #1143
      * 
      * @param text1
