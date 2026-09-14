@@ -270,6 +270,63 @@ public class Leetcode1400 {
     }
 
     /**
+     * #1368
+     * @param grid
+     * @return
+     */
+    public int minCost(int[][] grid) {
+        int m = grid.length, n = grid[0].length;
+        if (m == 1 && n == 1)
+            return 0;
+        boolean[][] visited = new boolean[m][n];
+        int cost = 0;
+        Queue<Pos> queue = new ArrayDeque<>();
+        queue.add(new Pos(0, 0));
+        Queue<Pos> level = new ArrayDeque<>();
+        int[] dx = { 0, 0, 1, -1 }, dy = { 1, -1, 0, 0 };
+        while (!queue.isEmpty()) {
+            while (!queue.isEmpty()) {
+                var p = queue.poll();
+                level.add(p);
+                Pos next = null;
+                if (grid[p.x][p.y] == 1)
+                    next = new Pos(p.x, p.y + 1);
+                else if (grid[p.x][p.y] == 2)
+                    next = new Pos(p.x, p.y - 1);
+                else if (grid[p.x][p.y] == 3)
+                    next = new Pos(p.x + 1, p.y);
+                else
+                    next = new Pos(p.x - 1, p.y);
+                if (next.x >= 0 && next.x < m && next.y >= 0 && next.y < n
+                        && !visited[next.x][next.y]) {
+                    if (next.x == m - 1 && next.y == n - 1)
+                        return cost;
+                    visited[next.x][next.y] = true;
+                    queue.add(next);
+                }
+            }
+            cost++;
+            while (!level.isEmpty()) {
+                var p = level.poll();
+                for (int i = 0; i < 4; i++) {
+                    var next = new Pos(p.x + dx[i], p.y + dy[i]);
+                    if (next.x >= 0 && next.x < m && next.y >= 0 && next.y < n
+                            && !visited[next.x][next.y]) {
+                        if (next.x == m - 1 && next.y == n - 1)
+                            return cost;
+                        visited[next.x][next.y] = true;
+                        queue.add(next);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+
+    static record Pos(int x, int y) {
+    }
+
+    /**
      * #1383
      * 
      * @param n
