@@ -18,8 +18,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.PriorityQueue;
 import java.util.Queue;
+import java.util.Random;
 import java.util.Set;
 import java.util.Stack;
+import java.util.TreeMap;
 import java.util.TreeSet;
 
 @SuppressWarnings("ALL")
@@ -3970,6 +3972,40 @@ public class Leetcode500 {
             decDeque.add(n);
         }
         return Arrays.stream(nums1).map(v -> map.getOrDefault(v, -1)).toArray();
+    }
+
+    static class Q497 {
+        class Solution {
+            long size = 0;
+            TreeMap<Long, Integer> set = new TreeMap<>();
+            int[][] rects = null;
+            Random rand = new Random();
+
+            public Solution(int[][] rects) {
+                this.rects = rects;
+                for (int i = 0; i < rects.length; i++) {
+                    var rect = rects[i];
+                    set.put(size, i);
+                    size += (long) (rect[2] - rect[0] + 1)
+                            * (rect[3] - rect[1] + 1);
+                }
+
+            }
+
+            public int[] pick() {
+                var s = rand.nextLong(size);
+                var e = set.floorEntry(s);
+                var rectId = e.getValue();
+                var id = s - e.getKey();
+                var rect = rects[rectId];
+                int w = rect[2] - rect[0] + 1;
+                int[] base = { rect[0], rect[1] };
+                base[1] += id / w;
+                base[0] += id % w;
+                return base;
+            }
+        }
+
     }
 
     /**
