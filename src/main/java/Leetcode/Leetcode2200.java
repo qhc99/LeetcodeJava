@@ -343,12 +343,12 @@ public class Leetcode2200 {
     public List<Integer> replaceNonCoprimes(int[] nums) {
         Deque<Integer> stack = new ArrayDeque<>();
         for (var n : nums) {
-            addLast(stack, n);
+            merge(stack, n);
         }
         return stack.stream().toList();
     }
 
-    void addLast(Deque<Integer> stack, int n) {
+    void merge(Deque<Integer> stack, int n) {
         if (stack.isEmpty())
             stack.addLast(n);
         else {
@@ -356,7 +356,7 @@ public class Leetcode2200 {
             var g = gcd(n, v);
             if (g > 1) {
                 stack.pollLast();
-                addLast(stack, v * (n / g));
+                merge(stack, v * (n / g));
             } else
                 stack.addLast(n);
         }
