@@ -510,4 +510,17 @@ public class Leetcode1700 {
             return treeFound;
         }
     }
+
+    /**
+     * #1698
+     * @param s
+     * @return
+     */
+    public int countDistinct(String s) {
+        SAM sam = new SAM(s.length());
+        for (char c : s.toCharArray()) {
+            sam.extend(c);
+        }
+        return (int) sam.countDistinct();
+    }
 }
