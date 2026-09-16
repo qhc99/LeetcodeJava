@@ -37,4 +37,30 @@ public class Leetcode3700 {
         return max;
     }
 
+    /**
+     * #3652
+     * @param prices
+     * @param strategy
+     * @param k
+     * @return
+     */
+    public long maxProfit(int[] prices, int[] strategy, int k) {
+        long s1 = 0, s2 = 0, s3 = 0;
+        for (int i = k / 2; i < k; i++)
+            s2 += prices[i];
+        for (int i = k; i < prices.length; i++)
+            s3 += prices[i] * strategy[i];
+        long max = s1 + s2 + s3;
+        long t = 0;
+        for (int i = 0; i < k; i++)
+            t += prices[i] * strategy[i];
+        max = Math.max(max, t + s3);
+        for (int i = k; i < prices.length; i++) {
+            s1 += prices[i - k] * strategy[i - k];
+            s3 -= prices[i] * strategy[i];
+            s2 += prices[i] - prices[i - k / 2];
+            max = Math.max(max, s1 + s2 + s3);
+        }
+        return max;
+    }
 }
