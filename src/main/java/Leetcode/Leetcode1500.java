@@ -346,4 +346,24 @@ public class Leetcode1500 {
             return current;
         }
     }
+
+    /**
+     * #1475
+     * @param prices
+     * @return
+     */
+    public int[] finalPrices(int[] prices) {
+        Deque<Integer> incStack = new ArrayDeque<>();
+        int[] res = new int[prices.length];
+        for (int i = prices.length - 1; i >= 0; i--) {
+            while (!incStack.isEmpty()
+                    && prices[incStack.peekLast()] > prices[i]) {
+                incStack.pollLast();
+            }
+            res[i] = prices[i]
+                    - (incStack.isEmpty() ? 0 : prices[incStack.peekLast()]);
+            incStack.addLast(i);
+        }
+        return res;
+    }
 }
