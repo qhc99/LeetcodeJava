@@ -927,6 +927,46 @@ public class Leetcode600 {
     }
 
     /**
+     * #549
+     * @param root
+     * @return
+     */
+    public int longestConsecutive(TreeNode root) {
+        var visitor = new LCVisitor();
+        visitor.visit(root);
+        return visitor.res;
+    }
+
+    static class LCVisitor {
+        int res = 1;
+
+        int[] visit(TreeNode n) {
+            int[] ret = { 1, 1 };//desc,asc
+            if (n.left != null) {
+                var l = visit(n.left);
+                if (n.left.val == n.val - 1) {
+                    res = Math.max(res, ret[1] + l[0]);
+                    ret[0] = Math.max(ret[0], 1 + l[0]);
+                } else if (n.left.val == n.val + 1) {
+                    res = Math.max(res, ret[0] + l[1]);
+                    ret[1] = Math.max(ret[1], 1 + l[1]);
+                }
+            }
+            if (n.right != null) {
+                var r = visit(n.right);
+                if (n.right.val == n.val - 1) {
+                    res = Math.max(res, ret[1] + r[0]);
+                    ret[0] = Math.max(ret[0], 1 + r[0]);
+                } else if (n.right.val == n.val + 1) {
+                    res = Math.max(res, ret[0] + r[1]);
+                    ret[1] = Math.max(ret[1], 1 + r[1]);
+                }
+            }
+            return ret;
+        }
+    }
+
+    /**
      * #551
      *
      * @param s
