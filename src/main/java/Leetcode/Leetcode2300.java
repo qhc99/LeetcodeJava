@@ -277,6 +277,73 @@ public class Leetcode2300 {
         return res;
     }
 
+    static class Q2276 {
+        class CountIntervals {
+            static class Node {
+                Node leftTree, rightTree;
+                int rangeLeft, rangeRight, count;
+
+                Node(int l, int r) {
+                    rangeLeft = l;
+                    rangeRight = r;
+                }
+
+                int getMidRange() {
+                    return rangeLeft + (rangeRight - rangeLeft) / 2;
+                }
+
+                Node getLeftTree() {
+                    if (leftTree == null)
+                        leftTree = new Node(rangeLeft, getMidRange());
+                    return leftTree;
+                }
+
+                Node getRightTree() {
+                    if (rightTree == null)
+                        rightTree = new Node(getMidRange() + 1, rangeRight);
+                    return rightTree;
+                }
+
+                void insert(int l, int r) {
+                    if (rangeLeft == l && rangeRight == r) {
+                        count = rangeRight + 1 - rangeLeft;
+                        return;
+                    }
+                    if (count == rangeRight + 1 - rangeLeft)
+                        return;
+                    int mid = getMidRange();
+                    if (r >= mid + 1) {
+                        var right = getRightTree();
+                        right.insert(Math.max(l, mid + 1), r);
+                    }
+                    if (l <= mid) {
+                        var left = getLeftTree();
+                        left.insert(l, Math.min(r, mid));
+                    }
+                    count = (leftTree != null ? leftTree.count : 0)
+                            + (rightTree != null ? rightTree.count : 0);
+                    if (count == rangeRight + 1 - rangeLeft)
+                        leftTree = rightTree = null;
+                }
+            }
+
+            Node root = new Node(1, 1_000_000_000);
+
+            public CountIntervals() {
+
+            }
+
+            public void add(int left, int right) {
+                root.insert(left, right);
+            }
+
+            public int count() {
+                return root.count;
+            }
+        }
+
+    }
+
     /**
      * #2282
      * 
