@@ -76,6 +76,23 @@ public class Leetcode2800 {
     }
 
     /**
+     * #2791
+     * @param parent
+     * @param s
+     * @return
+     */
+    public long countPalindromePaths(List<Integer> parent, String s) {
+        int n = parent.size();
+        ArrayList<Integer>[] graph = new ArrayList[n];
+        for (int i = 0; i < n; i++)
+            graph[i] = new ArrayList<>();
+        for (int i = 1; i < n; i++)
+            graph[parent.get(i)].add(i);
+        
+        return 0;
+    }
+
+    /**
      * #2799
      * 
      * @param nums
