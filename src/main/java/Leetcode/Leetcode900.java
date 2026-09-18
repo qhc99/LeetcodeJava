@@ -461,6 +461,32 @@ public class Leetcode900 {
     }
 
     /**
+     * #
+    16
+     * @param head
+     * @param nums
+     * @return
+     */
+    public int numComponents(ListNode head, int[] nums) {
+        Set<Integer> set = new HashSet<>(nums.length);
+        for (var n : nums)
+            set.add(n);
+        boolean inGroup = false;
+        int res = 0;
+        while (head != null) {
+            if (set.contains(head.val)) {
+                if (!inGroup) {
+                    res++;
+                    inGroup = true;
+                }
+            } else
+                inGroup = false;
+            head = head.next;
+        }
+        return res;
+    }
+
+    /**
      * #820
      * 
      * @param words
