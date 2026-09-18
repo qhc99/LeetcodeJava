@@ -1438,6 +1438,35 @@ public class Leetcode300 {
     }
 
     /**
+     * #270
+     * @param root
+     * @param target
+     * @return
+     */
+    public int closestValue(TreeNode root, double target) {
+        var visitor = new CloseVisitor();
+        visitor.visit(root, target);
+        return visitor.res;
+    }
+
+    static class CloseVisitor {
+        Integer res = null;
+
+        void visit(TreeNode node, double target) {
+            if (res == null
+                    || Math.abs(node.val - target) < Math.abs(res - target)
+                    || (Math.abs(node.val - target) == Math.abs(res - target)
+                            && node.val < res)) {
+                res = node.val;
+            }
+            if (target > node.val && node.right != null)
+                visit(node.right, target);
+            else if (target < node.val && node.left != null)
+                visit(node.left, target);
+        }
+    }
+
+    /**
      * #271 Codec
      */
     static class Nest {
