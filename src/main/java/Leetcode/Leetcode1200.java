@@ -6,6 +6,25 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.IntConsumer;
 
 public class Leetcode1200 {
+    /**
+     * #1101
+     * @param logs
+     * @param n
+     * @return
+     */
+    public int earliestAcq(int[][] logs, int n) {
+        Arrays.sort(logs, (a, b) -> Integer.compare(a[0], b[0]));
+        var set = new Disjointset(n);
+        for (var log : logs) {
+            if (set.parent(log[1]) != set.parent(log[2])) {
+                set.union(log[1], log[2]);
+                n--;
+            }
+            if (n == 1)
+                return log[0];
+        }
+        return -1;
+    }
 
     /**
      * #1117 H2O
