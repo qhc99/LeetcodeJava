@@ -3,6 +3,72 @@ package Leetcode;
 import java.util.*;
 
 public class Leetcode2900 {
+    /**
+     * #2812
+     * @param grid
+     * @return
+     */
+    public int maximumSafenessFactor(List<List<Integer>> grid) {
+        int n = grid.size();
+        int[][] dist = new int[n][n];
+        Queue<Pos> queue = new ArrayDeque<>();
+        Queue<Pos> next = new ArrayDeque<>();
+        boolean[][] visited = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (grid.get(i).get(j).equals(1)) {
+                    queue.add(new Pos(i, j));
+                    visited[i][j] = true;
+                }
+            }
+        }
+        int d = 0;
+        int[] dx = { 1, -1, 0, 0 }, dy = { 0, 0, 1, -1 };
+        while (!queue.isEmpty()) {
+            while (!queue.isEmpty()) {
+                var p = queue.poll();
+                dist[p.x][p.y] = d;
+                for (int i = 0; i < 4; i++) {
+                    int x = p.x + dx[i], y = p.y + dy[i];
+                    if (x >= 0 && x < n && y >= 0 && y < n && !visited[x][y]) {
+                        visited[x][y] = true;
+                        next.add(new Pos(x, y));
+                    }
+                }
+            }
+            d++;
+            var t = queue;
+            queue = next;
+            next = t;
+        }
+
+        Queue<Pos> route = new PriorityQueue<>(
+                (a, b) -> Integer.compare(dist[b.x][b.y], dist[a.x][a.y]));
+        int res = Math.min(dist[0][0], dist[n - 1][n - 1]);
+        if (res == 0)
+            return 0;
+        for (var r : visited)
+            Arrays.fill(r, false);
+        route.add(new Pos(0, 0));
+        visited[0][0] = true;
+        while (!route.isEmpty()) {
+            var p = route.poll();
+            res = Math.min(res, dist[p.x][p.y]);
+            if (p.x == n - 1 && p.y == n - 1)
+                return res;
+            for (int i = 0; i < 4; i++) {
+                int x = p.x + dx[i], y = p.y + dy[i];
+                if (x >= 0 && x < n && y >= 0 && y < n && !visited[x][y]) {
+                    visited[x][y] = true;
+                    route.add(new Pos(x, y));
+                }
+            }
+        }
+        return -1;
+    }
+
+    static record Pos(int x, int y) {
+    }
 
     /**
      * #2817
