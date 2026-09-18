@@ -8,11 +8,14 @@ public class Leetcode3300 {
      * @return
      */
     public int maximumLength(int[] nums, int k) {
-        int[] len = new int[k];
+        int[][] dp = new int[k][k];
         int max = 0;
         for (var n : nums) {
-            len[n % k]++;
-            max = Math.max(max, len[n % k]);
+            n %= k;
+            for (int p = 0; p < k; p++) {
+                dp[p][n] = dp[n][p] + 1;
+                max = Math.max(dp[p][n], max);
+            }
         }
         return max;
     }
