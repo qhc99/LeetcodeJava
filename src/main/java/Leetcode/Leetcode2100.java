@@ -424,6 +424,48 @@ public class Leetcode2100 {
     }
 
     /**
+     * #2092
+     * @param n
+     * @param meetings
+     * @param firstPerson
+     * @return
+     */
+    public List<Integer> findAllPeople(int n, int[][] meetings,
+            int firstPerson) {
+        var set = new Disjointset(n);
+        List<Integer> res = new ArrayList<>();
+        res.add(0);
+        set.union(0, firstPerson);
+        Arrays.sort(meetings, (a, b) -> Integer.compare(a[2], b[2]));
+        List<List<int[]>> mergedMeetings = new ArrayList<>();
+        for (var m : meetings) {
+            if (mergedMeetings.isEmpty()
+                    || mergedMeetings.getLast().get(0)[2] != m[2]) {
+                mergedMeetings.add(new ArrayList<>());
+                mergedMeetings.getLast().add(m);
+            } else {
+                mergedMeetings.getLast().add(m);
+            }
+        }
+        for (var ms : mergedMeetings) {
+            for(var m : ms){
+                set.union(m[0], m[1]);
+            }
+            for(var m : ms){
+                if(set.parent(m[0]) != set.parent(0)){
+                    set.prev[m[0]] = m[0];
+                    set.prev[m[1]] = m[1];
+                }
+            }
+        }
+        for (int i = 1; i < n; i++) {
+            if (set.parent(0) == set.parent(i))
+                res.add(i);
+        }
+        return res;
+    }
+
+    /**
      * #2096
      * 
      * @param root

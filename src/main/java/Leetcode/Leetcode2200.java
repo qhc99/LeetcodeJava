@@ -281,6 +281,16 @@ public class Leetcode2200 {
     }
 
     /**
+     * #2163
+     * @param nums
+     * @return
+     */
+    public long minimumDifference(int[] nums) {
+        
+        return 0;
+    }
+
+    /**
      * #2187
      * 
      * @param time
