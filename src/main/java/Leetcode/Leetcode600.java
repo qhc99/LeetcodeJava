@@ -57,6 +57,35 @@ public class Leetcode600 {
     }
 
     /**
+     * #502
+     * @param k
+     * @param w
+     * @param profits
+     * @param capital
+     * @return
+     */
+    public int findMaximizedCapital(int k, int w, int[] profits,
+            int[] capital) {
+        Queue<Integer> work = new PriorityQueue<>(
+                Comparator.comparing(idx -> profits[(int) idx]).reversed());
+        Queue<Integer> wait = new PriorityQueue<>(
+                Comparator.comparing(idx -> capital[idx]));
+        for (int i = 0; i < capital.length; i++) {
+            if (w >= capital[i])
+                work.add(i);
+            else
+                wait.add(i);
+        }
+        for (; k > 0 && !work.isEmpty(); k--) {
+            w += profits[work.poll()];
+            while (!wait.isEmpty() && w >= capital[wait.peek()]) {
+                work.add(wait.poll());
+            }
+        }
+        return w;
+    }
+
+    /**
      * #503
      *
      * @param nums
