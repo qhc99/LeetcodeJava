@@ -3,8 +3,6 @@ package Leetcode;
 import java.math.BigInteger;
 import java.util.*;
 
-import Leetcode.Leetcode2600.Allocator.Block;
-
 public class Leetcode2600 {
     /**
      * #2502 Allocator
@@ -70,6 +68,43 @@ public class Leetcode2600 {
             }
             return res;
         }
+    }
+
+    /**
+     * #2503
+     * @param grid
+     * @param queries
+     * @return
+     */
+    public int[] maxPoints(int[][] grid, int[] queries) {
+        int m = grid.length, n = grid[0].length, count = 0, threshould = 0;
+        boolean[][] visited = new boolean[m][n];
+        TreeMap<Integer, Integer> map = new TreeMap<>();
+        Queue<Pos> queue = new PriorityQueue<>(
+                Comparator.comparing(p -> grid[p.x][p.y]));
+        int[] dx = { 1, -1, 0, 0 }, dy = { 0, 0, 1, -1 };
+        visited[0][0] = true;
+        queue.add(new Pos(0, 0));
+        while (!queue.isEmpty()) {
+            var p = queue.poll();
+            count++;
+            threshould = Math.max(grid[p.x][p.y] + 1, threshould);
+            map.put(threshould, count);
+            for (int i = 0; i < 4; i++) {
+                int x = p.x + dx[i], y = p.y + dy[i];
+                if (x >= 0 && x < m && y >= 0 && y < n && !visited[x][y]) {
+                    visited[x][y] = true;
+                    queue.add(new Pos(x, y));
+                }
+            }
+        }
+        return Arrays.stream(queries).map(i -> {
+            var e = map.floorEntry(i);
+            return e != null ? e.getValue() : 0;
+        }).toArray();
+    }
+
+    static record Pos(int x, int y) {
     }
 
     /**
