@@ -320,6 +320,55 @@ public class Leetcode1300 {
         return result;
     }
 
+    static class Q1244 {
+        class Leaderboard {
+            Map<Integer, Integer> playerScore = new HashMap<>();
+            TreeMap<Integer, Integer> scoreCount = new TreeMap<>();
+
+            public Leaderboard() {
+
+            }
+
+            public void addScore(int playerId, int score) {
+                var oldScore = playerScore.getOrDefault(playerId, 0);
+                if (!oldScore.equals(0)) {
+                    if (scoreCount.get(oldScore).equals(1))
+                        scoreCount.remove(oldScore);
+                    else
+                        scoreCount.put(oldScore, scoreCount.get(oldScore) - 1);
+                }
+                playerScore.put(playerId, score + oldScore);
+                scoreCount.put(score + oldScore,
+                        scoreCount.getOrDefault(score + oldScore, 0) + 1);
+            }
+
+            public int top(int K) {
+                int sum = 0;
+                for (var e : scoreCount.descendingMap().entrySet()) {
+                    if (K == 0)
+                        break;
+                    if (e.getValue() <= K) {
+                        sum += e.getValue() * e.getKey();
+                        K -= e.getValue();
+                    } else {
+                        sum += K * e.getKey();
+                        K = 0;
+                    }
+                }
+                return sum;
+            }
+
+            public void reset(int playerId) {
+                var score = playerScore.remove(playerId);
+                if (scoreCount.get(score).equals(1))
+                    scoreCount.remove(score);
+                else
+                    scoreCount.put(score, scoreCount.get(score) - 1);
+            }
+        }
+
+    }
+
     /**
      * #1245
      * 
