@@ -286,8 +286,31 @@ public class Leetcode2200 {
      * @return
      */
     public long minimumDifference(int[] nums) {
-        
-        return 0;
+        Queue<Integer> first = new PriorityQueue<>(
+                (a, b) -> Integer.compare(b, a));
+        int n = nums.length / 3;
+        long[] part1 = new long[n + 1];
+        for (int i = 0; i < n; i++) {
+            part1[0] += nums[i];
+            first.add(nums[i]);
+        }
+        for (int i = n; i < 2 * n; i++) {
+            first.add(nums[i]);
+            part1[i - n + 1] = part1[i - n] + nums[i] - first.poll();
+        }
+        Queue<Integer> last = new PriorityQueue<>();
+        long part2 = 0;
+        for (int i = 2 * n; i < 3 * n; i++) {
+            last.add(nums[i]);
+            part2 += nums[i];
+        }
+        long minRes = part1[n] - part2;
+        for (int i = 2 * n - 1; i >= n; i--) {
+            last.add(nums[i]);
+            part2 = part2 + nums[i] - last.poll();
+            minRes = Math.min(minRes, part1[i - n] - part2);
+        }
+        return minRes;
     }
 
     /**
