@@ -424,6 +424,45 @@ public class Leetcode2100 {
     }
 
     /**
+     * #2076
+     * @param n
+     * @param restrictions
+     * @param requests
+     * @return
+     */
+    public boolean[] friendRequests(int n, int[][] restrictions,
+            int[][] requests) {
+        boolean[] res = new boolean[requests.length];
+        var set = new Disjointset(n);
+        for (int i = 0; i < requests.length; i++) {
+            var request = requests[i];
+            int p1 = set.parent(request[0]), p2 = set.parent(request[1]);
+            if (p1 == p2) {
+                res[i] = true;
+                continue;
+            }
+            int[] cmp1 = { p1, p2 };
+            Arrays.sort(cmp1);
+            boolean restricted = false;
+            for (var restriction : restrictions) {
+                int t1 = set.parent(restriction[0]),
+                        t2 = set.parent(restriction[1]);
+                int[] cmp2 = { t1, t2 };
+                Arrays.sort(cmp2);
+                if (Arrays.equals(cmp1, cmp2)) {
+                    restricted = true;
+                    break;
+                }
+            }
+            if (!restricted) {
+                res[i] = true;
+                set.union(p1, p2);
+            }
+        }
+        return res;
+    }
+
+    /**
      * #2092
      * @param n
      * @param meetings
@@ -448,11 +487,11 @@ public class Leetcode2100 {
             }
         }
         for (var ms : mergedMeetings) {
-            for(var m : ms){
+            for (var m : ms) {
                 set.union(m[0], m[1]);
             }
-            for(var m : ms){
-                if(set.parent(m[0]) != set.parent(0)){
+            for (var m : ms) {
+                if (set.parent(m[0]) != set.parent(0)) {
                     set.prev[m[0]] = m[0];
                     set.prev[m[1]] = m[1];
                 }
