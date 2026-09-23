@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @SuppressWarnings({ "JavaDoc" })
 public class Leetcode1000 {
@@ -822,6 +823,67 @@ public class Leetcode1000 {
         for (int t = 0; t < res.size(); t++)
             ans[t] = res.get(t);
         return ans;
+    }
+
+    /**
+     * #987
+     * @param root
+     * @return
+     */
+    public List<List<Integer>> verticalTraversal(TreeNode root) {
+        Queue<NodeInfo> queue = new ArrayDeque<>();
+        Queue<NodeInfo> next = new ArrayDeque<>();
+        List<VerticalData> pos = new ArrayList<>();
+        List<VerticalData> neg = new ArrayList<>();
+        Set<Integer> visitedCol = new HashSet<>();
+        queue.add(new NodeInfo(root, 0));
+        while (!queue.isEmpty()) {
+            visitedCol.clear();
+            while (!queue.isEmpty()) {
+                var nodeInfo = queue.poll();
+                visitedCol.add(nodeInfo.col);
+                if (nodeInfo.col >= 0) {
+                    if (nodeInfo.col >= pos.size())
+                        pos.add(new VerticalData(new ArrayList<>(),
+                                new PriorityQueue<>()));
+                    pos.get(nodeInfo.col).temp.add(nodeInfo.node.val);
+                } else {
+                    if (-nodeInfo.col - 1 >= neg.size())
+                        neg.add(new VerticalData(new ArrayList<>(),
+                                new PriorityQueue<>()));
+                    neg.get(-nodeInfo.col - 1).temp.add(nodeInfo.node.val);
+                }
+                if (nodeInfo.node.left != null)
+                    next.add(
+                            new NodeInfo(nodeInfo.node.left, nodeInfo.col - 1));
+                if (nodeInfo.node.right != null)
+                    next.add(new NodeInfo(nodeInfo.node.right,
+                            nodeInfo.col + 1));
+            }
+            for (var c : visitedCol) {
+                VerticalData data = null;
+                if (c >= 0)
+                    data = pos.get(c);
+                else
+                    data = neg.get(-c - 1);
+
+                while (!data.temp.isEmpty()) {
+                    data.col.add(data.temp.poll());
+                }
+            }
+
+            var t = queue;
+            queue = next;
+            next = t;
+        }
+        var t = Stream.concat(neg.reversed().stream(), pos.stream());
+        return t.map(d -> d.col).toList();
+    }
+
+    static record NodeInfo(TreeNode node, int col) {
+    }
+
+    static record VerticalData(List<Integer> col, Queue<Integer> temp) {
     }
 
     /**
