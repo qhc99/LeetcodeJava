@@ -360,6 +360,27 @@ public class Leetcode2400 {
     }
 
     /**
+     * #2389
+     * @param nums
+     * @param queries
+     * @return
+     */
+    public int[] answerQueries(int[] nums, int[] queries) {
+        Arrays.sort(nums);
+        int[] res = new int[queries.length];
+        for (int i = 1; i < nums.length; i++)
+            nums[i] += nums[i - 1];
+        for (int i = 0; i < queries.length; i++)
+            res[i] = searchAnswer(nums, queries[i]);
+        return res;
+    }
+
+    int searchAnswer(int[] nums, int q) {
+        var t = Arrays.binarySearch(nums, q);
+        return t >= 0 ? t + 1 : (-t - 1);
+    }
+
+    /**
      * #2397
      * 
      * @param matrix
