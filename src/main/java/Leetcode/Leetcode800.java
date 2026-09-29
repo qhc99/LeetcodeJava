@@ -476,6 +476,29 @@ public class Leetcode800 {
     }
 
     /**
+     * #719
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int smallestDistancePair(int[] nums, int k) {
+        Arrays.sort(nums);
+        Queue<int[]> queue = new PriorityQueue<>(
+                Comparator.comparing(t -> Math.abs(nums[t[0]] - nums[t[1]])));
+        for (int i = 0; i < nums.length - 1; i++)
+            queue.add(new int[] { i, i + 1 });
+        int res = 0;
+        for (; k > 0; k--) {
+            var t = queue.poll();
+            res = Math.abs(nums[t[0]] - nums[t[1]]);
+            t[1]++;
+            if (t[1] < nums.length)
+                queue.add(t);
+        }
+        return res;
+    }
+
+    /**
      * #722
      * 
      * @param source

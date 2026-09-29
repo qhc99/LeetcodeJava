@@ -10,8 +10,8 @@
     <description>Leetcode solution</description>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
@@ -23,7 +23,7 @@
                 https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-compiler-plugin -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.10.1</version>
+                <version>3.16.0</version>
                 <executions>
                     <execution>
                         <id>compile</id>
