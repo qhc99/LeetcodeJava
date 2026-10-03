@@ -12,27 +12,77 @@ public class Leetcode3200 {
      */
     public List<Boolean> getResults(int[][] queries) {
         List<Boolean> res = new ArrayList<>();
-        TreeMap<Integer, Integer> list = new TreeMap<>();
-        list.put(0, 0);
-        for (var query : queries) {
-            var block = query[1];
-            if (query[0] == 1) {
-                var floorEntry = list.floorEntry(block);
-                var ceilEntry = list.ceilingEntry(block);
-                var v = Math.max(block - floorEntry.getKey(),
-                        floorEntry.getValue());
-                list.put(block, v);
-                if (ceilEntry != null)
-                    list.put(ceilEntry.getKey(), Math.max(ceilEntry.getKey() - block, v));
-                
+        var max = 5_0000;
+        TreeSet<Integer> tree = new TreeSet<>();
+        tree.add(0);
+        tree.add(max);
+        var seg = new BlockSeg(max);
+        seg.insert(max, max);
+        for (var q : queries) {
+            if (q[0] == 1) {
+                var floor = Optional.ofNullable(tree.floor(q[1] - 1)).orElse(0);
+                var ceil = Optional.ofNullable(tree.ceiling(q[1] + 1))
+                        .orElse(max);
+                seg.insert(q[1], q[1] - floor);
+                seg.insert(ceil, ceil - q[1]);
+                tree.add(q[1]);
             } else {
-                var floorEntry = list.floorEntry(block);
-                var v = Math.max(block - floorEntry.getKey(),
-                        floorEntry.getValue());
-                res.add(v >= query[2]);
+                var floor = Optional.ofNullable(tree.floor(q[1])).orElse(0);
+                var b = seg.query(0, floor);
+                b = Math.max(b, q[1] - floor);
+                res.add(b >= q[2]);
             }
         }
         return res;
+    }
+
+    static class BlockSeg {
+        int[] seg;
+        int max = 0;
+
+        BlockSeg(int m) {
+            max = m;
+            seg = new int[(m + 1) * 4 + 1];
+        }
+
+        void _insert(int idx, int val, int id, int l, int r) {
+            if (l == r) {
+                seg[id] = val;
+                return;
+            }
+            int mid = l + (r - l) / 2;
+            if (idx <= mid) {
+                _insert(idx, val, id * 2, l, mid);
+            } else {
+                _insert(idx, val, id * 2 + 1, mid + 1, r);
+            }
+            seg[id] = Math.max(seg[id * 2], seg[id * 2 + 1]);
+        }
+
+        void insert(int idx, int val) {
+            _insert(idx, val, 1, 0, max);
+        }
+
+        int query(int rangeL, int rangeR) {
+            return _query(rangeL, rangeR, 1, 0, max);
+        }
+
+        int _query(int rangeL, int rangeR, int id, int l, int r) {
+            if (rangeL <= l && rangeR >= r) {
+                return seg[id];
+            }
+            int mid = l + (r - l) / 2;
+            int res = Integer.MIN_VALUE;
+            if (rangeL <= mid) {
+                res = Math.max(res,
+                        _query(rangeL, Math.min(mid, rangeR), id * 2, l, mid));
+            }
+            if (rangeR >= mid + 1) {
+                res = Math.max(res, _query(Math.max(rangeL, mid + 1), rangeR,
+                        id * 2 + 1, mid + 1, r));
+            }
+            return res;
+        }
     }
 
     /**
