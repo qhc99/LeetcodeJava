@@ -366,4 +366,63 @@ public class Leetcode1500 {
         }
         return res;
     }
+
+    /**
+     * #1489
+     * @param n
+     * @param edges
+     * @return
+     */
+    public List<List<Integer>> findCriticalAndPseudoCriticalEdges(int n,
+            int[][] edges) {
+        List<List<Integer>> res = new ArrayList<>();
+        res.add(new ArrayList<>());
+        res.add(new ArrayList<>());
+        int[][] links = new int[edges.length][4];
+        for (int i = 0; i < edges.length; i++) {
+            System.arraycopy(edges[i], 0, links[i], 0, 3);
+            links[i][3] = i;
+        }
+        Arrays.sort(links, Comparator.comparing(l -> l[2]));
+        int minTreeWeight = 0;
+        {
+            var set = new Disjointset(n);
+            for (var link : links) {
+                if (set.parent(link[0]) != set.parent(link[1])) {
+                    set.union(link[0], link[1]);
+                    minTreeWeight += link[2];
+                }
+            }
+        }
+        for (int i = 0; i < links.length; i++) {
+            var set = new Disjointset(n);
+            int group = n;
+            int treeWeight = 0;
+            for (int j = 0; j < links.length; j++) {
+                if (i != j
+                        && set.parent(links[j][0]) != set.parent(links[j][1])) {
+                    set.union(links[j][0], links[j][1]);
+                    treeWeight += links[j][2];
+                    group--;
+                }
+            }
+            if (group != 1 || (group == 1 && treeWeight > minTreeWeight)) {
+                res.get(0).add(links[i][3]);
+                continue;
+            }
+            set = new Disjointset(n);
+            treeWeight = links[i][2];
+            set.union(links[i][0], links[i][1]);
+            for (int j = 0; j < links.length; j++) {
+                if (i != j
+                        && set.parent(links[j][0]) != set.parent(links[j][1])) {
+                    set.union(links[j][0], links[j][1]);
+                    treeWeight += links[j][2];
+                }
+            }
+            if (treeWeight == minTreeWeight)
+                res.get(1).add(links[i][3]);
+        }
+        return res;
+    }
 }

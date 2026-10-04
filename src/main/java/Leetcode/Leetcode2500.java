@@ -497,6 +497,47 @@ public class Leetcode2500 {
     }
 
     /**
+     * #2484
+     * @param s
+     * @return
+     */
+    public int countPalindromes(String s) {
+        long res = 0;
+        if (s.length() < 5)
+            return 0;
+        int[] suffix = new int[10], prefix = new int[10];
+        int[][] suffix2 = new int[10][10], prefix2 = new int[10][10];
+        for (int i = s.length() - 1; i >= 2; i--) {
+            int n = s.charAt(i) - '0';
+            for (int j = 0; j <= 9; j++)
+                suffix2[n][j] += suffix[j];
+            suffix[n]++;
+        }
+        prefix[s.charAt(0) - '0']++;
+        prefix[s.charAt(1) - '0']++;
+        prefix2[s.charAt(1) - '0'][s.charAt(0) - '0']++;
+        for (int i = 2; i < s.length() - 2; i++) {
+            int n = s.charAt(i) - '0';
+            suffix[n]--;
+            for (int j = 0; j <= 9; j++) {
+                suffix2[n][j] -= suffix[j];
+            }
+            for (int j = 0; j <= 9; j++) {
+                for (int k = 0; k <= 9; k++) {
+                    res += (long) prefix2[j][k] * suffix2[j][k];
+                }
+            }
+            for (int j = 0; j <= 9; j++) {
+                prefix2[n][j] += prefix[j];
+            }
+            prefix[n]++;
+
+        }
+        return (int) (res % 1_000_000_007);
+
+    }
+
+    /**
      * #2493
      * 
      * @param n
