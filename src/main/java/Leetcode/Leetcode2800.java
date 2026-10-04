@@ -83,13 +83,30 @@ public class Leetcode2800 {
      */
     public long countPalindromePaths(List<Integer> parent, String s) {
         int n = parent.size();
-        ArrayList<Integer>[] graph = new ArrayList[n];
-        for (int i = 0; i < n; i++)
-            graph[i] = new ArrayList<>();
+        List<Integer>[] graph = new ArrayList[n];
+        Arrays.setAll(graph, i -> new ArrayList<>());
         for (int i = 1; i < n; i++)
             graph[parent.get(i)].add(i);
-        
-        return 0;
+        Map<Integer, Integer> count = new HashMap<>();
+        count.put(0, 1);
+
+        return dfsPath(0, 0, graph, s, count);
+    }
+
+    long dfsPath(int node, int xorAcc, List<Integer>[] graph, String nodesChar,
+            Map<Integer, Integer> count) {
+        long res = 0;
+
+        for (var nb : graph[node]) {
+            int nextXorAcc = xorAcc ^ (1 << (nodesChar.charAt(nb) - 'a'));
+            res += count.getOrDefault(nextXorAcc, 0);
+            for (int i = 0; i < 'z' - 'a' + 1; i++)
+                res += count.getOrDefault(nextXorAcc ^ (1 << i), 0);
+
+            count.merge(nextXorAcc, 1, Integer::sum);
+            res += dfsPath(nb, nextXorAcc, graph, nodesChar, count);
+        }
+        return res;
     }
 
     /**
