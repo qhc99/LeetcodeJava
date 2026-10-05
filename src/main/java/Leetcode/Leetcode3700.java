@@ -1,10 +1,78 @@
 package Leetcode;
 
-import java.util.Arrays;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.*;
 
 public class Leetcode3700 {
+
+    /**
+     * #3629
+     * @param nums
+     * @return
+     */
+    static class Q3629 {
+        static final int MAX = 1_000_000;
+        static final List<Integer>[] factors = new ArrayList[MAX + 1];
+        static {
+            Arrays.setAll(factors, i -> new ArrayList<>());
+            for (int i = 2; i < MAX + 1; i++)
+                if (factors[i].isEmpty())
+                    for (int j = i; j < MAX + 1; j += i)
+                        factors[j].add(i);
+        }
+
+        public int minJumps(int[] nums) {
+            if (nums.length == 1)
+                return 0;
+            Queue<Integer> queue = new ArrayDeque<>();
+            Queue<Integer> next = new ArrayDeque<>();
+            Map<Integer, List<Integer>> val2pos = new HashMap<>();
+
+            for (int i = 0; i < nums.length; i++) {
+                if (factors[nums[i]].size() == 1)
+                    val2pos.computeIfAbsent(nums[i], k -> new ArrayList<>())
+                            .add(i);
+            }
+            boolean[] visited = new boolean[nums.length];
+            visited[nums.length - 1] = true;
+            queue.add(nums.length - 1);
+            int ans = 0;
+            while (!queue.isEmpty()) {
+                ans++;
+                while (!queue.isEmpty()) {
+                    var pos = queue.poll();
+                    if (pos + 1 < nums.length && !visited[pos + 1]) {
+                        visited[pos + 1] = true;
+                        next.add(pos + 1);
+                    }
+                    if (pos - 1 >= 0 && !visited[pos - 1]) {
+                        visited[pos - 1] = true;
+                        if (pos - 1 == 0)
+                            return ans;
+                        next.add(pos - 1);
+                    }
+
+                    for (int factor : factors[nums[pos]]) {
+                        var factorPos = val2pos.getOrDefault(factor, List.of());
+                        for (var prev : factorPos) {
+                            if (!visited[prev]) {
+                                visited[prev] = true;
+                                if (prev == 0)
+                                    return ans;
+                                next.add(prev);
+                            }
+                        }
+                    }
+
+                }
+
+                var t = queue;
+                queue = next;
+                next = t;
+            }
+            return -1;
+        }
+    }
+
     /**
      * #3631
      * 
