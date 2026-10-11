@@ -1,6 +1,7 @@
 package Leetcode;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @SuppressWarnings({ "Unused", "JavadocDeclaration" })
 public class Leetcode1700 {
@@ -509,6 +510,32 @@ public class Leetcode1700 {
             }
             return treeFound;
         }
+    }
+
+    /**
+     * #1679
+     * @param n
+     * @param edgeList
+     * @param queries
+     * @return
+     */
+    public boolean[] distanceLimitedPathsExist(int n, int[][] edgeList,
+            int[][] queries) {
+        boolean[] res = new boolean[queries.length];
+        var set = new Disjointset(n + 1);
+        var idx = IntStream.range(0, queries.length).boxed()
+                .sorted(Comparator.comparing(i -> queries[i][2])).toList();
+        Arrays.sort(edgeList, Comparator.comparing(e -> e[2]));
+        int j = 0;
+        for (var i : idx) {
+            var q = queries[i];
+            while (j < edgeList.length && edgeList[j][2] < q[2]) {
+                set.union(edgeList[j][0], edgeList[j][1]);
+                j++;
+            }
+            res[i] = (set.parent(q[0]) == set.parent(q[1]));
+        }
+        return res;
     }
 
     /**
