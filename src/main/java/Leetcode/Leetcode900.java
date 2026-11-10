@@ -1021,6 +1021,66 @@ public class Leetcode900 {
     }
 
     /**
+     * #864
+     * @param grid
+     * @return
+     */
+    public int shortestPathAllKeys(String[] grid) {
+        int[] key2id = new int['z' - 'a' + 1];
+        Arrays.fill(key2id, -1);
+        int id = 0, m = grid.length, n = grid[0].length();
+        Queue<VisitState> queue = new ArrayDeque<>();
+
+        for (int i = 0; i < m; i++) {
+            var row = grid[i];
+            for (int j = 0; j < n; j++) {
+                var c = row.charAt(j);
+                if (Character.isLowerCase(c) && key2id[c - 'a'] == -1)
+                    key2id[c - 'a'] = id++;
+                if (c == '@') {
+                    queue.add(new VisitState(i, j, 0, 0));
+                }
+            }
+        }
+        boolean[][][] visited = new boolean[1 << id][m][n];
+        if (queue.isEmpty())
+            return -1;
+        else
+            visited[0][queue.peek().x][queue.peek().y] = true;
+        int target = (1 << id) - 1;
+        int[] dx = { 0, 0, 1, -1 }, dy = { 1, -1, 0, 0 };
+
+        while (!queue.isEmpty()) {
+            var current = queue.poll();
+            for (int i = 0; i < 4; i++) {
+                int x = dx[i] + current.x, y = dy[i] + current.y;
+                if (x >= 0 && x < m && y >= 0 && y < n
+                        && grid[x].charAt(y) != '#'
+                        && !visited[current.state][x][y]) {
+                    var c = grid[x].charAt(y);
+                    int state = current.state;
+                    if (Character.isUpperCase(c) && (key2id[c - 'A'] < 0
+                            || (state & (1 << key2id[c - 'A'])) == 0))
+                        continue;
+
+                    visited[state][x][y] = true;
+                    if (Character.isLowerCase(c)) {
+                        state = state | (1 << key2id[c - 'a']);
+                        visited[state][x][y] = true;
+                    }
+                    if (state == target)
+                        return current.steps + 1;
+                    queue.add(new VisitState(x, y, state, current.steps + 1));
+                }
+            }
+        }
+        return -1;
+    }
+
+    static record VisitState(int x, int y, int state, int steps) {
+    }
+
+    /**
      * #867
      * 
      * @param matrix
